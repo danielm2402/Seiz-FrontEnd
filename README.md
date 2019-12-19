@@ -1,4 +1,4 @@
-# [SEIZ](https://github.com/CristianPip3/Primalmkt-frontend)
+# [SEIZ](https://github.com/danielm2402/Seiz-FrontEnd.git)
 
 SEIZ, Una plataforma para el control de embargos y documentos.
 
