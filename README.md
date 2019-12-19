@@ -1,3 +1,30 @@
+# [SEIZ](https://github.com/CristianPip3/Primalmkt-frontend)
+
+SEIZ, Una plataforma para el control de embargos y documentos.
+
+## Características
+
+* [Redux-Saga](https://github.com/redux-saga/redux-saga) Para el manejo de asincronismo
+* [ReactJS](https://es.reactjs.org/) ReactJS como framework base
+* [CSS3](https://github.com/react-materialize/react-materialize) Para los múltiples componentes visuales
+* [Bootstrap](https://react-bootstrap.github.io/) Para el manejo de responsive y grids
+
+
+## Install Seiz-FrontEnd en local
+
+La construcción y prueba del proyecto requiere [node.js](http://nodejs.org/download/). recomendamos usar la última versión de npm: `npm install -g npm@latest`.
+
+Desde la terminal:
+
+1. Navegar al directorio clonado e instalar los paquetes y dependencias usadas en Seiz-FrontEnd usando `npm install`
+2. Levantar el servidor local `npm run start`
+
+
+
+## Ingresando a Seiz-FrontEnd
+
+1. En su navegador web ingrese a la siguiente dirección: [Seiz-FrontEnd](http://localhost:3000/)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
@@ -66,3 +93,5 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 ### `yarn build` fails to minify
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+
+
