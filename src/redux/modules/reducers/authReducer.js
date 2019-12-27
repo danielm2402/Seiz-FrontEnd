@@ -1,7 +1,7 @@
 import { Record } from 'immutable';
 import { LOGIN_EMAIL_REQUEST, LOGIN_EMAIL_FAILED, LOGIN_EMAIL_SUCCESS, REGISTER_WITH_EMAIL, REGISTER_WITH_EMAIL_SUCCESS
 ,LOGOUT_SUCCESS} from '../../constants/authConst';
-import { stat } from 'fs';
+
 export const Authstate = {
     loggedIn:false,
     user:null,
@@ -9,7 +9,6 @@ export const Authstate = {
     messageError:{exist:false, text:''}
     
 }
-
 export default function authReducer(state = Authstate, action={}){
     switch (action.type) {
         case LOGIN_EMAIL_REQUEST:
