@@ -3,7 +3,7 @@ import storage from "redux-persist/lib/storage";
 import { put, takeLatest } from "redux-saga/effects";
 import { getUserByToken } from "../../crud/auth.crud";
 import * as routerHelpers from "../../router/RouterHelpers";
-
+import axios from 'axios';
 export const actionTypes = {
   Login: "[Login] Action",
   Logout: "[Logout] Action",
@@ -63,7 +63,9 @@ export const actions = {
 
 export function* saga() {
   yield takeLatest(actionTypes.Login, function* loginSaga() {
-    yield put(actions.requestUser());
+
+    console.log('ejecutando saga de login')
+   // yield put(actions.requestUser());
   });
 
   yield takeLatest(actionTypes.Register, function* registerSaga() {

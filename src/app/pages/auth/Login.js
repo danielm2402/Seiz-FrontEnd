@@ -51,48 +51,17 @@ function Login(props) {
               email: "admin@demo.com",
               password: "demo"
             }}
-            validate={values => {
-              const errors = {};
-
-              if (!values.email) {
-                // https://github.com/formatjs/react-intl/blob/master/docs/API.md#injection-api
-                errors.email = intl.formatMessage({
-                  id: "AUTH.VALIDATION.REQUIRED_FIELD"
-                });
-              } else if (
-                !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)
-              ) {
-                errors.email = intl.formatMessage({
-                  id: "AUTH.VALIDATION.INVALID_FIELD"
-                });
-              }
-
-              if (!values.password) {
-                errors.password = intl.formatMessage({
-                  id: "AUTH.VALIDATION.REQUIRED_FIELD"
-                });
-              }
-
-              return errors;
-            }}
+            
             onSubmit={(values, { setStatus, setSubmitting }) => {
+              console.log('submit')
               enableLoading();
-              setTimeout(() => {
-                login(values.email, values.password)
-                  .then(({ data: { accessToken } }) => {
-                    disableLoading();
-                    props.login(accessToken);
-                  })
-                  .catch(() => {
-                    disableLoading();
-                    setSubmitting(false);
-                    setStatus(
-                      intl.formatMessage({
-                        id: "AUTH.VALIDATION.INVALID_LOGIN"
-                      })
-                    );
-                  });
-              }, 1000);
+              login(values.email, values.password)
+              .then(response =>{
+                console.log(response)
+                disableLoading();
+              })
+              .catch(err=>console.log(err.response))
+              
             }}
           >
             {({
