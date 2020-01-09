@@ -7,7 +7,7 @@ import { TextField } from "@material-ui/core";
 import clsx from "clsx";
 import * as auth from "../../store/ducks/auth.duck";
 import { login } from "../../crud/auth.crud";
-
+import axios from 'axios'
 function Login(props) {
   const { intl } = props;
   const [loading, setLoading] = useState(false);
@@ -47,21 +47,26 @@ function Login(props) {
           </div>
 
           <Formik
-            initialValues={{
-              email: "admin@demo.com",
-              password: "demo"
-            }}
+           
             
             onSubmit={(values, { setStatus, setSubmitting }) => {
-              console.log('submit')
               enableLoading();
-              login(values.email, values.password)
-              .then(response =>{
-                console.log(response)
-                disableLoading();
-              })
-              .catch(err=>console.log(err.response))
-              
+              const config = {
+                headers: {            
+                    Accept: 'application/json',
+                
+                }
+            };
+            axios.post('https://bancow.finseiz.com/api/login',{
+                username: values.email,
+                password:values.password
+            },config)
+            .then(response =>{
+              disableLoading();
+              props.login(response.data.token, response.data.user);
+              console.log(response)})
+            .catch(err =>console.log(err.response))
+              disableLoading();
             }}
           >
             {({

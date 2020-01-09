@@ -13,7 +13,7 @@ export function login(username, password) {
         ContentType: 'application/x-www-form-urlencoded; charset=UTF-8'
     }
 };
-  return axios.post(LOGIN_URL, { username:username, password:password }, config);
+  return axios.post('https://orionph.com/api/v1/login', { username:username, password:password }, config);
 }
 
 export function register(email, fullname, username, password) {

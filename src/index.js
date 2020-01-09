@@ -8,7 +8,7 @@ import axios from "axios";
 import React from "react";
 import ReactDOM from "react-dom";
 import store, { persistor } from "./app/store/store";
-import { mockAxios, setupAxios } from "./_metronic";
+//import { mockAxios, setupAxios } from "./_metronic";
 import App from "./App";
 import "./index.scss"; // Standard version
 // import "./sass/style.react.rtl.css"; // RTL version
@@ -30,14 +30,14 @@ const { PUBLIC_URL } = process.env;
  *
  * @see https://github.com/ctimmerm/axios-mock-adapter
  */
-/* const mock = */ mockAxios(axios);
+/* const mock = */ //mockAxios(axios);
 
 /**
  * Inject metronic interceptors for axios.
  *
  * @see https://github.com/axios/axios#interceptors
  */
-setupAxios(axios, store);
+//setupAxios(axios, store);
 
 const Layout = React.lazy(() => import("./_metronic/layout/Layout.js"));
 

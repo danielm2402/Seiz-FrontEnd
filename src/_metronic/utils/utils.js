@@ -10,20 +10,7 @@ export function addCSSClass(ele, cls) {
 export const toAbsoluteUrl = pathname => process.env.PUBLIC_URL + pathname;
 
 export function setupAxios(axios, store) {
-  axios.interceptors.request.use(
-    config => {
-      const {
-        auth: { authToken }
-      } = store.getState();
 
-      if (authToken) {
-        config.headers.Authorization = `Bearer ${authToken}`;
-      }
-
-      return config;
-    },
-    err => Promise.reject(err)
-  );
 }
 
 

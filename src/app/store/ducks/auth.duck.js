@@ -3,7 +3,7 @@ import storage from "redux-persist/lib/storage";
 import { put, takeLatest } from "redux-saga/effects";
 import { getUserByToken } from "../../crud/auth.crud";
 import * as routerHelpers from "../../router/RouterHelpers";
-import axios from 'axios';
+
 export const actionTypes = {
   Login: "[Login] Action",
   Logout: "[Logout] Action",
@@ -51,7 +51,7 @@ export const reducer = persistReducer(
 );
 
 export const actions = {
-  login: authToken => ({ type: actionTypes.Login, payload: { authToken } }),
+  login: (authToken, user) => ({ type: actionTypes.Login, payload: { authToken, user } }),
   register: authToken => ({
     type: actionTypes.Register,
     payload: { authToken }
@@ -62,19 +62,19 @@ export const actions = {
 };
 
 export function* saga() {
-  yield takeLatest(actionTypes.Login, function* loginSaga() {
+  yield takeLatest(actionTypes.Login, function* loginSaga(action) {
 
-    console.log('ejecutando saga de login')
-   // yield put(actions.requestUser());
+    yield put(actions.requestUser(action.payload.user));
   });
 
   yield takeLatest(actionTypes.Register, function* registerSaga() {
     yield put(actions.requestUser());
   });
 
-  yield takeLatest(actionTypes.UserRequested, function* userRequested() {
-    const { data: user } = yield getUserByToken();
-
-    yield put(actions.fulfillUser(user));
+  yield takeLatest(actionTypes.UserRequested, function* userRequested(action) {
+   // const { data: user } = yield getUserByToken();
+    console.log('trayendo user')
+    console.log(action.payload.user)
+    yield put(actions.fulfillUser(action.payload.user));
   });
 }
