@@ -512,13 +512,76 @@ export default {
         translate: "MENU.DASHBOARD",
         bullet: "dot"
       },
+      { section: "Embargos" },
+      {
+        title: "Subir",
+        root: true,
+        bullet: "dot",
+        icon: "flaticon-upload",
+        submenu: [
+          {
+            title: "Oficio",
+            bullet: "dot",
+            
+          },
+          {
+            title: "Coactivos",
+            bullet: "dot",
+            
+          },
+          {
+            title: "Masivos",
+            bullet: "dot",
+           
+          },
+          
+            
+          
+        ]
+      },
+      {
+        title: "Revisar",
+        root: true,
+        bullet: "dot",
+        icon: "flaticon-visible",
+        submenu: [
+          {
+            title: "Sin confirmar",
+            bullet: "dot",
+            
+          },
+          {
+            title: "Confirmados",
+            bullet: "dot",
+            
+          },
+          {
+            title: "Cartas",
+            bullet: "dot",
+           
+          },
+
+        ]
+      },
+      {
+        title: "Historial",
+        root: true,
+        bullet: "dot",
+        icon: "flaticon-time",
+      },
+      {
+        title: "Asignados",
+        root: true,
+        bullet: "dot",
+        icon: "flaticon-alert-2",
+      },
     
       { section: "Cuenta" },
       {
         title: "Usuario",
         root: true,
         bullet: "dot",
-        icon: "flaticon2-browser-2",
+        icon: "flaticon2-user",
         submenu: [
           {
             title: "Mi perfil",
@@ -527,8 +590,7 @@ export default {
           },
           {
             title: "Seguridad",
-            bullet: "dot",
-            
+            bullet: "dot", 
           },
           {
             title: "Salir",
@@ -541,53 +603,8 @@ export default {
         ]
       },
       
-      { section: "Custom" },
-      // {
-      //   root: true,
-      //   title: "Documentation",
-      //   bullet: "dot",
-      //   icon: "flaticon2-file-1",
-      //   submenu: [
-      //     { title: "Quick Start", page: "docs/quick-start" },
-      //     { title: "Overview", page: "docs/overview" },
-      //     { title: "Deployment", page: "docs/deployment" },
-      //     { title: "Internationalization", page: "docs/i18n" },
-      //     { title: "Mock Backend", page: "docs/mock-backend" },
-      //     { title: "Create a Page", page: "docs/create-a-page" }
-      //   ]
-      // },
-      {
-        title: "Error Pages",
-        root: true,
-        bullet: "dot",
-        icon: "flaticon-danger",
-        submenu: [
-          {
-            title: "Error Page - 1",
-            page: "error/error-v1"
-          },
-          {
-            title: "Error Page - 2",
-            page: "error/error-v2"
-          },
-          {
-            title: "Error Page - 3",
-            page: "error/error-v3"
-          },
-          {
-            title: "Error Page - 4",
-            page: "error/error-v4"
-          },
-          {
-            title: "Error Page - 5",
-            page: "error/error-v5"
-          },
-          {
-            title: "Error Page - 6",
-            page: "error/error-v6"
-          }
-        ]
-      }
+     
+      
     ]
   }
 };
