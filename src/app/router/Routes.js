@@ -10,6 +10,7 @@ import { Redirect, Route, Switch, withRouter } from "react-router-dom";
 import { shallowEqual, useSelector } from "react-redux";
 import { useLastLocation } from "react-router-last-location";
 import HomePage from "../pages/home/HomePage";
+import Upload from "../pages/upload/Upload"
 import AuthPage from "../pages/auth/AuthPage";
 import ErrorsPage from "../pages/errors/ErrorsPage";
 import LogoutPage from "../pages/auth/Logout";
@@ -51,6 +52,7 @@ export const Routes = withRouter(({ Layout, history }) => {
             <HomePage userLastLocation={userLastLocation} />
           </Layout>
         )}
+        
       </Switch>
     </LayoutContextProvider>
   );
