@@ -19,7 +19,7 @@
 // Desktop mode
 @include kt-desktop {
 	.kt-aside__brand {
-	    background-color: #1a1a27;
+	    background-color: #BCD535;
     	box-shadow: none;
 
     	.kt-aside__brand-tools {
@@ -43,7 +43,7 @@
 // Tablet and mobile mode
 @include kt-tablet-and-mobile {
 	.kt-header-mobile {
-		background-color: #1a1a27;
+		background-color: #BCD535;
 		box-shadow: 0px 1px 9px -3px rgba(0,0,0,0.1);
 
 		.kt-header__topbar--mobile-on & {

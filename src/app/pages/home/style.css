@@ -1,0 +1,19 @@
+.contenedor1{
+    display: flex;
+    width: 100%;
+    padding-left: 8px;
+}
+.contenedor{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.columna{
+    padding-right: 3px;
+}
+.card-item{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
