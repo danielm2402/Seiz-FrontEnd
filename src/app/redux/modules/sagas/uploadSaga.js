@@ -13,7 +13,7 @@ function* uploadSaga(payload) {
     console.log('upload desde saga...');
     console.log(payload.array)
     var bodyFormData = new FormData();
-    bodyFormData.append('prueba',payload.array); 
+    bodyFormData.append('prueba',payload.array[0]); 
     const config = {
         headers: {            
             Accept: 'application/json',
@@ -24,8 +24,8 @@ function* uploadSaga(payload) {
     const data = yield axios({
         method: 'post',
         url: 'https://bancow.finseiz.com/api/v1/embargos/upload',
-        data: bodyFormData,
-        headers: {'Content-Type': 'multipart/form-data', 'Authorization':payload.token }
+        data: payload.array[0],
+        headers: {'Content-Type': 'multipart/form-data', 'Authorization':'Bearer '+payload.token }
         })
         .then(function (response) {
             //handle success

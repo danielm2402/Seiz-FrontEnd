@@ -8,7 +8,6 @@ export default {
   aside: {
     self: {},
     items: [
-      { section: " " },
       { section: "Dashboard" },
       {
         title: "Inicio",

@@ -1,6 +1,13 @@
 import React, { Component } from 'react'
 import MaterialTableDemo from './MaterialTableDemo'
-export default class Confirmados extends Component {
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux'
+import {getEmbargos} from '../../redux/actions/embargosAction'
+class Confirmados extends Component {
+    componentDidMount(){
+        console.log('montando component')
+        this.props.handleRequestEmbargos('CONFIRMADOS', this.props.token)
+    }
     render() {
         var columns=[
       
@@ -20,3 +27,12 @@ export default class Confirmados extends Component {
         )
     }
 }
+
+const mapDispatchToProps=(dispatch)=>({
+    handleRequestEmbargos: bindActionCreators(getEmbargos,dispatch)
+})
+const mapStateToProps=(state)=>({
+    token: state.auth.authToken
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Confirmados)
