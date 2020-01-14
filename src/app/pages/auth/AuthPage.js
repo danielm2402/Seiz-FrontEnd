@@ -37,14 +37,14 @@ export default function AuthPage() {
             <div
               className="kt-grid__item kt-grid__item--order-tablet-and-mobile-2 kt-grid kt-grid--hor kt-login__aside"
               style={{
-                backgroundImage: `url(${toAbsoluteUrl("/media/bg/bg-4.jpg")})`
+                backgroundImage: `url(${toAbsoluteUrl("/media/bg/bg-seiz1.png")})`
               }}
             >
               <div className="kt-grid__item">
                 <Link to="/" className="kt-login__logo">
                   <img
                     alt="Logo"
-                    src={toAbsoluteUrl("/media/logos/logo-4.png")}
+                    src={toAbsoluteUrl("/media/logos/seiz-logo.png")}
                   />
                 </Link>
               </div>

@@ -100,10 +100,10 @@ export const initLayoutConfig = {
     "self": {
       "skin": "dark",
       "display": true,
-      "fixed": false,
+      "fixed": true,
       "minimize": {
-        "toggle": true,
-        "default": true
+        "toggle": false,
+        "default": false
       }
     },
     "footer": {

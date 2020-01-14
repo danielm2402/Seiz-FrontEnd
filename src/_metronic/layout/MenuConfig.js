@@ -34,6 +34,7 @@ export default {
           {
             title: "Oficio",
             bullet: "dot",
+            page: "upload/oficio"
             
           },
           {
