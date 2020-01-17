@@ -13,29 +13,17 @@ function* uploadSaga(payload) {
     console.log('upload desde saga...');
     console.log(payload.array)
     var bodyFormData = new FormData();
-    bodyFormData.append('prueba',payload.array[0]); 
+    bodyFormData.append('files',payload.array[0]); 
     const config = {
-        headers: {            
-            Accept: 'application/json',
-        
+        headers: {  
+            Authorization: 'Bearer ' + payload.token,         
+          
         }
     };
-    console.log(payload.token)
-    const data = yield axios({
-        method: 'post',
-        url: 'https://bancow.finseiz.com/api/v1/embargos/upload',
-        data: payload.array[0],
-        headers: {'Content-Type': 'multipart/form-data', 'Authorization':'Bearer '+payload.token }
-        })
-        .then(function (response) {
-            //handle success
-            console.log(response);
-        })
-        .catch(function (response) {
-            //handle error
-            console.log(response.response);
-        });
-    
+    const data= yield axios.post('https://bancow.finseiz.com/api/v1/embargos/upload',bodyFormData, config)
+    .then(response=>console.log(response))
+    .catch(error=>console.log(error.response))
+    console.log(data)
 }
 
 
