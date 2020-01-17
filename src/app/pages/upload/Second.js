@@ -1,11 +1,26 @@
 import React, { Component } from 'react'
-
-export default class Second extends Component {
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux'
+import './Sencond.css'
+class Second extends Component {
+    componentDidMount(){
+        console.log('SECOND FILES')
+        console.log(this.props.file)
+    }
+    componentWillUpdate(){
+        console.log(this.props.files)
+    }
     render() {
         return (
-            <div>
-                Second
+            <div className="contenedor-files">
+                
             </div>
         )
     }
 }
+
+const mapStateToProps=(state)=>({
+    files: state.uploadReducer
+})
+
+export default connect(mapStateToProps,null)(Second)

@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
-import {uploadRequest} from '../../redux/actions/uploadAction'
+import {addFile} from '../../redux/actions/uploadAction'
+import Second from './Second'
 import './First.css'
 class First extends Component {
     constructor(props){
@@ -14,7 +15,10 @@ class First extends Component {
         this.setState({
           files:event.target.files,
         }, function(){
-            this.props.handleRequestUpload(this.state.files, this.props.token)
+            console.log(this.state.files)
+           
+            this.props.handleAddFile(URL.createObjectURL(this.state.files[0]))
+            this.props.nextStep()
         })
       }
     render() {
@@ -26,19 +30,21 @@ class First extends Component {
                             <label for="file-input">
                                 <img src="https://icon-library.net/images/upload-photo-icon/upload-photo-icon-21.jpg" />
                             </label>
-                            <input id="file-input" type="file" onChange={this.onChangeHandler} multiple/>
+                            <input id="file-input" type="file" multiple onChange={this.onChangeHandler}/>
                             <p>Suelta tus archivos aquí</p>
                             <p>Pueden ser varios</p>
                         </div>
                     </div>
                 </div>
+            <Second file={this.state.files}/>
+
 
             </div>
         )
     }
 }
 const mapDispatchToProps=(dispatch)=>({
-    handleRequestUpload: bindActionCreators(uploadRequest,dispatch)
+    handleAddFile: bindActionCreators(addFile,dispatch)
 })
 const mapStateToProps=(state)=>({
     token: state.auth.authToken

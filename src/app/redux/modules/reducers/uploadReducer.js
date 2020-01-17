@@ -1,10 +1,11 @@
 
-import { UPLOAD_REQUEST, UPLOAD_REQUEST_SUCCESS, UPLOAD_REQUEST_FAILED
+import { UPLOAD_REQUEST, UPLOAD_REQUEST_SUCCESS, UPLOAD_REQUEST_FAILED, ADD_FILE
 } from '../../constants/UploadConsts';
 
 export const Authstate = {
     loading:true,
-    docs:[]
+    docs:[],
+    files:[]
     
 }
 export default function authReducer(state = Authstate, action={}){
@@ -23,6 +24,11 @@ export default function authReducer(state = Authstate, action={}){
             return{
                 ...state,
                 loading:false
+            }    
+        case ADD_FILE:
+            return{
+                ...state,
+                files:JSON.parse(JSON.stringify(action.file))
             }    
         default:
             return state;

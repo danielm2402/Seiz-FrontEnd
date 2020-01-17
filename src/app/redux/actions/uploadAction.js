@@ -11,3 +11,7 @@ export const uploadSuccess=()=>({
 export const uploadFailed=()=>({
     type: types.UPLOAD_REQUEST_FAILED,
 });
+export const addFile=(file)=>({
+    type: types.ADD_FILE,
+    file
+})
