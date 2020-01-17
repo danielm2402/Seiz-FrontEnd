@@ -16,8 +16,12 @@ class First extends Component {
           files:event.target.files,
         }, function(){
             console.log(this.state.files)
-           
-            this.props.handleAddFile(URL.createObjectURL(this.state.files[0]))
+            var urls=[]
+            for(let item of this.state.files) {
+                urls.push(URL.createObjectURL(item))
+            }
+            
+            this.props.handleAddFile(urls)
             this.props.nextStep()
         })
       }

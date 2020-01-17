@@ -28,7 +28,7 @@ export default function authReducer(state = Authstate, action={}){
         case ADD_FILE:
             return{
                 ...state,
-                files:JSON.parse(JSON.stringify(action.file))
+                files:[...state.files, action.file]
             }    
         default:
             return state;
