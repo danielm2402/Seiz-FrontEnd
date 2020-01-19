@@ -7,49 +7,55 @@ import { TiDocumentText } from "react-icons/ti";
 
 
 class Second extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
-        this.state={
-            files:[]
+        this.state = {
+            files: []
         }
     }
 
-     componentDidUpdate(prevProps){
+    componentDidUpdate(prevProps) {
         if (this.props.files !== prevProps.files) {
-            var urls= this.props.files
-        var id=0
-        urls.map(async(item)=>{
-            let blob= await fetch(item.url).then(r => r.blob());
-            var file = new File([blob], item.name);
-            this.setState({files:[...this.state.files,file]},()=>{
-                console.log(this.state.files)
+            var urls = this.props.files
+            var id = 0
+            urls.map(async (item) => {
+                let blob = await fetch(item.url).then(r => r.blob());
+                var file = new File([blob], item.name);
+                this.setState({ files: [...this.state.files, file] }, () => {
+                    console.log(this.state.files)
+                })
             })
-        })
-          }
-        
-    } 
+        }
 
-
-    componentDidMount(){
-       
     }
-    handleDocs = async() => {
+
+
+    handleLoad = () => {
+
+    }
+    handleDocs = async () => {
         let blob = await fetch(this.props.files).then(r => r.blob());
         console.log(blob)
         var file = new File([blob], "name");
         console.log(file)
-    }   
+    }
     render() {
         return (
             <div className="contenedor-files">
-                {this.state.files.map((item)=>{
-                    return(
-                        <div>
-                            <TiDocumentText/>
+                <div className="elements-render">
+                {this.state.files.map((item) => {
+                    return (
+                        <div className="container-item-document">
+                            <TiDocumentText style={{ width: '200px', height: '200px' }} />
                             <p>{item.name}</p>
-                        </div>    
+                        </div>
                     )
                 })}
+                </div>
+               
+                <div>
+                    <button className="button-seiziar" onClick={this.handleLoad}>SEIZIAR</button>
+                </div>
             </div>
         )
     }

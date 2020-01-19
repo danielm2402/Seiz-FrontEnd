@@ -1,4 +1,32 @@
 .contenedor-files{
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     
+}
+.container-item-document{
+    width: 210px;
+    height: auto;
+}
+.container-item-document p{
+    text-align: center;
+}
+.button-seiziar{
+    width: 220px;
+    height: 50px;
+    background-color: #BDD535;
+    border-radius: 2px;
+    color: #ffffff;
+    font-size: large;
+}
+.elements-render{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap
+    
+    ;
 }
