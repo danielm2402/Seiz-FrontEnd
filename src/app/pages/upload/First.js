@@ -17,10 +17,18 @@ class First extends Component {
         }, function(){
             console.log(this.state.files)
             var urls=[]
-            for(let item of this.state.files) {
-                urls.push(URL.createObjectURL(item))
+            for(var i=0;i<this.state.files.length;i++) {
+                console.log('IMPRIMIENDO CADA ARCHIVO')
+                console.log(this.state.files[i])
+               urls.push(
+                   { 
+                   url: URL.createObjectURL(this.state.files[i]),
+                   name: this.state.files[i].name
+                   }
+                   )
             }
-            
+            console.log('urlsss')
+            console.log(urls)
             this.props.handleAddFile(urls)
             this.props.nextStep()
         })

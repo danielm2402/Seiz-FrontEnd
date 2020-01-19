@@ -6,7 +6,6 @@ export const Authstate = {
     loading:true,
     docs:[],
     files:[]
-    
 }
 export default function authReducer(state = Authstate, action={}){
     switch (action.type) {
@@ -28,7 +27,7 @@ export default function authReducer(state = Authstate, action={}){
         case ADD_FILE:
             return{
                 ...state,
-                files:[...state.files, action.file]
+                files:action.file
             }    
         default:
             return state;
