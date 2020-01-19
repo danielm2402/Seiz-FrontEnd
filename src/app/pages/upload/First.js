@@ -40,8 +40,6 @@ class First extends Component {
                         </div>
                     </div>
                 </div>
-            <Second file={this.state.files}/>
-
 
             </div>
         )
