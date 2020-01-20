@@ -101,7 +101,7 @@ export default function Dashboard() {
               <div className="kt-space-20" />
 
               <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
-                <a href="">
+                <Link to="/listar/no-confirmados">
                 <PortletBody fluid={true}>
                   <div className="card-item">
                   <QuickStatsChart
@@ -114,7 +114,7 @@ export default function Dashboard() {
                  </div>
                  
                 </PortletBody>
-                </a>
+                </Link>
                 
               </Portlet>
             </div>

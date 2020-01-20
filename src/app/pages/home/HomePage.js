@@ -5,6 +5,7 @@ import Dashboard from "./Dashboard";
 import DocsPage from "./docs/DocsPage";
 import Upload from '../upload/Upload'
 import Confirmados from '../Listar/Confirmados'
+import NoConfirmados from '../Listar/NoConfirmados'
 import { LayoutSplashScreen } from "../../../_metronic";
 
 const GoogleMaterialPage = lazy(() =>
@@ -26,6 +27,7 @@ export default function HomePage() {
         <Route path="/dashboard" component={Dashboard} />
         <Route path="/upload" component={Upload}/>
         <Route path="/listar/confirmados" exact component={Confirmados}/>
+        <Route path="/listar/no-confirmados" exact component={NoConfirmados}/>
         <Route path="/google-material" component={GoogleMaterialPage} />
         <Route path="/react-bootstrap" component={ReactBootstrapPage} />
         <Route path="/docs" component={DocsPage} />
