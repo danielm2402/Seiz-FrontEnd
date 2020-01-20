@@ -3,10 +3,10 @@ import {
 } from 'redux-saga/effects';
 import axios from 'axios';
 import {
-    GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_CONFIRMADOS,GET_EMBARGOS_POR_CONFIRMAR
+    GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_CONFIRMADOS,GET_EMBARGOS_POR_CONFIRMAR, GET_EMBARGOS_ALL
 } from '../../constants/EmbargosConst';
 import {
-getEmbargosConfirmadosSuccess, getEmbargosPorConfirmarSuccess, getEmbargosAsignadosSuccess
+getEmbargosConfirmadosSuccess, getEmbargosPorConfirmarSuccess, getEmbargosAsignadosSuccess, getEmbargosAllSuccess
 }from '../../actions/embargosAction'
 
 function* getEmbargosConfirmadosSaga(payload) {
@@ -84,7 +84,27 @@ function* getEmbargosAsignadosSaga(payload) {
       console.log(data);
     
 }
-
+function* getEmbargosAllSaga(payload){
+    console.log('obteniendo embargos all');
+    const config = {
+        headers: {
+          Authorization: 'Bearer ' + payload.token,
+          Accept: 'application/json',
+        },
+      };
+    const data= yield axios.get('https://bancow.finseiz.com/api/v1/embargos/list', config)
+        .then(response => response)
+        .catch(err => err.response)
+        switch (data.status) {
+            case 200:
+                yield put(getEmbargosAllSuccess(data.data))
+                break;
+        
+            default:
+                break;
+        }
+      console.log(data);
+}
 
 
 function* embargosRootSaga() {
@@ -92,6 +112,7 @@ function* embargosRootSaga() {
         takeEvery(GET_EMBARGOS_CONFIRMADOS, getEmbargosConfirmadosSaga),
         takeEvery(GET_EMBARGOS_POR_CONFIRMAR, getEmbargosSinConfirmarSaga),
         takeEvery(GET_EMBARGOS_ASIGNADOS, getEmbargosAsignadosSaga),
+        takeEvery(GET_EMBARGOS_ALL, getEmbargosAllSaga),
         
        
     ])

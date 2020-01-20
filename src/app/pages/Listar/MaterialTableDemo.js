@@ -20,7 +20,7 @@ function MaterialTableDemo(props) {
         }
       ]}
       options={{
-        pageSize: 20,
+        pageSize: 19,
         pageSizeOptions: [],
         toolbar: true,
         paging: true

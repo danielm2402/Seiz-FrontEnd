@@ -2,12 +2,12 @@ import React, { Component } from 'react'
 import MaterialTableDemo from './MaterialTableDemo'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
-import {getEmbargosAsignados} from '../../redux/actions/embargosAction'
+import {getEmbargosAll} from '../../redux/actions/embargosAction'
 class Confirmados extends Component {
     componentDidMount(){
         console.log('montando component')
         console.log(this.props.confirmados)
-        this.props.handleRequestEmbargos(this.props.token, this.props.username)
+        this.props.handleRequestEmbargos(this.props.token)
     }
     componentDidUpdate(){
         console.log(this.props.confirmados)
@@ -25,19 +25,18 @@ class Confirmados extends Component {
           ]
         return (
             <div>
-                <MaterialTableDemo nombre="Embargos" columns={columns} data={this.props.asignados} />
+                <MaterialTableDemo nombre="Embargos" columns={columns} data={this.props.all} />
             </div>
         )
     }
 }
 
 const mapDispatchToProps=(dispatch)=>({
-    handleRequestEmbargos: bindActionCreators(getEmbargosAsignados,dispatch)
+    handleRequestEmbargos: bindActionCreators(getEmbargosAll,dispatch)
 })
 const mapStateToProps=(state)=>({
     token: state.auth.authToken,
-    username: state.auth.user.username,
-    asignados: state.EmbargosReducer.asignados
+    all: state.EmbargosReducer.all
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Confirmados)

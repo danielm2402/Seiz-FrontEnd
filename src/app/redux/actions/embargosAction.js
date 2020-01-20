@@ -8,6 +8,14 @@ export const getEmbargosConfirmadosSuccess=(data)=>({
     type: types.GET_EMBARGOS_CONFIRMADOS_SUCCESS,
     data
 });
+export const getEmbargosAll=(token)=>({
+    type: types.GET_EMBARGOS_ALL,
+    token
+});
+export const getEmbargosAllSuccess=(data)=>({
+    type: types.GET_EMBARGOS_ALL_SUCCESS,
+    data
+});
 export const getEmbargosPorConfirmar=(token)=>({
     type: types.GET_EMBARGOS_POR_CONFIRMAR,
     token

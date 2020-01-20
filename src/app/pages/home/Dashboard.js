@@ -196,7 +196,7 @@ export default function Dashboard() {
         </div>
         <div className="columna">
         <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
-               <a href="">
+               <Link to="/listar/todos">
                 <PortletBody fluid={true}>
                 <div className="card-item">
                   <QuickStatsChart
@@ -209,7 +209,7 @@ export default function Dashboard() {
                   <MdSearch style={{width:'50px', height:'50px'}}/>
                   </div>
                 </PortletBody>
-                </a>
+                </Link>
               </Portlet>
 
               <div className="kt-space-20" />
