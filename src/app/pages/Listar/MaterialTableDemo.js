@@ -5,24 +5,26 @@ import { connect } from 'react-redux';
 
 
 function MaterialTableDemo(props) {
-  const [state, setState] = React.useState({
-    open:false
-  });
 
-  const [open, setOpen] = useState(false);
   return (
     <div>
     <MaterialTable
       title={props.nombre}
       columns={props.columns}
-      //data={props.data}
+      data={props.data}
       actions={[
         {
           icon: 'border_color',
-          tooltip: 'Actualizar propiedad',
+          tooltip: 'Editar',
           
         }
       ]}
+      options={{
+        pageSize: 20,
+        pageSizeOptions: [],
+        toolbar: true,
+        paging: true
+    }}
       editable={{
         
         onRowDelete: oldData =>

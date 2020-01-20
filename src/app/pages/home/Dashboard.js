@@ -19,7 +19,9 @@ import RecentActivities from "../../widgets/RecentActivities";
 import PortletHeaderDropdown from "../../partials/content/CustomDropdowns/PortletHeaderDropdown";
 import { MdVideoLibrary, MdFileUpload,MdFileDownload,MdCloudUpload,MdSearch,MdEmail,MdNotificationsNone } from "react-icons/md";
 import { FaCheckDouble, FaCheck } from "react-icons/fa";
-
+import {
+  Link
+} from "react-router-dom";
 
 import './style.css'
 export default function Dashboard() {
@@ -81,7 +83,7 @@ export default function Dashboard() {
           
             <div className="columna">
               <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
-                <a href="">
+              <Link to="/upload/oficio">
                 <PortletBody fluid={true}>
                 <div className="card-item">
                   <QuickStatsChart
@@ -93,7 +95,7 @@ export default function Dashboard() {
                   <MdFileUpload style={{width:'50px', height:'50px'}}/>
                   </div>
                 </PortletBody>
-                </a>
+                </Link>
               </Portlet>
 
               <div className="kt-space-20" />
@@ -138,7 +140,7 @@ export default function Dashboard() {
               <div className="kt-space-20" />
 
               <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
-              <a href="">
+              <Link to="/listar/confirmados">
                 <PortletBody fluid={true}>
                 <div className="card-item">
                   <QuickStatsChart
@@ -151,7 +153,7 @@ export default function Dashboard() {
                   <FaCheckDouble style={{width:'40px', height:'40px'}}/>
                   </div>
                 </PortletBody>
-                </a>
+                </Link>
                
               </Portlet>
             </div>
