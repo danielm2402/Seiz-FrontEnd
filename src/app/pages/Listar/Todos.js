@@ -25,7 +25,7 @@ class Confirmados extends Component {
           ]
         return (
             <div>
-                <MaterialTableDemo nombre="Embargos" columns={columns} data={this.props.all} />
+                <MaterialTableDemo nombre="Embargos" columns={columns} data={this.props.all} pathname={this.props.location.pathname} />
             </div>
         )
     }

@@ -3,9 +3,10 @@ import {
 } from 'redux-saga/effects';
 import axios from 'axios';
 import {
-    GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_CONFIRMADOS,GET_EMBARGOS_POR_CONFIRMAR, GET_EMBARGOS_ALL
+    GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_CONFIRMADOS,GET_EMBARGOS_POR_CONFIRMAR, GET_EMBARGOS_ALL, DELETE_EMBARGO
 } from '../../constants/EmbargosConst';
 import {
+    getEmbargosAll,getEmbargosAsignados,getEmbargosPorConfirmar,getEmbargosConfirmados,
 getEmbargosConfirmadosSuccess, getEmbargosPorConfirmarSuccess, getEmbargosAsignadosSuccess, getEmbargosAllSuccess
 }from '../../actions/embargosAction'
 
@@ -105,6 +106,38 @@ function* getEmbargosAllSaga(payload){
         }
       console.log(data);
 }
+function* deleteEmbargoSaga(payload){
+    console.log('Eliminando embargo');
+    const config = {
+        headers: {
+          Authorization: 'Bearer ' + payload.token,
+          Accept: 'application/json',
+        },
+      };
+    const data= yield axios.delete('https://bancow.finseiz.com/api/v1/embargos/'+payload.id, config)
+        .then(response => response)
+        .catch(err => err.response)
+        switch (data.status) {
+            case 200:
+                if(payload.path=="/listar/confirmados"){
+                    yield put(getEmbargosConfirmados(payload.token))
+                }
+                if(payload.path=="/listar/no-confirmados"){
+                    yield put(getEmbargosPorConfirmar(payload.token))
+                }
+                if(payload.path=="/listar/asignados"){
+                    yield put(getEmbargosAsignados(payload.token))
+                }
+                if(payload.path=="/listar/todos"){
+                    yield put(getEmbargosAll(payload.token))
+                }
+                break;
+        
+            default:
+                break;
+        }
+      console.log(data);
+}
 
 
 function* embargosRootSaga() {
@@ -113,6 +146,8 @@ function* embargosRootSaga() {
         takeEvery(GET_EMBARGOS_POR_CONFIRMAR, getEmbargosSinConfirmarSaga),
         takeEvery(GET_EMBARGOS_ASIGNADOS, getEmbargosAsignadosSaga),
         takeEvery(GET_EMBARGOS_ALL, getEmbargosAllSaga),
+        takeEvery(DELETE_EMBARGO, deleteEmbargoSaga),
+        
         
        
     ])

@@ -6,7 +6,7 @@ import {getEmbargosConfirmados} from '../../redux/actions/embargosAction'
 class Confirmados extends Component {
     componentDidMount(){
         console.log('montando component')
-        console.log(this.props.confirmados)
+        console.log(this.props)
         this.props.handleRequestEmbargos(this.props.token)
     }
     componentDidUpdate(){

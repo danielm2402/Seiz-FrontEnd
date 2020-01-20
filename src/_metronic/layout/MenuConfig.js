@@ -23,6 +23,7 @@ export default {
         root: true,
         bullet: "dot",
         icon: "flaticon-alert-2",
+        page:"listar/asignados"
       },
       {
         title: "Subir",

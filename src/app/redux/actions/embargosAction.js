@@ -34,5 +34,11 @@ export const getEmbargosAsignadosSuccess=(data)=>({
     type: types.GET_EMBARGOS_ASIGNADOS_SUCCESS,
     data
 });
+export const deleteEmbargo=(id, token, path)=>({
+    type: types.DELETE_EMBARGO,
+    id,
+    token,
+    path
+});
 
 
