@@ -17,9 +17,10 @@ export const getEmbargosPorConfirmarSuccess=(data)=>({
     data
 });
 
-export const getEmbargosAsignados=(token)=>({
+export const getEmbargosAsignados=(token, user)=>({
     type: types.GET_EMBARGOS_ASIGNADOS,
-    token
+    token,
+    user
 });
 export const getEmbargosAsignadosSuccess=(data)=>({
     type: types.GET_EMBARGOS_ASIGNADOS_SUCCESS,

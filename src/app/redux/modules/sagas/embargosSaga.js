@@ -6,7 +6,7 @@ import {
     GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_CONFIRMADOS,GET_EMBARGOS_POR_CONFIRMAR
 } from '../../constants/EmbargosConst';
 import {
-getEmbargosConfirmadosSuccess, getEmbargosPorConfirmarSuccess
+getEmbargosConfirmadosSuccess, getEmbargosPorConfirmarSuccess, getEmbargosAsignadosSuccess
 }from '../../actions/embargosAction'
 
 function* getEmbargosConfirmadosSaga(payload) {
@@ -59,12 +59,40 @@ function* getEmbargosSinConfirmarSaga(payload) {
       console.log(data);
     
 }
+function* getEmbargosAsignadosSaga(payload) {
+    console.log('obteniendo embargos asignados');
+    const config = {
+        headers: {
+          Authorization: 'Bearer ' + payload.token,
+          Accept: 'application/json',
+        },
+        params:{
+            'assignedTo':payload.user
+        }
+      };
+    const data= yield axios.get('https://bancow.finseiz.com/api/v1/embargos/list', config)
+        .then(response => response)
+        .catch(err => err.response)
+        switch (data.status) {
+            case 200:
+                yield put(getEmbargosAsignadosSuccess(data.data))
+                break;
+        
+            default:
+                break;
+        }
+      console.log(data);
+    
+}
+
 
 
 function* embargosRootSaga() {
     yield all([
         takeEvery(GET_EMBARGOS_CONFIRMADOS, getEmbargosConfirmadosSaga),
         takeEvery(GET_EMBARGOS_POR_CONFIRMAR, getEmbargosSinConfirmarSaga),
+        takeEvery(GET_EMBARGOS_ASIGNADOS, getEmbargosAsignadosSaga),
+        
        
     ])
 }
