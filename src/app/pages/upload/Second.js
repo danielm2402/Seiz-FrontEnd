@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
+
+import { uploadRequest } from '../../redux/actions/uploadAction'
 import './Sencond.css'
 import axios from 'axios'
 import { TiDocumentText } from "react-icons/ti";
@@ -16,6 +18,7 @@ class Second extends Component {
 
     componentDidUpdate(prevProps) {
         if (this.props.files !== prevProps.files) {
+            this.setState({files:[]})
             var urls = this.props.files
             var id = 0
             urls.map(async (item) => {
@@ -31,7 +34,9 @@ class Second extends Component {
 
 
     handleLoad = () => {
-
+        console.log('LOADING');
+        this.props.handleRequest(this.state.files, this.props.token)
+        this.props.nextStep()
     }
     handleDocs = async () => {
         let blob = await fetch(this.props.files).then(r => r.blob());
@@ -43,16 +48,16 @@ class Second extends Component {
         return (
             <div className="contenedor-files">
                 <div className="elements-render">
-                {this.state.files.map((item) => {
-                    return (
-                        <div className="container-item-document">
-                            <TiDocumentText style={{ width: '200px', height: '200px' }} />
-                            <p>{item.name}</p>
-                        </div>
-                    )
-                })}
+                    {this.state.files.map((item) => {
+                        return (
+                            <div className="container-item-document">
+                                <TiDocumentText style={{ width: '200px', height: '200px' }} />
+                                <p>{item.name}</p>
+                            </div>
+                        )
+                    })}
                 </div>
-               
+
                 <div>
                     <button className="button-seiziar" onClick={this.handleLoad}>SEIZIAR</button>
                 </div>
@@ -61,8 +66,12 @@ class Second extends Component {
     }
 }
 
+const mapDisptachToProps = (dispatch) => ({
+    handleRequest: bindActionCreators(uploadRequest, dispatch)
+})
 const mapStateToProps = (state) => ({
-    files: state.uploadReducer.files
+    files: state.uploadReducer.files,
+    token: state.auth.authToken
 })
 
-export default connect(mapStateToProps, null)(Second)
+export default connect(mapStateToProps, mapDisptachToProps)(Second)

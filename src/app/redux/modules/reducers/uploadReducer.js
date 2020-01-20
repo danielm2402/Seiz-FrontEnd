@@ -3,7 +3,7 @@ import { UPLOAD_REQUEST, UPLOAD_REQUEST_SUCCESS, UPLOAD_REQUEST_FAILED, ADD_FILE
 } from '../../constants/UploadConsts';
 
 export const Authstate = {
-    loading:true,
+    loading:false,
     docs:[],
     files:[]
 }
@@ -17,7 +17,8 @@ export default function authReducer(state = Authstate, action={}){
         case UPLOAD_REQUEST_SUCCESS:
             return{
                 ...state,
-                loading:false
+                loading:false,
+                files:[]
             }    
         case UPLOAD_REQUEST_FAILED:
             return{

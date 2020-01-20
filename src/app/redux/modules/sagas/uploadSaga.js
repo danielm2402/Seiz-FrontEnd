@@ -20,9 +20,18 @@ function* uploadSaga(payload) {
         }
     };
     const data= yield axios.post('https://bancow.finseiz.com/api/v1/embargos/upload',bodyFormData, config)
-    .then(response=>console.log(response))
-    .catch(error=>console.log(error.response))
+    .then(response=>response)
+    .catch(error=>error.response)
     console.log(data)
+    switch (data.status) {
+        case 200:
+            yield put(uploadSuccess())
+        break;
+    
+        default:
+            yield put(uploadFailed())
+            break;
+    }
 }
 
 
