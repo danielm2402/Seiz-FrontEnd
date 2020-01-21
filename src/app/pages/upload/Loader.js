@@ -13,11 +13,24 @@ class Loader extends Component {
     }
     render() {
         return (
-            <div>
-                {this.props.loading?<ProgressBar className="right" animated now={100} />:<div>
+            <div className="container-page-loader">
+                {this.props.loading?
+                <div className="container-finish">
+                <h3>Estamos testeando tu paciencia</h3>
+                <div className="container-progress">
+                <ProgressBar className="right" animated now={100}/>
+                </div>
+                <h4>Deja que SEIZ haga el trabajo aburrido.</h4>
+                <p>SEIZ leerá y entenderá todos tus archivos en aproximadamente un minuto y medio.</p>
+                <h3>Éste es el momento oportuno para ir por un café</h3>
+                 </div>:
+
+                
+                <div>
                     <p>Documentos cargados</p>
                     <button onClick={()=>this.props.goToStep(1)}>Volver</button>
-                    </div>}
+                </div> 
+                }
                 
             </div>
         )
