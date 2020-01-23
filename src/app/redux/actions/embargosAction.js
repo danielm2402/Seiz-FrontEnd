@@ -40,5 +40,15 @@ export const deleteEmbargo=(id, token, path)=>({
     token,
     path
 });
+export const getEmbargo=(id, token)=>({
+    type: types.GET_EMBARGO,
+    id,
+    token
+})
+export const getDemandados=(id, token)=>({
+    type:types.GET_DEMANDADOS,
+    id,
+    token
+})
 
 

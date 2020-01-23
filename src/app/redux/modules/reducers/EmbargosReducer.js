@@ -1,5 +1,5 @@
 
-import { GET_EMBARGOS_CONFIRMADOS, GET_EMBARGOS_CONFIRMADOS_SUCCESS, GET_EMBARGOS_POR_CONFIRMAR, GET_EMBARGOS_POR_CONFIRMAR_SUCCESS,
+import { GET_EMBARGOS_CONFIRMADOS,GET_EMBARGO, GET_DEMANDADOS, GET_EMBARGOS_CONFIRMADOS_SUCCESS, GET_EMBARGOS_POR_CONFIRMAR, GET_EMBARGOS_POR_CONFIRMAR_SUCCESS,
 GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_ASIGNADOS_SUCCESS, GET_EMBARGOS_ALL, GET_EMBARGOS_ALL_SUCCESS
 } from '../../constants/EmbargosConst';
 
@@ -8,7 +8,9 @@ export const Authstate = {
     confirmados:[],
     porConfirmar:[],
     asignados:[],
-    all:[]
+    all:[],
+    embargo:{loading:true, data:{}},
+    demandados:{loading:true, data:{}}
     
 }
 export default function authReducer(state = Authstate, action={}){
@@ -55,7 +57,18 @@ export default function authReducer(state = Authstate, action={}){
             return{
                 ...state,
                 all:action.data
-            }                   
+            }
+        case GET_EMBARGO:
+            return{
+                ...state,
+                embargo:{loading:true, data:{}}
+            }
+        case GET_DEMANDADOS:
+            return{
+                ...state,
+                demandados:{loading:true,data:{}}
+            }    
+
         default:
             return state;
     }

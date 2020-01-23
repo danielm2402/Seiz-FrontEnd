@@ -14,7 +14,7 @@ a {
 .MuiInput-underline:focus:not(.Mui-focused):before,
 .MuiInput-underline:active:not(.Mui-focused):before,
 .MuiInput-underline:hover:not(.Mui-disabled):before {
-  border-bottom: 1px solid #5867dd !important;
+  border-bottom: 1px solid #BDD535 !important;
 }
 
 // builder
@@ -44,7 +44,7 @@ a {
   }
 
   & + .MuiSwitch-track {
-    background-color: #5867dd !important;
+    background-color: #BDD535 !important;
   }
 }
 
