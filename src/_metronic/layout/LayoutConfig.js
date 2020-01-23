@@ -102,8 +102,8 @@ export const initLayoutConfig = {
       "display": true,
       "fixed": true,
       "minimize": {
-        "toggle": false,
-        "default": false
+        "toggle": true,
+        "default": true
       }
     },
     "footer": {
