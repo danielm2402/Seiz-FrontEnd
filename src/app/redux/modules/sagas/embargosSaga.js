@@ -168,7 +168,7 @@ function* getEmbargoSaga(payload) {
         responseType: 'blob', // important
         headers: { Authorization: 'Bearer ' + payload.token, }
       }).then((response) => {
-         url = window.URL.createObjectURL(new Blob([response.data], {type: 'application/octet-stream'},'view.pdf'));
+         url = window.URL.createObjectURL(new Blob([response.data], {type: 'application/pdf'},'view.pdf'));
       }) );
 
       const bounding= (yield (axios({
@@ -177,7 +177,7 @@ function* getEmbargoSaga(payload) {
         responseType: 'blob', // important
         headers: { Authorization: 'Bearer ' + payload.token }
       }).then((response) => response.data)))
-
+      console.log(bounding)
       const file = window.URL.createObjectURL(new Blob([bounding], {type: 'application/json'},'view.json'));
       const json= yield axios.get(file)
       .then(response=>response.data)

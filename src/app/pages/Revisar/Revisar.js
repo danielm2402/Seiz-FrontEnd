@@ -3,66 +3,34 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 import { getDemandados, getEmbargo } from '../../redux/actions/embargosAction'
 import Tabla from './Tabla'
-import FileViewer from 'react-file-viewer';
-
-import axios from 'axios'
+import { PDFObject } from 'react-pdfobject'
+import { Document, Page, pdfjs } from 'react-pdf';
 import './Tabla.css'
 import { PDFReader } from 'reactjs-pdf-reader';
+import { PDFViewer } from '@react-pdf/renderer';
 
 class Revisar extends Component {
-    constructor(props){
+    constructor(props) {
         super(props)
-        this.state={
-            view:'',
-            json:'',
-            loading:true,
+        this.state = {
+            view: '',
+            json: '',
+            loading: true,
             numPages: null,
-     pageNumber: 1
+            pageNumber: 1
         }
     }
     componentDidMount() {
-        console.log(this.props)
+
         this.props.handleEmbargo(this.props.match.params.id, this.props.token)
         this.props.handleDemandados(this.props.match.params.id, this.props.token)
-        
     }
-    componentDidUpdate(prevProps){
-        if(this.props.embargo.data.urlEmbargoFile!==prevProps.embargo.data.urlEmbargoFile){
-            console.log('CAMBIANDO URL')
-            axios({
-                url: this.props.embargo.data.urlEmbargoFile,
-                method: 'GET',
-                responseType: 'blob', // important
-                headers: { Authorization: 'Bearer ' + this.props.token, }
-              }).then((response) => {
-                //url = window.URL.createObjectURL(new Blob([response.data]));
-                var file = window.URL.createObjectURL(new Blob([response.data], {type: 'application/pdf'},'view.pdf'));
-            
-                this.setState({view:file, loading:false},()=>{
-                    console.log(this.state.view)
-                })
-              }) 
-                 
-              axios({
-                url: (this.props.embargo.data.urlEmbargoFile.split('.pdf')[0])+'.json',
-                method: 'GET',
-                responseType: 'blob', // important
-                headers: { Authorization: 'Bearer ' + this.props.token, }
-              }).then((response) => {
-                //url = window.URL.createObjectURL(new Blob([response.data]));
-                var file = window.URL.createObjectURL(new Blob([response.data], {type: 'application/json'},'view.json'));
-               axios({
-                url: file,
-                method: 'GET',
-               }).then((response)=>{
-                   console.log(response)
-               })
-              })       
-        }
+    componentDidUpdate() {
+        console.log(this.props.document)
     }
     onDocumentLoadSuccess = ({ numPages }) => {
         this.setState({ numPages });
-      }
+    }
     render() {
         const { pageNumber, numPages } = this.state;
         return (
@@ -71,7 +39,7 @@ class Revisar extends Component {
                     <div>LOADINGGGG</div> :
                     <div className="container-view">
                         <div className="container-document">
-                            <PDFReader url={this.props.document}/>
+                        <PDFObject url={this.props.document} />
                         </div>
                         <div className="section-table">
                             <Tabla />
@@ -82,7 +50,7 @@ class Revisar extends Component {
     }
     onError(e) {
         console.log(e, 'error in file-viewer');
-      }
+    }
 }
 
 

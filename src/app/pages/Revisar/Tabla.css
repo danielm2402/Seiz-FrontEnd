@@ -5,6 +5,7 @@
 }
 .container-document{
     width: 50%;
+    height: 900px;
     padding: 10px;
   background: #fff;
 }
@@ -12,4 +13,8 @@
     width: 50%;
     padding: 10px;
   background: #fff;
+}
+.pdfobject-container{
+    height: 965px !important;
+    width: 612px !important;
 }
