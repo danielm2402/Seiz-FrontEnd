@@ -22,7 +22,7 @@ import { FaCheckDouble, FaCheck } from "react-icons/fa";
 import {
   Link
 } from "react-router-dom";
-
+import { VictoryPie } from "victory";
 import './style.css'
 export default function Dashboard() {
   const { brandColor, dangerColor, successColor, primaryColor } = useSelector(
@@ -242,19 +242,13 @@ export default function Dashboard() {
         <PortletBody fit={true}>
           <div className="row row-no-padding row-col-separator-xl">
             <div className="col-xl-4">
-              <OrdersWidget />
+            <VictoryPie />
             </div>
             <div className="col-xl-4">
-              <SalesBarChart
-                title="Daily Sales"
-                desc="Check out each column for more details"
-              />
+            <VictoryPie />
             </div>
             <div className="col-xl-4">
-              <SalesBarChart
-                title="Revenue Change"
-                desc="Revenue change breakdown by cities"
-              />
+            <VictoryPie />
             </div>
           </div>
         </PortletBody>

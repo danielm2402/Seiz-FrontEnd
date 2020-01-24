@@ -17,7 +17,7 @@ function* uploadSaga(payload) {
     const config = {
         headers: {  
             Authorization: 'Bearer ' + payload.token, 
-            'Content-Type':'application/octet-stream'  
+           
         }
     };
     const data= yield axios.post('https://bancow.finseiz.com/api/v1/embargos/upload',bodyFormData, config)
