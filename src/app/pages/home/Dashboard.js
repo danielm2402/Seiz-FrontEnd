@@ -17,12 +17,12 @@ import LatestUpdates from "../../widgets/LatestUpdates";
 import BestSellers from "../../widgets/BestSellers";
 import RecentActivities from "../../widgets/RecentActivities";
 import PortletHeaderDropdown from "../../partials/content/CustomDropdowns/PortletHeaderDropdown";
-import { MdVideoLibrary, MdFileUpload,MdFileDownload,MdCloudUpload,MdSearch,MdEmail,MdNotificationsNone } from "react-icons/md";
+import { MdVideoLibrary, MdFileUpload, MdFileDownload, MdCloudUpload, MdSearch, MdEmail, MdNotificationsNone } from "react-icons/md";
 import { FaCheckDouble, FaCheck } from "react-icons/fa";
 import {
   Link
 } from "react-router-dom";
-import { VictoryPie } from "victory";
+import { VictoryPie, VictoryChart, VictoryLine } from "victory";
 import './style.css'
 export default function Dashboard() {
   const { brandColor, dangerColor, successColor, primaryColor } = useSelector(
@@ -80,21 +80,21 @@ export default function Dashboard() {
       <div className="row">
         <div className="contenedor1">
           <div className="row contenedor">
-          
+
             <div className="columna">
               <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
-              <Link to="/upload/oficio">
-                <PortletBody fluid={true}>
-                <div className="card-item">
-                  <QuickStatsChart
-                    value={50}
-                    desc="Subir Oficio"
-                    color={chartOptions.chart1.color}
-                    border={chartOptions.chart1.border}
-                  />
-                  <MdFileUpload style={{width:'50px', height:'50px'}}/>
-                  </div>
-                </PortletBody>
+                <Link to="/upload/oficio">
+                  <PortletBody fluid={true}>
+                    <div className="card-item">
+                      <QuickStatsChart
+                        value={50}
+                        desc="Subir Oficio"
+                        color={chartOptions.chart1.color}
+                        border={chartOptions.chart1.border}
+                      />
+                      <MdFileUpload style={{ width: '50px', height: '50px' }} />
+                    </div>
+                  </PortletBody>
                 </Link>
               </Portlet>
 
@@ -102,76 +102,76 @@ export default function Dashboard() {
 
               <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
                 <Link to="/listar/no-confirmados">
-                <PortletBody fluid={true}>
-                  <div className="card-item">
-                  <QuickStatsChart
-                    value={10}
-                    desc="Por Confirmar"
-                    color={chartOptions.chart2.color}
-                    border={chartOptions.chart2.border}
-                  />
-                  <FaCheck style={{width:'50px', height:'50px'}}/>
-                 </div>
-                 
-                </PortletBody>
+                  <PortletBody fluid={true}>
+                    <div className="card-item">
+                      <QuickStatsChart
+                        value={10}
+                        desc="Por Confirmar"
+                        color={chartOptions.chart2.color}
+                        border={chartOptions.chart2.border}
+                      />
+                      <FaCheck style={{ width: '50px', height: '50px' }} />
+                    </div>
+
+                  </PortletBody>
                 </Link>
-                
+
               </Portlet>
             </div>
 
             <div className="columna">
               <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
-              <a href="">            
-                <PortletBody fluid={true}>
-                <div className="card-item">
-                  <QuickStatsChart
-                    value="234"
-                    desc="Descargar Embargos"
-                   
-                    color={chartOptions.chart3.color}
-                    border={chartOptions.chart3.border}
-                  />
-                  <MdFileDownload style={{width:'50px', height:'50px'}}/>
-                  </div>
-                </PortletBody>
-                </a>  
+                <a href="">
+                  <PortletBody fluid={true}>
+                    <div className="card-item">
+                      <QuickStatsChart
+                        value="234"
+                        desc="Descargar Embargos"
+
+                        color={chartOptions.chart3.color}
+                        border={chartOptions.chart3.border}
+                      />
+                      <MdFileDownload style={{ width: '50px', height: '50px' }} />
+                    </div>
+                  </PortletBody>
+                </a>
               </Portlet>
 
               <div className="kt-space-20" />
 
               <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
-              <Link to="/listar/confirmados">
-                <PortletBody fluid={true}>
-                <div className="card-item">
-                  <QuickStatsChart
-                    value="200"
-                    desc="Confirmados"
-                   
-                    color={chartOptions.chart4.color}
-                    border={chartOptions.chart4.border}
-                  />
-                  <FaCheckDouble style={{width:'40px', height:'40px'}}/>
-                  </div>
-                </PortletBody>
+                <Link to="/listar/confirmados">
+                  <PortletBody fluid={true}>
+                    <div className="card-item">
+                      <QuickStatsChart
+                        value="200"
+                        desc="Confirmados"
+
+                        color={chartOptions.chart4.color}
+                        border={chartOptions.chart4.border}
+                      />
+                      <FaCheckDouble style={{ width: '40px', height: '40px' }} />
+                    </div>
+                  </PortletBody>
                 </Link>
-               
+
               </Portlet>
             </div>
             <div className="columna">
-        <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
-          <a href="">
-                <PortletBody fluid={true}>
-                <div className="card-item">
-                  <QuickStatsChart
-                    value="12"
-                    desc="Cargar cuentas"
-                    
-                    color={chartOptions.chart3.color}
-                    border={chartOptions.chart3.border}
-                  />
-                  <MdCloudUpload style={{width:'50px', height:'50px'}}/>
-                  </div>
-                </PortletBody>
+              <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
+                <a href="">
+                  <PortletBody fluid={true}>
+                    <div className="card-item">
+                      <QuickStatsChart
+                        value="12"
+                        desc="Cargar cuentas"
+
+                        color={chartOptions.chart3.color}
+                        border={chartOptions.chart3.border}
+                      />
+                      <MdCloudUpload style={{ width: '50px', height: '50px' }} />
+                    </div>
+                  </PortletBody>
                 </a>
               </Portlet>
 
@@ -179,36 +179,36 @@ export default function Dashboard() {
 
               <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
                 <a href="">
-                <PortletBody fluid={true}>
-                <div className="card-item">
-                  <QuickStatsChart
-                    value="10"
-                    desc="Cartas"
-                   
-                    color={chartOptions.chart4.color}
-                    border={chartOptions.chart4.border}
-                  />
-                  <MdEmail style={{width:'50px', height:'50px'}}/>
-                  </div>
-                </PortletBody>
+                  <PortletBody fluid={true}>
+                    <div className="card-item">
+                      <QuickStatsChart
+                        value="10"
+                        desc="Cartas"
+
+                        color={chartOptions.chart4.color}
+                        border={chartOptions.chart4.border}
+                      />
+                      <MdEmail style={{ width: '50px', height: '50px' }} />
+                    </div>
+                  </PortletBody>
                 </a>
               </Portlet>
-        </div>
-        <div className="columna">
-        <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
-               <Link to="/listar/todos">
-                <PortletBody fluid={true}>
-                <div className="card-item">
-                  <QuickStatsChart
-                    value="800"
-                    desc="Buscar Embargos"
-                    
-                    color={chartOptions.chart3.color}
-                    border={chartOptions.chart3.border}
-                  />
-                  <MdSearch style={{width:'50px', height:'50px'}}/>
-                  </div>
-                </PortletBody>
+            </div>
+            <div className="columna">
+              <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
+                <Link to="/listar/todos">
+                  <PortletBody fluid={true}>
+                    <div className="card-item">
+                      <QuickStatsChart
+                        value="800"
+                        desc="Buscar Embargos"
+
+                        color={chartOptions.chart3.color}
+                        border={chartOptions.chart3.border}
+                      />
+                      <MdSearch style={{ width: '50px', height: '50px' }} />
+                    </div>
+                  </PortletBody>
                 </Link>
               </Portlet>
 
@@ -216,55 +216,45 @@ export default function Dashboard() {
 
               <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
                 <Link to="/listar/asignados">
-                <PortletBody fluid={true}>
-                <div className="card-item">
-                  <QuickStatsChart
-                    value="6"
-                    desc="Asignados"
-                    color={chartOptions.chart4.color}
-                    border={chartOptions.chart4.border}
-                  />
-                  <MdNotificationsNone style={{width:'50px', height:'50px'}}/>
-                  </div>
-                </PortletBody>
+                  <PortletBody fluid={true}>
+                    <div className="card-item">
+                      <QuickStatsChart
+                        value="6"
+                        desc="Asignados"
+                        color={chartOptions.chart4.color}
+                        border={chartOptions.chart4.border}
+                      />
+                      <MdNotificationsNone style={{ width: '50px', height: '50px' }} />
+                    </div>
+                  </PortletBody>
                 </Link>
               </Portlet>
-        </div>
-        </div>
+            </div>
           </div>
-      
+        </div>
 
-        
-        
+
+
+
       </div>
 
       <Portlet>
         <PortletBody fit={true}>
           <div className="row row-no-padding row-col-separator-xl">
             <div className="col-xl-4">
-            <VictoryPie />
+              <VictoryPie />
             </div>
             <div className="col-xl-4">
-            <VictoryPie />
+              <VictoryPie />
             </div>
             <div className="col-xl-4">
-            <VictoryPie />
+              <VictoryPie />
             </div>
           </div>
         </PortletBody>
       </Portlet>
 
-      <div className="row">
-        <div className="col-xl-4">
-          <DownloadFiles />
-        </div>
-        <div className="col-xl-4">
-          <NewUsers />
-        </div>
-        <div className="col-xl-4">
-          <LatestUpdates />
-        </div>
-      </div>
+
 
       {/* <div className="row">
         <div className="col-xl-8"></div>
@@ -275,7 +265,23 @@ export default function Dashboard() {
 
       <div className="row">
         <div className="col-xl-8">
-          <BestSellers />
+          <VictoryChart
+            
+          >
+            <VictoryLine
+              style={{
+                data: { stroke: "#c43a31" },
+                parent: { border: "1px solid #ccc" }
+              }}
+              data={[
+                { x: 1, y: 2 },
+                { x: 2, y: 3 },
+                { x: 3, y: 5 },
+                { x: 4, y: 4 },
+                { x: 5, y: 7 }
+              ]}
+            />
+          </VictoryChart>
         </div>
         <div className="col-xl-4">
           <RecentActivities />
