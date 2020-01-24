@@ -51,10 +51,11 @@ export const getDemandados=(id, token)=>({
     token
 })
 
-export const getEmbargoSuccess=(data, document)=>({
+export const getEmbargoSuccess=(data, document, json)=>({
     type:types.GET_EMBARGO_SUCCESS,
     data,
-    document
+    document,
+    json
 })
 export const getDemandadosSuccess=(data)=>({
     type:types.GET_DEMANDADOS_SUCCESS,

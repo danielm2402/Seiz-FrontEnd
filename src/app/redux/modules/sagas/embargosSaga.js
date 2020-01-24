@@ -158,29 +158,31 @@ function* getEmbargoSaga(payload) {
   const data = yield axios.get('https://bancow.finseiz.com/api/v1/embargos/' + payload.id, config)
     .then(response => response)
     .catch(err => err.response)
-  console.log(data)
+    var url=''
   switch (data.status) {
     case 200:
       console.log('obteniendo pdf')
-      let url=''
       yield (axios({
         url: data.data.urlEmbargoFile,
         method: 'GET',
         responseType: 'blob', // important
         headers: { Authorization: 'Bearer ' + payload.token, }
       }).then((response) => {
-        url = window.URL.createObjectURL(new Blob([response.data]));
-        
-         /* const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'file.pdf');
-        console.log(url)
-        document.body.appendChild(link);
-        link.click(); */
-      }));
+         url = window.URL.createObjectURL(new Blob([response.data], {type: 'application/octet-stream'},'view.pdf'));
+      }) );
 
-      yield put(getEmbargoSuccess(data.data, url))
+      const bounding= (yield (axios({
+        url: ((data.data.urlEmbargoFile.split('.pdf')[0])+'.json'),
+        method: 'GET',
+        responseType: 'blob', // important
+        headers: { Authorization: 'Bearer ' + payload.token }
+      }).then((response) => response.data)))
 
+      const file = window.URL.createObjectURL(new Blob([bounding], {type: 'application/json'},'view.json'));
+      const json= yield axios.get(file)
+      .then(response=>response.data)
+
+      yield put(getEmbargoSuccess(data.data, url, json))
       break;
 
     default:

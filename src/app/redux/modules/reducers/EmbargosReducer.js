@@ -9,7 +9,7 @@ export const Authstate = {
     porConfirmar:[],
     asignados:[],
     all:[],
-    embargo:{loading:true, data:{}, document:null},
+    embargo:{loading:true, data:{}, document:null, json:null},
     demandados:{loading:true, data:{}}
     
 }
@@ -76,7 +76,7 @@ export default function authReducer(state = Authstate, action={}){
         case GET_EMBARGO_SUCCESS:
             return{
                 ...state,
-                embargo:{loading:false, data:action.data, document:action.document}
+                embargo:{loading:false, data:action.data, document:action.document, json:action.json}
             }           
 
         default:
