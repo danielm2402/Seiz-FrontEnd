@@ -8,6 +8,7 @@ import { Document, Page, pdfjs } from 'react-pdf';
 import './Tabla.css'
 import { PDFReader } from 'reactjs-pdf-reader';
 import { PDFViewer } from '@react-pdf/renderer';
+import Demandantes from './Demandante'
 
 class Revisar extends Component {
     constructor(props) {
@@ -33,6 +34,10 @@ class Revisar extends Component {
     }
     render() {
         const { pageNumber, numPages } = this.state;
+        var columns=[
+            {title:'Nombre', field:'fullname'},   
+            { title: 'Identificación', field: 'id'},  
+          ]
         return (
             <div>
                 {this.props.loadingEmbargo || this.props.loadingDemandados ?
@@ -43,6 +48,7 @@ class Revisar extends Component {
                         </div>
                         <div className="section-table">
                             <Tabla />
+                            <Demandantes nombre="Demandantes" columns={columns} data={this.props.embargo.data.plaintiffs}/>
                         </div>
                     </div>}
             </div>
