@@ -51,7 +51,7 @@ class Second extends Component {
                     {this.state.files.map((item) => {
                         return (
                             <div className="container-item-document">
-                                <TiDocumentText style={{ width: '200px', height: '200px' }} />
+                                <TiDocumentText style={{ color:'#ffffff', width: '200px', height: '200px' }} />
                                 <p>{item.name}</p>
                             </div>
                         )
