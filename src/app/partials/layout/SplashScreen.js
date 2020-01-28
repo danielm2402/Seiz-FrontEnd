@@ -4,11 +4,11 @@ import { toAbsoluteUrl } from "../../../_metronic";
 
 class SplashScreen extends React.Component {
   render() {
-    return (
+    return ( 
       <>
         <div className="kt-splash-screen">
-        <img src={toAbsoluteUrl("/media/logos/logo-mini-md.png")}
-          alt="Metronic logo" />
+        <img src={toAbsoluteUrl("/media/logos/loader.png")}
+          alt="Seiz" />
         <CircularProgress className="kt-splash-screen__spinner" />
         </div>
       </>
