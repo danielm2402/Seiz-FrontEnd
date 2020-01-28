@@ -34,9 +34,6 @@ export default function HomePage() {
         <Route path="/listar/no-confirmados" exact component={NoConfirmados}/>
         <Route path="/listar/asignados" exact component={Asignados}/>
         <Route path="/listar/todos" exact component={Todos}/>
-        <Route path="/google-material" component={GoogleMaterialPage} />
-        <Route path="/react-bootstrap" component={ReactBootstrapPage} />
-        <Route path="/docs" component={DocsPage} />
         <Redirect to="/error/error-v1" />
       </Switch>
     </Suspense>

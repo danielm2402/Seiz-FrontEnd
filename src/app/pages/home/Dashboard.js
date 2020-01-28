@@ -79,14 +79,30 @@ export default function Dashboard() {
   return (
     <>
       <div className="cards-container">
+        <Link to="/upload">
         <Tarjet nombre="Subir oficio" width="280px" height="280px" number="200"/>
+        </Link>
+        <Link>
         <Tarjet nombre="Descargar Embargos" width="280px" height="280px" number="200"/>
+        </Link>
+        <Link>
         <Tarjet nombre="Cargar Cuentas" width="280px" height="280px" number="200"/>
+        </Link>
+        <Link to="/listar/no-confirmados">
         <Tarjet nombre="Por confirmar" width="280px" height="280px" number="200"/>
+        </Link>
+        <Link to="/listar/confirmados">
         <Tarjet nombre="Confirmados" width="280px" height="280px" number="200"/>
+        </Link>
+        <Link to="/listar/todos">
         <Tarjet  nombre="Buscar Embargo" width="280px" height="280px" number="200" />
+        </Link>
+        <Link>
         <Tarjet nombre="Cartas" width="280px" height="280px" number="200"/>
+        </Link>
+        <Link to="/listar/asignados">
         <Tarjet nombre="Embargos Asignados" width="280px" height="280px" number="200"/>
+        </Link>
       </div>
       <div className="cards-container">
       

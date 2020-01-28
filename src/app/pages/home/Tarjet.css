@@ -2,26 +2,35 @@
     background-color: #ffffff;
     display: flex;
     flex-direction: column;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    color: #BDD535
     
 }
+
 .header-tarjer{
     display: flex;
     align-items: center;
     justify-content: space-around;
     padding-top: 20px;
+    color: #434040
 }
 .number-tarjeta{
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+    
 }
 .number-tarjeta h1{
     font-size: 70px;
-    color: #BDD535
+    color: inherit
 }
 .hr-style{
     border: 1px solid #434040;
     width: 80%;
+}
+.tarjet-container:hover{
+    color:#ffffff !important;
+    background-color: #BDD535;
+    
 }
