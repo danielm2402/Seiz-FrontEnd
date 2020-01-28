@@ -28,6 +28,7 @@
   justify-content: center;
   flex-direction: column;
   height: auto;
+  margin-bottom: 15px;
 }
 .information-card input{
   border-radius: 4px;
@@ -73,4 +74,22 @@
 }
 .container-finish .progress.right .progress-bar  { 
   background-color: #BDD535;
+}
+.cols-demandantes{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+.table-demandantes{
+  width: 100%;
+  
+}
+.table-demandantes th{
+  text-align: center;
+  border: 1px solid #D8DCE0;
+  background-color: #434040;
+  border-top-left-radius: 10px;
+  color: #ffffff;
 }

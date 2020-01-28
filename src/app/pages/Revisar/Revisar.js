@@ -43,7 +43,6 @@ class Revisar extends Component {
             fecha: props.embargo.data.documentDate,
             tipoEmbargo: props.embargo.data.embargoType,
             tipoDocumento: props.embargo.data.documentType
-
         }
     }
     componentDidMount() {
@@ -63,9 +62,9 @@ class Revisar extends Component {
                 direccion: this.props.embargo.data.address,
                 ciudad: this.props.embargo.data.city,
                 fecha: this.props.embargo.data.documentDate,
-                tipoEmbargo:{ label: this.props.embargo.data.embargoType, value: this.props.embargo.data.embargoType } ,
+                tipoEmbargo: { label: this.props.embargo.data.embargoType, value: this.props.embargo.data.embargoType },
                 tipoDocumento: { label: this.props.embargo.data.documentType, value: this.props.embargo.data.documentType },
-                disabled:true
+                disabled: true
 
             })
             console.log(this.props.embargo)
@@ -85,11 +84,11 @@ class Revisar extends Component {
             <div>
                 {this.props.loadingEmbargo || this.props.loadingDemandados ?
                     <div className="container-progress">
-                    <ProgressBar className="right" animated now={100}/>
+                        <ProgressBar className="right" animated now={100} />
                     </div> :
                     <div className="container-view">
                         <div className="container-document">
-                            <PDFObject url={this.props.document} page={1} />
+                            <PDFObject url={this.props.document} page={2} />
                         </div>
                         <div className="section-table">
                             <div className="information-card">
@@ -113,11 +112,35 @@ class Revisar extends Component {
                                         <input id="fecha" name="fecha" value={this.state.fecha} disabled={this.state.disabled} />
                                         <label>Tipo de documento</label>
                                         <div className="select-input">
-                                            <Select options={options2} value={this.state.tipoDocumento} isDisabled={this.state.disabled}/>
+                                            <Select options={options2} value={this.state.tipoDocumento} isDisabled={this.state.disabled} />
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            
+                                <div className="information-card">
+                                    <div className="cols-demandantes">
+                                        <table className="table-demandantes">
+                                            <tr>
+                                                <th>Nombre</th>
+                                                <th>Identificación</th>
+                                                
+                                            </tr>
+                                            <tr>
+                                                <td>Jill</td>
+                                                <td>Smith</td>
+                                               
+                                            </tr>
+                                            <tr>
+                                                <td>Eve</td>
+                                                <td>Jackson</td>
+                                               
+                                            </tr>
+                                        </table>
+                                        </div>
+                                    </div>
+                                
+                        
                             {// <Tabla />
                                 //<Demandantes nombre="Demandantes" columns={columns} data={this.props.embargo.data.plaintiffs} />
                             }
