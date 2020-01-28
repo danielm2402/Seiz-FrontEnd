@@ -37,5 +37,6 @@ export default function HomePage() {
         <Redirect to="/error/error-v1" />
       </Switch>
     </Suspense>
-  );
+  )
+ ;
 }

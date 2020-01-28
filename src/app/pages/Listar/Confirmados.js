@@ -18,11 +18,11 @@ class Confirmados extends Component {
             {title:'Id', field:'id'},
             { title: 'Demandante', field: 'plaintiffs[0].fullname'},
             { title: 'Ciudad', field: 'city'},
-            { title: 'Estado', field: 'status'},
+            { title: 'Estado', field: 'status',
+            },
             { title: 'Tipo', field: 'embargoType'},
             { title: 'Fecha de carga', field: 'createdAt'},
             { title: 'Fecha Oficio', field: 'documentDate'},
-       
           ]
         return (
             <div>

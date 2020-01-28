@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { ProgressBar } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
+import { Redirect } from "react-router-dom";
+
+//import {ModalContainer, ModalDialog} from 'react-modal-dialog';
 import './Sencond.css'
 class Loader extends Component {
     componentDidUpdate(prevProps) {
@@ -25,10 +28,8 @@ class Loader extends Component {
                 <h3>Éste es el momento oportuno para ir por un café</h3>
                  </div>:
 
-                
                 <div>
-                    <p>Documentos cargados</p>
-                    <button onClick={()=>this.props.goToStep(1)}>Volver</button>
+                    <Redirect to='/dashboard'/>;
                 </div> 
                 }
                 

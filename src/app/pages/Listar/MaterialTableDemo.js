@@ -1,11 +1,26 @@
 
 import React, { useState }  from 'react';
-import MaterialTable from 'material-table';
+import MaterialTable,{ MTableCell }  from 'material-table';
 import {deleteEmbargo, getEmbargo, getDemandados} from '../../redux/actions/embargosAction'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {Link} from 'react-router-dom'
 import {useHistory} from 'react-router-dom'
+
+const color=(value)=>{
+  switch (value) {
+    case 'CONFIRMADO':
+      return '#1776E8'
+    case 'SIN_CONFIRMAR':
+      return '#D32121'
+      case 'COMPLETO':
+      return '#76E111'
+    default:
+      return '#ffffff'
+     
+  }
+}
+
 function MaterialTableDemo(props) {
   let history=useHistory()
   return (
@@ -13,6 +28,22 @@ function MaterialTableDemo(props) {
     <MaterialTable
       title={props.nombre}
       columns={props.columns}
+      components={{
+        Cell: props => {
+          console.log(props);
+          return (
+            <MTableCell
+              style={{
+                background: color(props.value)
+                
+            
+                    
+              }}
+              {...props}
+            />
+          );
+        }
+      }}
       data={props.data}
       actions={[
        rowData=>({
@@ -34,7 +65,10 @@ function MaterialTableDemo(props) {
         pageSize: 19,
         pageSizeOptions: [],
         toolbar: true,
-        paging: true
+        paging: true,
+        rowStyle: {
+          backgroundColor: '#EEE',
+        }
     }}
       editable={{
         onRowDelete: oldData =>

@@ -15,3 +15,6 @@ export const addFile=(file)=>({
     type: types.ADD_FILE,
     file
 })
+export const updateLoader=()=>({
+    type: types.UPDATE_LOADER
+})
