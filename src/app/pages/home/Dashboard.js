@@ -23,6 +23,7 @@ import {
   Link
 } from "react-router-dom";
 import { VictoryPie, VictoryChart, VictoryLine, VictoryGroup, VictoryBar } from "victory";
+import Tarjet from './Tarjet'
 import './style.css'
 export default function Dashboard() {
   const { brandColor, dangerColor, successColor, primaryColor } = useSelector(
@@ -77,165 +78,18 @@ export default function Dashboard() {
 
   return (
     <>
-      <div className="row">
-        <div className="contenedor1">
-          <div className="row contenedor">
-
-            <div className="columna">
-              <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
-                <Link to="/upload/oficio">
-                  <PortletBody fluid={true}>
-                    <div className="card-item">
-                      <QuickStatsChart
-                        value={50}
-                        desc="Subir Oficio"
-                        color={chartOptions.chart1.color}
-                        border={chartOptions.chart1.border}
-                      />
-                      <MdFileUpload style={{ width: '50px', height: '50px' }} />
-                    </div>
-                  </PortletBody>
-                </Link>
-              </Portlet>
-
-              <div className="kt-space-20" />
-
-              <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
-                <Link to="/listar/no-confirmados">
-                  <PortletBody fluid={true}>
-                    <div className="card-item">
-                      <QuickStatsChart
-                        value={10}
-                        desc="Por Confirmar"
-                        color={chartOptions.chart2.color}
-                        border={chartOptions.chart2.border}
-                      />
-                      <FaCheck style={{ width: '50px', height: '50px' }} />
-                    </div>
-
-                  </PortletBody>
-                </Link>
-
-              </Portlet>
-            </div>
-
-            <div className="columna">
-              <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
-                <a href="">
-                  <PortletBody fluid={true}>
-                    <div className="card-item">
-                      <QuickStatsChart
-                        value="234"
-                        desc="Descargar Embargos"
-
-                        color={chartOptions.chart3.color}
-                        border={chartOptions.chart3.border}
-                      />
-                      <MdFileDownload style={{ width: '50px', height: '50px' }} />
-                    </div>
-                  </PortletBody>
-                </a>
-              </Portlet>
-
-              <div className="kt-space-20" />
-
-              <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
-                <Link to="/listar/confirmados">
-                  <PortletBody fluid={true}>
-                    <div className="card-item">
-                      <QuickStatsChart
-                        value="200"
-                        desc="Confirmados"
-
-                        color={chartOptions.chart4.color}
-                        border={chartOptions.chart4.border}
-                      />
-                      <FaCheckDouble style={{ width: '40px', height: '40px' }} />
-                    </div>
-                  </PortletBody>
-                </Link>
-
-              </Portlet>
-            </div>
-            <div className="columna">
-              <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
-                <a href="">
-                  <PortletBody fluid={true}>
-                    <div className="card-item">
-                      <QuickStatsChart
-                        value="12"
-                        desc="Cargar cuentas"
-
-                        color={chartOptions.chart3.color}
-                        border={chartOptions.chart3.border}
-                      />
-                      <MdCloudUpload style={{ width: '50px', height: '50px' }} />
-                    </div>
-                  </PortletBody>
-                </a>
-              </Portlet>
-
-              <div className="kt-space-20" />
-
-              <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
-                <a href="">
-                  <PortletBody fluid={true}>
-                    <div className="card-item">
-                      <QuickStatsChart
-                        value="10"
-                        desc="Cartas"
-
-                        color={chartOptions.chart4.color}
-                        border={chartOptions.chart4.border}
-                      />
-                      <MdEmail style={{ width: '50px', height: '50px' }} />
-                    </div>
-                  </PortletBody>
-                </a>
-              </Portlet>
-            </div>
-            <div className="columna">
-              <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
-                <Link to="/listar/todos">
-                  <PortletBody fluid={true}>
-                    <div className="card-item">
-                      <QuickStatsChart
-                        value="800"
-                        desc="Buscar Embargos"
-
-                        color={chartOptions.chart3.color}
-                        border={chartOptions.chart3.border}
-                      />
-                      <MdSearch style={{ width: '50px', height: '50px' }} />
-                    </div>
-                  </PortletBody>
-                </Link>
-              </Portlet>
-
-              <div className="kt-space-20" />
-
-              <Portlet className="kt-portlet--height-fluid-half kt-portlet--border-bottom-brand">
-                <Link to="/listar/asignados">
-                  <PortletBody fluid={true}>
-                    <div className="card-item">
-                      <QuickStatsChart
-                        value="6"
-                        desc="Asignados"
-                        color={chartOptions.chart4.color}
-                        border={chartOptions.chart4.border}
-                      />
-                      <MdNotificationsNone style={{ width: '50px', height: '50px' }} />
-                    </div>
-                  </PortletBody>
-                </Link>
-              </Portlet>
-            </div>
-          </div>
-        </div>
-
-
-
-
+      <div className="cards-container">
+        <Tarjet nombre="Subir oficio" width="280px" height="280px" number="200"/>
+        <Tarjet nombre="Descargar Embargos" width="280px" height="280px" number="200"/>
+        <Tarjet nombre="Cargar Cuentas" width="280px" height="280px" number="200"/>
+        <Tarjet nombre="Por confirmar" width="280px" height="280px" number="200"/>
+        <Tarjet nombre="Confirmados" width="280px" height="280px" number="200"/>
+        <Tarjet  nombre="Buscar Embargo" width="280px" height="280px" number="200" />
+        <Tarjet nombre="Cartas" width="280px" height="280px" number="200"/>
+        <Tarjet nombre="Embargos Asignados" width="280px" height="280px" number="200"/>
+      </div>
+      <div className="cards-container">
+      
       </div>
 
       <Portlet>
