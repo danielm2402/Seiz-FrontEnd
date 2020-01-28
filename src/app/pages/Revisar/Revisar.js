@@ -10,7 +10,7 @@ import { PDFReader } from 'reactjs-pdf-reader';
 import { PDFViewer } from '@react-pdf/renderer';
 import Demandantes from './Demandante'
 import Select from 'react-select'
-
+import { ProgressBar } from 'react-bootstrap';
 const options = [
     { value: 'NO_SELECCIONADO', label: 'NO SELECCIONADO' },
     { value: 'FAMILIAR', label: 'FAMILIAR' },
@@ -84,10 +84,12 @@ class Revisar extends Component {
         return (
             <div>
                 {this.props.loadingEmbargo || this.props.loadingDemandados ?
-                    <div>LOADINGGGG</div> :
+                    <div className="container-progress">
+                    <ProgressBar className="right" animated now={100}/>
+                    </div> :
                     <div className="container-view">
                         <div className="container-document">
-                            <PDFObject url={this.props.document} />
+                            <PDFObject url={this.props.document} page={1} />
                         </div>
                         <div className="section-table">
                             <div className="information-card">

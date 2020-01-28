@@ -66,3 +66,10 @@
 .section-information-col{
   width: 45%;
 }
+.container-progress{
+  width: 100%;
+  height: 100%;
+}
+.container-finish .progress.right .progress-bar  { 
+  background-color: #BDD535;
+}
