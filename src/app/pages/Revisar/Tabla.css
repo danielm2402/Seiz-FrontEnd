@@ -4,19 +4,19 @@
     background: #ccc;
 }
 .container-document{
-    width: 50%;
+    width: 45%;
     height: 900px;
     padding: 10px;
   background: #fff;
 }
 .section-table{
-    width: 50%;
+    width: 55%;
     padding: 10px;
   background: #fff;
 }
 .pdfobject-container{
     height: 965px !important;
-    width: 612px !important;
+  
 }
 .information-card{
   width: 100%;

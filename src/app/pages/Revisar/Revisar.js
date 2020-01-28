@@ -124,18 +124,38 @@ class Revisar extends Component {
                                             <tr>
                                                 <th>Nombre</th>
                                                 <th>Identificación</th>
-                                                
                                             </tr>
+                                            {this.props.embargo.data.plaintiffs.map((item)=>{
+                                                return(
+                                                    <tr>
+                                                        <td><input value={item.fullname} disabled={this.state.disabled}/></td>
+                                                        <td><input value={item.id} disabled={this.state.disabled}/></td>
+                                                    </tr>
+                                                )
+                                            })}
+                                        </table>
+                                        </div>
+                                    </div>
+
+                                    <div className="information-card">
+                                    <div className="cols-demandantes">
+                                        <table className="table-demandantes">
                                             <tr>
-                                                <td>Jill</td>
-                                                <td>Smith</td>
-                                               
+                                                <th>Nombre</th>
+                                                <th>Tipo</th>
+                                                <th>Identificación</th>
+                                                <th>Monto</th>
                                             </tr>
-                                            <tr>
-                                                <td>Eve</td>
-                                                <td>Jackson</td>
-                                               
-                                            </tr>
+                                            {this.props.demandados.data.map((item)=>{
+                                                return(
+                                                    <tr>
+                                                        <td><input value={item.nombres} disabled={this.state.disabled}/></td>
+                                                        <td><input value={item.tipoIdentificacion} disabled={this.state.disabled}/></td>
+                                                        <td><input value={item.identificacion} disabled={this.state.disabled}/></td>
+                                                        <td><input value={item.montoAEmbargar} disabled={this.state.disabled}/></td>
+                                                    </tr>
+                                                )
+                                            })}
                                         </table>
                                         </div>
                                     </div>
@@ -160,7 +180,8 @@ const mapStateToProps = (state) => ({
     loadingEmbargo: state.EmbargosReducer.embargo.loading,
     loadingDemandados: state.EmbargosReducer.demandados.loading,
     document: state.EmbargosReducer.embargo.document,
-    embargo: state.EmbargosReducer.embargo
+    embargo: state.EmbargosReducer.embargo,
+    demandados: state.EmbargosReducer.demandados
 })
 const mapDispatchToProps = (dispatch) => ({
     handleEmbargo: bindActionCreators(getEmbargo, dispatch),
