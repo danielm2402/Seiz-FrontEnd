@@ -5,10 +5,10 @@ export const initLayoutConfig = {
   "self": {
     "layout": "fluid",
     "logo": {
-      "dark": "/media/logos/logo-light.png",
-      "light": "/media/logos/logo-dark.png",
-      "brand": "/media/logos/logo-light.png",
-      "green": "/media/logos/logo-light.png"
+      "dark": "/media/logos/seiz-white.png",
+      "light": "/media/logos/seiz-white.png",
+      "brand": "/media/logos/seiz-white.png",
+      "green": "/media/logos/seiz-white.png"
     }
   },
   "loader": {
