@@ -93,6 +93,19 @@ class Revisar extends Component {
     handleCancel=()=>{
         this.setState({disabled:true})
     }
+    focusElement(e){
+        //console.log(this.state[e.target.name])
+        var palabra=((this.state[e.target.name]).toString()).split(' ')
+       // console.log(palabra)
+        var selector=[]
+        var contador=0
+        for (let index = 0; index < palabra.length; index++) {
+           selector[contador]=this.props.json.pages[0].words.filter((item)=>(palabra[index].trim())==(item.text.trim())) 
+           contador=contador+1
+        }
+
+        console.log(selector)
+    }
     render() {
         const { pageNumber, numPages } = this.state;
         var columns = [
@@ -121,26 +134,26 @@ class Revisar extends Component {
                             </div>
                             <div className="information-card">
                                 <label for="entidad">Entidad Remitente</label>
-                                <input id="entidad" name="entidad" value={this.state.entidad} disabled={this.state.disabled} />
+                                <input id="entidad" name="entidad" value={this.state.entidad} disabled={this.state.disabled} onFocus={(e)=>{this.focusElement(e)}} />
                                 <div className="section-information-cols">
                                     <div className="section-information-col">
                                         <label for="ciudad" >Ciudad</label>
-                                        <input id="ciudad" name="ciudad" value={this.state.ciudad} disabled={this.state.disabled} />
+                                        <input id="ciudad" name="ciudad" value={this.state.ciudad} disabled={this.state.disabled} onFocus={(e)=>{this.focusElement(e)}} />
                                         <label for="referencia">Referencia</label>
-                                        <input id="referencia" name="referencia" value={this.state.referencia} disabled={this.state.disabled} />
+                                        <input id="referencia" name="referencia" value={this.state.referencia} disabled={this.state.disabled} onFocus={(e)=>{this.focusElement(e)}} />
                                         <label>Tipo de embargo</label>
                                         <div className="select-input">
-                                            <Select options={options} value={this.state.tipoEmbargo} isDisabled={this.state.disabled} />
+                                            <Select options={options} value={this.state.tipoEmbargo} isDisabled={this.state.disabled} onFocus={(e)=>{this.focusElement(e)}} />
                                         </div>
                                     </div>
                                     <div className="section-information-col">
                                         <label for="direccion">Direccion</label>
-                                        <input id="direccion" name="direccion" value={this.state.direccion} disabled={this.state.disabled} />
+                                        <input id="direccion" name="direccion" value={this.state.direccion} disabled={this.state.disabled} onFocus={(e)=>{this.focusElement(e)}} />
                                         <label for="fecha">Fecha</label>
-                                        <input id="fecha" name="fecha" value={this.state.fecha} disabled={this.state.disabled} />
+                                        <input id="fecha" name="fecha" value={this.state.fecha} disabled={this.state.disabled} onFocus={(e)=>{this.focusElement(e)}} />
                                         <label>Tipo de documento</label>
                                         <div className="select-input">
-                                            <Select options={options2} value={this.state.tipoDocumento} isDisabled={this.state.disabled} />
+                                            <Select options={options2} value={this.state.tipoDocumento} isDisabled={this.state.disabled} onFocus={(e)=>{this.focusElement(e)}} />
                                         </div>
                                     </div>
                                 </div>
@@ -209,7 +222,8 @@ const mapStateToProps = (state) => ({
     loadingDemandados: state.EmbargosReducer.demandados.loading,
     document: state.EmbargosReducer.embargo.document,
     embargo: state.EmbargosReducer.embargo,
-    demandados: state.EmbargosReducer.demandados
+    demandados: state.EmbargosReducer.demandados,
+    json: state.EmbargosReducer.embargo.json
 })
 const mapDispatchToProps = (dispatch) => ({
     handleEmbargo: bindActionCreators(getEmbargo, dispatch),
