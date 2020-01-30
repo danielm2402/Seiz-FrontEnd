@@ -54,7 +54,7 @@ class Revisar extends Component {
             fecha: props.embargo.data.documentDate,
             tipoEmbargo: props.embargo.data.embargoType,
             tipoDocumento: props.embargo.data.documentType,
-            disabled:true
+            disabled: true
         }
     }
     onDocumentLoad = ({ numPages }) => {
@@ -87,24 +87,35 @@ class Revisar extends Component {
         }
 
     }
-    handleEdit=()=>{
-        this.setState({disabled:false})
+    handleEdit = () => {
+        this.setState({ disabled: false })
     }
-    handleCancel=()=>{
-        this.setState({disabled:true})
+    handleCancel = () => {
+        this.setState({ disabled: true })
     }
-    focusElement(e){
+    focusElement(e) {
         //console.log(this.state[e.target.name])
-        var palabra=((this.state[e.target.name]).toString()).split(' ')
-       // console.log(palabra)
-        var selector=[]
-        var contador=0
+        var palabra = ((this.state[e.target.name]).toString()).split(' ')
+        var selector = []
+        var contador = 0
         for (let index = 0; index < palabra.length; index++) {
-           selector[contador]=this.props.json.pages[0].words.filter((item)=>(palabra[index].trim())==(item.text.trim())) 
-           contador=contador+1
+            selector[contador] = this.props.json.pages[this.state.pageNumber - 1].words.filter((item) => (palabra[index].trim()) == (item.text.trim()))
+            contador = contador + 1
         }
-
         console.log(selector)
+        const canvas = this.refs.canvas
+        const ctx = canvas.getContext("2d")
+        
+   
+        ctx.beginPath();
+        ctx.moveTo(0.53431374,0.05429293);
+        ctx.lineTo(0.5686275,0.05429293);
+        ctx.lineTo(0.5686275,0.061868686);
+        ctx.lineTo(0.53431374,0.061868686)
+        ctx.closePath();
+        ctx.fill();
+        
+        
     }
     render() {
         const { pageNumber, numPages } = this.state;
@@ -120,40 +131,44 @@ class Revisar extends Component {
                     </div> :
                     <div className="container-view">
                         <div className="container-document">
+                            <canvas ref="canvas" className="lienzo"/>
+
+                            
                             <Document
                                 file={this.props.document}
                                 onLoadSuccess={this.onDocumentLoadSuccess}
                             >
                                 <Page pageNumber={pageNumber} />
                             </Document>
+
                         </div>
                         <div className="section-table">
                             <div className="buttons-edits">
-                            
-                            {!this.state.disabled?<button onClick={this.handleCancel}><MdCancel size="1.5em" color={"#BDD535"}/></button>:<button onClick={this.handleEdit}><FaRegEdit size="1.5em" color={"#BDD535"}/></button>}
+
+                                {!this.state.disabled ? <button onClick={this.handleCancel}><MdCancel size="1.5em" color={"#BDD535"} /></button> : <button onClick={this.handleEdit}><FaRegEdit size="1.5em" color={"#BDD535"} /></button>}
                             </div>
                             <div className="information-card">
                                 <label for="entidad">Entidad Remitente</label>
-                                <input id="entidad" name="entidad" value={this.state.entidad} disabled={this.state.disabled} onFocus={(e)=>{this.focusElement(e)}} />
+                                <input id="entidad" name="entidad" value={this.state.entidad} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e) }} />
                                 <div className="section-information-cols">
                                     <div className="section-information-col">
                                         <label for="ciudad" >Ciudad</label>
-                                        <input id="ciudad" name="ciudad" value={this.state.ciudad} disabled={this.state.disabled} onFocus={(e)=>{this.focusElement(e)}} />
+                                        <input id="ciudad" name="ciudad" value={this.state.ciudad} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e) }} />
                                         <label for="referencia">Referencia</label>
-                                        <input id="referencia" name="referencia" value={this.state.referencia} disabled={this.state.disabled} onFocus={(e)=>{this.focusElement(e)}} />
+                                        <input id="referencia" name="referencia" value={this.state.referencia} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e) }} />
                                         <label>Tipo de embargo</label>
                                         <div className="select-input">
-                                            <Select options={options} value={this.state.tipoEmbargo} isDisabled={this.state.disabled} onFocus={(e)=>{this.focusElement(e)}} />
+                                            <Select options={options} value={this.state.tipoEmbargo} isDisabled={this.state.disabled} onFocus={(e) => { this.focusElement(e) }} />
                                         </div>
                                     </div>
                                     <div className="section-information-col">
                                         <label for="direccion">Direccion</label>
-                                        <input id="direccion" name="direccion" value={this.state.direccion} disabled={this.state.disabled} onFocus={(e)=>{this.focusElement(e)}} />
+                                        <input id="direccion" name="direccion" value={this.state.direccion} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e) }} />
                                         <label for="fecha">Fecha</label>
-                                        <input id="fecha" name="fecha" value={this.state.fecha} disabled={this.state.disabled} onFocus={(e)=>{this.focusElement(e)}} />
+                                        <input id="fecha" name="fecha" value={this.state.fecha} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e) }} />
                                         <label>Tipo de documento</label>
                                         <div className="select-input">
-                                            <Select options={options2} value={this.state.tipoDocumento} isDisabled={this.state.disabled} onFocus={(e)=>{this.focusElement(e)}} />
+                                            <Select options={options2} value={this.state.tipoDocumento} isDisabled={this.state.disabled} onFocus={(e) => { this.focusElement(e) }} />
                                         </div>
                                     </div>
                                 </div>
