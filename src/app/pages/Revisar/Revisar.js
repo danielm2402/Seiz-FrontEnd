@@ -54,7 +54,8 @@ class Revisar extends Component {
             fecha: props.embargo.data.documentDate,
             tipoEmbargo: props.embargo.data.embargoType,
             tipoDocumento: props.embargo.data.documentType,
-            disabled: true
+            disabled: true,
+            boundig:{boundig:false,points:[]}
         }
     }
     onDocumentLoad = ({ numPages }) => {
@@ -103,19 +104,29 @@ class Revisar extends Component {
             contador = contador + 1
         }
         console.log(selector)
-        const canvas = this.refs.canvas
-        const ctx = canvas.getContext("2d")
-        
-   
-        ctx.beginPath();
-        ctx.moveTo(0.53431374,0.05429293);
-        ctx.lineTo(0.5686275,0.05429293);
-        ctx.lineTo(0.5686275,0.061868686);
-        ctx.lineTo(0.53431374,0.061868686)
+        let totalBoundig=[]
+       console.log(selector.map((item)=>{
+           item.map((item2)=>{
+               console.log(item2)
+               totalBoundig.push(item2)
+               return item2.text
+           })
+       }))
+       console.log('totalboundig')
+       console.log(totalBoundig)
+
+
+        /* ctx.beginPath();
+        ctx.moveTo((0.53431374*100),(0.05429293*100));
+        ctx.lineTo(0.5686275*612,0.05429293*965);
+        ctx.lineTo(0.5686275*612,0.061868686*965);
+        ctx.lineTo(0.53431374*612,0.061868686*965)
         ctx.closePath();
-        ctx.fill();
-        
-        
+        ctx.fill(); */
+        this.setState({
+            boundig:{boundig:true, points:[{x:0.4591503*612,y:0.13678756*965},{x:0.49509802*612,y:0.13678756*965},{x:0.49509802*612,y:0.15025906*965},{x:0.4591503*612,y:0.15025906*965}]}
+        })
+
     }
     render() {
         const { pageNumber, numPages } = this.state;
@@ -123,6 +134,7 @@ class Revisar extends Component {
             { title: 'Nombre', field: 'fullname' },
             { title: 'Identificación', field: 'id' },
         ]
+      
         return (
             <div>
                 {this.props.loadingEmbargo || this.props.loadingDemandados ?
@@ -131,15 +143,20 @@ class Revisar extends Component {
                     </div> :
                     <div className="container-view">
                         <div className="container-document">
-                            <canvas ref="canvas" className="lienzo"/>
-
+                            {this.state.boundig.boundig?
+                            <svg className="lienzo"  xmlns="http://www.w3.org/2000/svg">
+                            <polygon points={`${this.state.boundig.points[0].x}, ${this.state.boundig.points[0].y} ${this.state.boundig.points[1].x}, ${this.state.boundig.points[1].y} ${this.state.boundig.points[2].x}, ${this.state.boundig.points[2].y} ${this.state.boundig.points[3].x},${this.state.boundig.points[3].y} `} />
+                            </svg>:<></>
+                            }
                             
+
                             <Document
                                 file={this.props.document}
                                 onLoadSuccess={this.onDocumentLoadSuccess}
                             >
                                 <Page pageNumber={pageNumber} />
                             </Document>
+
 
                         </div>
                         <div className="section-table">
