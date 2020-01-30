@@ -8,6 +8,10 @@ import './Tabla.css'
 import { PDFReader } from 'reactjs-pdf-reader';
 import { PDFViewer } from '@react-pdf/renderer';
 import Demandantes from './Demandante'
+import { FaRegEdit } from "react-icons/fa";
+import { MdCancel } from "react-icons/md";
+
+
 
 import Select from 'react-select'
 import { ProgressBar } from 'react-bootstrap';
@@ -49,7 +53,8 @@ class Revisar extends Component {
             ciudad: props.embargo.data.city,
             fecha: props.embargo.data.documentDate,
             tipoEmbargo: props.embargo.data.embargoType,
-            tipoDocumento: props.embargo.data.documentType
+            tipoDocumento: props.embargo.data.documentType,
+            disabled:true
         }
     }
     onDocumentLoad = ({ numPages }) => {
@@ -82,6 +87,12 @@ class Revisar extends Component {
         }
 
     }
+    handleEdit=()=>{
+        this.setState({disabled:false})
+    }
+    handleCancel=()=>{
+        this.setState({disabled:true})
+    }
     render() {
         const { pageNumber, numPages } = this.state;
         var columns = [
@@ -104,6 +115,10 @@ class Revisar extends Component {
                             </Document>
                         </div>
                         <div className="section-table">
+                            <div className="buttons-edits">
+                            
+                            {!this.state.disabled?<button onClick={this.handleCancel}><MdCancel size="1.5em" color={"#BDD535"}/></button>:<button onClick={this.handleEdit}><FaRegEdit size="1.5em" color={"#BDD535"}/></button>}
+                            </div>
                             <div className="information-card">
                                 <label for="entidad">Entidad Remitente</label>
                                 <input id="entidad" name="entidad" value={this.state.entidad} disabled={this.state.disabled} />
