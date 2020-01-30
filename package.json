@@ -76,7 +76,7 @@
     "react-icons": "^3.8.0",
     "react-intl": "^2.9.0",
     "react-is": "^16.10.2",
-    "react-pdf": "3.0.6",
+    "react-pdf": "^3.0.6",
     "react-pdfobject": "^1.1.1",
     "react-perfect-scrollbar": "^1.5.3",
     "react-redux": "^7.1.1",

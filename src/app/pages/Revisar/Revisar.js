@@ -4,13 +4,20 @@ import { connect } from 'react-redux'
 import { getDemandados, getEmbargo } from '../../redux/actions/embargosAction'
 import Tabla from './Tabla'
 import { PDFObject } from 'react-pdfobject'
-import { Document, Page, pdfjs } from 'react-pdf';
 import './Tabla.css'
 import { PDFReader } from 'reactjs-pdf-reader';
 import { PDFViewer } from '@react-pdf/renderer';
 import Demandantes from './Demandante'
+
 import Select from 'react-select'
 import { ProgressBar } from 'react-bootstrap';
+import { setOptions, Document, Page } from "react-pdf";
+const pdfjsVersion = "2.0.305";
+
+setOptions({
+    workerSrc: `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsVersion}/pdf.worker.js`
+});
+
 const options = [
     { value: 'NO_SELECCIONADO', label: 'NO SELECCIONADO' },
     { value: 'FAMILIAR', label: 'FAMILIAR' },
@@ -45,6 +52,10 @@ class Revisar extends Component {
             tipoDocumento: props.embargo.data.documentType
         }
     }
+    onDocumentLoad = ({ numPages }) => {
+        this.setState({ numPages });
+    }
+
     componentDidMount() {
         console.log('HOLA MUNDOOO')
         console.log(this.state.entidad)
@@ -71,9 +82,6 @@ class Revisar extends Component {
         }
 
     }
-    onDocumentLoadSuccess = ({ numPages }) => {
-        this.setState({ numPages });
-    }
     render() {
         const { pageNumber, numPages } = this.state;
         var columns = [
@@ -88,7 +96,12 @@ class Revisar extends Component {
                     </div> :
                     <div className="container-view">
                         <div className="container-document">
-                            <PDFObject url={this.props.document} page={2} />
+                            <Document
+                                file={this.props.document}
+                                onLoadSuccess={this.onDocumentLoadSuccess}
+                            >
+                                <Page pageNumber={pageNumber} />
+                            </Document>
                         </div>
                         <div className="section-table">
                             <div className="information-card">
@@ -117,50 +130,50 @@ class Revisar extends Component {
                                     </div>
                                 </div>
                             </div>
-                            
-                                <div className="information-card">
-                                    <div className="cols-demandantes">
-                                        <table className="table-demandantes">
-                                            <tr>
-                                                <th>Nombre</th>
-                                                <th>Identificación</th>
-                                            </tr>
-                                            {this.props.embargo.data.plaintiffs.map((item)=>{
-                                                return(
-                                                    <tr>
-                                                        <td><input value={item.fullname} disabled={this.state.disabled}/></td>
-                                                        <td><input value={item.id} disabled={this.state.disabled}/></td>
-                                                    </tr>
-                                                )
-                                            })}
-                                        </table>
-                                        </div>
-                                    </div>
 
-                                    <div className="information-card">
-                                    <div className="cols-demandantes">
-                                        <table className="table-demandantes">
-                                            <tr>
-                                                <th>Nombre</th>
-                                                <th>Tipo</th>
-                                                <th>Identificación</th>
-                                                <th>Monto</th>
-                                            </tr>
-                                            {this.props.demandados.data.map((item)=>{
-                                                return(
-                                                    <tr>
-                                                        <td><input value={item.nombres} disabled={this.state.disabled}/></td>
-                                                        <td><input value={item.tipoIdentificacion} disabled={this.state.disabled}/></td>
-                                                        <td><input value={item.identificacion} disabled={this.state.disabled}/></td>
-                                                        <td><input value={item.montoAEmbargar} disabled={this.state.disabled}/></td>
-                                                    </tr>
-                                                )
-                                            })}
-                                        </table>
-                                        </div>
-                                    </div>
-                                
-                        
+                            <div className="information-card">
+                                <div className="cols-demandantes">
+                                    <table className="table-demandantes">
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Identificación</th>
+                                        </tr>
+                                        {this.props.embargo.data.plaintiffs.map((item) => {
+                                            return (
+                                                <tr>
+                                                    <td><input value={item.fullname} disabled={this.state.disabled} /></td>
+                                                    <td><input value={item.id} disabled={this.state.disabled} /></td>
+                                                </tr>
+                                            )
+                                        })}
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div className="information-card">
+                                <div className="cols-demandantes">
+                                    <table className="table-demandantes">
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Tipo</th>
+                                            <th>Identificación</th>
+                                            <th>Monto</th>
+                                        </tr>
+                                        {this.props.demandados.data.map((item) => {
+                                            return (
+                                                <tr>
+                                                    <td><input value={item.nombres} disabled={this.state.disabled} /></td>
+                                                    <td><input value={item.tipoIdentificacion} disabled={this.state.disabled} /></td>
+                                                    <td><input value={item.identificacion} disabled={this.state.disabled} /></td>
+                                                    <td><input value={item.montoAEmbargar} disabled={this.state.disabled} /></td>
+                                                </tr>
+                                            )
+                                        })}
+                                    </table>
+                                </div>
+                            </div>
+
+
                             {// <Tabla />
                                 //<Demandantes nombre="Demandantes" columns={columns} data={this.props.embargo.data.plaintiffs} />
                             }
