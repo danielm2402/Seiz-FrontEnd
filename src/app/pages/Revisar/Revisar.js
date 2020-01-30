@@ -55,7 +55,7 @@ class Revisar extends Component {
             tipoEmbargo: props.embargo.data.embargoType,
             tipoDocumento: props.embargo.data.documentType,
             disabled: true,
-            boundig:{boundig:false,points:[]}
+            boundig: { boundig: false, points: [] }
         }
     }
     onDocumentLoad = ({ numPages }) => {
@@ -104,27 +104,19 @@ class Revisar extends Component {
             contador = contador + 1
         }
         console.log(selector)
-        let totalBoundig=[]
-       console.log(selector.map((item)=>{
-           item.map((item2)=>{
-               console.log(item2)
-               totalBoundig.push(item2)
-               return item2.text
-           })
-       }))
-       console.log('totalboundig')
-       console.log(totalBoundig)
+        let totalBoundig = []
+        console.log(selector.map((item) => {
+            item.map((item2) => {
+                console.log(item2)
+                totalBoundig.push(item2.boundingPoly.vertices)
+                return item2.text
+            })
+        }))
+        console.log('totalboundig')
+        console.log(totalBoundig)
 
-
-        /* ctx.beginPath();
-        ctx.moveTo((0.53431374*100),(0.05429293*100));
-        ctx.lineTo(0.5686275*612,0.05429293*965);
-        ctx.lineTo(0.5686275*612,0.061868686*965);
-        ctx.lineTo(0.53431374*612,0.061868686*965)
-        ctx.closePath();
-        ctx.fill(); */
         this.setState({
-            boundig:{boundig:true, points:[{x:0.4591503*612,y:0.13678756*965},{x:0.49509802*612,y:0.13678756*965},{x:0.49509802*612,y:0.15025906*965},{x:0.4591503*612,y:0.15025906*965}]}
+            boundig: { boundig: true, points: totalBoundig }
         })
 
     }
@@ -134,7 +126,7 @@ class Revisar extends Component {
             { title: 'Nombre', field: 'fullname' },
             { title: 'Identificación', field: 'id' },
         ]
-      
+
         return (
             <div>
                 {this.props.loadingEmbargo || this.props.loadingDemandados ?
@@ -143,12 +135,17 @@ class Revisar extends Component {
                     </div> :
                     <div className="container-view">
                         <div className="container-document">
-                            {this.state.boundig.boundig?
-                            <svg className="lienzo"  xmlns="http://www.w3.org/2000/svg">
-                            <polygon points={`${this.state.boundig.points[0].x}, ${this.state.boundig.points[0].y} ${this.state.boundig.points[1].x}, ${this.state.boundig.points[1].y} ${this.state.boundig.points[2].x}, ${this.state.boundig.points[2].y} ${this.state.boundig.points[3].x},${this.state.boundig.points[3].y} `} />
-                            </svg>:<></>
+                            {this.state.boundig.points.length > 0 ?
+                            <svg className="lienzo" xmlns="http://www.w3.org/2000/svg">
+                                {
+                                this.state.boundig.points.map((item) => {
+                                    return(
+                                        <polygon points={`${(item[0].x)*612},${(item[0].y)*965} ${(item[1].x)*612},${(item[1].y)*965} ${(item[2].x)*612},${(item[2].y)*965} ${(item[3].x)*612},${(item[3].y)*965}`} />)
+                                })
                             }
-                            
+                                </svg>: <></>
+                            }
+
 
                             <Document
                                 file={this.props.document}
