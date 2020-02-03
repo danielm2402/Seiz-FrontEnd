@@ -190,7 +190,7 @@ class Revisar extends Component {
                                 {
                                 this.state.boundig.points.map((item) => {
                                     return(
-                                        <polygon fill="#044B94" fill-opacity="0.4" points={`${(item[0].x)*612} ${(item[0].y)*792}, 
+                                        <polygon fill="#90FEA5" fill-opacity="0.4" points={`${(item[0].x)*612} ${(item[0].y)*792}, 
                                         ${(item[1].x)*612} ${(item[1].y)*792}, 
                                         ${(item[2].x)*612} ${(item[2].y)*792}, 
                                         ${(item[3].x)*612} ${(item[3].y)*792}`} />)
