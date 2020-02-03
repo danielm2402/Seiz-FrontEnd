@@ -86,10 +86,10 @@ class Revisar extends Component {
 
     }
     handleEdit = () => {
-        this.setState({ disabled: false })
+        this.setState({ disabled: false})
     }
     handleCancel = () => {
-        this.setState({ disabled: true })
+        this.setState({ disabled: true,boundig:{boundig:false, points:[]}  })
     }
     focusElement(e, palabra) {
         console.log(e.target.value)
