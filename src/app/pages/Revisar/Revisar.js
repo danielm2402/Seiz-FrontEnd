@@ -91,8 +91,36 @@ class Revisar extends Component {
     handleCancel = () => {
         this.setState({ disabled: true })
     }
-    focusElement(e) {
+    focusElement(e, palabra) {
         console.log(e.target.value)
+        console.log(palabra)
+        let vectorLocation=[];
+        let totalBoundig = [];
+        for (const prop in palabra.fieldInstances) {
+            console.log(`palabra.fieldInstances.${prop}`);
+            for(const prop1 in palabra.fieldInstances[prop].parts){
+                console.log(palabra.fieldInstances[prop].parts[prop1])
+                vectorLocation.push({start:palabra.fieldInstances[prop].parts[prop1].startLocation, end:palabra.fieldInstances[prop].parts[prop1].endLocation, page:palabra.fieldInstances[prop].parts[prop1].page })
+            }
+          }
+          console.log(vectorLocation)
+          vectorLocation.map((item)=>{
+              var iterador= item.start
+              for (iterador; iterador <= item.end; iterador++) {
+                totalBoundig.push(this.props.json.pages[0].words[iterador].boundingPoly.vertices)
+              }
+          })
+       /* console.log(palabra.fieldInstances.map((item)=>{
+            item.parts.map((item1)=>{
+               vectorLocation.push({start:item1.startLocation, end:item1.endLocation})
+                
+            })
+        }))
+ */
+
+       /*  let totalBoundig = []
+
+
          var palabra = ((this.state[e.target.name]).toString()).split(' ')
         var selector = []
         var contador = 0
@@ -101,7 +129,7 @@ class Revisar extends Component {
             contador = contador + 1
         }
         console.log(selector)
-        let totalBoundig = []
+        
         console.log(selector.map((item) => {
             item.map((item2) => {
                 console.log(item2)
@@ -109,8 +137,9 @@ class Revisar extends Component {
                 return item2.text
             })
         }))
+        */
         console.log('totalboundig')
-        console.log(totalBoundig)
+        console.log(totalBoundig) 
 
         this.setState({
             boundig: { boundig: true, points: totalBoundig }
@@ -161,7 +190,10 @@ class Revisar extends Component {
                                 {
                                 this.state.boundig.points.map((item) => {
                                     return(
-                                        <polygon fill="#044B94" fill-opacity="0.4" points={`${(item[0].x)*612},${(item[0].y)*965} ${(item[1].x)*612},${(item[1].y)*965} ${(item[2].x)*612},${(item[2].y)*965} ${(item[3].x)*612},${(item[3].y)*965}`} />)
+                                        <polygon fill="#044B94" fill-opacity="0.4" points={`${(item[0].x)*612} ${(item[0].y)*792}, 
+                                        ${(item[1].x)*612} ${(item[1].y)*792}, 
+                                        ${(item[2].x)*612} ${(item[2].y)*792}, 
+                                        ${(item[3].x)*612} ${(item[3].y)*792}`} />)
                                 })
                             }
                                 </svg>: <></>
@@ -184,13 +216,13 @@ class Revisar extends Component {
                             </div>
                             <div className="information-card">
                                 <label for="entidad">Entidad Remitente</label>
-                                <input id="entidad" name="entidad" value={this.state.entidad} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e) }} />
+                                <input id="entidad" name="entidad" value={this.state.entidad} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, this.props.resaltado.fields.entidadRemitente)}} />
                                 <div className="section-information-cols">
                                     <div className="section-information-col">
                                         <label for="ciudad" >Ciudad</label>
-                                        <input id="ciudad" name="ciudad" value={this.state.ciudad} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e) }} />
+                                        <input id="ciudad" name="ciudad" value={this.state.ciudad} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, this.props.resaltado.fields.ciudad) }} />
                                         <label for="referencia">Referencia</label>
-                                        <input id="referencia" name="referencia" value={this.state.referencia} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e) }} />
+                                        <input id="referencia" name="referencia" value={this.state.referencia} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, this.props.resaltado.fields.referencia) }} />
                                         <label>Tipo de embargo</label>
                                         <div className="select-input">
                                             <Select options={options} value={this.state.tipoEmbargo} isDisabled={this.state.disabled} onFocus={(e) => { this.focusElement(e) }} />
@@ -198,9 +230,9 @@ class Revisar extends Component {
                                     </div>
                                     <div className="section-information-col">
                                         <label for="direccion">Direccion</label>
-                                        <input id="direccion" name="direccion" value={this.state.direccion} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e) }} />
+                                        <input id="direccion" name="direccion" value={this.state.direccion} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, this.props.resaltado.fields.direccion) }} />
                                         <label for="fecha">Fecha</label>
-                                        <input id="fecha" name="fecha" value={this.state.fecha} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e) }} />
+                                        <input id="fecha" name="fecha" value={this.state.fecha} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, this.props.resaltado.fields.fecha) }} />
                                         <label>Tipo de documento</label>
                                         <div className="select-input">
                                             <Select options={options2} value={this.state.tipoDocumento} isDisabled={this.state.disabled} onFocus={(e) => { this.focusElement(e) }} />
@@ -273,7 +305,9 @@ const mapStateToProps = (state) => ({
     document: state.EmbargosReducer.embargo.document,
     embargo: state.EmbargosReducer.embargo,
     demandados: state.EmbargosReducer.demandados,
-    json: state.EmbargosReducer.embargo.json
+    json: state.EmbargosReducer.embargo.json,
+    resaltado: state.EmbargosReducer.embargo.json1
+
 })
 const mapDispatchToProps = (dispatch) => ({
     handleEmbargo: bindActionCreators(getEmbargo, dispatch),
