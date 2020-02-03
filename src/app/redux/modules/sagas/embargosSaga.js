@@ -182,7 +182,18 @@ function* getEmbargoSaga(payload) {
       const json= yield axios.get(file)
       .then(response=>response.data)
 
-      yield put(getEmbargoSuccess(data.data, url, json))
+      const boundingSelector= (yield (axios({
+        url: ((data.data.urlEmbargoFile.split('.pdf')[0])+'.jsonl'),
+        method: 'GET',
+        responseType: 'blob', // important
+        headers: { Authorization: 'Bearer ' + payload.token }
+      }).then((response) => response.data)))
+      console.log(bounding)
+      const file1 = window.URL.createObjectURL(new Blob([boundingSelector], {type: 'application/json'},'view1.json'));
+      const json1= yield axios.get(file1)
+      .then(response=>response.data)
+
+      yield put(getEmbargoSuccess(data.data, url, json, json1))
       break;
 
     default:

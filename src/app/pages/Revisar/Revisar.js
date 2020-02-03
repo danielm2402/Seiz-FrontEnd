@@ -10,9 +10,6 @@ import { PDFViewer } from '@react-pdf/renderer';
 import Demandantes from './Demandante'
 import { FaRegEdit } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
-
-
-
 import Select from 'react-select'
 import { ProgressBar } from 'react-bootstrap';
 import { setOptions, Document, Page } from "react-pdf";
@@ -95,8 +92,8 @@ class Revisar extends Component {
         this.setState({ disabled: true })
     }
     focusElement(e) {
-        //console.log(this.state[e.target.name])
-        var palabra = ((this.state[e.target.name]).toString()).split(' ')
+        console.log(e.target.value)
+         var palabra = ((this.state[e.target.name]).toString()).split(' ')
         var selector = []
         var contador = 0
         for (let index = 0; index < palabra.length; index++) {
@@ -117,8 +114,32 @@ class Revisar extends Component {
 
         this.setState({
             boundig: { boundig: true, points: totalBoundig }
-        })
+        }) 
+    }
+    focusElement2(e) {
+        console.log(e.target.value)
+         var palabra = (e.target.value.toString()).split(' ')
+        var selector = []
+        var contador = 0
+        for (let index = 0; index < palabra.length; index++) {
+            selector[contador] = this.props.json.pages[this.state.pageNumber - 1].words.filter((item) => (palabra[index].trim()) == (item.text.trim()))
+            contador = contador + 1
+        }
+        console.log(selector)
+        let totalBoundig = []
+        console.log(selector.map((item) => {
+            item.map((item2) => {
+                console.log(item2)
+                totalBoundig.push(item2.boundingPoly.vertices)
+                return item2.text
+            })
+        }))
+        console.log('totalboundig')
+        console.log(totalBoundig)
 
+        this.setState({
+            boundig: { boundig: true, points: totalBoundig }
+        }) 
     }
     render() {
         const { pageNumber, numPages } = this.state;
@@ -140,7 +161,7 @@ class Revisar extends Component {
                                 {
                                 this.state.boundig.points.map((item) => {
                                     return(
-                                        <polygon points={`${(item[0].x)*612},${(item[0].y)*965} ${(item[1].x)*612},${(item[1].y)*965} ${(item[2].x)*612},${(item[2].y)*965} ${(item[3].x)*612},${(item[3].y)*965}`} />)
+                                        <polygon fill="#044B94" fill-opacity="0.4" points={`${(item[0].x)*612},${(item[0].y)*965} ${(item[1].x)*612},${(item[1].y)*965} ${(item[2].x)*612},${(item[2].y)*965} ${(item[3].x)*612},${(item[3].y)*965}`} />)
                                 })
                             }
                                 </svg>: <></>
@@ -198,7 +219,7 @@ class Revisar extends Component {
                                         {this.props.embargo.data.plaintiffs.map((item) => {
                                             return (
                                                 <tr>
-                                                    <td><input value={item.fullname} disabled={this.state.disabled} /></td>
+                                                    <td><input value={item.fullname}  disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e) }} /></td>
                                                     <td><input value={item.id} disabled={this.state.disabled} /></td>
                                                 </tr>
                                             )
@@ -219,7 +240,7 @@ class Revisar extends Component {
                                         {this.props.demandados.data.map((item) => {
                                             return (
                                                 <tr>
-                                                    <td><input value={item.nombres} disabled={this.state.disabled} /></td>
+                                                    <td><input value={item.nombres} name={'name'+item.identificacion} disabled={this.state.disabled} onFocus={(e) => { this.focusElement2(e) }} /></td>
                                                     <td><input value={item.tipoIdentificacion} disabled={this.state.disabled} /></td>
                                                     <td><input value={item.identificacion} disabled={this.state.disabled} /></td>
                                                     <td><input value={item.montoAEmbargar} disabled={this.state.disabled} /></td>
