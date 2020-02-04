@@ -18,13 +18,24 @@ import BestSellers from "../../widgets/BestSellers";
 import RecentActivities from "../../widgets/RecentActivities";
 import PortletHeaderDropdown from "../../partials/content/CustomDropdowns/PortletHeaderDropdown";
 import { MdVideoLibrary, MdFileUpload, MdFileDownload, MdCloudUpload, MdSearch, MdEmail, MdNotificationsActive } from "react-icons/md";
-import { FaSearch, FaCheck,FaUpload,FaEye } from "react-icons/fa";
+import { FaSearch, FaCheck, FaUpload, FaEye } from "react-icons/fa";
 import {
   Link
 } from "react-router-dom";
 import { VictoryPie, VictoryChart, VictoryLine, VictoryGroup, VictoryBar } from "victory";
 import Tarjet from './Tarjet'
 import './style.css'
+
+const colors = [
+  "#252525",
+  "#525252",
+  "#737373",
+  "#969696",
+  "#bdbdbd",
+  "#d9d9d9",
+  "#f0f0f0"
+];
+
 export default function Dashboard() {
   const { brandColor, dangerColor, successColor, primaryColor } = useSelector(
     state => ({
@@ -79,55 +90,78 @@ export default function Dashboard() {
   return (
     <>
       <div className="cards-container">
-        
-          <Link to="/upload">
-            <Tarjet nombre="Subir oficio" width="200px" height="141px" number="10">
-              <FaUpload color="#F4F4F4" size="3em"/>
-            </Tarjet>
-          </Link>
-         
-          <Link to="/listar/no-confirmados">
-            <Tarjet nombre="Confirmar" width="200px" height="141px" number="75">
-              <FaEye color="#F4F4F4" size="3em"/>
-              </Tarjet>
-          </Link>
-          <Link to="/listar/confirmados">
-            <Tarjet nombre="Confirmados" width="200px" height="141px" number="350">
-              <FaCheck color="#F4F4F4" size="3em" />
-              </Tarjet>
-          </Link>
-          <Link to="/listar/todos">
-            <Tarjet nombre="Buscar" width="200px" height="141px" number="650">
-              <FaSearch color="#F4F4F4" size="3em"/>
-              </Tarjet>
-          </Link>
-          <Link>
-            <Tarjet nombre="Cartas" width="200px" height="141px" number="50">
-              <MdEmail color="#F4F4F4" size="3em"/>
-              </Tarjet>
-          </Link>
-          <Link to="/listar/asignados">
-            <Tarjet nombre="Asignados" width="200px" height="141px" number="12">
-              <MdNotificationsActive color="#F4F4F4" size="3em"/>
-              </Tarjet>
-          </Link>
-        
-         
+
+        <Link to="/upload">
+          <Tarjet nombre="Subir oficio" width="200px" height="141px" number="10">
+            <FaUpload color="#F4F4F4" size="3em" />
+          </Tarjet>
+        </Link>
+
+        <Link to="/listar/no-confirmados">
+          <Tarjet nombre="Confirmar" width="200px" height="141px" number="75">
+            <FaEye color="#F4F4F4" size="3em" />
+          </Tarjet>
+        </Link>
+        <Link to="/listar/confirmados">
+          <Tarjet nombre="Confirmados" width="200px" height="141px" number="350">
+            <FaCheck color="#F4F4F4" size="3em" />
+          </Tarjet>
+        </Link>
+        <Link to="/listar/todos">
+          <Tarjet nombre="Buscar" width="200px" height="141px" number="650">
+            <FaSearch color="#F4F4F4" size="3em" />
+          </Tarjet>
+        </Link>
+        <Link>
+          <Tarjet nombre="Cartas" width="200px" height="141px" number="50">
+            <MdEmail color="#F4F4F4" size="3em" />
+          </Tarjet>
+        </Link>
+        <Link to="/listar/asignados">
+          <Tarjet nombre="Asignados" width="200px" height="141px" number="12">
+            <MdNotificationsActive color="#F4F4F4" size="3em" />
+          </Tarjet>
+        </Link>
+
+
 
 
       </div>
-   
+
       <Portlet>
         <PortletBody fit={true}>
           <div className="row row-no-padding row-col-separator-xl">
             <div className="col-xl-4">
-              <VictoryPie />
+              <VictoryPie style={{
+                data: {
+                  fill: ({ y }) =>
+                    y > 49 ? 'green'
+                      : y > 39 ? 'yellow'
+                        : 'tomato'
+                }
+              }} />
             </div>
             <div className="col-xl-4">
-              <VictoryPie />
+              <VictoryChart>
+                <VictoryGroup offset={20}
+                  colorScale={"qualitative"}
+                >
+
+                  <VictoryBar
+                    data={[{ x: 1.5, y: 3 }, { x: 2, y: 4 }, { x: 3, y: 9 }]}
+                  />
+                </VictoryGroup>
+              </VictoryChart>
             </div>
             <div className="col-xl-4">
-              <VictoryPie />
+              <VictoryPie style={{
+                data: {
+                  fill: ({ y }) =>
+                    
+                       y > 20 ? 'yellow'
+                        : 'blue'
+                }
+              }}  />
             </div>
           </div>
         </PortletBody>
