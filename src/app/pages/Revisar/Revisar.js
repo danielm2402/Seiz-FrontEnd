@@ -7,12 +7,13 @@ import { PDFObject } from 'react-pdfobject'
 import './Tabla.css'
 import { PDFReader } from 'reactjs-pdf-reader';
 import { PDFViewer } from '@react-pdf/renderer';
-import Demandantes from './Demandante'
+import TextField from '@material-ui/core/TextField';
 import { FaRegEdit } from "react-icons/fa";
 import { MdCancel } from "react-icons/md";
 import Select from 'react-select'
 import { ProgressBar } from 'react-bootstrap';
 import { setOptions, Document, Page } from "react-pdf";
+import Demandados from './Demandados'
 const pdfjsVersion = "2.0.305";
 
 setOptions({
@@ -176,9 +177,59 @@ class Revisar extends Component {
     render() {
         const { pageNumber, numPages } = this.state;
         var columns = [
-            { title: 'Nombre', field: 'fullname' },
-            { title: 'Identificación', field: 'id' },
+            { title: 'Nombre', field: 'nombres',editComponent: props => {
+                return (
+                    <TextField
+                    id="standard-basic"
+                    value={props.value}
+                    label="Nombre"
+                    margin="normal"
+                  />
+                )}},
+            { title: 'Tipo', field: 'tipoIdentificacion',editComponent: props => {
+                return (
+                    <TextField
+                    id="standard-basic"
+                    value={props.value}
+                    label="Tipo"
+                    margin="normal"
+                  />
+                )}},
+            { title: 'Identificación', field: 'identificacion' ,editComponent: props => {
+                return (
+                    <TextField
+                    id="standard-basic"
+                    value={props.value}
+                    label="Identificacion"
+                    margin="normal"
+                  />
+                )}},
+            { title: 'Cuentas', field: 'montoAEmbargar',editComponent: props => {
+                return (
+                    <TextField
+                    id="standard-basic"
+                    value={props.value}
+                    label="Cuentas"
+                    margin="normal"
+                    onFocus={(e)=>this.focusElement(e,props.value)}
+                  />
+                )}}
         ]
+        var add=null
+        this.props.disabled==true?
+        add=null
+        : add= newData =>
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            {
+              const data = this.state.data;
+              data.push(newData);
+              this.setState({ data }, () => resolve());
+            }
+            resolve()
+          }, 1000)
+        }) 
+
 
         return (
             <div>
@@ -223,7 +274,7 @@ class Revisar extends Component {
                                 <div className="section-information-cols">
                                     <div className="section-information-col">
                                         <label for="ciudad" >Ciudad</label>
-                                        <input id="ciudad" name="ciudad" value={this.state.ciudad} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, this.props.resaltado.fields.ciudad) }} />
+                                        <input id="ciudad" name="ciudad" value={this.state.ciudad} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado!==""?this.props.resaltado.fields.ciudad:null)) }} />
                                         <label for="referencia">Referencia</label>
                                         <input id="referencia" name="referencia" value={this.state.referencia} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado!==""?this.props.resaltado.fields.referencia:null)) }} />
                                         <label>Tipo de embargo</label>
@@ -235,7 +286,7 @@ class Revisar extends Component {
                                         <label for="direccion">Direccion</label>
                                         <input id="direccion" name="direccion" value={this.state.direccion} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado!==""? this.props.resaltado.fields.direccion:null)) }} />
                                         <label for="fecha">Fecha</label>
-                                        <input id="fecha" name="fecha" value={this.state.fecha} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, this.props.resaltado.fields.fecha) }} />
+                                        <input id="fecha" name="fecha" value={this.state.fecha} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado!==""?this.props.resaltado.fields.fecha:null)) }} />
                                         <label>Tipo de documento</label>
                                         <div className="select-input">
                                             <Select options={options2} value={this.state.tipoDocumento} isDisabled={this.state.disabled} onFocus={(e) => { this.focusElement(e) }} />
@@ -263,8 +314,9 @@ class Revisar extends Component {
                                 </div>
                             </div>
 
-                            <div className="information-card">
-                                <div className="cols-demandantes">
+                            
+                                <Demandados add={add} data={this.props.demandados.data} nombre="Demandados" columns={columns} editable={!this.state.disabled}/>
+                               {/*  <div className="cols-demandantes">
                                     <table className="table-demandantes">
                                         <tr>
                                             <th>Nombre</th>
@@ -283,8 +335,8 @@ class Revisar extends Component {
                                             )
                                         })}
                                     </table>
-                                </div>
-                            </div>
+                                </div> */}
+                            
 
 
                             {// <Tabla />
