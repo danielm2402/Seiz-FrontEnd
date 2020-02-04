@@ -142,7 +142,7 @@ export default function Dashboard() {
               }} />
             </div>
             <div className="col-xl-4">
-              <VictoryChart>
+              <VictoryChart style={{parent: {height: '100%'}}}>
                 <VictoryGroup offset={20}
                   colorScale={"qualitative"}
                 >
@@ -154,14 +154,23 @@ export default function Dashboard() {
               </VictoryChart>
             </div>
             <div className="col-xl-4">
-              <VictoryPie style={{
-                data: {
-                  fill: ({ y }) =>
-                    
-                       y > 20 ? 'yellow'
-                        : 'blue'
-                }
-              }}  />
+              <VictoryChart
+
+              >
+                <VictoryLine
+                  style={{
+                    data: { stroke: "#c43a31" },
+                    parent: { border: "1px solid #ccc" }
+                  }}
+                  data={[
+                    { x: 1, y: 2 },
+                    { x: 2, y: 3 },
+                    { x: 3, y: 5 },
+                    { x: 4, y: 4 },
+                    { x: 5, y: 7 }
+                  ]}
+                />
+              </VictoryChart>
             </div>
           </div>
         </PortletBody>

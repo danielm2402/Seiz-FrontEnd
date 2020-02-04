@@ -92,58 +92,61 @@ class Revisar extends Component {
         this.setState({ disabled: true,boundig:{boundig:false, points:[]}  })
     }
     focusElement(e, palabra) {
-        console.log(e.target.value)
-        console.log(palabra)
-        let vectorLocation=[];
-        let totalBoundig = [];
-        for (const prop in palabra.fieldInstances) {
-            console.log(`palabra.fieldInstances.${prop}`);
-            for(const prop1 in palabra.fieldInstances[prop].parts){
-                console.log(palabra.fieldInstances[prop].parts[prop1])
-                vectorLocation.push({start:palabra.fieldInstances[prop].parts[prop1].startLocation, end:palabra.fieldInstances[prop].parts[prop1].endLocation, page:palabra.fieldInstances[prop].parts[prop1].page })
-            }
-          }
-          console.log(vectorLocation)
-          vectorLocation.map((item)=>{
-              var iterador= item.start
-              for (iterador; iterador <= item.end; iterador++) {
-                totalBoundig.push(this.props.json.pages[0].words[iterador].boundingPoly.vertices)
+        if(this.props.resaltado!==""){
+            console.log(e.target.value)
+            console.log(palabra)
+            let vectorLocation=[];
+            let totalBoundig = [];
+            for (const prop in palabra.fieldInstances) {
+                console.log(`palabra.fieldInstances.${prop}`);
+                for(const prop1 in palabra.fieldInstances[prop].parts){
+                    console.log(palabra.fieldInstances[prop].parts[prop1])
+                    vectorLocation.push({start:palabra.fieldInstances[prop].parts[prop1].startLocation, end:palabra.fieldInstances[prop].parts[prop1].endLocation, page:palabra.fieldInstances[prop].parts[prop1].page })
+                }
               }
-          })
-       /* console.log(palabra.fieldInstances.map((item)=>{
-            item.parts.map((item1)=>{
-               vectorLocation.push({start:item1.startLocation, end:item1.endLocation})
-                
-            })
-        }))
- */
-
-       /*  let totalBoundig = []
-
-
-         var palabra = ((this.state[e.target.name]).toString()).split(' ')
-        var selector = []
-        var contador = 0
-        for (let index = 0; index < palabra.length; index++) {
-            selector[contador] = this.props.json.pages[this.state.pageNumber - 1].words.filter((item) => (palabra[index].trim()) == (item.text.trim()))
-            contador = contador + 1
+              console.log(vectorLocation)
+              vectorLocation.map((item)=>{
+                  var iterador= item.start
+                  for (iterador; iterador <= item.end; iterador++) {
+                    totalBoundig.push(this.props.json.pages[0].words[iterador].boundingPoly.vertices)
+                  }
+              })
+           /* console.log(palabra.fieldInstances.map((item)=>{
+                item.parts.map((item1)=>{
+                   vectorLocation.push({start:item1.startLocation, end:item1.endLocation})
+                    
+                })
+            }))
+     */
+    
+           /*  let totalBoundig = []
+    
+    
+             var palabra = ((this.state[e.target.name]).toString()).split(' ')
+            var selector = []
+            var contador = 0
+            for (let index = 0; index < palabra.length; index++) {
+                selector[contador] = this.props.json.pages[this.state.pageNumber - 1].words.filter((item) => (palabra[index].trim()) == (item.text.trim()))
+                contador = contador + 1
+            }
+            console.log(selector)
+            
+            console.log(selector.map((item) => {
+                item.map((item2) => {
+                    console.log(item2)
+                    totalBoundig.push(item2.boundingPoly.vertices)
+                    return item2.text
+                })
+            }))
+            */
+            console.log('totalboundig')
+            console.log(totalBoundig) 
+    
+            this.setState({
+                boundig: { boundig: true, points: totalBoundig }
+            }) 
         }
-        console.log(selector)
-        
-        console.log(selector.map((item) => {
-            item.map((item2) => {
-                console.log(item2)
-                totalBoundig.push(item2.boundingPoly.vertices)
-                return item2.text
-            })
-        }))
-        */
-        console.log('totalboundig')
-        console.log(totalBoundig) 
-
-        this.setState({
-            boundig: { boundig: true, points: totalBoundig }
-        }) 
+       
     }
     focusElement2(e) {
         console.log(e.target.value)
@@ -216,13 +219,13 @@ class Revisar extends Component {
                             </div>
                             <div className="information-card">
                                 <label for="entidad">Entidad Remitente</label>
-                                <input id="entidad" name="entidad" value={this.state.entidad} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, this.props.resaltado.fields.entidadRemitente)}} />
+                                <input id="entidad" name="entidad" value={this.state.entidad} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado!==""?this.props.resaltado.fields.entidadRemitente:null))}} />
                                 <div className="section-information-cols">
                                     <div className="section-information-col">
                                         <label for="ciudad" >Ciudad</label>
                                         <input id="ciudad" name="ciudad" value={this.state.ciudad} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, this.props.resaltado.fields.ciudad) }} />
                                         <label for="referencia">Referencia</label>
-                                        <input id="referencia" name="referencia" value={this.state.referencia} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, this.props.resaltado.fields.referencia) }} />
+                                        <input id="referencia" name="referencia" value={this.state.referencia} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado!==""?this.props.resaltado.fields.referencia:null)) }} />
                                         <label>Tipo de embargo</label>
                                         <div className="select-input">
                                             <Select options={options} value={this.state.tipoEmbargo} isDisabled={this.state.disabled} onFocus={(e) => { this.focusElement(e) }} />
@@ -230,7 +233,7 @@ class Revisar extends Component {
                                     </div>
                                     <div className="section-information-col">
                                         <label for="direccion">Direccion</label>
-                                        <input id="direccion" name="direccion" value={this.state.direccion} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, this.props.resaltado.fields.direccion) }} />
+                                        <input id="direccion" name="direccion" value={this.state.direccion} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado!==""? this.props.resaltado.fields.direccion:null)) }} />
                                         <label for="fecha">Fecha</label>
                                         <input id="fecha" name="fecha" value={this.state.fecha} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, this.props.resaltado.fields.fecha) }} />
                                         <label>Tipo de documento</label>
