@@ -20,9 +20,22 @@
 .cards-container{
     display: flex;
     flex-direction: row;
+    align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    padding-bottom: 20px;
+    padding-bottom: 10px;
+  
+}
+.cards-left{
+    width: 50%;
+    flex-direction: row;
+}
+.cards-left-container{
+    width: 100%;
+    flex-direction: column;
+}
+.cards-right{
+    width: 50%;
 }
 .cards-container a{
     color: #434040;

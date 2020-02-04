@@ -24,6 +24,7 @@ function MaterialTableDemo(props) {
         }
       ]}
       options={{
+        filtering: true,
         pageSize: 19,
         pageSizeOptions: [],
         toolbar: true,

@@ -79,35 +79,32 @@ export default function Dashboard() {
   return (
     <>
       <div className="cards-container">
-        <Link to="/upload">
-        <Tarjet nombre="Subir oficio" width="280px" height="280px" number="10"/>
-        </Link>
-        <Link>
-        <Tarjet nombre="Descargar Embargos" width="280px" height="280px" number="400"/>
-        </Link>
-        <Link>
-        <Tarjet nombre="Cargar Cuentas" width="280px" height="280px" number="15"/>
-        </Link>
-        <Link to="/listar/no-confirmados">
-        <Tarjet nombre="Por confirmar" width="280px" height="280px" number="75"/>
-        </Link>
-        <Link to="/listar/confirmados">
-        <Tarjet nombre="Confirmados" width="280px" height="280px" number="350"/>
-        </Link>
-        <Link to="/listar/todos">
-        <Tarjet  nombre="Buscar Embargo" width="280px" height="280px" number="650" />
-        </Link>
-        <Link>
-        <Tarjet nombre="Cartas" width="280px" height="280px" number="50"/>
-        </Link>
-        <Link to="/listar/asignados">
-        <Tarjet nombre="Embargos Asignados" width="280px" height="280px" number="12"/>
-        </Link>
-      </div>
-      <div className="cards-container">
-      
-      </div>
+        
+          <Link to="/upload">
+            <Tarjet nombre="Subir oficio" width="200px" height="141px" number="10" />
+          </Link>
+         
+          <Link to="/listar/no-confirmados">
+            <Tarjet nombre="Por confirmar" width="200px" height="141px" number="75" />
+          </Link>
+          <Link to="/listar/confirmados">
+            <Tarjet nombre="Confirmados" width="200px" height="141px" number="350" />
+          </Link>
+          <Link to="/listar/todos">
+            <Tarjet nombre="Buscar Embargo" width="200px" height="141px" number="650" />
+          </Link>
+          <Link>
+            <Tarjet nombre="Cartas" width="200px" height="141px" number="50" />
+          </Link>
+          <Link to="/listar/asignados">
+            <Tarjet nombre="Embargos Asignados" width="200px" height="141px" number="12" />
+          </Link>
+        
+         
 
+
+      </div>
+   
       <Portlet>
         <PortletBody fit={true}>
           <div className="row row-no-padding row-col-separator-xl">
