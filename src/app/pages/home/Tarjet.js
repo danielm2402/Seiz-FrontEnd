@@ -8,10 +8,10 @@ export default class Tarjet extends Component {
             <div className="tarjet-container" style={{ width: this.props.width, height: this.props.height }}>
                 <div className="tarjet-information">
                     <h3 className="title-tarjet">{this.props.nombre}</h3>
-                    <h2>{this.props.numero}</h2>
+                    <h2>{this.props.number}</h2>
                 </div>
                 <div className="tarjet-icon">
-
+                {this.props.children}
                 </div>
             </div>
         )

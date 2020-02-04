@@ -17,8 +17,8 @@ import LatestUpdates from "../../widgets/LatestUpdates";
 import BestSellers from "../../widgets/BestSellers";
 import RecentActivities from "../../widgets/RecentActivities";
 import PortletHeaderDropdown from "../../partials/content/CustomDropdowns/PortletHeaderDropdown";
-import { MdVideoLibrary, MdFileUpload, MdFileDownload, MdCloudUpload, MdSearch, MdEmail, MdNotificationsNone } from "react-icons/md";
-import { FaCheckDouble, FaCheck } from "react-icons/fa";
+import { MdVideoLibrary, MdFileUpload, MdFileDownload, MdCloudUpload, MdSearch, MdEmail, MdNotificationsActive } from "react-icons/md";
+import { FaSearch, FaCheck,FaUpload,FaEye } from "react-icons/fa";
 import {
   Link
 } from "react-router-dom";
@@ -81,23 +81,35 @@ export default function Dashboard() {
       <div className="cards-container">
         
           <Link to="/upload">
-            <Tarjet nombre="Subir oficio" width="200px" height="141px" number="10" />
+            <Tarjet nombre="Subir oficio" width="200px" height="141px" number="10">
+              <FaUpload color="#F4F4F4" size="3em"/>
+            </Tarjet>
           </Link>
          
           <Link to="/listar/no-confirmados">
-            <Tarjet nombre="Por confirmar" width="200px" height="141px" number="75" />
+            <Tarjet nombre="Confirmar" width="200px" height="141px" number="75">
+              <FaEye color="#F4F4F4" size="3em"/>
+              </Tarjet>
           </Link>
           <Link to="/listar/confirmados">
-            <Tarjet nombre="Confirmados" width="200px" height="141px" number="350" />
+            <Tarjet nombre="Confirmados" width="200px" height="141px" number="350">
+              <FaCheck color="#F4F4F4" size="3em" />
+              </Tarjet>
           </Link>
           <Link to="/listar/todos">
-            <Tarjet nombre="Buscar Embargo" width="200px" height="141px" number="650" />
+            <Tarjet nombre="Buscar" width="200px" height="141px" number="650">
+              <FaSearch color="#F4F4F4" size="3em"/>
+              </Tarjet>
           </Link>
           <Link>
-            <Tarjet nombre="Cartas" width="200px" height="141px" number="50" />
+            <Tarjet nombre="Cartas" width="200px" height="141px" number="50">
+              <MdEmail color="#F4F4F4" size="3em"/>
+              </Tarjet>
           </Link>
           <Link to="/listar/asignados">
-            <Tarjet nombre="Embargos Asignados" width="200px" height="141px" number="12" />
+            <Tarjet nombre="Asignados" width="200px" height="141px" number="12">
+              <MdNotificationsActive color="#F4F4F4" size="3em"/>
+              </Tarjet>
           </Link>
         
          

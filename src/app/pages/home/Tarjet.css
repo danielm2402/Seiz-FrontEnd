@@ -9,7 +9,12 @@
     font-family: Poppins, Helvetica, sans-serif;
 }
 .tarjet-information{
+    padding-left: 10px;
     width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: left;
 }
 .tarjet-icon{
     width: 50%;
@@ -27,4 +32,10 @@ h3{
     font-size: 1.2rem;
     font-weight: 500;
     color: #48465b;
+}
+.tarjet-icon{
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
