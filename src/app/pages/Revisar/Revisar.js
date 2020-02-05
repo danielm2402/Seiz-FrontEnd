@@ -166,6 +166,7 @@ class Revisar extends Component {
                     value={props.value}
                     label="Tipo"
                     margin="normal"
+                    
                   />
                 )}},
             { title: 'Identificación', field: 'identificacion' ,editComponent: props => {
@@ -175,6 +176,7 @@ class Revisar extends Component {
                     value={props.value}
                     label="Identificacion"
                     margin="normal"
+                    onFocus={(e)=>this.focusElement2(e,this.props.resaltado.fields.demandados, props.rowData.id, 'identificacion')}
                   />
                 )}},
             { title: 'Cuentas', field: 'montoAEmbargar',editComponent: props => {
@@ -184,7 +186,7 @@ class Revisar extends Component {
                     value={props.value}
                     label="Cuentas"
                     margin="normal"
-                    onFocus={(e)=>this.focusElement(e,props.value)}
+                    onFocus={(e) => { this.focusElement(e, (this.props.resaltado!==""?this.props.resaltado.fields.monto:null))}}
                   />
                 )}}
         ]
