@@ -112,34 +112,6 @@ class Revisar extends Component {
                     totalBoundig.push(this.props.json.pages[0].words[iterador].boundingPoly.vertices)
                   }
               })
-           /* console.log(palabra.fieldInstances.map((item)=>{
-                item.parts.map((item1)=>{
-                   vectorLocation.push({start:item1.startLocation, end:item1.endLocation})
-                    
-                })
-            }))
-     */
-    
-           /*  let totalBoundig = []
-    
-    
-             var palabra = ((this.state[e.target.name]).toString()).split(' ')
-            var selector = []
-            var contador = 0
-            for (let index = 0; index < palabra.length; index++) {
-                selector[contador] = this.props.json.pages[this.state.pageNumber - 1].words.filter((item) => (palabra[index].trim()) == (item.text.trim()))
-                contador = contador + 1
-            }
-            console.log(selector)
-            
-            console.log(selector.map((item) => {
-                item.map((item2) => {
-                    console.log(item2)
-                    totalBoundig.push(item2.boundingPoly.vertices)
-                    return item2.text
-                })
-            }))
-            */
             console.log('totalboundig')
             console.log(totalBoundig) 
     
@@ -149,30 +121,30 @@ class Revisar extends Component {
         }
        
     }
-    focusElement2(e) {
-        console.log(e.target.value)
-         var palabra = (e.target.value.toString()).split(' ')
-        var selector = []
-        var contador = 0
-        for (let index = 0; index < palabra.length; index++) {
-            selector[contador] = this.props.json.pages[this.state.pageNumber - 1].words.filter((item) => (palabra[index].trim()) == (item.text.trim()))
-            contador = contador + 1
-        }
-        console.log(selector)
-        let totalBoundig = []
-        console.log(selector.map((item) => {
-            item.map((item2) => {
-                console.log(item2)
-                totalBoundig.push(item2.boundingPoly.vertices)
-                return item2.text
-            })
-        }))
-        console.log('totalboundig')
-        console.log(totalBoundig)
+    focusElement2(e, palabra, id, tipo) {
+        if(this.props.resaltado!==""){
+           
+            let vectorLocation=[];
+            let totalBoundig = [];
+            const row = palabra.fieldInstances[id].parts[tipo]
+            console.log(row)
+            vectorLocation.push({start:row.startLocation, end:row.endLocation, page:row.page })
+                   
 
-        this.setState({
-            boundig: { boundig: true, points: totalBoundig }
-        }) 
+              console.log(vectorLocation)
+              vectorLocation.map((item)=>{
+                  var iterador= item.start
+                  for (iterador; iterador <= item.end; iterador++) {
+                    totalBoundig.push(this.props.json.pages[0].words[iterador].boundingPoly.vertices)
+                  }
+              })
+            console.log('totalboundig')
+            console.log(totalBoundig) 
+    
+            this.setState({
+                boundig: { boundig: true, points: totalBoundig }
+            })  
+        }
     }
     render() {
         const { pageNumber, numPages } = this.state;
@@ -180,16 +152,17 @@ class Revisar extends Component {
             { title: 'Nombre', field: 'nombres',editComponent: props => {
                 return (
                     <TextField
-                    id="standard-basic"
+                    id="name"
                     value={props.value}
                     label="Nombre"
                     margin="normal"
+                    onFocus={(e)=>this.focusElement2(e,this.props.resaltado.fields.demandados, props.rowData.id, 'nombre')}
                   />
                 )}},
             { title: 'Tipo', field: 'tipoIdentificacion',editComponent: props => {
                 return (
                     <TextField
-                    id="standard-basic"
+                    id="tipo"
                     value={props.value}
                     label="Tipo"
                     margin="normal"
@@ -198,7 +171,7 @@ class Revisar extends Component {
             { title: 'Identificación', field: 'identificacion' ,editComponent: props => {
                 return (
                     <TextField
-                    id="standard-basic"
+                    id="id"
                     value={props.value}
                     label="Identificacion"
                     margin="normal"
@@ -207,7 +180,7 @@ class Revisar extends Component {
             { title: 'Cuentas', field: 'montoAEmbargar',editComponent: props => {
                 return (
                     <TextField
-                    id="standard-basic"
+                    id="cuentas"
                     value={props.value}
                     label="Cuentas"
                     margin="normal"
