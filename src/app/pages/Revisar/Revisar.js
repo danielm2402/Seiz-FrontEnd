@@ -420,18 +420,24 @@ class Revisar extends Component {
             const ctx = this.refs.canvas.getContext('2d');
             ctx.clearRect(0, 0, this.refs.canvas.width, this.refs.canvas.height); //clear canvas
             ctx.beginPath();
+            ctx.fillStyle = "rgba(0,0,0, 0.4)";
+            ctx.fillRect(0, 0, this.refs.canvas.width, this.refs.canvas.height);
             var width = x - this.state.previousPointX;
             var height = y - this.state.previousPointY;
             ctx.beginPath();
             ctx.lineWidth = "1";
             ctx.strokeStyle = "red";
-            ctx.rect(this.state.previousPointX, this.state.previousPointY, width, height);
+            ctx.fillStyle = "rgba(255,255,255, 0.5)";
+            ctx.fillRect(this.state.previousPointX, this.state.previousPointY, width, height);
             ctx.stroke();
         }
     }
     handleMouseUp(event) {
         //console.log('UP')
         // console.log(event)
+        const ctx = this.refs.canvas.getContext('2d');
+        ctx.clearRect(0, 0, this.refs.canvas.width, this.refs.canvas.height); //clear canvas
+        ctx.beginPath();
         this.setState({
             isDown: false
         });
