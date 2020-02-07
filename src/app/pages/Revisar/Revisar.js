@@ -174,6 +174,9 @@ class Revisar extends Component {
 
     }
     focusElement2(e, palabra, id, tipo) {
+        console.log('el id')
+        console.log(id)
+        console.log(palabra)
         if (this.props.resaltado !== "") {
 
             let vectorLocation = [];
@@ -269,20 +272,22 @@ class Revisar extends Component {
                             value={props.value}
                             label="Nombre"
                             margin="normal"
-                            onFocus={(e) => this.focusElement2(e, this.props.resaltado.fields.demandados, props.rowData.id, 'nombre')}
+                            onFocus={(e) => {
+                                console.log(props)
+                                this.focusElement2(e, this.props.resaltado.fields.demandantes, props.rowData.id, 'nombre')}}
                         />
                     )
                 }
             },
             {
-                title: 'Identificación', field: 'id', editComponent: props => {
+                title: 'Identificación', field: 'identification', editComponent: props => {
                     return (
                         <TextField
                             id="id"
                             value={props.value}
                             label="Identificacion"
                             margin="normal"
-                            onFocus={(e) => this.focusElement2(e, this.props.resaltado.fields.demandados, props.rowData.id, 'identificacion')}
+                            onFocus={(e) => this.focusElement2(e, this.props.resaltado.fields.demandantes, props.rowData.id, 'identificacion')}
                         />
                     )
                 }
