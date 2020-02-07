@@ -109,3 +109,19 @@
  
   z-index: 99999999999;
 }
+
+.document-tools{
+  width: 50%;
+  display: flex;
+}
+.tools-edit{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.tools-page{
+  position: absolute;
+  display: flex;
+  width: 100%;
+  justify-content: start;
+}

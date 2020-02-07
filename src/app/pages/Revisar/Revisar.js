@@ -9,8 +9,8 @@ import './Tabla.css'
 import { PDFReader } from 'reactjs-pdf-reader';
 import { PDFViewer } from '@react-pdf/renderer';
 import TextField from '@material-ui/core/TextField';
-import { FaRegEdit } from "react-icons/fa";
-import { MdCancel } from "react-icons/md";
+import { FaRegEdit,FaTable } from "react-icons/fa";
+import { MdCancel, MdPhotoSizeSelectSmall,MdNavigateNext,MdNavigateBefore } from "react-icons/md";
 import Select from 'react-select'
 import { ProgressBar } from 'react-bootstrap';
 import { setOptions, Document, Page } from "react-pdf";
@@ -71,7 +71,6 @@ const colourStyles = {
     singleValue: (styles, { data }) => ({ ...styles, ...dot('blue') }),
 };
 
-const cropper = React.createRef(null);
 class Revisar extends Component {
     constructor(props) {
         super(props)
@@ -93,7 +92,8 @@ class Revisar extends Component {
             demandantes: [],
             isDown: false,
             previousPointX: '',
-            previousPointY: ''
+            previousPointY: '',
+            editCanvas: false
         }
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.handleMouseMove = this.handleMouseMove.bind(this);
@@ -148,6 +148,9 @@ class Revisar extends Component {
         if (this.props.resaltado !== "") {
             console.log(e.target.value)
             console.log(palabra)
+            try {
+                
+           
             let vectorLocation = [];
             let totalBoundig = [];
             for (const prop in palabra.fieldInstances) {
@@ -170,6 +173,9 @@ class Revisar extends Component {
             this.setState({
                 boundig: { boundig: true, points: totalBoundig }
             })
+        } catch (error) {
+                
+        }
         }
 
     }
@@ -203,8 +209,7 @@ class Revisar extends Component {
     }
 
     editCanvas = () => {
-        const ctx = this.refs.canvas.getContext('2d');
-        ctx.fillRect(0, 0, 100, 100);
+        this.setState({ editCanvas: true })
     }
 
     render() {
@@ -274,7 +279,8 @@ class Revisar extends Component {
                             margin="normal"
                             onFocus={(e) => {
                                 console.log(props)
-                                this.focusElement2(e, this.props.resaltado.fields.demandantes, props.rowData.id, 'nombre')}}
+                                this.focusElement2(e, this.props.resaltado.fields.demandantes, props.rowData.id, 'nombre')
+                            }}
                         />
                     )
                 }
@@ -287,6 +293,7 @@ class Revisar extends Component {
                             value={props.value}
                             label="Identificacion"
                             margin="normal"
+
                             onFocus={(e) => this.focusElement2(e, this.props.resaltado.fields.demandantes, props.rowData.id, 'identificacion')}
                         />
                     )
@@ -318,8 +325,20 @@ class Revisar extends Component {
                         <ProgressBar className="right" animated now={100} />
                     </div> :
                     <div>
-                        <button onClick={this.editCanvas}>EDITAR</button>
+                        <div style={{ width: '100%', backgroundColor: '#fff' }}>
+                            <div className="document-tools">
+                                <div className="tools-edit">
+                                <button onClick={this.editCanvas}><MdNavigateBefore size="1.5em" color={"#BDD535"} /></button>
+                                <button onClick={this.editCanvas}><MdNavigateNext size="1.5em" color={"#BDD535"} /></button>
+                                    
+                                </div>
+                                <div className="tools-page">
+                                <button onClick={this.editCanvas}><MdPhotoSizeSelectSmall size="1.5em" color={"#BDD535"} /></button>
+                                    <button onClick={this.editCanvas}><FaTable size="1.5em" color={"#BDD535"} /></button>
+                                </div>
 
+                            </div>
+                        </div>
                         <div className="container-view">
 
                             <div className="container-document">
@@ -408,45 +427,53 @@ class Revisar extends Component {
         console.log(e, 'error in file-viewer');
     }
     handleMouseDown(event) { //added code here
-        console.log('DOWN')
-        console.log(event);
-        this.setState({
-            isDown: true,
-            previousPointX: event.offsetX,
-            previousPointY: event.offsetY
-        }, () => {
+        if (this.state.editCanvas) {
+            console.log('DOWN')
+            console.log(event);
+            this.setState({
+                isDown: true,
+                previousPointX: event.offsetX,
+                previousPointY: event.offsetY
+            }, () => {
 
-        })
+            })
+
+        }
+
     }
     handleMouseMove(event) {
-        var x = event.offsetX;
-        var y = event.offsetY;
-        if (this.state.isDown) {
-            const ctx = this.refs.canvas.getContext('2d');
-            ctx.clearRect(0, 0, this.refs.canvas.width, this.refs.canvas.height); //clear canvas
-            ctx.beginPath();
-            ctx.fillStyle = "rgba(0,0,0, 0.4)";
-            ctx.fillRect(0, 0, this.refs.canvas.width, this.refs.canvas.height);
-            var width = x - this.state.previousPointX;
-            var height = y - this.state.previousPointY;
-            ctx.beginPath();
-            ctx.lineWidth = "1";
-            ctx.strokeStyle = "red";
-            ctx.fillStyle = "rgba(255,255,255, 0.5)";
-            ctx.fillRect(this.state.previousPointX, this.state.previousPointY, width, height);
-            ctx.stroke();
+        if (this.state.editCanvas) {
+
+
+            var x = event.offsetX;
+            var y = event.offsetY;
+            if (this.state.isDown) {
+                const ctx = this.refs.canvas.getContext('2d');
+                ctx.clearRect(0, 0, this.refs.canvas.width, this.refs.canvas.height); //clear canvas
+                ctx.beginPath();
+                ctx.fillStyle = "rgba(0,0,0, 0.4)";
+                ctx.fillRect(0, 0, this.refs.canvas.width, this.refs.canvas.height);
+                var width = x - this.state.previousPointX;
+                var height = y - this.state.previousPointY;
+                ctx.beginPath();
+                ctx.lineWidth = "1";
+                ctx.strokeStyle = "red";
+                ctx.fillStyle = "rgba(255,255,255, 0.5)";
+                ctx.fillRect(this.state.previousPointX, this.state.previousPointY, width, height);
+                ctx.stroke();
+            }
         }
     }
     handleMouseUp(event) {
-        //console.log('UP')
-        // console.log(event)
-        const ctx = this.refs.canvas.getContext('2d');
-        ctx.clearRect(0, 0, this.refs.canvas.width, this.refs.canvas.height); //clear canvas
-        ctx.beginPath();
-        this.setState({
-            isDown: false
-        });
+        if (this.state.editCanvas) {
+            const ctx = this.refs.canvas.getContext('2d');
+            ctx.clearRect(0, 0, this.refs.canvas.width, this.refs.canvas.height); //clear canvas
+            ctx.beginPath();
+            this.setState({
+                isDown: false
+            });
 
+        }
     }
 }
 
