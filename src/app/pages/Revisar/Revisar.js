@@ -93,7 +93,9 @@ class Revisar extends Component {
             isDown: false,
             previousPointX: '',
             previousPointY: '',
-            editCanvas: false
+            editCanvas: false,
+            actualFocus:'',
+            rectangle:{}
         }
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.handleMouseMove = this.handleMouseMove.bind(this);
@@ -142,15 +144,15 @@ class Revisar extends Component {
         this.setState({ disabled: false })
     }
     handleCancel = () => {
-        this.setState({ disabled: true, boundig: { boundig: false, points: [] } })
+        this.setState({ disabled: true, boundig: { boundig: false, points: [] }, editCanvas:false })
     }
     focusElement(e, palabra) {
+        console.log(e.target.name)
+        this.setState({actualFocus:e.target.name})
         if (this.props.resaltado !== "") {
             console.log(e.target.value)
             console.log(palabra)
             try {
-                
-           
             let vectorLocation = [];
             let totalBoundig = [];
             for (const prop in palabra.fieldInstances) {
@@ -333,7 +335,7 @@ class Revisar extends Component {
                                     
                                 </div>
                                 <div className="tools-page">
-                                <button onClick={this.editCanvas}><MdPhotoSizeSelectSmall size="1.5em" color={"#BDD535"} /></button>
+                                <button className="button-select" onClick={this.editCanvas}><MdPhotoSizeSelectSmall size="1.5em" color={"#BDD535"} /></button>
                                     <button onClick={this.editCanvas}><FaTable size="1.5em" color={"#BDD535"} /></button>
                                 </div>
 
@@ -391,7 +393,7 @@ class Revisar extends Component {
                                 </div>
                                 <div className="information-card">
                                     <label for="entidad">Entidad Remitente</label>
-                                    <input id="entidad" name="entidad" value={this.state.entidad} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.entidadRemitente : null)) }} />
+                                    <input id="entidad" name="entidad" value={this.state.entidad} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.entidadRemitente : null),) }} />
                                     <div className="section-information-cols">
                                         <div className="section-information-col">
                                             <label for="ciudad" >Ciudad</label>
@@ -432,6 +434,7 @@ class Revisar extends Component {
             console.log(event);
             this.setState({
                 isDown: true,
+                isDownCount:1,
                 previousPointX: event.offsetX,
                 previousPointY: event.offsetY
             }, () => {
@@ -443,8 +446,6 @@ class Revisar extends Component {
     }
     handleMouseMove(event) {
         if (this.state.editCanvas) {
-
-
             var x = event.offsetX;
             var y = event.offsetY;
             if (this.state.isDown) {
@@ -460,12 +461,23 @@ class Revisar extends Component {
                 ctx.strokeStyle = "red";
                 ctx.fillStyle = "rgba(255,255,255, 0.5)";
                 ctx.fillRect(this.state.previousPointX, this.state.previousPointY, width, height);
+                console.log('EL RECTANGULO EN MOVIMIENTO ES:')
+                console.log(x,y,width,height)
                 ctx.stroke();
             }
         }
     }
     handleMouseUp(event) {
         if (this.state.editCanvas) {
+            var x = event.offsetX;
+            var y = event.offsetY;
+            var width = x - this.state.previousPointX;
+            var height = y - this.state.previousPointY;
+            this.setState({
+                rectangle:{x:x,y:y,width:width,height:height}
+            },function(){
+                console.log(this.state.rectangle)
+            })
             const ctx = this.refs.canvas.getContext('2d');
             ctx.clearRect(0, 0, this.refs.canvas.width, this.refs.canvas.height); //clear canvas
             ctx.beginPath();

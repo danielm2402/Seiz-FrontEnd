@@ -99,7 +99,7 @@
 .lienzo{
   position: absolute;
   width: 612px;
-  height: 965px;
+  height: 792px;
   
   z-index: 99999999;
 }
@@ -125,3 +125,4 @@
   width: 100%;
   justify-content: start;
 }
+
