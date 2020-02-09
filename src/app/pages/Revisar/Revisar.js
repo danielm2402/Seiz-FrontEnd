@@ -461,8 +461,8 @@ class Revisar extends Component {
                 ctx.strokeStyle = "red";
                 ctx.fillStyle = "rgba(255,255,255, 0.5)";
                 ctx.fillRect(this.state.previousPointX, this.state.previousPointY, width, height);
-                console.log('EL RECTANGULO EN MOVIMIENTO ES:')
-                console.log(x,y,width,height)
+                //console.log('EL RECTANGULO EN MOVIMIENTO ES:')
+                //console.log(x,y,width,height)
                 ctx.stroke();
             }
         }
@@ -474,9 +474,17 @@ class Revisar extends Component {
             var width = x - this.state.previousPointX;
             var height = y - this.state.previousPointY;
             this.setState({
-                rectangle:{x:x,y:y,width:width,height:height}
+                rectangle:{x:this.state.previousPointX,y:this.state.previousPointY,width:width,height:height}
             },function(){
-                console.log(this.state.rectangle)
+               this.props.json.pages[0].words.map((item)=>{
+                   item.boundingPoly.vertices.map((item1)=>{
+                      if(((item1.x*612)>=this.state.previousPointX)&&((item1.x*612)<=((this.state.rectangle.width+this.state.previousPointX)))){
+                        if(((item1.y*792)>=this.state.previousPointY)&&((item1.y*792)<=((this.state.rectangle.height+this.state.previousPointY)))){
+                            console.log(item)
+                        } 
+                      } 
+                   })
+               })
             })
             const ctx = this.refs.canvas.getContext('2d');
             ctx.clearRect(0, 0, this.refs.canvas.width, this.refs.canvas.height); //clear canvas
@@ -487,7 +495,12 @@ class Revisar extends Component {
 
         }
     }
+    changeWord(){
+        
+    }
 }
+
+   
 
 
 const mapStateToProps = (state) => ({
