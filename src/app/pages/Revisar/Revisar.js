@@ -476,17 +476,25 @@ class Revisar extends Component {
             this.setState({
                 rectangle:{x:this.state.previousPointX,y:this.state.previousPointY,width:width,height:height}
             },function(){
+                
                this.props.json.pages[0].words.map((item)=>{
-                   item.boundingPoly.vertices.map((item1)=>{
-                      if(((item1.x*612)>=this.state.previousPointX)&&((item1.x*612)<=((this.state.rectangle.width+this.state.previousPointX)))){
-                        if(((item1.y*792)>=this.state.previousPointY)&&((item1.y*792)<=((this.state.rectangle.height+this.state.previousPointY)))){
-                            console.log(item)
-                        } 
-                      } 
-                   })
+                 var x= ((((item.boundingPoly.vertices[1].x))+((item.boundingPoly.vertices[0].x)))/2)*612 
+                 var y= ((((item.boundingPoly.vertices[3].y))+((item.boundingPoly.vertices[0].y)))/2)*792
+                 
+                 if((x>this.state.previousPointX && x<(this.state.rectangle.width+this.state.previousPointX)&&((y>this.state.previousPointY)&&(y<this.state.rectangle.height+this.state.previousPointY)))){
+                     console.log('LA PALABRA ES:')
+                     console.log(item)
+                     console.log(x,y)
+
+                 }
                })
             })
             const ctx = this.refs.canvas.getContext('2d');
+            ctx.beginPath();
+            ctx.lineWidth = "1";
+            ctx.strokeStyle = "red";
+            ctx.fillStyle = "rgba(255,255,255, 0.5)";
+            ctx.fillRect(this.state.previousPointX, this.state.previousPointY, width, height);
             ctx.clearRect(0, 0, this.refs.canvas.width, this.refs.canvas.height); //clear canvas
             ctx.beginPath();
             this.setState({
