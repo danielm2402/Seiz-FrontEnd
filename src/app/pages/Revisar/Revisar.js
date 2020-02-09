@@ -485,6 +485,7 @@ class Revisar extends Component {
                      console.log('LA PALABRA ES:')
                      console.log(item)
                      console.log(x,y)
+                     this.setState({[this.state.actualFocus]:item.text})
 
                  }
                })
