@@ -476,20 +476,27 @@ class Revisar extends Component {
             this.setState({
                 rectangle:{x:this.state.previousPointX,y:this.state.previousPointY,width:width,height:height}
             },function(){
+                let vector=[]
                 
-               this.props.json.pages[0].words.map((item)=>{
+                this.props.json.pages[0].words.map((item)=>{
                  var x= ((((item.boundingPoly.vertices[1].x))+((item.boundingPoly.vertices[0].x)))/2)*612 
                  var y= ((((item.boundingPoly.vertices[3].y))+((item.boundingPoly.vertices[0].y)))/2)*792
                  
                  if((x>this.state.previousPointX && x<(this.state.rectangle.width+this.state.previousPointX)&&((y>this.state.previousPointY)&&(y<this.state.rectangle.height+this.state.previousPointY)))){
-                     console.log('LA PALABRA ES:')
-                     console.log(item)
-                     console.log(x,y)
-                     this.setState({[this.state.actualFocus]:item.text})
-
+                  
+                     vector.push(item)
                  }
                })
+               var palabra=''
+               vector.map((item)=>{
+                    palabra=palabra +' '+item.text
+                    
+               })
+               console.log(palabra)
+               this.setState({[this.state.actualFocus]:palabra})
+              // console.log(this.state[this.state.actualFocus])
             })
+           
             const ctx = this.refs.canvas.getContext('2d');
             ctx.beginPath();
             ctx.lineWidth = "1";
