@@ -28,6 +28,7 @@ import './style.css'
 import Details from './google-material/stadistics/Detalles'
 import Pie from './google-material/stadistics/Pie'
 import Comparator from './google-material/stadistics/Comparator'
+import AreaChart from './google-material/stadistics/AreaChart'
 const colors = [
   "#252525",
   "#525252",
@@ -94,34 +95,34 @@ export default function Dashboard() {
       <div className="cards-container">
 
         <Link to="/upload">
-          <Tarjet nombre="Subir oficio" width="200px" height="141px" number="10">
-            <FaUpload color="#F4F4F4" size="3em" />
+          <Tarjet nombre="Subir oficio" width="210px" height="141px" number="10">
+            <FaUpload color="#BDD535" size="3em" />
           </Tarjet>
         </Link>
 
         <Link to="/listar/no-confirmados">
-          <Tarjet nombre="Confirmar" width="200px" height="141px" number="75">
-            <FaEye color="#F4F4F4" size="3em" />
+          <Tarjet nombre="Confirmar" width="210px" height="141px" number="75">
+            <FaEye color="#BDD535" size="3em" />
           </Tarjet>
         </Link>
         <Link to="/listar/confirmados">
-          <Tarjet nombre="Confirmados" width="200px" height="141px" number="350">
-            <FaCheck color="#F4F4F4" size="3em" />
+          <Tarjet nombre="Confirmados" width="210px" height="141px" number="350">
+            <FaCheck color="#BDD535" size="3em" />
           </Tarjet>
         </Link>
         <Link to="/listar/todos">
-          <Tarjet nombre="Buscar" width="200px" height="141px" number="650">
-            <FaSearch color="#F4F4F4" size="3em" />
+          <Tarjet nombre="Buscar" width="210px" height="141px" number="650">
+            <FaSearch color="#BDD535" size="3em" />
           </Tarjet>
         </Link>
         <Link>
-          <Tarjet nombre="Cartas" width="200px" height="141px" number="50">
-            <MdEmail color="#F4F4F4" size="3em" />
+          <Tarjet nombre="Cartas" width="210px" height="141px" number="50">
+            <MdEmail color="#BDD535" size="3em" />
           </Tarjet>
         </Link>
         <Link to="/listar/asignados">
-          <Tarjet nombre="Asignados" width="200px" height="141px" number="12">
-            <MdNotificationsActive color="#F4F4F4" size="3em" />
+          <Tarjet nombre="Asignados" width="210px" height="141px" number="12">
+            <MdNotificationsActive color="#BDD535" size="3em" />
           </Tarjet>
         </Link>
 
@@ -130,51 +131,25 @@ export default function Dashboard() {
 
       </div>
 
+    {/*   <div className="row">
+        <div className="col-xl-8">
+        <AreaChart/>
+        </div>
+        <div className="col-xl-4">
+        <Comparator/>
+        </div>
+      </div> */}
+
       <Portlet>
         <PortletBody fit={true}>
-          <div className="row row-no-padding row-col-separator-xl">
-            <div className="col-xl-4">
-              {/* <VictoryPie style={{
-                data: {
-                  fill: ({ y }) =>
-                    y > 49 ? 'green'
-                      : y > 39 ? 'yellow'
-                        : 'tomato'
-                }
-              }} /> */}
-              <Pie></Pie>
+          <div className="row  row-col-separator-xl">
+           
+            <div className="col-xl-8">
+            <AreaChart/>
             </div>
             <div className="col-xl-4">
-            {/*   <VictoryChart style={{parent: {height: '100%'}}}>
-                <VictoryGroup offset={20}
-                  colorScale={"qualitative"}
-                >
-
-                  <VictoryBar
-                    data={[{ x: 1.5, y: 3 }, { x: 2, y: 4 }, { x: 3, y: 9 }]}
-                  />
-                </VictoryGroup>
-              </VictoryChart> */}
-              <Comparator/>
-            </div>
-            <div className="col-xl-4">
-              <VictoryChart
-
-              >
-                <VictoryLine
-                  style={{
-                    data: { stroke: "#c43a31" },
-                    parent: { border: "1px solid #ccc" }
-                  }}
-                  data={[
-                    { x: 1, y: 2 },
-                    { x: 2, y: 3 },
-                    { x: 3, y: 5 },
-                    { x: 4, y: 4 },
-                    { x: 5, y: 7 }
-                  ]}
-                />
-              </VictoryChart>
+            <Comparator/>
+            
             </div>
           </div>
         </PortletBody>
