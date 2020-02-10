@@ -37,10 +37,10 @@ class Brand extends React.Component {
               id="kt_aside_toggler"
             >
               <span>
-                <AngleDoubleLeftIcon />
+                {/* <AngleDoubleLeftIcon /> */}
               </span>
               <span>
-                <AngleDoubleRightIcon />
+                {/* <AngleDoubleRightIcon /> */}
               </span>
             </button>
           </div>
