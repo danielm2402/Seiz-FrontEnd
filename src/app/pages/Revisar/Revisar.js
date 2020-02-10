@@ -147,6 +147,7 @@ class Revisar extends Component {
         this.setState({ disabled: true, boundig: { boundig: false, points: [] }, editCanvas:false })
     }
     focusElement(e, palabra) {
+     
         console.log(e.target.name)
         this.setState({actualFocus:e.target.name})
         if (this.props.resaltado !== "") {
@@ -186,7 +187,9 @@ class Revisar extends Component {
         console.log(id)
         console.log(palabra)
         if (this.props.resaltado !== "") {
-
+            try {
+                
+           
             let vectorLocation = [];
             let totalBoundig = [];
             const row = palabra.fieldInstances[id].parts[tipo]
@@ -207,6 +210,9 @@ class Revisar extends Component {
             this.setState({
                 boundig: { boundig: true, points: totalBoundig }
             })
+        } catch (error) {
+                
+        }
         }
     }
 
