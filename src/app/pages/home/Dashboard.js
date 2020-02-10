@@ -26,7 +26,8 @@ import { VictoryPie, VictoryChart, VictoryLine, VictoryGroup, VictoryBar } from 
 import Tarjet from './Tarjet'
 import './style.css'
 import Details from './google-material/stadistics/Detalles'
-
+import Pie from './google-material/stadistics/Pie'
+import Comparator from './google-material/stadistics/Comparator'
 const colors = [
   "#252525",
   "#525252",
@@ -133,17 +134,18 @@ export default function Dashboard() {
         <PortletBody fit={true}>
           <div className="row row-no-padding row-col-separator-xl">
             <div className="col-xl-4">
-              <VictoryPie style={{
+              {/* <VictoryPie style={{
                 data: {
                   fill: ({ y }) =>
                     y > 49 ? 'green'
                       : y > 39 ? 'yellow'
                         : 'tomato'
                 }
-              }} />
+              }} /> */}
+              <Pie></Pie>
             </div>
             <div className="col-xl-4">
-              <VictoryChart style={{parent: {height: '100%'}}}>
+            {/*   <VictoryChart style={{parent: {height: '100%'}}}>
                 <VictoryGroup offset={20}
                   colorScale={"qualitative"}
                 >
@@ -152,7 +154,8 @@ export default function Dashboard() {
                     data={[{ x: 1.5, y: 3 }, { x: 2, y: 4 }, { x: 3, y: 9 }]}
                   />
                 </VictoryGroup>
-              </VictoryChart>
+              </VictoryChart> */}
+              <Comparator/>
             </div>
             <div className="col-xl-4">
               <VictoryChart

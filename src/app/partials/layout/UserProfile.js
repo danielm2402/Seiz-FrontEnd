@@ -7,6 +7,10 @@ import { toAbsoluteUrl } from "../../../_metronic";
 import HeaderDropdownToggle from "../content/CustomDropdowns/HeaderDropdownToggle";
 
 class UserProfile extends React.Component {
+  componentDidMount(){
+    console.log('AQUI EL AUTH')
+    console.log(this.props.auth)
+  }
   render() {
     const { user, showHi, showAvatar, showBadge } = this.props;
 
@@ -19,17 +23,17 @@ class UserProfile extends React.Component {
           <div className="kt-header__topbar-user">
             {showHi && (
               <span className="kt-header__topbar-welcome kt-hidden-mobile">
-                Hi,
+                Hola,
               </span>
             )}
 
             {showHi && (
               <span className="kt-header__topbar-username kt-hidden-mobile">
-                {user.fullname}
+                {this.props.auth.user.username}
               </span>
             )}
 
-            {showAvatar && <img alt="Pic" src={user.pic} />}
+            {showAvatar && <img alt="Pic" src={'user.pic'} />}
 
             {showBadge && (
               <span className="kt-badge kt-badge--username kt-badge--unified-success kt-badge--lg kt-badge--rounded kt-badge--bold">
@@ -48,12 +52,12 @@ class UserProfile extends React.Component {
             }}
           >
             <div className="kt-user-card__avatar">
-              <img alt="Pic" className="kt-hidden" src={user.pic} />
+              <img alt="Pic" className="kt-hidden" src={'user.pic'} />
               <span className="kt-badge kt-badge--lg kt-badge--rounded kt-badge--bold kt-font-success">
                 S
               </span>
             </div>
-            <div className="kt-user-card__name">{user.fullname}</div>
+            <div className="kt-user-card__name">{this.props.auth.user.username}</div>
             <div className="kt-user-card__badge">
               <span className="btn btn-success btn-sm btn-bold btn-font-md">
                 23 messages
@@ -128,8 +132,8 @@ class UserProfile extends React.Component {
   }
 }
 
-const mapStateToProps = ({ auth: { user } }) => ({
-  user
+const mapStateToProps = (state) => ({
+  auth: state.auth
 });
 
 export default connect(mapStateToProps)(UserProfile);
