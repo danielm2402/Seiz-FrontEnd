@@ -166,7 +166,7 @@ class Revisar extends Component {
             vectorLocation.map((item) => {
                 var iterador = item.start
                 for (iterador; iterador <= item.end; iterador++) {
-                    totalBoundig.push(this.props.json.pages[0].words[iterador].boundingPoly.vertices)
+                    totalBoundig.push(this.props.json.pages[this.state.pageNumber-1].words[iterador].boundingPoly.vertices)
                 }
             })
             console.log('totalboundig')
@@ -329,9 +329,10 @@ class Revisar extends Component {
                     <div>
                         <div style={{ width: '100%', backgroundColor: '#fff' }}>
                             <div className="document-tools">
-                                <div className="tools-edit">
-                                <button onClick={this.editCanvas}><MdNavigateBefore size="1.5em" color={"#BDD535"} /></button>
-                                <button onClick={this.editCanvas}><MdNavigateNext size="1.5em" color={"#BDD535"} /></button>
+                                <div className="tools-edit" >
+                                    {this.state.pageNumber>1?<button onClick={()=>this.setState({pageNumber:this.state.pageNumber-1})}><MdNavigateBefore size="1.5em" color={"#BDD535"} /></button>:<></>}
+                                
+                                <button  onClick={()=>this.setState({pageNumber:this.state.pageNumber+1})}><MdNavigateNext size="1.5em" color={"#BDD535"} /></button>
                                     
                                 </div>
                                 <div className="tools-page">

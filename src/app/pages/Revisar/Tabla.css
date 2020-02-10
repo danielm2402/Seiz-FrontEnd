@@ -113,16 +113,17 @@
 .document-tools{
   width: 50%;
   display: flex;
+  flex-direction: row;
 }
 .tools-edit{
-  width: 100%;
-  display: flex;
-  justify-content: center;
+ width: 33%;
+
 }
 .tools-page{
-  position: absolute;
   display: flex;
-  width: 100%;
-  justify-content: start;
+  flex-direction: row;
+ width: 33%;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 

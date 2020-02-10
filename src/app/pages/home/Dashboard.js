@@ -25,6 +25,7 @@ import {
 import { VictoryPie, VictoryChart, VictoryLine, VictoryGroup, VictoryBar } from "victory";
 import Tarjet from './Tarjet'
 import './style.css'
+import Details from './google-material/stadistics/Detalles'
 
 const colors = [
   "#252525",
@@ -187,23 +188,7 @@ export default function Dashboard() {
 
       <div className="row">
         <div className="col-xl-8">
-          <VictoryChart
-
-          >
-            <VictoryLine
-              style={{
-                data: { stroke: "#c43a31" },
-                parent: { border: "1px solid #ccc" }
-              }}
-              data={[
-                { x: 1, y: 2 },
-                { x: 2, y: 3 },
-                { x: 3, y: 5 },
-                { x: 4, y: 4 },
-                { x: 5, y: 7 }
-              ]}
-            />
-          </VictoryChart>
+            <Details/>
         </div>
         <div className="col-xl-4">
           <RecentActivities />
