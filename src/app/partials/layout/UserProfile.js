@@ -5,7 +5,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import { connect } from "react-redux";
 import { toAbsoluteUrl } from "../../../_metronic";
 import HeaderDropdownToggle from "../content/CustomDropdowns/HeaderDropdownToggle";
-
+import Avatar from 'react-avatar';
 class UserProfile extends React.Component {
   componentDidMount(){
     console.log('AQUI EL AUTH')
@@ -33,7 +33,7 @@ class UserProfile extends React.Component {
               </span>
             )}
 
-            {showAvatar && <img alt="Pic" src={'user.pic'} />}
+            {showAvatar &&<Avatar name={this.props.auth.user.username} size="20" /> }
 
             {showBadge && (
               <span className="kt-badge kt-badge--username kt-badge--unified-success kt-badge--lg kt-badge--rounded kt-badge--bold">
@@ -52,10 +52,8 @@ class UserProfile extends React.Component {
             }}
           >
             <div className="kt-user-card__avatar">
-              <img alt="Pic" className="kt-hidden" src={'user.pic'} />
-              <span className="kt-badge kt-badge--lg kt-badge--rounded kt-badge--bold kt-font-success">
-                S
-              </span>
+           <img alt="Pic" className="kt-hidden" src={'user.pic'} />
+           <Avatar name={this.props.auth.user.username} size="60" /> 
             </div>
             <div className="kt-user-card__name">{this.props.auth.user.username}</div>
             <div className="kt-user-card__badge">

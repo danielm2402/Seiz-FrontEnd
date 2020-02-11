@@ -160,10 +160,14 @@ export default function Dashboard() {
         <PortletBody fit={true}>
           <div className="row  row-col-separator-xl">
            
-            <div className="col-xl-8">
+            <div className="col-xl-6">
             <AreaChart/>
             </div>
             <div className="col-xl-4">
+            <Comparator/>
+            
+            </div>
+            <div className="col-xl-2">
             <Comparator/>
             
             </div>

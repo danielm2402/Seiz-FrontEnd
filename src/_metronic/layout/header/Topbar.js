@@ -25,10 +25,6 @@ export default class Topbar extends React.Component {
           dot="false"
         />
 
-        
-
-      
-
         <UserProfile showAvatar={true} showHi={true} showBadge={false} />
       </div>
     );
