@@ -1,11 +1,26 @@
 
 import React, { useState }  from 'react';
-import MaterialTable from 'material-table';
+import MaterialTable,{ MTableCell }  from 'material-table';
 import {deleteEmbargo, getEmbargo, getDemandados} from '../../redux/actions/embargosAction'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {Link} from 'react-router-dom'
 import {useHistory} from 'react-router-dom'
+
+const color=(value)=>{
+  switch (value) {
+    case 'CONFIRMADO':
+      return '#03A9F4'
+    case 'SIN_CONFIRMAR':
+      return '#F44336'
+      case 'COMPLETO':
+      return '#4CAF50'
+    default:
+      return '#ffffff'
+     
+  }
+}
+
 function MaterialTableDemo(props) {
   let history=useHistory()
   return (
@@ -23,43 +38,72 @@ function MaterialTableDemo(props) {
         { title: 'Fecha Oficio', field: 'documentDate'},
    
       ]}
-      data={props.data}
+      components={{
+        Cell: props => {
+          console.log('LA CELDA TABLE')
+          console.log(props);
+          if(props.columnDef.field=='status'){
+          return (
+            
+            <MTableCell
       
+            >
+              {props.columnDef.field=='status'?
+              <span style={{backgroundColor:color(props.value), borderRadius:'3px'}}>{props.value}</span>:<></>}
+              </MTableCell>
+          );
+        }
+        else{
+          return(
+          <MTableCell
+             
+          {...props}
+        />)
+        }
+      }
+      
+      }}
+      data={props.data}
+      actions={[
+       rowData=>({
+          icon:'remove_red_eye',
+          tooltip:'Ver',
+          onClick:(event, rowData)=>{
+            props.handleView(rowData.id, props.token)
+            props.handleDemandados(rowData.id, props.token)
+            history.push(`/view/${rowData.id}`)
+          },
+        }),
+       rowData=> ({
+          icon:'edit',
+          tooltip:'Revisar',
+          disabled: rowData.status=='CONFIRMADO'||rowData.status=='COMPLETO'
+        })
+      ]}
       options={{
+        filtering: true,
         pageSize: 5,
         pageSizeOptions: [],
         toolbar: true,
-        paging: true
+        paging: true,
+        rowStyle: {
+          backgroundColor: '#EEE',
+        }
     }}
-    editable={{
-      isEditable: rowData => props.editable === true, // only name(a) rows would be editable
-      isDeletable: rowData => props.editable === true, // only name(a) rows would be deletable
-      onRowAdd:props.add,
-      onRowUpdate: (newData, oldData) =>
-          new Promise((resolve, reject) => {
-              setTimeout(() => {
-                  {
-                      /* const data = this.state.data;
-                      const index = data.indexOf(oldData);
-                      data[index] = newData;                
-                      this.setState({ data }, () => resolve()); */
-                  }
-                  resolve();
-              }, 1000);
+      editable={{
+        onRowDelete: oldData =>
+          new Promise(resolve => {
+            
+            resolve()
+            console.log(oldData)
+            props.handleEliminar(oldData.id, props.token, props.pathname)
+          
+     
           }),
-      onRowDelete: oldData =>
-          new Promise((resolve, reject) => {
-              setTimeout(() => {
-                  {
-                      /* let data = this.state.data;
-                      const index = data.indexOf(oldData);
-                      data.splice(index, 1);
-                      this.setState({ data }, () => resolve()); */
-                  }
-                  resolve();
-              }, 1000);
-          })
-  }}
+        
+       
+    }}
+     
     />
     </div>
   );

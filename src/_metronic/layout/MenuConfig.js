@@ -30,28 +30,9 @@ export default {
         title: "Subir",
         root: true,
         bullet: "dot",
-        icon: "flaticon-upload",
-        submenu: [
-          {
-            title: "Oficio",
-            bullet: "dot",
-            page: "upload/oficio"
-            
-          },
-          {
-            title: "Coactivos",
-            bullet: "dot",
-            
-          },
-          {
-            title: "Masivos",
-            bullet: "dot",
-           
-          },
-          
-            
-          
-        ]
+        icon: "flaticon-upload", 
+        page:"upload" 
+        
       },
       {
         title: "Revisar",
@@ -62,16 +43,18 @@ export default {
           {
             title: "Sin confirmar",
             bullet: "dot",
+            page:"listar/no-confirmados" 
             
           },
           {
             title: "Confirmados",
             bullet: "dot",
-            
+            page:"listar/confirmados"
           },
           {
-            title: "Cartas",
+            title: "Asignados",
             bullet: "dot",
+            page:"listar/asignados"
            
           },
 
