@@ -40,8 +40,17 @@
 .cards-container a{
     color: #434040;
 }
+.container-general{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
 .container-left{
-    width: 50%;
+    width: 49%;
+}
+.container-right{
+    width: 49%;
 }
 .container-embargos{
     background-color: #fff;
@@ -61,4 +70,25 @@
 }
 .indicator{
     width: 100%;
+}
+.container-top
+{
+    height: 300px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.historico{
+    background-color: #fff;
+    height: 100%;
+    width: 64%;
+}
+.confirmar{
+    background-color: #fff;
+    height: 100%;
+    width: 34%;
+}
+.container-bottom{
+    margin-top: 20px;
 }

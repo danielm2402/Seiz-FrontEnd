@@ -35,6 +35,8 @@ import TarjetInficator from './google-material/stadistics/TarjetIndicator'
 import { CircularProgressbar } from 'react-circular-progressbar';
 import { connect } from 'react-redux'
 import MaterialTable from './MaterialTableDemo'
+import ChartArea from './google-material/stadistics/ChartArea'
+import TableUsers from './TableUsers'
 import 'react-circular-progressbar/dist/styles.css';
 import {getEmbargosAsignados} from '../../redux/actions/embargosAction'
 const colors = [
@@ -156,6 +158,7 @@ function Dashboard(props) {
         <Comparator/>
         </div>
       </div> */}
+      <div className="container-general">
       <div className="container-left">
         <div className="container-embargos">
         <MaterialTable data={props.embargos}/>
@@ -168,6 +171,20 @@ function Dashboard(props) {
           <Details/>
           </div> */}
         </div>
+      </div>
+      <div className="container-right">
+          <div className="container-top">
+            <div className="historico">
+              <ChartArea/>
+            </div>
+            <div className="confirmar">
+            <CircularProgressbar strokeWidth={5}value={50} text={'80%'}></CircularProgressbar>
+            </div>
+          </div>
+          <div className="container-bottom">
+            <TableUsers/>
+          </div>
+      </div>
       </div>
 
       {/* <Portlet>
