@@ -10,11 +10,11 @@ import {useHistory} from 'react-router-dom'
 const color=(value)=>{
   switch (value) {
     case 'CONFIRMADO':
-      return '#1776E8'
+      return '#03A9F4'
     case 'SIN_CONFIRMAR':
-      return '#D32121'
+      return '#F44336'
       case 'COMPLETO':
-      return '#76E111'
+      return '#4CAF50'
     default:
       return '#ffffff'
      
@@ -30,19 +30,28 @@ function MaterialTableDemo(props) {
       columns={props.columns}
       components={{
         Cell: props => {
+          console.log('LA CELDA TABLE')
           console.log(props);
+          if(props.columnDef.field=='status'){
           return (
-            <MTableCell
-              style={{
-                background: color(props.value)
-                
             
-                    
-              }}
-              {...props}
-            />
+            <MTableCell
+      
+            >
+              {props.columnDef.field=='status'?
+              <span style={{backgroundColor:color(props.value), borderRadius:'3px'}}>{props.value}</span>:<></>}
+              </MTableCell>
           );
         }
+        else{
+          return(
+          <MTableCell
+             
+          {...props}
+        />)
+        }
+      }
+      
       }}
       data={props.data}
       actions={[
