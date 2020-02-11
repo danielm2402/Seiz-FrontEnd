@@ -30,6 +30,9 @@ import Pie from './google-material/stadistics/Pie'
 import Comparator from './google-material/stadistics/Comparator'
 import AreaChart from './google-material/stadistics/AreaChart'
 import SimpleBarChar from './google-material/stadistics/SimpleBarChar'
+import TarjetInficator from './google-material/stadistics/TarjetIndicator'
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 const colors = [
   "#252525",
   "#525252",
@@ -97,33 +100,45 @@ export default function Dashboard() {
 
         <Link to="/upload">
           <Tarjet nombre="Subir oficio" width="210px" height="141px" number="10">
-            <FaUpload color="#BDD535" size="3em" />
+            <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
+          <CircularProgressbar strokeWidth={5}value={66} text={'60%'} />
+          </div>
           </Tarjet>
         </Link>
 
         <Link to="/listar/no-confirmados">
           <Tarjet nombre="Confirmar" width="210px" height="141px" number="75">
-            <FaEye color="#BDD535" size="3em" />
+          <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
+          <CircularProgressbar strokeWidth={5}value={16} text={'16%'} />
+          </div>
           </Tarjet>
         </Link>
         <Link to="/listar/confirmados">
           <Tarjet nombre="Confirmados" width="210px" height="141px" number="350">
-            <FaCheck color="#BDD535" size="3em" />
+          <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
+          <CircularProgressbar strokeWidth={5}value={30} text={'30%'} />
+          </div>
           </Tarjet>
         </Link>
         <Link to="/listar/todos">
           <Tarjet nombre="Buscar" width="210px" height="141px" number="650">
-            <FaSearch color="#BDD535" size="3em" />
+          <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
+          <CircularProgressbar strokeWidth={5}value={20} text={'20%'} />
+          </div>
           </Tarjet>
         </Link>
         <Link>
           <Tarjet nombre="Cartas" width="210px" height="141px" number="50">
-            <MdEmail color="#BDD535" size="3em" />
+          <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
+          <CircularProgressbar strokeWidth={5}value={50} text={'50%'} />
+          </div>
           </Tarjet>
         </Link>
         <Link to="/listar/asignados">
           <Tarjet nombre="Asignados" width="210px" height="141px" number="12">
-            <MdNotificationsActive color="#BDD535" size="3em" />
+          <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
+          <CircularProgressbar strokeWidth={5}value={46} text={'46%'} />
+          </div>
           </Tarjet>
         </Link>
 
