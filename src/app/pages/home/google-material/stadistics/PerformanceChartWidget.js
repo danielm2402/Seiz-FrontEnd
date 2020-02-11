@@ -98,9 +98,7 @@ class PerformanceChartWidget extends PureComponent {
                 </ResponsiveContainer>
               </div>
             </div>
-            <div>
-                <Admin/>
-            </div>
+           
           </Grid>
           <Grid item md={4} xs={12}>
             <Typography className={classes.smallTitle} variant="button">

@@ -1,5 +1,6 @@
-import React, { useMemo } from "react";
+import React, { useMemo,useState, useEffect } from "react";
 import { useSelector } from "react-redux";
+import { bindActionCreators } from 'redux';
 import {
   Portlet,
   PortletBody,
@@ -32,7 +33,10 @@ import AreaChart from './google-material/stadistics/AreaChart'
 import SimpleBarChar from './google-material/stadistics/SimpleBarChar'
 import TarjetInficator from './google-material/stadistics/TarjetIndicator'
 import { CircularProgressbar } from 'react-circular-progressbar';
+import { connect } from 'react-redux'
+import MaterialTable from './MaterialTableDemo'
 import 'react-circular-progressbar/dist/styles.css';
+import {getEmbargosAsignados} from '../../redux/actions/embargosAction'
 const colors = [
   "#252525",
   "#525252",
@@ -43,7 +47,7 @@ const colors = [
   "#f0f0f0"
 ];
 
-export default function Dashboard() {
+function Dashboard(props) {
   const { brandColor, dangerColor, successColor, primaryColor } = useSelector(
     state => ({
       brandColor: metronic.builder.selectors.getConfig(
@@ -93,7 +97,8 @@ export default function Dashboard() {
     }),
     [brandColor, dangerColor, primaryColor, successColor]
   );
-
+  useEffect(() => {
+   props.getEmbargos()}, []);
   return (
     <>
       <div className="cards-container">
@@ -141,10 +146,6 @@ export default function Dashboard() {
           </div>
           </Tarjet>
         </Link>
-
-
-
-
       </div>
 
     {/*   <div className="row">
@@ -155,8 +156,21 @@ export default function Dashboard() {
         <Comparator/>
         </div>
       </div> */}
+      <div className="container-left">
+        <div className="container-embargos">
+        <MaterialTable data={props.embargos}/>
+        </div>
+        <div className="left-stadistics">
+           <div className="comparator">
+          <Comparator/>
+          </div> 
+          {/* <div className="indicator">
+          <Details/>
+          </div> */}
+        </div>
+      </div>
 
-      <Portlet>
+      {/* <Portlet>
         <PortletBody fit={true}>
           <div className="row  row-col-separator-xl">
            
@@ -173,7 +187,7 @@ export default function Dashboard() {
             </div>
           </div>
         </PortletBody>
-      </Portlet>
+      </Portlet> */}
 
 
 
@@ -206,3 +220,11 @@ export default function Dashboard() {
     </>
   );
 }
+
+const mapStateToProps=(state)=>({
+embargos: state.EmbargosReducer.porConfirmar
+})
+const mapDispatchToProps=(dispatch)=>({
+  getEmbargos: bindActionCreators(getEmbargosAsignados,dispatch)
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

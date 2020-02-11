@@ -33,7 +33,7 @@ class UserProfile extends React.Component {
               </span>
             )}
 
-            {showAvatar &&<Avatar name={this.props.auth.user.username} size="20" /> }
+            {showAvatar &&<Avatar name={this.props.auth.user.username} size="40" /> }
 
             {showBadge && (
               <span className="kt-badge kt-badge--username kt-badge--unified-success kt-badge--lg kt-badge--rounded kt-badge--bold">
