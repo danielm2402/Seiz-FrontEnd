@@ -9,8 +9,8 @@ import './Tabla.css'
 import { PDFReader } from 'reactjs-pdf-reader';
 import { PDFViewer } from '@react-pdf/renderer';
 import TextField from '@material-ui/core/TextField';
-import { FaRegEdit,FaTable } from "react-icons/fa";
-import { MdCancel, MdPhotoSizeSelectSmall,MdNavigateNext,MdNavigateBefore } from "react-icons/md";
+import { FaRegEdit, FaTable } from "react-icons/fa";
+import { MdCancel, MdPhotoSizeSelectSmall, MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import Select from 'react-select'
 import { ProgressBar } from 'react-bootstrap';
 import { setOptions, Document, Page } from "react-pdf";
@@ -94,8 +94,8 @@ class Revisar extends Component {
             previousPointX: '',
             previousPointY: '',
             editCanvas: false,
-            actualFocus:'',
-            rectangle:{}
+            actualFocus: '',
+            rectangle: {}
         }
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.handleMouseMove = this.handleMouseMove.bind(this);
@@ -144,41 +144,41 @@ class Revisar extends Component {
         this.setState({ disabled: false })
     }
     handleCancel = () => {
-        this.setState({ disabled: true, boundig: { boundig: false, points: [] }, editCanvas:false })
+        this.setState({ disabled: true, boundig: { boundig: false, points: [] }, editCanvas: false })
     }
     focusElement(e, palabra) {
-     
+
         console.log(e.target.name)
-        this.setState({actualFocus:e.target.name})
+        this.setState({ actualFocus: e.target.name })
         if (this.props.resaltado !== "") {
             console.log(e.target.value)
             console.log(palabra)
             try {
-            let vectorLocation = [];
-            let totalBoundig = [];
-            for (const prop in palabra.fieldInstances) {
-                console.log(`palabra.fieldInstances.${prop}`);
-                for (const prop1 in palabra.fieldInstances[prop].parts) {
-                    console.log(palabra.fieldInstances[prop].parts[prop1])
-                    vectorLocation.push({ start: palabra.fieldInstances[prop].parts[prop1].startLocation, end: palabra.fieldInstances[prop].parts[prop1].endLocation, page: palabra.fieldInstances[prop].parts[prop1].page })
+                let vectorLocation = [];
+                let totalBoundig = [];
+                for (const prop in palabra.fieldInstances) {
+                    console.log(`palabra.fieldInstances.${prop}`);
+                    for (const prop1 in palabra.fieldInstances[prop].parts) {
+                        console.log(palabra.fieldInstances[prop].parts[prop1])
+                        vectorLocation.push({ start: palabra.fieldInstances[prop].parts[prop1].startLocation, end: palabra.fieldInstances[prop].parts[prop1].endLocation, page: palabra.fieldInstances[prop].parts[prop1].page })
+                    }
                 }
-            }
-            console.log(vectorLocation)
-            vectorLocation.map((item) => {
-                var iterador = item.start
-                for (iterador; iterador <= item.end; iterador++) {
-                    totalBoundig.push(this.props.json.pages[this.state.pageNumber-1].words[iterador].boundingPoly.vertices)
-                }
-            })
-            console.log('totalboundig')
-            console.log(totalBoundig)
+                console.log(vectorLocation)
+                vectorLocation.map((item) => {
+                    var iterador = item.start
+                    for (iterador; iterador <= item.end; iterador++) {
+                        totalBoundig.push(this.props.json.pages[this.state.pageNumber - 1].words[iterador].boundingPoly.vertices)
+                    }
+                })
+                console.log('totalboundig')
+                console.log(totalBoundig)
 
-            this.setState({
-                boundig: { boundig: true, points: totalBoundig }
-            })
-        } catch (error) {
-                
-        }
+                this.setState({
+                    boundig: { boundig: true, points: totalBoundig }
+                })
+            } catch (error) {
+
+            }
         }
 
     }
@@ -188,31 +188,31 @@ class Revisar extends Component {
         console.log(palabra)
         if (this.props.resaltado !== "") {
             try {
-                
-           
-            let vectorLocation = [];
-            let totalBoundig = [];
-            const row = palabra.fieldInstances[id].parts[tipo]
-            console.log(row)
-            vectorLocation.push({ start: row.startLocation, end: row.endLocation, page: row.page })
 
 
-            console.log(vectorLocation)
-            vectorLocation.map((item) => {
-                var iterador = item.start
-                for (iterador; iterador <= item.end; iterador++) {
-                    totalBoundig.push(this.props.json.pages[0].words[iterador].boundingPoly.vertices)
-                }
-            })
-            console.log('totalboundig')
-            console.log(totalBoundig)
+                let vectorLocation = [];
+                let totalBoundig = [];
+                const row = palabra.fieldInstances[id].parts[tipo]
+                console.log(row)
+                vectorLocation.push({ start: row.startLocation, end: row.endLocation, page: row.page })
 
-            this.setState({
-                boundig: { boundig: true, points: totalBoundig }
-            })
-        } catch (error) {
-                
-        }
+
+                console.log(vectorLocation)
+                vectorLocation.map((item) => {
+                    var iterador = item.start
+                    for (iterador; iterador <= item.end; iterador++) {
+                        totalBoundig.push(this.props.json.pages[0].words[iterador].boundingPoly.vertices)
+                    }
+                })
+                console.log('totalboundig')
+                console.log(totalBoundig)
+
+                this.setState({
+                    boundig: { boundig: true, points: totalBoundig }
+                })
+            } catch (error) {
+
+            }
         }
     }
 
@@ -335,64 +335,72 @@ class Revisar extends Component {
                     <div>
                         <div style={{ width: '100%', backgroundColor: '#fff' }}>
                             <div className="document-tools">
-                                <div className="tools-edit" >
-                                    {this.state.pageNumber>1?<button onClick={()=>this.setState({pageNumber:this.state.pageNumber-1})}><MdNavigateBefore size="1.5em" color={"#BDD535"} /></button>:<></>}
-                                
-                                <button  onClick={()=>this.setState({pageNumber:this.state.pageNumber+1})}><MdNavigateNext size="1.5em" color={"#BDD535"} /></button>
-                                    
-                                </div>
-                                <div className="tools-page">
-                                <button className="button-select" onClick={this.editCanvas}><MdPhotoSizeSelectSmall size="1.5em" color={"#BDD535"} /></button>
-                                    <button onClick={this.editCanvas}><FaTable size="1.5em" color={"#BDD535"} /></button>
-                                </div>
+
 
                             </div>
                         </div>
                         <div className="container-view">
+                            <div className="section-document">
+                                <div className="tools-doc">
+                                    <div className="tools-edit" >
+                                        <button onClick={() => this.setState({ pageNumber: this.state.pageNumber - 1 })}><MdNavigateBefore size="1.5em" color={"#BDD535"} /></button>
 
-                            <div className="container-document">
 
 
-                                {this.state.boundig.points.length > 0 ?
-                                    <svg className="lienzo" xmlns="http://www.w3.org/2000/svg">
-                                        {
-                                            this.state.boundig.points.map((item) => {
-                                                return (
-                                                    <polygon fill="#90FEA5" fill-opacity="0.4" points={`${(item[0].x) * 612} ${(item[0].y) * 792}, 
+                                    </div>
+                                    <div className="tools-page">
+                                        <div className="tools-page-center">
+                                            <button onClick={() => this.setState({ pageNumber: this.state.pageNumber + 1 })}><MdNavigateNext size="1.5em" color={"#BDD535"} /></button>
+                                        </div>
+                                        <div className="tools-page-right">
+                                            <button className="button-select" onClick={this.editCanvas}><MdPhotoSizeSelectSmall size="1.5em" color={"#BDD535"} /></button>
+                                            <button onClick={this.editCanvas}><FaTable size="1.5em" color={"#BDD535"} /></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="container-document">
+
+
+                                    {this.state.boundig.points.length > 0 ?
+                                        <svg className="lienzo" xmlns="http://www.w3.org/2000/svg">
+                                            {
+                                                this.state.boundig.points.map((item) => {
+                                                    return (
+                                                        <polygon fill="#90FEA5" fill-opacity="0.4" points={`${(item[0].x) * 612} ${(item[0].y) * 792}, 
                                         ${(item[1].x) * 612} ${(item[1].y) * 792}, 
                                         ${(item[2].x) * 612} ${(item[2].y) * 792}, 
                                         ${(item[3].x) * 612} ${(item[3].y) * 792}`} />)
-                                            })
-                                        }
-                                    </svg> : <></>
-                                }
-                                <canvas ref="canvas" width="612" height="792" className="canvas-edit"
-                                    onMouseDown={
-                                        e => {
-                                            let nativeEvent = e.nativeEvent;
-                                            this.handleMouseDown(nativeEvent);
-                                        }}
-                                    onMouseMove={
-                                        e => {
-                                            let nativeEvent = e.nativeEvent;
-                                            this.handleMouseMove(nativeEvent);
-                                        }}
-                                    onMouseUp={
-                                        e => {
-                                            let nativeEvent = e.nativeEvent;
-                                            this.handleMouseUp(nativeEvent);
-                                        }}
-                                />
-                                <Document
-                                    file={this.props.document}
-                                    onLoadSuccess={this.onDocumentLoadSuccess}
-                                >
-                                    <Page pageNumber={pageNumber} />
-                                </Document>
+                                                })
+                                            }
+                                        </svg> : <></>
+                                    }
+                                    <canvas ref="canvas" width="612" height="792" className="canvas-edit"
+                                        onMouseDown={
+                                            e => {
+                                                let nativeEvent = e.nativeEvent;
+                                                this.handleMouseDown(nativeEvent);
+                                            }}
+                                        onMouseMove={
+                                            e => {
+                                                let nativeEvent = e.nativeEvent;
+                                                this.handleMouseMove(nativeEvent);
+                                            }}
+                                        onMouseUp={
+                                            e => {
+                                                let nativeEvent = e.nativeEvent;
+                                                this.handleMouseUp(nativeEvent);
+                                            }}
+                                    />
+                                    <Document
+                                        file={this.props.document}
+                                        onLoadSuccess={this.onDocumentLoadSuccess}
+                                    >
+                                        <Page pageNumber={pageNumber} />
+                                    </Document>
 
 
+                                </div>
                             </div>
-
                             <div className="section-table">
                                 <div className="buttons-edits">
 
@@ -400,7 +408,7 @@ class Revisar extends Component {
                                 </div>
                                 <div className="information-card">
                                     <label for="entidad">Entidad Remitente</label>
-                                    <input id="entidad" name="entidad" value={this.state.entidad} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.entidadRemitente : null),) }} />
+                                    <input id="entidad" name="entidad" value={this.state.entidad} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.entidadRemitente : null)) }} />
                                     <div className="section-information-cols">
                                         <div className="section-information-col">
                                             <label for="ciudad" >Ciudad</label>
@@ -441,7 +449,7 @@ class Revisar extends Component {
             console.log(event);
             this.setState({
                 isDown: true,
-                isDownCount:1,
+                isDownCount: 1,
                 previousPointX: event.offsetX,
                 previousPointY: event.offsetY
             }, () => {
@@ -481,29 +489,29 @@ class Revisar extends Component {
             var width = x - this.state.previousPointX;
             var height = y - this.state.previousPointY;
             this.setState({
-                rectangle:{x:this.state.previousPointX,y:this.state.previousPointY,width:width,height:height}
-            },function(){
-                let vector=[]
-                
-                this.props.json.pages[0].words.map((item)=>{
-                 var x= ((((item.boundingPoly.vertices[1].x))+((item.boundingPoly.vertices[0].x)))/2)*612 
-                 var y= ((((item.boundingPoly.vertices[3].y))+((item.boundingPoly.vertices[0].y)))/2)*792
-                 
-                 if((x>this.state.previousPointX && x<(this.state.rectangle.width+this.state.previousPointX)&&((y>this.state.previousPointY)&&(y<this.state.rectangle.height+this.state.previousPointY)))){
-                  
-                     vector.push(item)
-                 }
-               })
-               var palabra=''
-               vector.map((item)=>{
-                    palabra=palabra +' '+item.text
-                    
-               })
-               console.log(palabra)
-               this.setState({[this.state.actualFocus]:palabra})
-              // console.log(this.state[this.state.actualFocus])
+                rectangle: { x: this.state.previousPointX, y: this.state.previousPointY, width: width, height: height }
+            }, function () {
+                let vector = []
+
+                this.props.json.pages[0].words.map((item) => {
+                    var x = ((((item.boundingPoly.vertices[1].x)) + ((item.boundingPoly.vertices[0].x))) / 2) * 612
+                    var y = ((((item.boundingPoly.vertices[3].y)) + ((item.boundingPoly.vertices[0].y))) / 2) * 792
+
+                    if ((x > this.state.previousPointX && x < (this.state.rectangle.width + this.state.previousPointX) && ((y > this.state.previousPointY) && (y < this.state.rectangle.height + this.state.previousPointY)))) {
+
+                        vector.push(item)
+                    }
+                })
+                var palabra = ''
+                vector.map((item) => {
+                    palabra = palabra + ' ' + item.text
+
+                })
+                console.log(palabra)
+                this.setState({ [this.state.actualFocus]: palabra })
+                // console.log(this.state[this.state.actualFocus])
             })
-           
+
             const ctx = this.refs.canvas.getContext('2d');
             ctx.beginPath();
             ctx.lineWidth = "1";
@@ -518,12 +526,12 @@ class Revisar extends Component {
 
         }
     }
-    changeWord(){
-        
+    changeWord() {
+
     }
 }
 
-   
+
 
 
 const mapStateToProps = (state) => ({

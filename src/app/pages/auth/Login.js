@@ -82,12 +82,7 @@ function Login(props) {
                     <div className="alert-text">{status}</div>
                   </div>
                 ) : (
-                  <div role="alert" className="alert alert-info">
-                    <div className="alert-text">
-                      Use account <strong>admin@demo.com</strong> and password{" "}
-                      <strong>demo</strong> to continue.
-                    </div>
-                  </div>
+                  <div></div>
                 )}
 
                 <div className="form-group">
