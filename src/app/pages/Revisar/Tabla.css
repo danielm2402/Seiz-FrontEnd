@@ -124,9 +124,19 @@
 .tools-edit{
  width: 50%;
  display: flex;
+ 
+}
+.tools-edit-num{
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.tools-edit-change{
+  width: 50%;
+  display: flex;
   align-items: center;
   justify-content: flex-end;
-
 }
 .tools-page{
   width: 50%;

@@ -78,7 +78,7 @@ class Revisar extends Component {
             view: '',
             json: '',
             loading: true,
-            numPages: null,
+            numPages: 0,
             pageNumber: 1,
             referencia: props.embargo.data.id,
             entidad: props.embargo.data.sender,
@@ -95,7 +95,7 @@ class Revisar extends Component {
             previousPointY: '',
             editCanvas: false,
             actualFocus: '',
-            rectangle: {}
+            rectangle: {},
         }
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.handleMouseMove = this.handleMouseMove.bind(this);
@@ -110,7 +110,7 @@ class Revisar extends Component {
     }
 
     componentDidMount() {
-        console.log('HOLA MUNDOOO')
+ 
         console.log(this.state.entidad)
         console.log(this.props.embargo.data.sender)
         this.props.handleEmbargo(this.props.match.params.id, this.props.token)
@@ -118,8 +118,9 @@ class Revisar extends Component {
 
     }
     componentDidUpdate(prevProps, prevState) {
-        console.log('CAMBIANDO PROPS')
+        
         if (this.props.document !== prevProps.document) {
+           
             this.setState({
                 referencia: this.props.embargo.data.id,
                 entidad: this.props.embargo.data.sender,
@@ -135,10 +136,23 @@ class Revisar extends Component {
                     width: 30,
                     aspect: 16 / 9,
                 },
+               
 
             })
-            console.log(this.props.embargo)
+          
         }
+        if(this.props.json !== prevProps.json && this.props.json !== undefined){
+            console.log('JSOOOON')
+            console.log(this.props)
+            this.setState({
+                numPages:this.props.json.pages.length
+            },()=>{
+                console.log('AQUI EL NUEVO STATE')
+                console.log(this.state.numPages)
+            })
+           
+        }
+       
     }
     handleEdit = () => {
         this.setState({ disabled: false })
@@ -336,26 +350,36 @@ class Revisar extends Component {
                         <div style={{ width: '100%', backgroundColor: '#fff' }}>
                             <div className="document-tools">
 
-
                             </div>
                         </div>
                         <div className="container-view">
                             <div className="section-document">
                                 <div className="tools-doc">
                                     <div className="tools-edit" >
-                                        <button onClick={() => this.setState({ pageNumber: this.state.pageNumber - 1 })}><MdNavigateBefore size="1.5em" color={"#BDD535"} /></button>
-
-
-
+                                        <div className="tools-edit-num">
+                                            {this.state.numPages}/{this.state.pageNumber}
+                                        </div>
+                                        <div className="tools-edit-change">
+                                        {this.state.numPages>1 && this.state.pageNumber>1?
+                                        <button onClick={() =>{
+                                            console.log('BUTON BUENO')
+                                            console.log(this.state.numPages, this.state.pageNumber)
+                                            this.setState({ pageNumber: this.state.pageNumber - 1 })}}><MdNavigateBefore size="1.5em" color={"#BDD535"} /></button>
+                                        :<button disabled={true} onClick={()=>console.log('BOTON DESAHIBILITADO')} ><MdNavigateBefore size="1.5em" color={"#BDD535"} /></button>}
+                                        </div>
                                     </div>
                                     <div className="tools-page">
                                         <div className="tools-page-center">
-                                            <button onClick={() => this.setState({ pageNumber: this.state.pageNumber + 1 })}><MdNavigateNext size="1.5em" color={"#BDD535"} /></button>
+                                            {this.state.numPages>1 && this.state.pageNumber<this.state.numPages?
+                                            <button onClick={() => this.setState({ pageNumber: this.state.pageNumber + 1 })}><MdNavigateNext size="1.5em" color={"#BDD535"} /></button>:
+                                            <button disabled={true} onClick={()=>console.log('BOTON DESAHIBILITADO')}><MdNavigateNext size="1.5em" color={"#BDD535"} /></button>}
+                                           
                                         </div>
+                                        {this.state.disabled?<></>:
                                         <div className="tools-page-right">
                                             <button className="button-select" onClick={this.editCanvas}><MdPhotoSizeSelectSmall size="1.5em" color={"#BDD535"} /></button>
                                             <button onClick={this.editCanvas}><FaTable size="1.5em" color={"#BDD535"} /></button>
-                                        </div>
+                                        </div>}
                                     </div>
                                 </div>
                                 <div className="container-document">
@@ -493,7 +517,7 @@ class Revisar extends Component {
             }, function () {
                 let vector = []
 
-                this.props.json.pages[0].words.map((item) => {
+                this.props.json.pages[this.state.pageNumber-1].words.map((item) => {
                     var x = ((((item.boundingPoly.vertices[1].x)) + ((item.boundingPoly.vertices[0].x))) / 2) * 612
                     var y = ((((item.boundingPoly.vertices[3].y)) + ((item.boundingPoly.vertices[0].y))) / 2) * 792
 
@@ -542,7 +566,9 @@ const mapStateToProps = (state) => ({
     embargo: state.EmbargosReducer.embargo,
     demandados: state.EmbargosReducer.demandados,
     json: state.EmbargosReducer.embargo.json,
-    resaltado: state.EmbargosReducer.embargo.json1
+    resaltado: state.EmbargosReducer.embargo.json1,
+
+    prueba: state.EmbargosReducer
 
 })
 const mapDispatchToProps = (dispatch) => ({
