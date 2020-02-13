@@ -229,6 +229,11 @@ class Revisar extends Component {
             }
         }
     }
+    handleInput=(event)=>{
+        this.setState({
+        [event.target.name]: event.target.value
+        })
+    }
 
     editCanvas = () => {
         this.setState({ editCanvas: true })
@@ -432,23 +437,23 @@ class Revisar extends Component {
                                 </div>
                                 <div className="information-card">
                                     <label for="entidad">Entidad Remitente</label>
-                                    <input id="entidad" name="entidad" value={this.state.entidad} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.entidadRemitente : null)) }} />
+                                    <input id="entidad" name="entidad" value={this.state.entidad} onChange={this.handleInput}  disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.entidadRemitente : null)) }} />
                                     <div className="section-information-cols">
                                         <div className="section-information-col">
                                             <label for="ciudad" >Ciudad</label>
-                                            <input id="ciudad" name="ciudad" value={this.state.ciudad} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.ciudad : null)) }} />
+                                            <input id="ciudad" name="ciudad" value={this.state.ciudad} onChange={this.handleInput}  disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.ciudad : null)) }} />
                                             <label for="referencia">Referencia</label>
-                                            <input id="referencia" name="referencia" value={this.state.referencia} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.referencia : null)) }} />
+                                            <input id="referencia" name="referencia" value={this.state.referencia} onChange={this.handleInput}  disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.referencia : null)) }} />
                                             <label>Tipo de embargo</label>
                                             <div className="select-input" style={{ zIndex: 999999999 }}>
-                                                <Select styles={colourStyles} options={options} value={this.state.tipoEmbargo} isDisabled={this.state.disabled} />
+                                                <Select styles={colourStyles} options={options}  value={this.state.tipoEmbargo} isDisabled={this.state.disabled} />
                                             </div>
                                         </div>
                                         <div className="section-information-col">
                                             <label for="direccion">Direccion</label>
-                                            <input id="direccion" name="direccion" value={this.state.direccion} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.direccion : null)) }} />
+                                            <input id="direccion" name="direccion" value={this.state.direccion} onChange={this.handleInput}  disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.direccion : null)) }} />
                                             <label for="fecha">Fecha</label>
-                                            <input id="fecha" name="fecha" value={this.state.fecha} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.fecha : null)) }} />
+                                            <input id="fecha" name="fecha" value={this.state.fecha} onChange={this.handleInput}  disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.fecha : null)) }} />
                                             <label>Tipo de documento</label>
                                             <div className="select-input">
                                                 <Select options={options2} value={this.state.tipoDocumento} isDisabled={this.state.disabled} />
@@ -549,9 +554,6 @@ class Revisar extends Component {
             });
 
         }
-    }
-    changeWord() {
-
     }
 }
 
