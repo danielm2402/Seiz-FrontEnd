@@ -27,7 +27,6 @@ class Demandados extends Component {
 
   }
   focusElement(e, palabra) {
-
     console.log(e.target.name)
     // this.setState({ actualFocus: e.target.name })
     if (this.props.resaltado !== "") {
@@ -58,10 +57,8 @@ class Demandados extends Component {
           boundig: { boundig: true, points: totalBoundig }
         })
       } catch (error) {
-
       }
     }
-
   }
   focusElement2(e, palabra, id, tipo) {
     console.log('el id')

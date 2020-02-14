@@ -259,39 +259,7 @@ class Revisar extends Component {
     render() {
         const { pageNumber, numPages } = this.state;
       
-        var columns1 = [
-            {
-                title: 'Nombre', field: 'fullname', editComponent: props => {
-                    return (
-                        <TextField
-                            id="name"
-                            value={props.value}
-                            label="Nombre"
-                            margin="normal"
-                            onFocus={(e) => {
-                                console.log(props)
-                                this.focusElement2(e, this.props.resaltado.fields.demandantes, props.rowData.id, 'nombre')
-                            }}
-                        />
-                    )
-                }
-            },
-            {
-                title: 'Identificación', field: 'identification', editComponent: props => {
-                    return (
-                        <TextField
-                            id="id"
-                            value={props.value}
-                            label="Identificacion"
-                            margin="normal"
-
-                            onFocus={(e) => this.focusElement2(e, this.props.resaltado.fields.demandantes, props.rowData.id, 'identificacion')}
-                        />
-                    )
-                }
-            },
-        ]
-
+      
         var add = null
         this.props.disabled == true ?
             add = null
@@ -440,7 +408,7 @@ class Revisar extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                <Demandantes add={add} data={this.state.demandantes} nombre="Demandantes" columns={columns1} editable={!this.state.disabled} />
+                                <Demandantes add={add} data={this.state.demandantes} nombre="Demandantes" editable={!this.state.disabled} />
                                 <Demandados add={add} data={this.props.demandados.data} nombre="Demandados" editable={!this.state.disabled} />
                             </div>
                         </div>
