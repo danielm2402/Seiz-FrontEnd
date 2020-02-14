@@ -4,10 +4,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 import { getDemandados, getEmbargo } from '../../redux/actions/embargosAction'
 import Tabla from './Tabla'
-import { PDFObject } from 'react-pdfobject'
 import './Tabla.css'
-import { PDFReader } from 'reactjs-pdf-reader';
-import { PDFViewer } from '@react-pdf/renderer';
+
 import TextField from '@material-ui/core/TextField';
 import { FaRegEdit, FaTable } from "react-icons/fa";
 import { MdCancel, MdPhotoSizeSelectSmall, MdNavigateNext, MdNavigateBefore } from "react-icons/md";
@@ -17,8 +15,8 @@ import { setOptions, Document, Page } from "react-pdf";
 import Demandados from './Demandados'
 import Demandantes from './Demandantes';
 import chroma from 'chroma-js';
-import ReactCrop from 'react-image-crop';
 
+import { changePoints, resetPoints } from '../../redux/actions/boundingAction'
 
 const pdfjsVersion = "2.0.305";
 
@@ -177,6 +175,7 @@ class Revisar extends Component {
     }
     handleCancel = () => {
         this.setState({ disabled: true, boundig: { boundig: false, points: [] }, editCanvas: false })
+        this.props.handleBoundingReset()
     }
     focusElement(e, palabra) {
 
@@ -554,7 +553,8 @@ const mapStateToProps = (state) => ({
 })
 const mapDispatchToProps = (dispatch) => ({
     handleEmbargo: bindActionCreators(getEmbargo, dispatch),
-    handleDemandados: bindActionCreators(getDemandados, dispatch)
+    handleDemandados: bindActionCreators(getDemandados, dispatch),
+    handleBoundingReset:bindActionCreators(resetPoints,dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Revisar)
