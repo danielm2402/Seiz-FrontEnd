@@ -96,6 +96,7 @@ class Revisar extends Component {
             editCanvas: false,
             actualFocus: '',
             rectangle: {},
+            demandados: []
         }
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.handleMouseMove = this.handleMouseMove.bind(this);
@@ -110,7 +111,7 @@ class Revisar extends Component {
     }
 
     componentDidMount() {
- 
+
         console.log(this.state.entidad)
         console.log(this.props.embargo.data.sender)
         this.props.handleEmbargo(this.props.match.params.id, this.props.token)
@@ -118,9 +119,9 @@ class Revisar extends Component {
 
     }
     componentDidUpdate(prevProps, prevState) {
-        
+        console.log(this.props)
         if (this.props.document !== prevProps.document) {
-           
+
             this.setState({
                 referencia: this.props.embargo.data.id,
                 entidad: this.props.embargo.data.sender,
@@ -136,23 +137,40 @@ class Revisar extends Component {
                     width: 30,
                     aspect: 16 / 9,
                 },
-               
+
 
             })
-          
+
         }
-        if(this.props.json !== prevProps.json && this.props.json !== undefined){
-            console.log('JSOOOON')
-            console.log(this.props)
+        if (this.props.json !== prevProps.json && this.props.json !== undefined) {
+
             this.setState({
-                numPages:this.props.json.pages.length
-            },()=>{
-                console.log('AQUI EL NUEVO STATE')
-                console.log(this.state.numPages)
+                numPages: this.props.json.pages.length
+            }, () => {
+
             })
-           
+
         }
        
+        if(this.props.demandados!==prevProps.demandados){
+            if(this.props.demandados.data.length>0)
+            {
+                console.log('demandados')
+            console.log(this.props.demandados)
+            let vectorDemandados={}
+            for (let index = 0; index < this.props.demandados.data.length; index++) {
+                vectorDemandados={...vectorDemandados, ['nombre'+this.props.demandados.data[index].id]:this.props.demandados.data[index].nombres}
+                
+                
+            }
+            this.setState({demandados:vectorDemandados},()=>{
+                console.log(this.state.demandados)
+            })
+            }
+            
+        }
+        
+
     }
     handleEdit = () => {
         this.setState({ disabled: false })
@@ -229,9 +247,9 @@ class Revisar extends Component {
             }
         }
     }
-    handleInput=(event)=>{
+    handleInput = (event) => {
         this.setState({
-        [event.target.name]: event.target.value
+            [event.target.name]: event.target.value
         })
     }
 
@@ -247,10 +265,17 @@ class Revisar extends Component {
                     return (
                         <TextField
                             id="name"
-                            value={props.value}
+                            value={this.state.demandados['nombre'+props.rowData.id]}
+                            onChange={(event)=>{
+                                console.log('EDITANDO DEMANDADOS')
+                                this.setState({demandados:{...this.state.demandados,['nombre'+props.rowData.id]:event.target.value}})
+                            }}
                             label="Nombre"
                             margin="normal"
-                            onFocus={(e) => this.focusElement2(e, this.props.resaltado.fields.demandados, props.rowData.id, 'nombre')}
+                            /* onFocus={()=>{
+                                console.log('PROPS EDIT')
+                                console.log(props)}} */
+                           // onFocus={(e) => this.focusElement2(e, this.props.resaltado.fields.demandados, props.rowData.id, 'nombre')}
                         />
                     )
                 }
@@ -365,26 +390,27 @@ class Revisar extends Component {
                                             {this.state.numPages}/{this.state.pageNumber}
                                         </div>
                                         <div className="tools-edit-change">
-                                        {this.state.numPages>1 && this.state.pageNumber>1?
-                                        <button onClick={() =>{
-                                            console.log('BUTON BUENO')
-                                            console.log(this.state.numPages, this.state.pageNumber)
-                                            this.setState({ pageNumber: this.state.pageNumber - 1 })}}><MdNavigateBefore size="1.5em" color={"#BDD535"} /></button>
-                                        :<button disabled={true} onClick={()=>console.log('BOTON DESAHIBILITADO')} ><MdNavigateBefore size="1.5em" color={"#BDD535"} /></button>}
+                                            {this.state.numPages > 1 && this.state.pageNumber > 1 ?
+                                                <button onClick={() => {
+                                                    console.log('BUTON BUENO')
+                                                    console.log(this.state.numPages, this.state.pageNumber)
+                                                    this.setState({ pageNumber: this.state.pageNumber - 1 })
+                                                }}><MdNavigateBefore size="1.5em" color={"#BDD535"} /></button>
+                                                : <button disabled={true} onClick={() => console.log('BOTON DESAHIBILITADO')} ><MdNavigateBefore size="1.5em" color={"#BDD535"} /></button>}
                                         </div>
                                     </div>
                                     <div className="tools-page">
                                         <div className="tools-page-center">
-                                            {this.state.numPages>1 && this.state.pageNumber<this.state.numPages?
-                                            <button onClick={() => this.setState({ pageNumber: this.state.pageNumber + 1 })}><MdNavigateNext size="1.5em" color={"#BDD535"} /></button>:
-                                            <button disabled={true} onClick={()=>console.log('BOTON DESAHIBILITADO')}><MdNavigateNext size="1.5em" color={"#BDD535"} /></button>}
-                                           
+                                            {this.state.numPages > 1 && this.state.pageNumber < this.state.numPages ?
+                                                <button onClick={() => this.setState({ pageNumber: this.state.pageNumber + 1 })}><MdNavigateNext size="1.5em" color={"#BDD535"} /></button> :
+                                                <button disabled={true} onClick={() => console.log('BOTON DESAHIBILITADO')}><MdNavigateNext size="1.5em" color={"#BDD535"} /></button>}
+
                                         </div>
-                                        {this.state.disabled?<></>:
-                                        <div className="tools-page-right">
-                                            <button className="button-select" onClick={this.editCanvas}><MdPhotoSizeSelectSmall size="1.5em" color={"#BDD535"} /></button>
-                                            <button onClick={this.editCanvas}><FaTable size="1.5em" color={"#BDD535"} /></button>
-                                        </div>}
+                                        {this.state.disabled ? <></> :
+                                            <div className="tools-page-right">
+                                                <button className="button-select" onClick={this.editCanvas}><MdPhotoSizeSelectSmall size="1.5em" color={"#BDD535"} /></button>
+                                                <button onClick={this.editCanvas}><FaTable size="1.5em" color={"#BDD535"} /></button>
+                                            </div>}
                                     </div>
                                 </div>
                                 <div className="container-document">
@@ -437,23 +463,23 @@ class Revisar extends Component {
                                 </div>
                                 <div className="information-card">
                                     <label for="entidad">Entidad Remitente</label>
-                                    <input id="entidad" name="entidad" value={this.state.entidad} onChange={this.handleInput}  disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.entidadRemitente : null)) }} />
+                                    <input id="entidad" name="entidad" value={this.state.entidad} onChange={this.handleInput} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.entidadRemitente : null)) }} />
                                     <div className="section-information-cols">
                                         <div className="section-information-col">
                                             <label for="ciudad" >Ciudad</label>
-                                            <input id="ciudad" name="ciudad" value={this.state.ciudad} onChange={this.handleInput}  disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.ciudad : null)) }} />
+                                            <input id="ciudad" name="ciudad" value={this.state.ciudad} onChange={this.handleInput} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.ciudad : null)) }} />
                                             <label for="referencia">Referencia</label>
-                                            <input id="referencia" name="referencia" value={this.state.referencia} onChange={this.handleInput}  disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.referencia : null)) }} />
+                                            <input id="referencia" name="referencia" value={this.state.referencia} onChange={this.handleInput} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.referencia : null)) }} />
                                             <label>Tipo de embargo</label>
                                             <div className="select-input" style={{ zIndex: 999999999 }}>
-                                                <Select styles={colourStyles} options={options}  value={this.state.tipoEmbargo} isDisabled={this.state.disabled} />
+                                                <Select styles={colourStyles} options={options} value={this.state.tipoEmbargo} isDisabled={this.state.disabled} />
                                             </div>
                                         </div>
                                         <div className="section-information-col">
                                             <label for="direccion">Direccion</label>
-                                            <input id="direccion" name="direccion" value={this.state.direccion} onChange={this.handleInput}  disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.direccion : null)) }} />
+                                            <input id="direccion" name="direccion" value={this.state.direccion} onChange={this.handleInput} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.direccion : null)) }} />
                                             <label for="fecha">Fecha</label>
-                                            <input id="fecha" name="fecha" value={this.state.fecha} onChange={this.handleInput}  disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.fecha : null)) }} />
+                                            <input id="fecha" name="fecha" value={this.state.fecha} onChange={this.handleInput} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.fecha : null)) }} />
                                             <label>Tipo de documento</label>
                                             <div className="select-input">
                                                 <Select options={options2} value={this.state.tipoDocumento} isDisabled={this.state.disabled} />
@@ -522,7 +548,7 @@ class Revisar extends Component {
             }, function () {
                 let vector = []
 
-                this.props.json.pages[this.state.pageNumber-1].words.map((item) => {
+                this.props.json.pages[this.state.pageNumber - 1].words.map((item) => {
                     var x = ((((item.boundingPoly.vertices[1].x)) + ((item.boundingPoly.vertices[0].x))) / 2) * 612
                     var y = ((((item.boundingPoly.vertices[3].y)) + ((item.boundingPoly.vertices[0].y))) / 2) * 792
 
