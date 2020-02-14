@@ -8,12 +8,14 @@ import EmbargosReducer from '../redux/modules/reducers/EmbargosReducer'
 //sagas
 import uploadSagas from "../redux/modules/sagas/uploadSaga";
 import embargosSagas from '../redux/modules/sagas/embargosSaga'
+import boundingReducer from '../redux/modules/reducers/boundigReducer'
 export const rootReducer = combineReducers({
   auth: auth.reducer,
   i18n: metronic.i18n.reducer,
   builder: metronic.builder.reducer,
   uploadReducer,
-  EmbargosReducer
+  EmbargosReducer,
+  boundingReducer
 });
 
 export function* rootSaga() {

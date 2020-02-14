@@ -259,67 +259,7 @@ class Revisar extends Component {
 
     render() {
         const { pageNumber, numPages } = this.state;
-        var columns = [
-            {
-                title: 'Nombre', field: 'nombres', editComponent: props => {
-                    return (
-                        <TextField
-                            id="name"
-                            value={this.state.demandados['nombre'+props.rowData.id]}
-                            onChange={(event)=>{
-                                console.log('EDITANDO DEMANDADOS')
-                                this.setState({demandados:{...this.state.demandados,['nombre'+props.rowData.id]:event.target.value}})
-                            }}
-                            label="Nombre"
-                            margin="normal"
-                            /* onFocus={()=>{
-                                console.log('PROPS EDIT')
-                                console.log(props)}} */
-                           // onFocus={(e) => this.focusElement2(e, this.props.resaltado.fields.demandados, props.rowData.id, 'nombre')}
-                        />
-                    )
-                }
-            },
-            {
-                title: 'Tipo', field: 'tipoIdentificacion', editComponent: props => {
-                    return (
-                        <TextField
-                            id="tipo"
-                            value={props.value}
-                            label="Tipo"
-                            margin="normal"
-
-                        />
-                    )
-                }
-            },
-            {
-                title: 'Identificación', field: 'identificacion', editComponent: props => {
-                    return (
-                        <TextField
-                            id="id"
-                            value={props.value}
-                            label="Identificacion"
-                            margin="normal"
-                            onFocus={(e) => this.focusElement2(e, this.props.resaltado.fields.demandados, props.rowData.id, 'identificacion')}
-                        />
-                    )
-                }
-            },
-            {
-                title: 'Cuentas', field: 'montoAEmbargar', editComponent: props => {
-                    return (
-                        <TextField
-                            id="cuentas"
-                            value={props.value}
-                            label="Cuentas"
-                            margin="normal"
-                            onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.monto : null)) }}
-                        />
-                    )
-                }
-            }
-        ]
+      
         var columns1 = [
             {
                 title: 'Nombre', field: 'fullname', editComponent: props => {
@@ -429,6 +369,20 @@ class Revisar extends Component {
                                             }
                                         </svg> : <></>
                                     }
+                                    {this.props.boundingRedux.points.length > 0 ?
+                                        <svg className="lienzo" xmlns="http://www.w3.org/2000/svg">
+                                            {
+                                                this.props.boundingRedux.points.map((item) => {
+                                                    return (
+                                                        <polygon fill="#90FEA5" fill-opacity="0.4" points={`${(item[0].x) * 612} ${(item[0].y) * 792}, 
+                                        ${(item[1].x) * 612} ${(item[1].y) * 792}, 
+                                        ${(item[2].x) * 612} ${(item[2].y) * 792}, 
+                                        ${(item[3].x) * 612} ${(item[3].y) * 792}`} />)
+                                                })
+                                            }
+                                        </svg> : <></>
+                                    }
+                                    
                                     <canvas ref="canvas" width="612" height="792" className="canvas-edit"
                                         onMouseDown={
                                             e => {
@@ -474,7 +428,7 @@ class Revisar extends Component {
                                             <div className="select-input" style={{ zIndex: 999999999 }}>
                                                 <Select styles={colourStyles} options={options} value={this.state.tipoEmbargo} isDisabled={this.state.disabled} />
                                             </div>
-                                        </div>
+                                        </div> 
                                         <div className="section-information-col">
                                             <label for="direccion">Direccion</label>
                                             <input id="direccion" name="direccion" value={this.state.direccion} onChange={this.handleInput} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.direccion : null)) }} />
@@ -488,7 +442,7 @@ class Revisar extends Component {
                                     </div>
                                 </div>
                                 <Demandantes add={add} data={this.state.demandantes} nombre="Demandantes" columns={columns1} editable={!this.state.disabled} />
-                                <Demandados add={add} data={this.props.demandados.data} nombre="Demandados" columns={columns} editable={!this.state.disabled} />
+                                <Demandados add={add} data={this.props.demandados.data} nombre="Demandados" editable={!this.state.disabled} />
                             </div>
                         </div>
                     </div>}
@@ -595,8 +549,7 @@ const mapStateToProps = (state) => ({
     demandados: state.EmbargosReducer.demandados,
     json: state.EmbargosReducer.embargo.json,
     resaltado: state.EmbargosReducer.embargo.json1,
-
-    prueba: state.EmbargosReducer
+    boundingRedux: state.boundingReducer.boundigTable,
 
 })
 const mapDispatchToProps = (dispatch) => ({
