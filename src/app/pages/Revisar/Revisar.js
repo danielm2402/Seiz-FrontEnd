@@ -97,14 +97,19 @@ class Revisar extends Component {
             rectangle: {},
             demandados: [],
             activeModeTable: false,
-            colsEdit: { nombre: 0, tipo:'NO_SELECCIONADO', identificacion: 2, expediente: 3 }
+            colsEdit: { nombre: 0, tipo:'NO_SELECCIONADO', identificacion: 2, expediente: 3 },
+            obtenerDemandados:false
         }
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.handleMouseMove = this.handleMouseMove.bind(this);
         this.handleMouseUp = this.handleMouseUp.bind(this);
     }
     modeTable = () => {
-        this.setState({ activeModeTable: true })
+        console.log('edit table')
+        this.setState({ activeModeTable: true, editCanvas: false, obtenerDemandados:false },function(){
+            console.log(this.state.editCanvas)
+            console.log(this.state.activeModeTable)
+        })
     }
     onDocumentLoad = ({ numPages }) => {
         this.setState({ numPages });
@@ -258,7 +263,11 @@ class Revisar extends Component {
     }
 
     editCanvas = () => {
-        this.setState({ editCanvas: true })
+        console.log('edit canva')
+        this.setState({ editCanvas: true, activeModeTable:false, obtenerDemandados:false },function(){
+            console.log(this.state.editCanvas)
+            console.log(this.state.activeModeTable)
+        })
     }
 
     render() {
@@ -299,13 +308,12 @@ class Revisar extends Component {
                                 <div className="tools-doc">
                                     <div className="tools-edit" >
                                         <div className="tools-edit-num">
-                                            {this.state.numPages}/{this.state.pageNumber}
+                                       <label> {this.state.pageNumber}/{this.state.numPages}</label>
                                         </div>
                                         <div className="tools-edit-change">
                                             {this.state.numPages > 1 && this.state.pageNumber > 1 ?
                                                 <button onClick={() => {
-                                                    console.log('BUTON BUENO')
-                                                    console.log(this.state.numPages, this.state.pageNumber)
+                                                    
                                                     this.setState({ pageNumber: this.state.pageNumber - 1 })
                                                 }}><MdNavigateBefore size="1.5em" color={"#BDD535"} /></button>
                                                 : <button disabled={true} onClick={() => console.log('BOTON DESAHIBILITADO')} ><MdNavigateBefore size="1.5em" color={"#BDD535"} /></button>}
@@ -322,6 +330,7 @@ class Revisar extends Component {
                                             <div className="tools-page-right">
                                                 <button className="button-select" onClick={this.editCanvas}><MdPhotoSizeSelectSmall size="1.5em" color={"#BDD535"} /></button>
                                                 <button onClick={this.modeTable}><FaTable size="1.5em" color={"#BDD535"} /></button>
+                                                {this.state.obtenerDemandados? <button onClick={this.modeTable}>Obtener Demandados</button>:<></>}
                                             </div>}
                                     </div>
                                 </div>
@@ -533,14 +542,32 @@ class Revisar extends Component {
         })
     }
     handleMouseDown(event) { //added code here
-        if (this.state.editCanvas) {
+        console.log(this.state.editCanvas)
+        console.log(this.state.activeModeTable)
+        if (this.state.editCanvas && !this.state.activeModeTable) {
             console.log('DOWN')
             console.log(event);
             this.setState({
                 isDown: true,
                 isDownCount: 1,
                 previousPointX: event.offsetX,
-                previousPointY: event.offsetY
+                previousPointY: event.offsetY,
+                
+            }, () => {
+
+            })
+
+        }
+
+        if (!this.state.editCanvas && this.state.activeModeTable) {
+            console.log('DOWN')
+            console.log(event);
+            this.setState({
+                isDown: true,
+                isDownCount: 1,
+                previousPointX: event.offsetX,
+                previousPointY: event.offsetY,
+                obtenerDemandados:false
             }, () => {
 
             })
@@ -549,7 +576,7 @@ class Revisar extends Component {
 
     }
     handleMouseMove(event) {
-        if (this.state.editCanvas) {
+        if (this.state.editCanvas && !this.state.activeModeTable) {
             var x = event.offsetX;
             var y = event.offsetY;
             if (this.state.isDown) {
@@ -565,14 +592,33 @@ class Revisar extends Component {
                 ctx.strokeStyle = "red";
                 ctx.fillStyle = "rgba(255,255,255, 0.5)";
                 ctx.fillRect(this.state.previousPointX, this.state.previousPointY, width, height);
-                //console.log('EL RECTANGULO EN MOVIMIENTO ES:')
-                //console.log(x,y,width,height)
+                ctx.stroke();
+            }
+        }
+        if (!this.state.editCanvas && this.state.activeModeTable) {
+            var x = event.offsetX;
+            var y = event.offsetY;
+            if (this.state.isDown) {
+                const ctx = this.refs.canvas.getContext('2d');
+                ctx.clearRect(0, 0, this.refs.canvas.width, this.refs.canvas.height); //clear canvas
+                ctx.beginPath();
+                ctx.fillStyle = "rgba(0,0,0, 0.4)";
+                ctx.fillRect(0, 0, this.refs.canvas.width, this.refs.canvas.height);
+                var width = x - this.state.previousPointX;
+                var height = y - this.state.previousPointY;
+                ctx.beginPath();
+                ctx.lineWidth = "1";
+                ctx.strokeStyle = "red";
+                ctx.fillStyle = "rgba(255,255,255, 0.5)";
+                ctx.fillRect(this.state.previousPointX, this.state.previousPointY, width, height);
                 ctx.stroke();
             }
         }
     }
     handleMouseUp(event) {
-        if (this.state.editCanvas) {
+        console.log(this.state.editCanvas)
+        console.log(this.state.activeModeTable)
+        if (this.state.editCanvas && !this.state.activeModeTable) {
             var x = event.offsetX;
             var y = event.offsetY;
             var width = x - this.state.previousPointX;
@@ -615,6 +661,48 @@ class Revisar extends Component {
             });
 
         }
+        if(!this.state.editCanvas && this.state.activeModeTable){
+            var x = event.offsetX;
+            var y = event.offsetY;
+            var width = x - this.state.previousPointX;
+            var height = y - this.state.previousPointY;
+            this.setState({
+                rectangle: { x: this.state.previousPointX, y: this.state.previousPointY, width: width, height: height }
+            }, function () {
+                let vector = []
+
+                this.props.json.pages[this.state.pageNumber - 1].words.map((item) => {
+                    var x = ((((item.boundingPoly.vertices[1].x)) + ((item.boundingPoly.vertices[0].x))) / 2) * 612
+                    var y = ((((item.boundingPoly.vertices[3].y)) + ((item.boundingPoly.vertices[0].y))) / 2) * 792
+
+                    if ((x > this.state.previousPointX && x < (this.state.rectangle.width + this.state.previousPointX) && ((y > this.state.previousPointY) && (y < this.state.rectangle.height + this.state.previousPointY)))) {
+
+                        vector.push(item)
+                    }
+                })
+                var palabra = ''
+                vector.map((item) => {
+                    palabra = palabra + ' ' + item.text
+
+                })
+                this.props.handleRegion(palabra)
+                console.log(palabra)
+                this.setState({ [this.state.actualFocus]: palabra })
+                // console.log(this.state[this.state.actualFocus])
+            })
+
+            const ctx = this.refs.canvas.getContext('2d');
+            ctx.beginPath();
+            ctx.lineWidth = "1";
+            ctx.strokeStyle = "red";
+            ctx.fillStyle = "rgba(255,255,255, 0.5)";
+            ctx.fillRect(this.state.previousPointX, this.state.previousPointY, width, height);
+            this.setState({
+                isDown: false,
+                obtenerDemandados:true
+            });
+        }
+        
     }
 }
 
