@@ -1,2 +1,4 @@
-export const POINTS='POINTS'
-export const RESET_POINTS='RESET_POINTS'
+export const POINTS='POINTS';
+export const RESET_POINTS='RESET_POINTS';
+export const NUEVA_REGION='NUEVA_REGION';
+export const RESET_REGION='RESET_REGION'

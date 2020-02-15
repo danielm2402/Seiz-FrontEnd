@@ -9,14 +9,15 @@ import './Tabla.css'
 import TextField from '@material-ui/core/TextField';
 import { FaRegEdit, FaTable } from "react-icons/fa";
 import { MdCancel, MdPhotoSizeSelectSmall, MdNavigateNext, MdNavigateBefore } from "react-icons/md";
-import Select from 'react-select'
+
 import { ProgressBar } from 'react-bootstrap';
 import { setOptions, Document, Page } from "react-pdf";
 import Demandados from './Demandados'
 import Demandantes from './Demandantes';
 import chroma from 'chroma-js';
-
-import { changePoints, resetPoints } from '../../redux/actions/boundingAction'
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import { changePoints, resetPoints, nuevaRegion } from '../../redux/actions/boundingAction'
 
 const pdfjsVersion = "2.0.305";
 
@@ -83,8 +84,8 @@ class Revisar extends Component {
             direccion: props.embargo.data.address,
             ciudad: props.embargo.data.city,
             fecha: props.embargo.data.documentDate,
-            tipoEmbargo: props.embargo.data.embargoType,
-            tipoDocumento: props.embargo.data.documentType,
+            tipoEmbargo: { label: '', value: '' },
+            tipoDocumento: { label: '', value: '' },
             disabled: true,
             boundig: { boundig: false, points: [] },
             demandantes: [],
@@ -137,6 +138,8 @@ class Revisar extends Component {
                 },
 
 
+            }, function(){
+                console.log(this.state)
             })
 
         }
@@ -149,25 +152,24 @@ class Revisar extends Component {
             })
 
         }
-       
-        if(this.props.demandados!==prevProps.demandados){
-            if(this.props.demandados.data.length>0)
-            {
+
+        if (this.props.demandados !== prevProps.demandados) {
+            if (this.props.demandados.data.length > 0) {
                 console.log('demandados')
-            console.log(this.props.demandados)
-            let vectorDemandados={}
-            for (let index = 0; index < this.props.demandados.data.length; index++) {
-                vectorDemandados={...vectorDemandados, ['nombre'+this.props.demandados.data[index].id]:this.props.demandados.data[index].nombres}
-                
-                
+                console.log(this.props.demandados)
+                let vectorDemandados = {}
+                for (let index = 0; index < this.props.demandados.data.length; index++) {
+                    vectorDemandados = { ...vectorDemandados, ['nombre' + this.props.demandados.data[index].id]: this.props.demandados.data[index].nombres }
+
+
+                }
+                this.setState({ demandados: vectorDemandados }, () => {
+                    console.log(this.state.demandados)
+                })
             }
-            this.setState({demandados:vectorDemandados},()=>{
-                console.log(this.state.demandados)
-            })
-            }
-            
+
         }
-        
+
 
     }
     handleEdit = () => {
@@ -258,8 +260,8 @@ class Revisar extends Component {
 
     render() {
         const { pageNumber, numPages } = this.state;
-      
-      
+
+
         var add = null
         this.props.disabled == true ?
             add = null
@@ -349,7 +351,7 @@ class Revisar extends Component {
                                             }
                                         </svg> : <></>
                                     }
-                                    
+
                                     <canvas ref="canvas" width="612" height="792" className="canvas-edit"
                                         onMouseDown={
                                             e => {
@@ -393,9 +395,23 @@ class Revisar extends Component {
                                             <input id="referencia" name="referencia" value={this.state.referencia} onChange={this.handleInput} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.referencia : null)) }} />
                                             <label>Tipo de embargo</label>
                                             <div className="select-input" style={{ zIndex: 999999999 }}>
-                                                <Select styles={colourStyles} options={options} value={this.state.tipoEmbargo} isDisabled={this.state.disabled} />
+                                                <Select
+                                                    labelId="demo-simple-select-label"
+                                                    id="tipoEmbargo" 
+                                                    name="tipoEmbargo"
+                                                    value={String(this.state.tipoEmbargo.label)}
+                                                    
+
+                                                >
+                                                    <MenuItem value={'NO_SELECCIONADO'}>NO_SELECCIONADO</MenuItem>
+                                                    <MenuItem value={'FAMILIAR'}>FAMILIAR</MenuItem>
+                                                    <MenuItem value={'JUDICIAL'}>JUDICIAL</MenuItem>
+                                                    <MenuItem value={'COACTIVO'}>COACTIVO</MenuItem>
+                                                    <MenuItem value={'COOPERATIVA'}>COOPERATIVA</MenuItem>
+
+                                                </Select>
                                             </div>
-                                        </div> 
+                                        </div>
                                         <div className="section-information-col">
                                             <label for="direccion">Direccion</label>
                                             <input id="direccion" name="direccion" value={this.state.direccion} onChange={this.handleInput} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.direccion : null)) }} />
@@ -403,7 +419,7 @@ class Revisar extends Component {
                                             <input id="fecha" name="fecha" value={this.state.fecha} onChange={this.handleInput} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.fecha : null)) }} />
                                             <label>Tipo de documento</label>
                                             <div className="select-input">
-                                                <Select options={options2} value={this.state.tipoDocumento} isDisabled={this.state.disabled} />
+
                                             </div>
                                         </div>
                                     </div>
@@ -483,6 +499,7 @@ class Revisar extends Component {
                     palabra = palabra + ' ' + item.text
 
                 })
+                this.props.handleRegion(palabra)
                 console.log(palabra)
                 this.setState({ [this.state.actualFocus]: palabra })
                 // console.log(this.state[this.state.actualFocus])
@@ -522,7 +539,8 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     handleEmbargo: bindActionCreators(getEmbargo, dispatch),
     handleDemandados: bindActionCreators(getDemandados, dispatch),
-    handleBoundingReset:bindActionCreators(resetPoints,dispatch)
+    handleBoundingReset: bindActionCreators(resetPoints, dispatch),
+    handleRegion: bindActionCreators(nuevaRegion, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Revisar)

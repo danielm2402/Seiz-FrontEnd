@@ -9,3 +9,10 @@ export const resetPoints=()=>({
     type: types.RESET_POINTS,
     
 });
+export const nuevaRegion=(palabra)=>({
+    type: types.NUEVA_REGION,
+    palabra
+});
+export const resetRegion=()=>({
+    type: types.RESET_REGION,
+});
