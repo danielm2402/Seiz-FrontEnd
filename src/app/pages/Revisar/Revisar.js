@@ -85,7 +85,7 @@ class Revisar extends Component {
             ciudad: props.embargo.data.city,
             fecha: props.embargo.data.documentDate,
             tipoEmbargo: '',
-            tipoDocumento:'',
+            tipoDocumento: '',
             disabled: true,
             boundig: { boundig: false, points: [] },
             demandantes: [],
@@ -95,15 +95,16 @@ class Revisar extends Component {
             editCanvas: false,
             actualFocus: '',
             rectangle: {},
-            demandados: []
+            demandados: [],
+            activeModeTable: false,
+            colsEdit: { nombre: 0, tipo:'NO_SELECCIONADO', identificacion: 2, expediente: 3 }
         }
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.handleMouseMove = this.handleMouseMove.bind(this);
         this.handleMouseUp = this.handleMouseUp.bind(this);
     }
-    _crop() {
-        // image in dataUrl
-        console.log(this.refs.cropper.getCroppedCanvas().toDataURL());
+    modeTable = () => {
+        this.setState({ activeModeTable: true })
     }
     onDocumentLoad = ({ numPages }) => {
         this.setState({ numPages });
@@ -138,7 +139,7 @@ class Revisar extends Component {
                 },
 
 
-            }, function(){
+            }, function () {
                 console.log(this.state)
             })
 
@@ -176,7 +177,7 @@ class Revisar extends Component {
         this.setState({ disabled: false })
     }
     handleCancel = () => {
-        this.setState({ disabled: true, boundig: { boundig: false, points: [] }, editCanvas: false })
+        this.setState({ disabled: true, boundig: { boundig: false, points: [] }, editCanvas: false, activeModeTable: false })
         this.props.handleBoundingReset()
     }
     focusElement(e, palabra) {
@@ -251,7 +252,7 @@ class Revisar extends Component {
     handleInput = (event) => {
         this.setState({
             [event.target.name]: event.target.value
-        }, function(){
+        }, function () {
             console.log(this.state)
         })
     }
@@ -320,7 +321,7 @@ class Revisar extends Component {
                                         {this.state.disabled ? <></> :
                                             <div className="tools-page-right">
                                                 <button className="button-select" onClick={this.editCanvas}><MdPhotoSizeSelectSmall size="1.5em" color={"#BDD535"} /></button>
-                                                <button onClick={this.editCanvas}><FaTable size="1.5em" color={"#BDD535"} /></button>
+                                                <button onClick={this.modeTable}><FaTable size="1.5em" color={"#BDD535"} /></button>
                                             </div>}
                                     </div>
                                 </div>
@@ -398,9 +399,9 @@ class Revisar extends Component {
                                             <label>Tipo de embargo</label>
                                             <div className="select-input" style={{ zIndex: 999999999 }}>
                                                 <Select
-                                                disabled={this.state.disabled}
+                                                    disabled={this.state.disabled}
                                                     labelId="demo-simple-select-label"
-                                                    id="tipoEmbargo" 
+                                                    id="tipoEmbargo"
                                                     name="tipoEmbargo"
                                                     value={String(this.state.tipoEmbargo)}
                                                     onChange={this.handleInput}
@@ -421,10 +422,10 @@ class Revisar extends Component {
                                             <input id="fecha" name="fecha" value={this.state.fecha} onChange={this.handleInput} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.fecha : null)) }} />
                                             <label>Tipo de documento</label>
                                             <div className="select-input">
-                                            <Select
+                                                <Select
                                                     name="tipoDocumento"
                                                     disabled={this.state.disabled}
-                                                    id="tipoDocumento" 
+                                                    id="tipoDocumento"
                                                     name="tipoDocumento"
                                                     value={String(this.state.tipoDocumento)}
                                                     onChange={this.handleInput}
@@ -433,15 +434,89 @@ class Revisar extends Component {
                                                     <MenuItem value={'EMBARGO'}>EMBARGO</MenuItem>
                                                     <MenuItem value={'DESEMBARGO'}>DESEMBARGO</MenuItem>
                                                     <MenuItem value={'REQUERIMIENTO'}>REQUERIMIENTO</MenuItem>
-                                                    
+
 
                                                 </Select>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <Demandantes add={add} data={this.state.demandantes} nombre="Demandantes" page={this.state.pageNumber} editable={!this.state.disabled} />
+                                {this.state.activeModeTable ?
+                                    <div className="table-generator-container">
+                                        <label>Selecciona el numero de la columna</label>
+                                        <div className="table-inputs">
+                                            <div className="select-table-element">
+                                                <h6>Nombre</h6>
+                                                <Select
+                                                    name="nombre"
+                                                    value={String(this.state.colsEdit.nombre)}
+                                                    onChange={this.handleColsTable}
+                                                >
+                                                    <MenuItem value={0}>1</MenuItem>
+                                                    <MenuItem value={1}>2</MenuItem>
+                                                    <MenuItem value={2}>3</MenuItem>
+                                                    <MenuItem value={3}>4</MenuItem>
+                                                    <MenuItem value={4}>5</MenuItem>
+                                                    <MenuItem value={5}>6</MenuItem>
+                                                    <MenuItem value={6}>7</MenuItem>
+                                                    <MenuItem value={7}>8</MenuItem>
+                                                </Select>
+                                            </div>
+                                            <div className="select-table-element">
+                                            <h6>Tipo Identificación</h6>
+                                            <Select
+                                                name="tipo"
+                                                value={String(this.state.colsEdit.tipo)}
+                                                onChange={this.handleColsTable}
+                                            >
+                                                <MenuItem value={'NO_SELECCIONADO'}>NO_SELECCIONADO</MenuItem>
+                                                <MenuItem value={'CEDULA'}>CEDULA</MenuItem>
+                                                <MenuItem value={'CEDULA_EXTRANJERA'}>CEDULA_EXTRANJERA</MenuItem>
+                                                <MenuItem value={'NIT'}>NIT</MenuItem>
+                                                <MenuItem value={'TARJETA_IDENTIDAD'}>TARJETA_IDENTIDAD</MenuItem>
+                                        
+                                            </Select>
+                                            </div>
+                                            <div className="select-table-element">
+                                            <h6>Identificación</h6>
+                                            <Select
+                                                name="identificacion"
+                                                value={String(this.state.colsEdit.identificacion)}
+                                                onChange={this.handleColsTable}
+                                            >
+                                                <MenuItem value={0}>1</MenuItem>
+                                                <MenuItem value={1}>2</MenuItem>
+                                                <MenuItem value={2}>3</MenuItem>
+                                                <MenuItem value={3}>4</MenuItem>
+                                                <MenuItem value={4}>5</MenuItem>
+                                                <MenuItem value={5}>6</MenuItem>
+                                                <MenuItem value={6}>7</MenuItem>
+                                                <MenuItem value={7}>8</MenuItem>
+                                            </Select>
+                                            </div>
+                                            <div className="select-table-element">
+                                            <h6>Expediente</h6>
+                                            <Select
+                                                name="expediente"
+                                                value={String(this.state.colsEdit.expediente)}
+                                                onChange={this.handleColsTable}
+                                            >
+                                                <MenuItem value={0}>1</MenuItem>
+                                                <MenuItem value={1}>2</MenuItem>
+                                                <MenuItem value={2}>3</MenuItem>
+                                                <MenuItem value={3}>4</MenuItem>
+                                                <MenuItem value={4}>5</MenuItem>
+                                                <MenuItem value={5}>6</MenuItem>
+                                                <MenuItem value={6}>7</MenuItem>
+                                                <MenuItem value={7}>8</MenuItem>
+                                            </Select>
+                                            </div>
+                                        </div>
+                                    </div> : <></>
+                                }
+
                                 <Demandados add={add} data={this.props.demandados.data} nombre="Demandados" page={this.state.pageNumber} editable={!this.state.disabled} />
                             </div>
                         </div>
@@ -451,6 +526,11 @@ class Revisar extends Component {
     }
     onError(e) {
         console.log(e, 'error in file-viewer');
+    }
+    handleColsTable = (event) => {
+        this.setState({ colsEdit: { ...this.state.colsEdit, [event.target.name]: event.target.value } }, function () {
+            console.log(this.state.colsEdit)
+        })
     }
     handleMouseDown(event) { //added code here
         if (this.state.editCanvas) {
