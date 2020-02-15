@@ -17,7 +17,7 @@ import Demandantes from './Demandantes';
 import chroma from 'chroma-js';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import { changePoints, resetPoints, nuevaRegion } from '../../redux/actions/boundingAction'
+import { changePoints, resetPoints, nuevaRegion, obtenerDemandadosTable } from '../../redux/actions/boundingAction'
 
 const pdfjsVersion = "2.0.305";
 
@@ -97,7 +97,7 @@ class Revisar extends Component {
             rectangle: {},
             demandados: [],
             activeModeTable: false,
-            colsEdit: { nombre: 0, tipo:'NO_SELECCIONADO', identificacion: 2, expediente: 3 },
+            colsEdit: { nombre: 0, tipo:'NO_SELECCIONADO', identificacion: 1, expediente: 2, monto:3},
             obtenerDemandados:false
         }
         this.handleMouseDown = this.handleMouseDown.bind(this);
@@ -269,6 +269,10 @@ class Revisar extends Component {
             console.log(this.state.activeModeTable)
         })
     }
+    obtenerDemandados=()=>{
+        console.log('obteniendo demandados')
+        this.setState({obtenerDemandados:false})
+    }
 
     render() {
         const { pageNumber, numPages } = this.state;
@@ -330,7 +334,7 @@ class Revisar extends Component {
                                             <div className="tools-page-right">
                                                 <button className="button-select" onClick={this.editCanvas}><MdPhotoSizeSelectSmall size="1.5em" color={"#BDD535"} /></button>
                                                 <button onClick={this.modeTable}><FaTable size="1.5em" color={"#BDD535"} /></button>
-                                                {this.state.obtenerDemandados? <button onClick={this.modeTable}>Obtener Demandados</button>:<></>}
+                                                {this.state.obtenerDemandados? <button onClick={this.obtenerDemandados}>Obtener</button>:<></>}
                                             </div>}
                                     </div>
                                 </div>
@@ -522,6 +526,23 @@ class Revisar extends Component {
                                                 <MenuItem value={7}>8</MenuItem>
                                             </Select>
                                             </div>
+                                            <div className="select-table-element">
+                                            <h6>Monto</h6>
+                                            <Select
+                                                name="monto"
+                                                value={String(this.state.colsEdit.monto)}
+                                                onChange={this.handleColsTable}
+                                            >
+                                                <MenuItem value={0}>1</MenuItem>
+                                                <MenuItem value={1}>2</MenuItem>
+                                                <MenuItem value={2}>3</MenuItem>
+                                                <MenuItem value={3}>4</MenuItem>
+                                                <MenuItem value={4}>5</MenuItem>
+                                                <MenuItem value={5}>6</MenuItem>
+                                                <MenuItem value={6}>7</MenuItem>
+                                                <MenuItem value={7}>8</MenuItem>
+                                            </Select>
+                                            </div>
                                         </div>
                                     </div> : <></>
                                 }
@@ -669,26 +690,23 @@ class Revisar extends Component {
             this.setState({
                 rectangle: { x: this.state.previousPointX, y: this.state.previousPointY, width: width, height: height }
             }, function () {
-                let vector = []
-
-                this.props.json.pages[this.state.pageNumber - 1].words.map((item) => {
-                    var x = ((((item.boundingPoly.vertices[1].x)) + ((item.boundingPoly.vertices[0].x))) / 2) * 612
-                    var y = ((((item.boundingPoly.vertices[3].y)) + ((item.boundingPoly.vertices[0].y))) / 2) * 792
-
-                    if ((x > this.state.previousPointX && x < (this.state.rectangle.width + this.state.previousPointX) && ((y > this.state.previousPointY) && (y < this.state.rectangle.height + this.state.previousPointY)))) {
-
-                        vector.push(item)
-                    }
-                })
-                var palabra = ''
-                vector.map((item) => {
-                    palabra = palabra + ' ' + item.text
-
-                })
-                this.props.handleRegion(palabra)
-                console.log(palabra)
-                this.setState({ [this.state.actualFocus]: palabra })
-                // console.log(this.state[this.state.actualFocus])
+                
+                console.log(this.state.rectangle.x/612, this.state.rectangle.y/792 )
+             const verti=[
+                {x:(this.state.rectangle.x/612),y:(this.state.rectangle+this.state.rectangle.height)/792},
+                {x:(this.state.rectangle.x+this.state.rectangle.width)/612,y:(this.state.rectangle+this.state.rectangle.height)/792},
+                {x:(this.state.rectangle.x+this.state.rectangle.width)/612,y:this.state.rectangle.y/792},
+                {x:(this.state.rectangle.x/612),y:(this.state.rectangle.y/792)}
+            ]
+            const columns={
+                nombre:String(this.state.colsEdit.nombre),
+                identificacion:String(this.state.colsEdit.identificacion),
+                expendiente:String(this.state.colsEdit.expediente),
+                monto:String(this.state.colsEdit.monto)
+            }
+            console.log(verti)
+            console.log(columns)
+            this.props.handleTableDemandados(verti, columns)
             })
 
             const ctx = this.refs.canvas.getContext('2d');
@@ -725,7 +743,8 @@ const mapDispatchToProps = (dispatch) => ({
     handleEmbargo: bindActionCreators(getEmbargo, dispatch),
     handleDemandados: bindActionCreators(getDemandados, dispatch),
     handleBoundingReset: bindActionCreators(resetPoints, dispatch),
-    handleRegion: bindActionCreators(nuevaRegion, dispatch)
+    handleRegion: bindActionCreators(nuevaRegion, dispatch),
+    handleTableDemandados: bindActionCreators(obtenerDemandadosTable, dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Revisar)

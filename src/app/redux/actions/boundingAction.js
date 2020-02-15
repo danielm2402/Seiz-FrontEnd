@@ -16,3 +16,13 @@ export const nuevaRegion=(palabra)=>({
 export const resetRegion=()=>({
     type: types.RESET_REGION,
 });
+
+export const obtenerDemandadosTable=(vertices, columns)=>({
+    type: types.OBTENER_DEMANDADOS_TABLE,
+    vertices,
+    columns
+});
+export const obtenerDemandadosTableSuccess=(data)=>({
+    type: types.OBTENER_DEMANDADOS_TABLE_SUCCESS,
+    data
+})
