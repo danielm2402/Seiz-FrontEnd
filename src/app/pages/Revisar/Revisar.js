@@ -84,8 +84,8 @@ class Revisar extends Component {
             direccion: props.embargo.data.address,
             ciudad: props.embargo.data.city,
             fecha: props.embargo.data.documentDate,
-            tipoEmbargo: { label: '', value: '' },
-            tipoDocumento: { label: '', value: '' },
+            tipoEmbargo: '',
+            tipoDocumento:'',
             disabled: true,
             boundig: { boundig: false, points: [] },
             demandantes: [],
@@ -127,8 +127,8 @@ class Revisar extends Component {
                 direccion: this.props.embargo.data.address,
                 ciudad: this.props.embargo.data.city,
                 fecha: this.props.embargo.data.documentDate,
-                tipoEmbargo: { label: this.props.embargo.data.embargoType, value: this.props.embargo.data.embargoType },
-                tipoDocumento: { label: this.props.embargo.data.documentType, value: this.props.embargo.data.documentType },
+                tipoEmbargo: this.props.embargo.data.embargoType,
+                tipoDocumento: this.props.embargo.data.documentType,
                 demandantes: this.props.embargo.data.plaintiffs,
                 disabled: true,
                 crop: {
@@ -251,6 +251,8 @@ class Revisar extends Component {
     handleInput = (event) => {
         this.setState({
             [event.target.name]: event.target.value
+        }, function(){
+            console.log(this.state)
         })
     }
 
@@ -396,12 +398,12 @@ class Revisar extends Component {
                                             <label>Tipo de embargo</label>
                                             <div className="select-input" style={{ zIndex: 999999999 }}>
                                                 <Select
+                                                disabled={this.state.disabled}
                                                     labelId="demo-simple-select-label"
                                                     id="tipoEmbargo" 
                                                     name="tipoEmbargo"
-                                                    value={String(this.state.tipoEmbargo.label)}
-                                                    
-
+                                                    value={String(this.state.tipoEmbargo)}
+                                                    onChange={this.handleInput}
                                                 >
                                                     <MenuItem value={'NO_SELECCIONADO'}>NO_SELECCIONADO</MenuItem>
                                                     <MenuItem value={'FAMILIAR'}>FAMILIAR</MenuItem>
@@ -419,7 +421,22 @@ class Revisar extends Component {
                                             <input id="fecha" name="fecha" value={this.state.fecha} onChange={this.handleInput} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.fecha : null)) }} />
                                             <label>Tipo de documento</label>
                                             <div className="select-input">
+                                            <Select
+                                                    name="tipoDocumento"
+                                                    disabled={this.state.disabled}
+                                                    id="tipoDocumento" 
+                                                    name="tipoDocumento"
+                                                    value={String(this.state.tipoDocumento)}
+                                                    onChange={this.handleInput}
+                                                >
+                                                    <MenuItem value={'NO_SELECCIONADO'}>NO_SELECCIONADO</MenuItem>
+                                                    <MenuItem value={'EMBARGO'}>EMBARGO</MenuItem>
+                                                    <MenuItem value={'DESEMBARGO'}>DESEMBARGO</MenuItem>
+                                                    <MenuItem value={'REQUERIMIENTO'}>REQUERIMIENTO</MenuItem>
+                                                    
 
+                                                </Select>
+                                                
                                             </div>
                                         </div>
                                     </div>
