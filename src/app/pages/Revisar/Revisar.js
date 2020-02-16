@@ -98,7 +98,9 @@ class Revisar extends Component {
             demandados: [],
             activeModeTable: false,
             colsEdit: { nombre: 0, tipo:'NO_SELECCIONADO', identificacion: 1, expediente: 2, monto:3},
-            obtenerDemandados:false
+            obtenerDemandados:false,
+            tablePoints:[],
+            tableCols:{}
         }
         this.handleMouseDown = this.handleMouseDown.bind(this);
         this.handleMouseMove = this.handleMouseMove.bind(this);
@@ -271,7 +273,11 @@ class Revisar extends Component {
     }
     obtenerDemandados=()=>{
         console.log('obteniendo demandados')
+        console.log(this.props.match.params.id)
         this.setState({obtenerDemandados:false})
+        console.log(this.state.tableCols)
+        console.log(this.state.tablePoints)
+        this.props.handleTableDemandados(this.state.tablePoints, this.state.tableCols,this.props.match.params.id, this.props.token)
     }
 
     render() {
@@ -693,10 +699,11 @@ class Revisar extends Component {
                 
                 console.log(this.state.rectangle.x/612, this.state.rectangle.y/792 )
              const verti=[
-                {x:(this.state.rectangle.x/612),y:(this.state.rectangle+this.state.rectangle.height)/792},
-                {x:(this.state.rectangle.x+this.state.rectangle.width)/612,y:(this.state.rectangle+this.state.rectangle.height)/792},
+                {x:(this.state.rectangle.x/612),y:(this.state.rectangle.y/792)},
                 {x:(this.state.rectangle.x+this.state.rectangle.width)/612,y:this.state.rectangle.y/792},
-                {x:(this.state.rectangle.x/612),y:(this.state.rectangle.y/792)}
+                {x:(this.state.rectangle.x+this.state.rectangle.width)/612,y:(this.state.rectangle.y+this.state.rectangle.height)/792},
+                {x:(this.state.rectangle.x/612),y:(this.state.rectangle.y+this.state.rectangle.height)/792},
+                
             ]
             const columns={
                 nombre:String(this.state.colsEdit.nombre),
@@ -706,7 +713,8 @@ class Revisar extends Component {
             }
             console.log(verti)
             console.log(columns)
-            this.props.handleTableDemandados(verti, columns)
+            this.setState({tablePoints:verti , tableCols:columns})
+            
             })
 
             const ctx = this.refs.canvas.getContext('2d');
