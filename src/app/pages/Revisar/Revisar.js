@@ -18,7 +18,7 @@ import chroma from 'chroma-js';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import { changePoints, resetPoints, nuevaRegion, obtenerDemandadosTable } from '../../redux/actions/boundingAction'
-
+import TableDemandados from './tables/TableDemandado'
 const pdfjsVersion = "2.0.305";
 
 setOptions({
@@ -555,7 +555,8 @@ class Revisar extends Component {
                                     </div> : <></>
                                 }
 
-                                <Demandados add={add} data={this.props.demandados.data} nombre="Demandados" page={this.state.pageNumber} editable={!this.state.disabled} />
+                                <TableDemandados/>
+                               {/*  <Demandados add={add} data={this.props.demandados.data} nombre="Demandados" page={this.state.pageNumber} editable={!this.state.disabled} /> */}
                                 <Demandantes add={add} data={this.state.demandantes} nombre="Demandantes" page={this.state.pageNumber} editable={!this.state.disabled} />
                             </div>
                         </div>

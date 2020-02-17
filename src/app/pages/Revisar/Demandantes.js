@@ -103,6 +103,7 @@ class Demandantes extends Component {
           columns={[
             {
               title: 'Nombre', field: 'fullname', editComponent: props => {
+               
                 console.log(props)
                 return (
                   this.props.bounding !== "" && props.rowData.id === this.state.ultimFocus.id && props.columnDef.field === this.state.ultimFocus.tipo ?
