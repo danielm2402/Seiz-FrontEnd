@@ -8,6 +8,9 @@ import TextField from '@material-ui/core/TextField';
 import { changePoints, setUltimaTableFocus } from '../../../redux/actions/boundingAction'
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
 class TableDemandado extends Component {
     constructor(props) {
         super(props)
@@ -18,8 +21,8 @@ class TableDemandado extends Component {
             identificacion: '',
             monto: '',
             ultimFocus: { id: '', tipo: '' },
-            numItems:0,
-            numItemsSiguientes:5,
+            numItems: 0,
+            numItemsSiguientes: 5,
         }
     }
     componentDidUpdate(prevProps) {
@@ -115,7 +118,7 @@ class TableDemandado extends Component {
 
     render() {
         let renderTable;
-        var contador=0;
+        var contador = 0;
         if (this.props.demandados.loading) {
             renderTable = (
                 <table>
@@ -125,6 +128,9 @@ class TableDemandado extends Component {
                         <th><div className="title-col">Identificacion</div></th>
                         <th><div className="title-col">Monto</div></th>
                         <th><div className="title-col">Actions</div></th>
+                    </tr>
+                    <tr>
+                        NO DATA
                     </tr>
                 </table>)
         } else {
@@ -139,88 +145,93 @@ class TableDemandado extends Component {
                             <th><div className="title-col">Actions</div></th>
                         </tr>
                         {
-                        this.props.demandados.data.map((item) => {
-                            contador=contador+1
-                            if(contador>=this.state.numItems&&contador<this.state.numItemsSiguientes ){
+                            this.props.demandados.data.map((item) => {
+                                contador = contador + 1
+                                if (contador >= this.state.numItems && contador < this.state.numItemsSiguientes) {
 
-                            if (this.state.itemEdit != item.id) {
-                                
-                                return (
-                                    <tr>
-                                        <td><div className="element-table">{item.nombres}</div></td>
-                                        <td><div className="element-table">{item.tipoIdentificacion}</div></td>
-                                        <td><div className="element-table"></div>{item.identificacion}</td>
-                                        <td><div className="element-table">{item.montoAEmbargar}</div></td>
-                                        <td><div className="edits-rows"><a onClick={() => this.handleEdit(item.id, item.nombres, item.tipoIdentificacion, item.identificacion, item.montoAEmbargar)}><div className="button-edit-row"><FaRegEdit /></div></a>
-                                            <a><div className="button-edit-row"><MdDeleteSweep /></div></a>
-                                        </div></td>
-                                    </tr>
-                                )
+                                    if (this.state.itemEdit != item.id) {
+
+                                        return (
+                                            <tr>
+                                                <td><div className="element-table">{item.nombres}</div></td>
+                                                <td><div className="element-table">{item.tipoIdentificacion}</div></td>
+                                                <td><div className="element-table"></div>{item.identificacion}</td>
+                                                <td><div className="element-table">{item.montoAEmbargar}</div></td>
+                                                <td><div className="edits-rows"><a onClick={() => this.handleEdit(item.id, item.nombres, item.tipoIdentificacion, item.identificacion, item.montoAEmbargar)}><div className="button-edit-row"><FaRegEdit /></div></a>
+                                                    <a><div className="button-edit-row"><MdDeleteSweep /></div></a>
+                                                </div></td>
+                                            </tr>
+                                        )
+                                    }
+                                    return (
+                                        <tr>
+                                            <td><div className="element-table">
+                                                <TextField
+                                                    onChange={(e) => this.setState({ nombre: e.target.value })}
+                                                    value={this.state.nombre}
+                                                    label="Nombre"
+                                                    margin="normal"
+                                                    onFocus={(e) => {
+                                                        try {
+                                                            this.focusElement2(e, this.props.resaltado.fields.demandados, this.state.itemEdit, 'nombre', 'nombre')
+                                                        }
+                                                        catch (error) {
+                                                            console.log(error)
+                                                        }
+                                                    }}
+                                                />
+                                            </div></td>
+                                            <td><div className="element-table">
+                                                <InputLabel shrink id="demo-simple-select-placeholder-label-label">
+                                                    Tipo
+                                                  </InputLabel>
+                                                <Select
+                                                labelId="demo-simple-select-placeholder-label-label"
+                                                id="demo-simple-select-placeholder-label"
+                                                    label="Tipo"
+                                                    name="tipo"
+                                                    value={String(this.state.tipo)}
+                                                    onChange={(e) => this.setState({ tipo: e.target.value })}
+                                                >
+                                                    <MenuItem value={'NO_SELECCIONADO'}>NO_SELECCIONADO</MenuItem>
+                                                    <MenuItem value={'CEDULA'}>CEDULA</MenuItem>
+                                                    <MenuItem value={'CEDULA_EXTRANJERA'}>CEDULA_EXTRANJERA</MenuItem>
+                                                    <MenuItem value={'NIT'}>NIT</MenuItem>
+                                                    <MenuItem value={'TARJETA_IDENTIDAD'}>TARJETA_IDENTIDAD</MenuItem>
+
+                                                </Select>
+                                            </div></td>
+                                            <td><div className="element-table"></div><TextField
+                                                onChange={(e) => this.setState({ identificacion: e.target.value })}
+                                                value={this.state.identificacion}
+                                                label="Identificación"
+                                                margin="normal"
+                                                onFocus={(e) => {
+                                                    try {
+                                                        this.focusElement2(e, this.props.resaltado.fields.demandados, this.state.itemEdit, 'identificacion', 'identificacion')
+                                                    }
+                                                    catch (error) {
+                                                        console.log(error)
+                                                    }
+                                                }}
+                                            /></td>
+                                            <td><div className="element-table"><TextField
+                                                onChange={(e) => this.setState({ monto: e.target.value })}
+                                                value={this.state.monto}
+                                                label="Monto"
+                                                margin="normal"
+                                                onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.monto : null)) }}
+                                            /></div></td>
+                                            <td><div className="edits-rows">
+                                                <a onClick={this.handleCancelEdit}><div className="button-edit-row"><MdCancel /></div></a>
+                                                <a><div className="button-edit-row"><MdCheck /></div></a>
+
+                                            </div></td>
+                                        </tr>
+                                    )
+                                }
                             }
-                            return (
-                                <tr>
-                                    <td><div className="element-table">
-                                        <TextField
-                                            onChange={(e) => this.setState({ nombre: e.target.value })}
-                                            value={this.state.nombre}
-                                            label="Nombre"
-                                            margin="normal"
-                                            onFocus={(e) => {
-                                                try {
-                                                    this.focusElement2(e, this.props.resaltado.fields.demandados, this.state.itemEdit, 'nombre', 'nombre')
-                                                }
-                                                catch (error) {
-                                                    console.log(error)
-                                                }
-                                            }}
-                                        />
-                                    </div></td>
-                                    <td><div className="element-table">
-                                        <Select
-                                        label="Tipo"
-                                            name="tipo"
-                                            value={String(this.state.tipo)}
-                                            onChange={(e) => this.setState({ tipo: e.target.value })}
-                                        >
-                                            <MenuItem value={'NO_SELECCIONADO'}>NO_SELECCIONADO</MenuItem>
-                                            <MenuItem value={'CEDULA'}>CEDULA</MenuItem>
-                                            <MenuItem value={'CEDULA_EXTRANJERA'}>CEDULA_EXTRANJERA</MenuItem>
-                                            <MenuItem value={'NIT'}>NIT</MenuItem>
-                                            <MenuItem value={'TARJETA_IDENTIDAD'}>TARJETA_IDENTIDAD</MenuItem>
-                                            
-                                        </Select>
-                                    </div></td>
-                                    <td><div className="element-table"></div><TextField
-                                        onChange={(e) => this.setState({ identificacion: e.target.value })}
-                                        value={this.state.identificacion}
-                                        label="Identificación"
-                                        margin="normal"
-                                        onFocus={(e) => {
-                                            try {
-                                                this.focusElement2(e, this.props.resaltado.fields.demandados, this.state.itemEdit, 'identificacion', 'identificacion')
-                                            }
-                                            catch (error) {
-                                                console.log(error)
-                                            }
-                                        }}
-                                    /></td>
-                                    <td><div className="element-table"><TextField
-                                        onChange={(e) => this.setState({ monto: e.target.value })}
-                                        value={this.state.monto}
-                                        label="Monto"
-                                        margin="normal"
-                                        onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.monto : null)) }}
-                                    /></div></td>
-                                    <td><div className="edits-rows">
-                                        <a onClick={this.handleCancelEdit}><div className="button-edit-row"><MdCancel /></div></a>
-                                        <a><div className="button-edit-row"><MdCheck /></div></a>
-
-                                    </div></td>
-                                </tr>
                             )
-                        }
-                        }
-                        )
                         }
 
                     </table>
@@ -237,7 +248,9 @@ class TableDemandado extends Component {
                             <th><div className="title-col">Monto</div></th>
                             <th><div className="title-col">Actions</div></th>
                         </tr>
-                    </table>)
+                        
+                    </table>
+                    )
             }
         }
         return (
@@ -255,14 +268,14 @@ class TableDemandado extends Component {
             </div>
         )
     }
-    next=()=>{
-        this.setState({numItems:this.state.numItemsSiguientes,numItemsSiguientes:this.state.numItemsSiguientes+5},function(){
+    next = () => {
+        this.setState({ numItems: this.state.numItemsSiguientes, numItemsSiguientes: this.state.numItemsSiguientes + 5 }, function () {
             console.log(this.state.numItems)
             console.log(this.state.numItemsSiguientes)
         })
     }
-    back=()=>{
-        this.setState({numItems:this.state.numItemsSiguientes-10,numItemsSiguientes:this.state.numItemsSiguientes-5},function(){
+    back = () => {
+        this.setState({ numItems: this.state.numItemsSiguientes - 10, numItemsSiguientes: this.state.numItemsSiguientes - 5 }, function () {
             console.log(this.state.numItems)
             console.log(this.state.numItemsSiguientes)
         })
@@ -283,3 +296,6 @@ const mapDispatchToProps = (dispatch) => ({
 
 })
 export default connect(mapStateToProps, mapDispatchToProps)(TableDemandado)
+
+
+   
