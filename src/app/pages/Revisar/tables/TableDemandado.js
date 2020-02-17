@@ -262,7 +262,10 @@ class TableDemandado extends Component {
         })
     }
     back=()=>{
-        this.setState({numItems:this.state.numItemsSiguientes-5,numItemsSiguientes:this.state.numItemsSiguientes-5})
+        this.setState({numItems:this.state.numItemsSiguientes-10,numItemsSiguientes:this.state.numItemsSiguientes-5},function(){
+            console.log(this.state.numItems)
+            console.log(this.state.numItemsSiguientes)
+        })
     }
 }
 
