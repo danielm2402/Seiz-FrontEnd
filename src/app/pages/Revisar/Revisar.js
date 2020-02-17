@@ -5,7 +5,8 @@ import { connect } from 'react-redux'
 import { getDemandados, getEmbargo } from '../../redux/actions/embargosAction'
 import Tabla from './Tabla'
 import './Tabla.css'
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import TextField from '@material-ui/core/TextField';
 import { FaRegEdit, FaTable } from "react-icons/fa";
 import { MdCancel, MdPhotoSizeSelectSmall, MdNavigateNext, MdNavigateBefore } from "react-icons/md";
@@ -178,6 +179,11 @@ class Revisar extends Component {
 
         }
 
+        if(this.props.loadingDemandadosTable!==prevProps.loadingDemandadosTable){
+            if(this.props.loadingDemandadosTable){
+                toast.info("Obteniendo demandados");
+            }
+        }
 
     }
     handleEdit = () => {
@@ -561,6 +567,7 @@ class Revisar extends Component {
                             </div>
                         </div>
                     </div>}
+                    <ToastContainer />
             </div>
         )
     }
@@ -746,6 +753,7 @@ const mapStateToProps = (state) => ({
     json: state.EmbargosReducer.embargo.json,
     resaltado: state.EmbargosReducer.embargo.json1,
     boundingRedux: state.boundingReducer.boundigTable,
+    loadingDemandadosTable: state.boundingReducer.loadingDemandados
 
 })
 const mapDispatchToProps = (dispatch) => ({

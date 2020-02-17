@@ -53,6 +53,7 @@ function* obtenerDemandadosTableSaga(payload) {
             console.log('EL VECTOR EDIT')
             console.log(vectorEdit)
             yield put(getDemandadosSuccess(vectorEdit))
+            yield put(obtenerDemandadosTableSuccess(vectorEdit))
             break;
     
         default:
