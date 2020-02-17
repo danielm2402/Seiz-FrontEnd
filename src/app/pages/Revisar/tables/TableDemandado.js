@@ -170,7 +170,8 @@ class TableDemandado extends Component {
                                     </div></td>
                                     <td><div className="element-table">
                                         <Select
-                                            name="monto"
+                                        label="Tipo"
+                                            name="tipo"
                                             value={String(this.state.tipo)}
                                             onChange={(e) => this.setState({ tipo: e.target.value })}
                                         >

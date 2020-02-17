@@ -51,7 +51,7 @@ export const initLayoutConfig = {
       "width": "fluid",
       "skin": "dark",
       "fixed": {
-        "desktop": true,
+        "desktop": false,
         "mobile": false
       }
     },
