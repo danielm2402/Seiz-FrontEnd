@@ -17,7 +17,9 @@ class TableDemandado extends Component {
             tipo: '',
             identificacion: '',
             monto: '',
-            ultimFocus: { id: '', tipo: '' }
+            ultimFocus: { id: '', tipo: '' },
+            numItems:0,
+            numItemsSiguientes:5,
         }
     }
     componentDidUpdate(prevProps) {
@@ -113,6 +115,7 @@ class TableDemandado extends Component {
 
     render() {
         let renderTable;
+        var contador=0;
         if (this.props.demandados.loading) {
             renderTable = (
                 <table>
@@ -135,9 +138,13 @@ class TableDemandado extends Component {
                             <th><div className="title-col">Monto</div></th>
                             <th><div className="title-col">Actions</div></th>
                         </tr>
-                        {this.props.demandados.data.map((item) => {
+                        {
+                        this.props.demandados.data.map((item) => {
+                            contador=contador+1
+                            if(contador>=this.state.numItems&&contador<this.state.numItemsSiguientes ){
 
                             if (this.state.itemEdit != item.id) {
+                                
                                 return (
                                     <tr>
                                         <td><div className="element-table">{item.nombres}</div></td>
@@ -212,6 +219,7 @@ class TableDemandado extends Component {
                                 </tr>
                             )
                         }
+                        }
                         )
                         }
 
@@ -240,12 +248,21 @@ class TableDemandado extends Component {
                 {renderTable}
                 <div className="buttons-control-table">
 
-                    <a><div className="button-table"><MdNavigateBefore /></div></a>
-                    <a><div className="button-table"><MdNavigateNext /></div></a>
+                    <a onClick={this.back}><div className="button-table"><MdNavigateBefore /></div></a>
+                    <a onClick={this.next}><div className="button-table"><MdNavigateNext /></div></a>
 
                 </div>
             </div>
         )
+    }
+    next=()=>{
+        this.setState({numItems:this.state.numItemsSiguientes,numItemsSiguientes:this.state.numItemsSiguientes+5},function(){
+            console.log(this.state.numItems)
+            console.log(this.state.numItemsSiguientes)
+        })
+    }
+    back=()=>{
+        this.setState({numItems:this.state.numItemsSiguientes-5,numItemsSiguientes:this.state.numItemsSiguientes-5})
     }
 }
 
