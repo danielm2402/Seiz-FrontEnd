@@ -5,6 +5,8 @@ import { FaRegEdit } from "react-icons/fa";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 import TextField from '@material-ui/core/TextField';
+import { changePoints, resetPoints, nuevaRegion, resetRegion } from '../../../redux/actions/boundingAction'
+
 class TableDemandado extends Component {
     constructor(props) {
         super(props)
@@ -13,9 +15,19 @@ class TableDemandado extends Component {
             nombre:'',
             tipo:'',
             identificacion:'',
-            monto:''
+            monto:'',
+            ultimFocus:{id:'',tipo:''}
         }
     }
+    componentDidUpdate(prevProps) {
+        
+        if (this.props.bounding !== prevProps.bounding) {
+            console.log('NUEVA PALABRAAAA')
+          this.setState({[this.state.ultimFocus.tipo]:this.props.bounding},function(){
+              console.log(this.state)
+          })
+        }
+      }
     handleEdit=(id, nombre,tipo,identificacion,monto)=>{
     
         this.setState({itemEdit:id, nombre:nombre, tipo:tipo, identificacion:identificacion, monto:monto})
@@ -28,6 +40,72 @@ class TableDemandado extends Component {
         console.log('editaaaaaaando')
         this.setState({itemEdit:id})
     }
+    focusElement(e, palabra) {
+        console.log(e.target.name)
+        // this.setState({ actualFocus: e.target.name })
+        if (this.props.resaltado !== "") {
+          console.log(e.target.value)
+          console.log(palabra)
+          try {
+            let vectorLocation = [];
+            let totalBoundig = [];
+            for (const prop in palabra.fieldInstances) {
+              console.log(`palabra.fieldInstances.${prop}`);
+              for (const prop1 in palabra.fieldInstances[prop].parts) {
+                console.log(palabra.fieldInstances[prop].parts[prop1])
+                vectorLocation.push({ start: palabra.fieldInstances[prop].parts[prop1].startLocation, end: palabra.fieldInstances[prop].parts[prop1].endLocation, page: palabra.fieldInstances[prop].parts[prop1].page })
+              }
+            }
+            console.log(vectorLocation)
+            vectorLocation.map((item) => {
+              var iterador = item.start
+              for (iterador; iterador <= item.end; iterador++) {
+                totalBoundig.push(this.props.json.pages[this.props.page - 1].words[iterador].boundingPoly.vertices)
+              }
+            })
+            console.log('totalboundig')
+            console.log(totalBoundig)
+    
+            this.props.handleBounding(totalBoundig)
+            this.setState({
+              boundig: { boundig: true, points: totalBoundig }
+            })
+          } catch (error) {
+          }
+        }
+      }
+    focusElement2(e, palabra, id, tipo, column) {
+        console.log('el id')
+        console.log(id)
+        console.log(palabra)
+        this.setState({ ultimFocus: { id: id, tipo: column } })
+        if (this.props.resaltado !== "") {
+          try {
+            let vectorLocation = [];
+            let totalBoundig = [];
+            const row = palabra.fieldInstances[id].parts[tipo]
+            vectorLocation.push({ start: row.startLocation, end: row.endLocation, page: row.page })
+    
+    
+            console.log(vectorLocation)
+            vectorLocation.map((item) => {
+              var iterador = item.start
+              for (iterador; iterador <= item.end; iterador++) {
+                totalBoundig.push(this.props.json.pages[this.props.page - 1].words[iterador].boundingPoly.vertices)
+              }
+            })
+            console.log('totalboundig')
+            console.log(totalBoundig)
+    
+            this.props.handleBounding(totalBoundig)
+            this.setState({
+              boundig: { boundig: true, points: totalBoundig }
+            })
+          } catch (error) {
+    
+          }
+        }
+      }
 
     render() {
         let renderTable;
@@ -75,6 +153,14 @@ class TableDemandado extends Component {
                                             value={this.state.nombre}
                                             label="Nombre"
                                             margin="normal"
+                                            onFocus={(e) => {
+                                                try {
+                                                  this.focusElement2(e, this.props.resaltado.fields.demandados, this.state.itemEdit, 'nombre', 'nombre')
+                                                }
+                                                catch (error) {
+                                                  console.log(error)
+                                                }
+                                              }}
                                         />
                                     </div></td>
                                     <td><div className="element-table"><TextField
@@ -88,12 +174,21 @@ class TableDemandado extends Component {
                                             value={this.state.identificacion}
                                             label="Identificación"
                                             margin="normal"
+                                            onFocus={(e) => {
+                                                try {
+                                                  this.focusElement2(e, this.props.resaltado.fields.demandados, this.state.itemEdit, 'identificacion', 'identificacion')
+                                                }
+                                                catch (error) {
+                                                  console.log(error)
+                                                }
+                                              }}
                                         /></td>
                                     <td><div className="element-table"><TextField
                                            onChange={(e)=>this.setState({monto:e.target.value})}
                                             value={this.state.monto}
                                             label="Monto"
                                             margin="normal"
+                                            onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.monto : null)) }}
                                         /></div></td>
                                     <td><div className="edits-rows">
                                     <a onClick={this.handleCancelEdit}><div className="button-edit-row"><MdCancel /></div></a>
@@ -141,11 +236,13 @@ class TableDemandado extends Component {
 }
 
 const mapStateToProps = (state) => ({
-
+    json: state.EmbargosReducer.embargo.json,
     demandados: state.EmbargosReducer.demandados,
+    resaltado: state.EmbargosReducer.embargo.json1,
+    bounding: state.boundingReducer.palabra
 
 })
 const mapDispatchToProps = (dispatch) => ({
-
+    handleBounding: bindActionCreators(changePoints, dispatch),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(TableDemandado)

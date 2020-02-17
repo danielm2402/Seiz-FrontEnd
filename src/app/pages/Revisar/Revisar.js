@@ -555,7 +555,7 @@ class Revisar extends Component {
                                     </div> : <></>
                                 }
 
-                                <TableDemandados/>
+                                <TableDemandados page={this.state.pageNumber}/>
                                {/*  <Demandados add={add} data={this.props.demandados.data} nombre="Demandados" page={this.state.pageNumber} editable={!this.state.disabled} /> */}
                                 <Demandantes add={add} data={this.state.demandantes} nombre="Demandantes" page={this.state.pageNumber} editable={!this.state.disabled} />
                             </div>
