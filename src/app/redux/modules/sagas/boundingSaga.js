@@ -36,12 +36,23 @@ function* obtenerDemandadosTableSaga(payload) {
     switch (data.status) {
         case 200:
             const vector=data.data.map((item)=>{
-                
                   return JSON.parse(item.content)
             
             })
-            console.log(vector)
-            yield put(getDemandadosSuccess(vector))
+            var cont=0;
+            const vectorEdit= vector.map((item)=>{
+                cont=cont+1;
+                return{
+                    id: cont,
+                    nombres:item.nombre,
+                    identificacion:item.identificacion,
+                    montoAEmbargar:item.monto,
+                    tipoIdentificacion:'NO_SELECCIONADO'
+                }
+            })
+            console.log('EL VECTOR EDIT')
+            console.log(vectorEdit)
+            yield put(getDemandadosSuccess(vectorEdit))
             break;
     
         default:

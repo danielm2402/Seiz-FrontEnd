@@ -1,10 +1,11 @@
 
-import { POINTS, RESET_POINTS, NUEVA_REGION, RESET_REGION
+import { POINTS, RESET_POINTS, NUEVA_REGION, RESET_REGION,TABLE_ULTIMO_FOCUS
 } from '../../constants/boundingConst.js';
 
 export const Boundingstate = {
     boundigTable:{boundig: false, points: []},
-    palabra:''
+    palabra:'',
+    tabla:''
 }
 export default function boundingReducer(state = Boundingstate, action={}){
     switch (action.type) {
@@ -22,13 +23,20 @@ export default function boundingReducer(state = Boundingstate, action={}){
         case NUEVA_REGION:
             return{
                 ...state,
-                palabra: action.palabra
+                palabra: action.palabra,
+
             }    
         case RESET_REGION:
             return{
                 ...state,
-                palabra:''
+                palabra:'',
+                tabla:''
             }
+        case TABLE_ULTIMO_FOCUS:
+            return{
+                ...state,
+                tabla:action.table
+            }    
         default:
             return state;
     }

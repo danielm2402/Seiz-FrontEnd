@@ -11,7 +11,7 @@ export const resetPoints=()=>({
 });
 export const nuevaRegion=(palabra)=>({
     type: types.NUEVA_REGION,
-    palabra
+    palabra,
 });
 export const resetRegion=()=>({
     type: types.RESET_REGION,
@@ -29,3 +29,10 @@ export const obtenerDemandadosTableSuccess=(data)=>({
     type: types.OBTENER_DEMANDADOS_TABLE_SUCCESS,
     data
 })
+
+export const setUltimaTableFocus=(table)=>({
+    type: types.TABLE_ULTIMO_FOCUS,
+    table
+})
+
+
