@@ -9,6 +9,7 @@ import {
 import {
     obtenerDemandadosTableSuccess
 } from '../../actions/boundingAction'
+import{getDemandadosSuccess} from '../../actions/embargosAction'
 
 function* obtenerDemandadosTableSaga(payload) {
     console.log('OBTENIENDO DEMANDADOS TABLA saga...');
@@ -25,13 +26,27 @@ function* obtenerDemandadosTableSaga(payload) {
     const data = yield axios.post('https://bancow.finseiz.com/api/v1/demandados/seiz/extractTable', {
         
         verticalLines:[],
-        pageNumber:0,
+        pageNumber:(payload.page-1),
         boundingPoly:{vertices:payload.vertices},
         keyColumns:payload.columns
     }, config)
         .then(response => response)
         .catch(error => error.response)
     console.log(data)
+    switch (data.status) {
+        case 200:
+            const vector=data.data.map((item)=>{
+                
+                  return JSON.parse(item.content)
+            
+            })
+            console.log(vector)
+            yield put(getDemandadosSuccess(vector))
+            break;
+    
+        default:
+            break;
+    }
 }
 
 

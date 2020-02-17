@@ -7,19 +7,20 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
 import { useHistory } from 'react-router-dom'
 import TextField from '@material-ui/core/TextField';
-import { changePoints, resetPoints } from '../../redux/actions/boundingAction'
+import { changePoints, resetPoints, resetRegion } from '../../redux/actions/boundingAction'
 
 class Demandantes extends Component {
   constructor(props) {
     super(props)
     this.state = {
       focus: false,
-      boundig: { boundig: false, points: [] }
+      boundig: { boundig: false, points: [] },
+      ultimFocus: { id: '', tipo: '' }
     }
   }
   shouldComponentUpdate(nextProps, nextState) {
 
-    if (this.state.boundig != nextState.boundig) {
+    if (this.state.boundig != nextState.boundig || this.state.ultimFocus != nextState.ultimFocus) {
       return false
     } else {
       return true;
@@ -46,7 +47,7 @@ class Demandantes extends Component {
         vectorLocation.map((item) => {
           var iterador = item.start
           for (iterador; iterador <= item.end; iterador++) {
-            totalBoundig.push(this.props.json.pages[this.props.page-1].words[iterador].boundingPoly.vertices)
+            totalBoundig.push(this.props.json.pages[this.props.page - 1].words[iterador].boundingPoly.vertices)
           }
         })
         console.log('totalboundig')
@@ -60,10 +61,11 @@ class Demandantes extends Component {
       }
     }
   }
-  focusElement2(e, palabra, id, tipo) {
+  focusElement2(e, palabra, id, tipo, column) {
     console.log('el id')
     console.log(id)
     console.log(palabra)
+    this.setState({ ultimFocus: { id: id, tipo: column } })
     if (this.props.resaltado !== "") {
       try {
         let vectorLocation = [];
@@ -77,7 +79,7 @@ class Demandantes extends Component {
         vectorLocation.map((item) => {
           var iterador = item.start
           for (iterador; iterador <= item.end; iterador++) {
-            totalBoundig.push(this.props.json.pages[this.props.page-1].words[iterador].boundingPoly.vertices)
+            totalBoundig.push(this.props.json.pages[this.props.page - 1].words[iterador].boundingPoly.vertices)
           }
         })
         console.log('totalboundig')
@@ -100,36 +102,68 @@ class Demandantes extends Component {
           title={this.props.nombre}
           columns={[
             {
-                title: 'Nombre', field: 'fullname', editComponent: props => {
-                    return (
-                        <TextField
-                            id="name"
-                            value={props.value}
-                            label="Nombre"
-                            margin="normal"
-                            onFocus={(e) => {
-                                console.log(props)
-                                this.focusElement2(e, this.props.resaltado.fields.demandantes, props.rowData.id, 'nombre')
-                            }}
-                        />
-                    )
-                }
+              title: 'Nombre', field: 'fullname', editComponent: props => {
+                console.log(props)
+                return (
+                  this.props.bounding !== "" && props.rowData.id === this.state.ultimFocus.id && props.columnDef.field === this.state.ultimFocus.tipo ?
+                  <TextField
+                    id="name"
+                    value={this.props.bounding}
+                    label="Nombre1"
+                    margin="normal"
+                    onChange={e => {
+                      this.props.handlePalabra()
+                      props.onChange(e.target.value)
+                    }}
+                    
+                  />: <TextField
+                  id="name"
+                  onChange={e => {
+                    props.onChange(e.target.value)
+                  }}
+                  value={props.value}
+                  onChange={e => { props.onChange(e.target.value) }}
+                  label="Nombre2"
+                  margin="normal"
+                  
+                  onFocus={(e) => {
+                    try {
+                      this.focusElement2(e, this.props.resaltado.fields.demandantes, props.rowData.id, 'nombre', props.columnDef.field)
+                    }
+                    catch (error) {
+                      console.log(error)
+                    }
+                  }}
+                />
+                )
+              }
             },
             {
-                title: 'Identificación', field: 'identification', editComponent: props => {
-                    return (
-                        <TextField
-                            id="id"
-                            value={props.value}
-                            label="Identificacion"
-                            margin="normal"
-
-                            onFocus={(e) => this.focusElement2(e, this.props.resaltado.fields.demandantes, props.rowData.id, 'identificacion')}
-                        />
-                    )
-                }
+              title: 'Identificación', field: 'identification', editComponent: props => {
+                return (
+                  this.props.bounding !== "" && props.rowData.id === this.state.ultimFocus.id && props.columnDef.field === this.state.ultimFocus.tipo ?
+                    <TextField
+                      id="id"
+                      onChange={e => {
+                        this.props.handlePalabra()
+                        props.onChange(e.target.value)
+                      }}
+                      value={this.props.bounding}
+                      label="Identificacion"
+                      margin="normal"
+                      onFocus={(e) => this.focusElement2(e, this.props.resaltado.fields.demandantes, props.rowData.id, 'identificacion', props.columnDef.field)}
+                    /> : <TextField
+                      id="id"
+                      value={props.value}
+                      onChange={e => props.onChange(e.target.value)}
+                      label="Identificacion"
+                      margin="normal"
+                      onFocus={(e) => this.focusElement2(e, this.props.resaltado.fields.demandantes, props.rowData.id, 'identificacion', props.columnDef.field)}
+                    />
+                )
+              }
             },
-        ]}
+          ]}
           data={this.props.data}
 
           options={{
@@ -181,11 +215,12 @@ const mapStateToProps = (state) => ({
   demandados: state.EmbargosReducer.demandados,
   json: state.EmbargosReducer.embargo.json,
   resaltado: state.EmbargosReducer.embargo.json1,
+  bounding: state.boundingReducer.palabra
 
 
 })
 const mapDispatchToProps = (dispatch) => ({
   handleBounding: bindActionCreators(changePoints, dispatch),
-
+  handlePalabra: bindActionCreators(resetRegion, dispatch)
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Demandantes);

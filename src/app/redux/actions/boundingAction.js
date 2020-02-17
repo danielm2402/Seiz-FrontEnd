@@ -17,11 +17,12 @@ export const resetRegion=()=>({
     type: types.RESET_REGION,
 });
 
-export const obtenerDemandadosTable=(vertices, columns, id, token)=>({
+export const obtenerDemandadosTable=(vertices, columns, id, page, token)=>({
     type: types.OBTENER_DEMANDADOS_TABLE,
     vertices,
     columns,
     id,
+    page,
     token
 });
 export const obtenerDemandadosTableSuccess=(data)=>({
