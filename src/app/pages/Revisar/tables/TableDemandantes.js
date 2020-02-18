@@ -11,15 +11,13 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-class TableDemandado extends Component {
+class TableDemandantes extends Component {
     constructor(props) {
         super(props)
         this.state = {
             itemEdit: null,
             nombre: '',
-            tipo: '',
             identificacion: '',
-            monto: '',
             ultimFocus: { id: '', tipo: '' },
             numItems: 0,
             numItemsSiguientes: 5,
@@ -32,7 +30,7 @@ class TableDemandado extends Component {
         if (this.props.bounding !== prevProps.bounding) {
             console.log('NUEVA PALABRAAAA')
             console.log(this.props.tablaBounding)
-            if (this.props.tablaBounding == 'demandados') {
+            if (this.props.tablaBounding == 'demandantes') {
                 console.log('CAMBIANDO LA PALABRA DEL INPUT')
                 this.setState({ [this.state.ultimFocus.tipo]: this.props.bounding }, function () {
                     console.log(this.state.nombre)
@@ -50,9 +48,9 @@ class TableDemandado extends Component {
            
         }
     }
-    handleEdit = (id, nombre, tipo, identificacion, monto) => {
+    handleEdit = (id, nombre, identificacion) => {
 
-        this.setState({ itemEdit: id, nombre: nombre, tipo: tipo, identificacion: identificacion, monto: monto },function(){
+        this.setState({ itemEdit: id, nombre: nombre, identificacion: identificacion },function(){
             console.log(this.state)
         })
     }
@@ -105,7 +103,7 @@ class TableDemandado extends Component {
      
 
         this.setState({ ultimFocus: { id: id, tipo: column } })
-        this.props.handleUltimTable('demandados')
+        this.props.handleUltimTable('demandantes')
         if (this.props.resaltado !== "") {
             try {
                 let vectorLocation = [];
@@ -134,14 +132,12 @@ class TableDemandado extends Component {
     render() {
         let renderTable;
         var contador = -1;
-        if (this.props.demandados.loading) {
+        if (this.props.embargo) {
             renderTable = (
                 <table>
                     <tr>
                         <th><div className="title-col">Nombre</div></th>
-                        <th><div className="title-col">Tipo</div></th>
                         <th><div className="title-col">Identificacion</div></th>
-                        <th><div className="title-col">Monto</div></th>
                         <th><div className="title-col">Actions</div></th>
                     </tr>
                     <tr>
@@ -149,18 +145,17 @@ class TableDemandado extends Component {
                     </tr>
                 </table>)
         } else {
-            if (this.props.demandados.data.length > 0) {
+            if (this.props.demandantes.length > 0) {
                 renderTable = (
                     <table>
                         <tr>
                             <th><div className="title-col">Nombre</div></th>
-                            <th><div className="title-col">Tipo</div></th>
                             <th><div className="title-col">Identificacion</div></th>
-                            <th><div className="title-col">Monto</div></th>
                             <th><div className="title-col">Actions</div></th>
+                           
                         </tr>
                         {
-                            this.props.demandados.data.map((item) => {
+                            this.props.demandantes.map((item) => {
                                 contador = contador + 1
                                 if (contador >= this.state.numItems && contador < this.state.numItemsSiguientes) {
 
@@ -168,11 +163,10 @@ class TableDemandado extends Component {
 
                                         return (
                                             <tr>
-                                                <td><div className="element-table">{item.nombres}</div></td>
-                                                <td><div className="element-table">{item.tipoIdentificacion}</div></td>
-                                                <td><div className="element-table">{item.identificacion}</div></td>
-                                                <td><div className="element-table">{item.montoAEmbargar}</div></td>
-                                                <td><div className="edits-rows"><a onClick={() => this.handleEdit(item.id, item.nombres, item.tipoIdentificacion, item.identificacion, item.montoAEmbargar)}><div className="button-edit-row"><FaRegEdit size={'1.3rem'} /></div></a>
+                                                <td><div className="element-table">{item.fullname}</div></td>
+                                                <td><div className="element-table">{item.identificacion||'-'}</div></td>
+                                              
+                                                <td><div className="edits-rows"><a onClick={() => this.handleEdit(item.id, item.fullname,item.identificacion)}><div className="button-edit-row"><FaRegEdit size={'1.3rem'} /></div></a>
                                                     <a><div className="button-edit-row"><MdDeleteSweep size={'1.3rem'} /></div></a>
                                                 </div></td>
                                             </tr>
@@ -188,33 +182,13 @@ class TableDemandado extends Component {
                                                     margin="normal"
                                                     onFocus={(e) => {
                                                         try {
-                                                            this.focusElement2(e, this.props.resaltado.fields.demandados, this.state.itemEdit, 'nombre', 'nombre')
+                                                            this.focusElement2(e, this.props.resaltado.fields.demandantes, this.state.itemEdit, 'nombre', 'nombre')
                                                         }
                                                         catch (error) {
                                                             console.log(error)
                                                         }
                                                     }}
                                                 />
-                                            </div></td>
-                                            <td><div className="element-table">
-                                                <InputLabel shrink id="demo-simple-select-placeholder-label-label">
-                                                    Tipo
-                                                  </InputLabel>
-                                                <Select
-                                                labelId="demo-simple-select-placeholder-label-label"
-                                                id="demo-simple-select-placeholder-label"
-                                                    label="Tipo"
-                                                    name="tipo"
-                                                    value={String(this.state.tipo)}
-                                                    onChange={(e) => this.setState({ tipo: e.target.value })}
-                                                >
-                                                    <MenuItem value={'NO_SELECCIONADO'}>NO_SELECCIONADO</MenuItem>
-                                                    <MenuItem value={'CEDULA'}>CEDULA</MenuItem>
-                                                    <MenuItem value={'CEDULA_EXTRANJERA'}>CEDULA_EXTRANJERA</MenuItem>
-                                                    <MenuItem value={'NIT'}>NIT</MenuItem>
-                                                    <MenuItem value={'TARJETA_IDENTIDAD'}>TARJETA_IDENTIDAD</MenuItem>
-
-                                                </Select>
                                             </div></td>
                                             <td><div className="element-table"></div><TextField
                                                 onChange={(e) => this.setState({ identificacion: e.target.value })}
@@ -223,20 +197,13 @@ class TableDemandado extends Component {
                                                 margin="normal"
                                                 onFocus={(e) => {
                                                     try {
-                                                        this.focusElement2(e, this.props.resaltado.fields.demandados, this.state.itemEdit, 'identificacion', 'identificacion')
+                                                        this.focusElement2(e, this.props.resaltado.fields.demandantes, this.state.itemEdit, 'identificacion', 'identificacion')
                                                     }
                                                     catch (error) {
                                                         console.log(error)
                                                     }
                                                 }}
                                             /></td>
-                                            <td><div className="element-table"><TextField
-                                                onChange={(e) => this.setState({ monto: e.target.value })}
-                                                value={this.state.monto}
-                                                label="Monto"
-                                                margin="normal"
-                                                onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.monto : null)) }}
-                                            /></div></td>
                                             <td><div className="edits-rows">
                                                 <a onClick={this.handleCancelEdit}><div className="button-edit-row"><MdCancel /></div></a>
                                                 <a><div className="button-edit-row"><MdCheck /></div></a>
@@ -258,9 +225,9 @@ class TableDemandado extends Component {
                     <table>
                         <tr>
                             <th><div className="title-col">Nombre</div></th>
-                            <th><div className="title-col">Tipo</div></th>
+                          
                             <th><div className="title-col">Identificacion</div></th>
-                            <th><div className="title-col">Monto</div></th>
+                        
                             <th><div className="title-col">Actions</div></th>
                         </tr>
                         
@@ -271,13 +238,13 @@ class TableDemandado extends Component {
         return (
             <div className="container-table-edit">
                 <div>
-                    <h5>Demandados</h5>
+                    <h5>Demandantes</h5>
                 </div>
                 {renderTable}
                 <div className="buttons-control-table">
 
-                    <a onClick={this.back}><div className="button-table"><MdNavigateBefore  size={'1.4rem'} /></div></a>
-                    <a onClick={this.next}><div className="button-table"><MdNavigateNext  size={'1.4rem'} /></div></a>
+                    <a onClick={this.back}><div className="button-table"><MdNavigateBefore size={'1.4rem'} /></div></a>
+                    <a onClick={this.next}><div className="button-table"><MdNavigateNext size={'1.4rem'} /></div></a>
 
                 </div>
             </div>
@@ -301,21 +268,25 @@ class TableDemandado extends Component {
         })
     }
 }
+TableDemandantes.defaultProps = {
+    demandantes: [],
+    
+  };
+  
 
 const mapStateToProps = (state) => ({
     json: state.EmbargosReducer.embargo.json,
-    demandados: state.EmbargosReducer.demandados,
     resaltado: state.EmbargosReducer.embargo.json1,
     bounding: state.boundingReducer.palabra,
-    tablaBounding: state.boundingReducer.tabla
-
+    tablaBounding: state.boundingReducer.tabla,
+    embargo: state.EmbargosReducer.embargo.loading 
 })
 const mapDispatchToProps = (dispatch) => ({
     handleBounding: bindActionCreators(changePoints, dispatch),
     handleUltimTable: bindActionCreators(setUltimaTableFocus, dispatch)
 
 })
-export default connect(mapStateToProps, mapDispatchToProps)(TableDemandado)
+export default connect(mapStateToProps, mapDispatchToProps)(TableDemandantes)
 
 
    

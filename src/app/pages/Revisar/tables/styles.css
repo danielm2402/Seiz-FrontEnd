@@ -2,6 +2,10 @@
     width: 100%;
     background-color: #fff;
 }
+.container-table-edit h5{
+    margin-left: 20px;
+    color:#595F6E
+}
 .buttons-control-table{
     width: 100%;
     display: flex;
