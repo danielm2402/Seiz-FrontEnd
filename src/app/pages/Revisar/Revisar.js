@@ -472,7 +472,7 @@ class Revisar extends Component {
                                 </div>
                                 {this.state.activeModeTable ?
                                     <div className="table-generator-container">
-                                        <label>Selecciona el numero de la columna</label>
+                                        <label>Selecciona el número de la columna</label>
                                         <div className="table-inputs">
                                             <div className="select-table-element">
                                                 <h6>Nombre</h6>

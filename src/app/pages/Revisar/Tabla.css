@@ -33,7 +33,7 @@
   justify-content: center;
   flex-direction: column;
   height: auto;
-  margin-bottom: 15px;
+  margin-bottom: 25px;
   
   
 }
@@ -173,6 +173,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-bottom: 20px;
 
 }
 .table-generator-container .table-inputs{

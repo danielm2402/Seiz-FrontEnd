@@ -23,6 +23,8 @@ class TableDemandado extends Component {
             ultimFocus: { id: '', tipo: '' },
             numItems: 0,
             numItemsSiguientes: 5,
+            totalItems:0,
+            totalPages:{exacts:0, numRecorrido:1}
         }
     }
     componentDidUpdate(prevProps) {
@@ -35,6 +37,15 @@ class TableDemandado extends Component {
                 })
             }
 
+        }
+        if(this.props.demandados !== prevProps.demandados){
+            if(this.props.demandados.data.length%5===0){
+                this.setState({totalPages:{exacts:(this.props.demandados.data.length/5),numRecorrido:1}})
+            }
+            else{
+                this.setState({totalPages:{exacts:(Math.trunc(this.props.demandados.data.length/5))+1,numRecorrido:1}})
+            }
+           
         }
     }
     handleEdit = (id, nombre, tipo, identificacion, monto) => {
@@ -118,7 +129,7 @@ class TableDemandado extends Component {
 
     render() {
         let renderTable;
-        var contador = 0;
+        var contador = -1;
         if (this.props.demandados.loading) {
             renderTable = (
                 <table>
@@ -269,15 +280,20 @@ class TableDemandado extends Component {
         )
     }
     next = () => {
-        this.setState({ numItems: this.state.numItemsSiguientes, numItemsSiguientes: this.state.numItemsSiguientes + 5 }, function () {
-            console.log(this.state.numItems)
-            console.log(this.state.numItemsSiguientes)
+
+        if(this.state.totalPages.numRecorrido<this.state.totalPages.exacts)
+        {
+            
+        this.setState({ totalPages:{...this.state.totalPages, numRecorrido:this.state.totalPages.numRecorrido+1},numItems: this.state.numItemsSiguientes, numItemsSiguientes: this.state.numItemsSiguientes + 5 }, function () {
+            console.log(this.state.totalPages)
         })
     }
+    }
     back = () => {
-        this.setState({ numItems: this.state.numItemsSiguientes - 10, numItemsSiguientes: this.state.numItemsSiguientes - 5 }, function () {
-            console.log(this.state.numItems)
-            console.log(this.state.numItemsSiguientes)
+        if(this.state.totalPages.numRecorrido>1)
+        this.setState({ totalPages:{...this.state.totalPages, numRecorrido:this.state.totalPages.numRecorrido-1}, numItems: this.state.numItemsSiguientes - 10, numItemsSiguientes: this.state.numItemsSiguientes - 5 }, function () {
+            console.log(this.state.totalPages)
+           
         })
     }
 }
