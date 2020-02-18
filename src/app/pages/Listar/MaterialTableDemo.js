@@ -68,6 +68,7 @@ function MaterialTableDemo(props) {
        rowData=>({
           icon:'remove_red_eye',
           tooltip:'Ver',
+          disabled: rowData.status=='SIN_CONFIRMAR',
           onClick:(event, rowData)=>{
             props.handleView(rowData.id, props.token)
             props.handleDemandados(rowData.id, props.token)
@@ -77,7 +78,12 @@ function MaterialTableDemo(props) {
        rowData=> ({
           icon:'edit',
           tooltip:'Revisar',
-          disabled: rowData.status=='CONFIRMADO'||rowData.status=='COMPLETO'
+          disabled: rowData.status=='CONFIRMADO'||rowData.status=='COMPLETO',
+          onClick:(event, rowData)=>{
+            props.handleView(rowData.id, props.token)
+            props.handleDemandados(rowData.id, props.token)
+            history.push(`/confirm/${rowData.id}`)
+          },
         })
       ]}
       options={{

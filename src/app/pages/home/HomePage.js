@@ -9,6 +9,7 @@ import NoConfirmados from '../Listar/NoConfirmados'
 import Asignados from '../Listar/Asignados'
 import Todos from '../Listar/Todos'
 import Revisar from '../Revisar/Revisar'
+import Confirmar from '../confirmar/Confirmar'
 import { LayoutSplashScreen } from "../../../_metronic";
 
 const GoogleMaterialPage = lazy(() =>
@@ -31,6 +32,7 @@ export default function HomePage() {
         <Route path="/upload" component={Upload}/>
         <Route path="/listar/confirmados" exact component={Confirmados}/>
         <Route path="/view/:id" component={Revisar}/>
+        <Route path="/confirm/:id" component={Confirmar}/>
         <Route path="/listar/no-confirmados" exact component={NoConfirmados}/>
         <Route path="/listar/asignados" exact component={Asignados}/>
         <Route path="/listar/todos" exact component={Todos}/>
