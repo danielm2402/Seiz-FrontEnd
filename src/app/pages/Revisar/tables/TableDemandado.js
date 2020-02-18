@@ -70,7 +70,9 @@ class TableDemandado extends Component {
             identificacion:identificacion,
             montoAEmbargar:monto
         }
-       this.props.handleUpdate(id, obj)
+       this.props.handleUpdate(id, obj);
+       this.handleCancelEdit()
+    
     }
     handleConfirmEdit = (id) => {
         console.log('editaaaaaaando')

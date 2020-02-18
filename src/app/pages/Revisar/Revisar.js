@@ -185,6 +185,10 @@ class Revisar extends Component {
                 toast.info("Obteniendo demandados");
             }
         }
+        if(this.props.embargo.data.plaintiffs!==prevProps.embargo.data.plaintiffs){
+            this.setState({demandantes: this.props.embargo.data.plaintiffs})
+        }
+
 
     }
     handleEdit = () => {

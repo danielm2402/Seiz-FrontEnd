@@ -69,7 +69,7 @@ export const updateDemandando=(id, data)=>({
     data
 })
 export const updateDemandante=(id, data)=>({
-    type:types.UPDATE_DEMANDADO,
+    type:types.UPDATE_DEMANDANTE,
     id,
     data
 })

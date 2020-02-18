@@ -9,7 +9,7 @@ export const Authstate = {
     porConfirmar:[],
     asignados:[],
     all:[],
-    embargo:{loading:true, data:{}, document:null, json:null, json1:null},
+    embargo:{loading:true, data:{plaintiffs:[]}, document:null, json:null, json1:null},
     demandados:{loading:true, data:[]}
     
 }
@@ -90,6 +90,10 @@ export default function authReducer(state = Authstate, action={}){
             case UPDATE_DEMANDANTE:
                 return{
                     ...state,
+                    embargo:{...state.embargo, data:{...state.embargo.data, plaintiffs:[...state.embargo.data.plaintiffs.filter(item => item.id!==action.id),{...state.embargo.data.plaintiffs.find(element => element.id === action.id),fullname:action.data.nombres,
+                        identificacion:action.data.identificacion
+                    
+                        }]}}
 
                 }                      
 

@@ -11,6 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
+import {updateDemandante} from '../../../redux/actions/embargosAction'
 class TableDemandantes extends Component {
     constructor(props) {
         super(props)
@@ -61,6 +62,18 @@ class TableDemandantes extends Component {
     handleConfirmEdit = (id) => {
         console.log('editaaaaaaando')
         this.setState({ itemEdit: id })
+    }
+    handleConfirm=(id)=>{
+
+        const {nombre,identificacion}=this.state
+        const obj={
+            nombres: nombre,
+            identificacion:identificacion,
+        
+        }
+       this.props.handleUpdate(id, obj);
+       this.handleCancelEdit()
+    
     }
     focusElement(e, palabra) {
         console.log(e.target.name)
@@ -206,7 +219,7 @@ class TableDemandantes extends Component {
                                             /></td>
                                             <td><div className="edits-rows">
                                                 <a onClick={this.handleCancelEdit}><div className="button-edit-row"><MdCancel /></div></a>
-                                                <a><div className="button-edit-row"><MdCheck /></div></a>
+                                                <a onClick={(e)=>this.handleConfirm(item.id)}><div className="button-edit-row"><MdCheck /></div></a>
 
                                             </div></td>
                                         </tr>
@@ -283,8 +296,8 @@ const mapStateToProps = (state) => ({
 })
 const mapDispatchToProps = (dispatch) => ({
     handleBounding: bindActionCreators(changePoints, dispatch),
-    handleUltimTable: bindActionCreators(setUltimaTableFocus, dispatch)
-
+    handleUltimTable: bindActionCreators(setUltimaTableFocus, dispatch),
+    handleUpdate: bindActionCreators(updateDemandante,dispatch),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(TableDemandantes)
 
