@@ -11,6 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
+import {updateDemandando} from '../../../redux/actions/embargosAction'
 class TableDemandado extends Component {
     constructor(props) {
         super(props)
@@ -59,6 +60,17 @@ class TableDemandado extends Component {
     handleCancelEdit = () => {
         console.log('cancelando edicion')
         this.setState({ itemEdit: null })
+    }
+    handleConfirm=(id)=>{
+
+        const {nombre,tipo,identificacion,monto }=this.state
+        const obj={
+            nombres: nombre,
+            tipoIdentificacion:tipo,
+            identificacion:identificacion,
+            montoAEmbargar:monto
+        }
+       this.props.handleUpdate(id, obj)
     }
     handleConfirmEdit = (id) => {
         console.log('editaaaaaaando')
@@ -160,7 +172,7 @@ class TableDemandado extends Component {
                             <th><div className="title-col">Actions</div></th>
                         </tr>
                         {
-                            this.props.demandados.data.map((item) => {
+                            this.props.demandados.data.map((item, index) => {
                                 contador = contador + 1
                                 if (contador >= this.state.numItems && contador < this.state.numItemsSiguientes) {
 
@@ -239,7 +251,7 @@ class TableDemandado extends Component {
                                             /></div></td>
                                             <td><div className="edits-rows">
                                                 <a onClick={this.handleCancelEdit}><div className="button-edit-row"><MdCancel /></div></a>
-                                                <a><div className="button-edit-row"><MdCheck /></div></a>
+                                                <a onClick={(e)=>this.handleConfirm(item.id)}><div className="button-edit-row"><MdCheck /></div></a>
 
                                             </div></td>
                                         </tr>
@@ -312,7 +324,8 @@ const mapStateToProps = (state) => ({
 })
 const mapDispatchToProps = (dispatch) => ({
     handleBounding: bindActionCreators(changePoints, dispatch),
-    handleUltimTable: bindActionCreators(setUltimaTableFocus, dispatch)
+    handleUltimTable: bindActionCreators(setUltimaTableFocus, dispatch),
+    handleUpdate: bindActionCreators(updateDemandando,dispatch),
 
 })
 export default connect(mapStateToProps, mapDispatchToProps)(TableDemandado)

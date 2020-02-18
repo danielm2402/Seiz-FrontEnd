@@ -1,6 +1,6 @@
 
 import {GET_DEMANDADOS_SUCCESS, GET_EMBARGO_SUCCESS, GET_EMBARGOS_CONFIRMADOS,GET_EMBARGO, GET_DEMANDADOS, GET_EMBARGOS_CONFIRMADOS_SUCCESS, GET_EMBARGOS_POR_CONFIRMAR, GET_EMBARGOS_POR_CONFIRMAR_SUCCESS,
-GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_ASIGNADOS_SUCCESS, GET_EMBARGOS_ALL, GET_EMBARGOS_ALL_SUCCESS
+GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_ASIGNADOS_SUCCESS, GET_EMBARGOS_ALL, GET_EMBARGOS_ALL_SUCCESS,UPDATE_DEMANDADO, UPDATE_DEMANDANTE
 } from '../../constants/EmbargosConst';
 
 export const Authstate = {
@@ -10,7 +10,7 @@ export const Authstate = {
     asignados:[],
     all:[],
     embargo:{loading:true, data:{}, document:null, json:null, json1:null},
-    demandados:{loading:true, data:{}}
+    demandados:{loading:true, data:[]}
     
 }
 export default function authReducer(state = Authstate, action={}){
@@ -77,7 +77,21 @@ export default function authReducer(state = Authstate, action={}){
             return{
                 ...state,
                 embargo:{loading:false, data:action.data, document:action.document, json:action.json, json1:action.json1}
-            }           
+            }  
+        case UPDATE_DEMANDADO:
+            return{
+                ...state,
+                demandados:{loading:false, data: [...state.demandados.data.filter(item => item.id!==action.id ), {...state.demandados.data.find(element => element.id === action.id),nombres:action.data.nombres,
+                tipoIdentificacion:action.data.tipoIdentificacion,
+                identificacion:action.data.identificacion,
+                montoAEmbargar:action.data.montoAEmbargar
+                }]}
+            } 
+            case UPDATE_DEMANDANTE:
+                return{
+                    ...state,
+
+                }                      
 
         default:
             return state;

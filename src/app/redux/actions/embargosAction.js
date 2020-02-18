@@ -63,4 +63,14 @@ export const getDemandadosSuccess=(data)=>({
     data
 })
 
+export const updateDemandando=(id, data)=>({
+    type:types.UPDATE_DEMANDADO,
+    id,
+    data
+})
+export const updateDemandante=(id, data)=>({
+    type:types.UPDATE_DEMANDADO,
+    id,
+    data
+})
 
