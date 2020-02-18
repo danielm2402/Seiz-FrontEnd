@@ -31,9 +31,11 @@ class TableDemandado extends Component {
 
         if (this.props.bounding !== prevProps.bounding) {
             console.log('NUEVA PALABRAAAA')
+            console.log(this.props.tablaBounding)
             if (this.props.tablaBounding == 'demandados') {
+                console.log('CAMBIANDO LA PALABRA DEL INPUT')
                 this.setState({ [this.state.ultimFocus.tipo]: this.props.bounding }, function () {
-                    console.log(this.state)
+                    console.log(this.state.nombre)
                 })
             }
 
@@ -50,7 +52,9 @@ class TableDemandado extends Component {
     }
     handleEdit = (id, nombre, tipo, identificacion, monto) => {
 
-        this.setState({ itemEdit: id, nombre: nombre, tipo: tipo, identificacion: identificacion, monto: monto })
+        this.setState({ itemEdit: id, nombre: nombre, tipo: tipo, identificacion: identificacion, monto: monto },function(){
+            console.log(this.state)
+        })
     }
     handleCancelEdit = () => {
         console.log('cancelando edicion')
@@ -98,31 +102,31 @@ class TableDemandado extends Component {
         console.log('el id')
         console.log(id)
         console.log(palabra)
+     
+
         this.setState({ ultimFocus: { id: id, tipo: column } })
+        this.props.handleUltimTable('demandados')
         if (this.props.resaltado !== "") {
             try {
                 let vectorLocation = [];
                 let totalBoundig = [];
                 const row = palabra.fieldInstances[id].parts[tipo]
                 vectorLocation.push({ start: row.startLocation, end: row.endLocation, page: row.page })
-
-
-                console.log(vectorLocation)
                 vectorLocation.map((item) => {
                     var iterador = item.start
                     for (iterador; iterador <= item.end; iterador++) {
                         totalBoundig.push(this.props.json.pages[this.props.page - 1].words[iterador].boundingPoly.vertices)
                     }
                 })
-                console.log('totalboundig')
-                console.log(totalBoundig)
-                this.props.handleUltimTable('demandados')
+                console.log('MANDANDO HANDLE ULTIM TABLE')
+                
                 this.props.handleBounding(totalBoundig)
                 this.setState({
                     boundig: { boundig: true, points: totalBoundig }
                 })
             } catch (error) {
-
+               
+                console.log(error)
             }
         }
     }
@@ -166,7 +170,7 @@ class TableDemandado extends Component {
                                             <tr>
                                                 <td><div className="element-table">{item.nombres}</div></td>
                                                 <td><div className="element-table">{item.tipoIdentificacion}</div></td>
-                                                <td><div className="element-table"></div>{item.identificacion}</td>
+                                                <td><div className="element-table">{item.identificacion}</div></td>
                                                 <td><div className="element-table">{item.montoAEmbargar}</div></td>
                                                 <td><div className="edits-rows"><a onClick={() => this.handleEdit(item.id, item.nombres, item.tipoIdentificacion, item.identificacion, item.montoAEmbargar)}><div className="button-edit-row"><FaRegEdit /></div></a>
                                                     <a><div className="button-edit-row"><MdDeleteSweep /></div></a>
