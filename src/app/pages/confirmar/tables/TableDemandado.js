@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './styles.css'
-import { MdNavigateNext, MdNavigateBefore, MdDeleteSweep, MdCheck, MdCancel } from "react-icons/md";
+import { MdNavigateNext, MdNavigateBefore, MdDeleteSweep, MdCheck, MdCancel,MdAdd } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
@@ -287,8 +287,9 @@ class TableDemandado extends Component {
         }
         return (
             <div className="container-table-edit">
-                <div>
+                <div className="table-header">
                     <h5>Demandados</h5>
+                    <a><div className="button-table"><MdAdd size={'1.4rem'}/></div></a>
                 </div>
                 {renderTable}
                 <div className="buttons-control-table">

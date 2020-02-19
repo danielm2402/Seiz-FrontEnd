@@ -6,6 +6,13 @@
     margin-left: 20px;
     color:#595F6E
 }
+.table-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-right: 10px;
+    padding-bottom: 10px;
+}
 .buttons-control-table{
     width: 100%;
     display: flex;
