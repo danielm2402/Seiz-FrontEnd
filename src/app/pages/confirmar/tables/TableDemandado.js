@@ -11,7 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-import {updateDemandando} from '../../../redux/actions/embargosAction'
+import {updateDemandando, deleteDemandado} from '../../../redux/actions/embargosAction'
 class TableDemandado extends Component {
     constructor(props) {
         super(props)
@@ -77,6 +77,9 @@ class TableDemandado extends Component {
     handleConfirmEdit = (id) => {
         console.log('editaaaaaaando')
         this.setState({ itemEdit: id })
+    }
+    handleEdit=(id)=>{
+        this.props.handleDelete(id)
     }
     focusElement(e, palabra) {
         console.log(e.target.name)
@@ -187,7 +190,7 @@ class TableDemandado extends Component {
                                                 <td><div className="element-table">{item.identificacion}</div></td>
                                                 <td><div className="element-table">{item.montoAEmbargar}</div></td>
                                                 <td><div className="edits-rows"><a onClick={() => this.handleEdit(item.id, item.nombres, item.tipoIdentificacion, item.identificacion, item.montoAEmbargar)}><div className="button-edit-row"><FaRegEdit size={'1.3rem'} /></div></a>
-                                                    <a><div className="button-edit-row"><MdDeleteSweep size={'1.3rem'} /></div></a>
+                                                    <a onClick={()=>this.handleEdit(item.id)}><div className="button-edit-row"><MdDeleteSweep size={'1.3rem'} /></div></a>
                                                 </div></td>
                                             </tr>
                                         )
@@ -328,6 +331,7 @@ const mapDispatchToProps = (dispatch) => ({
     handleBounding: bindActionCreators(changePoints, dispatch),
     handleUltimTable: bindActionCreators(setUltimaTableFocus, dispatch),
     handleUpdate: bindActionCreators(updateDemandando,dispatch),
+    handleDelete: bindActionCreators(deleteDemandado,dispatch)
 
 })
 export default connect(mapStateToProps, mapDispatchToProps)(TableDemandado)
