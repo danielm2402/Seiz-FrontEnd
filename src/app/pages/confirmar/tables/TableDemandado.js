@@ -78,7 +78,7 @@ class TableDemandado extends Component {
         console.log('editaaaaaaando')
         this.setState({ itemEdit: id })
     }
-    handleEdit=(id)=>{
+    handleDelete=(id)=>{
         this.props.handleDelete(id)
     }
     focusElement(e, palabra) {
@@ -190,7 +190,7 @@ class TableDemandado extends Component {
                                                 <td><div className="element-table">{item.identificacion}</div></td>
                                                 <td><div className="element-table">{item.montoAEmbargar}</div></td>
                                                 <td><div className="edits-rows"><a onClick={() => this.handleEdit(item.id, item.nombres, item.tipoIdentificacion, item.identificacion, item.montoAEmbargar)}><div className="button-edit-row"><FaRegEdit size={'1.3rem'} /></div></a>
-                                                    <a onClick={()=>this.handleEdit(item.id)}><div className="button-edit-row"><MdDeleteSweep size={'1.3rem'} /></div></a>
+                                                    <a onClick={()=>this.handleDelete(item.id)}><div className="button-edit-row"><MdDeleteSweep size={'1.3rem'} /></div></a>
                                                 </div></td>
                                             </tr>
                                         )
