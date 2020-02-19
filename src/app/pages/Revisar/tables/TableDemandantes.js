@@ -11,7 +11,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-import {updateDemandante} from '../../../redux/actions/embargosAction'
+import {updateDemandante, deleteDemandante} from '../../../redux/actions/embargosAction'
 class TableDemandantes extends Component {
     constructor(props) {
         super(props)
@@ -74,6 +74,9 @@ class TableDemandantes extends Component {
        this.props.handleUpdate(id, obj);
        this.handleCancelEdit()
     
+    }
+    handleDelete=(id)=>{
+        this.props.handleDelete(id)
     }
     focusElement(e, palabra) {
         console.log(e.target.name)
@@ -180,7 +183,7 @@ class TableDemandantes extends Component {
                                                 <td><div className="element-table">{item.identificacion||'-'}</div></td>
                                               
                                                 <td><div className="edits-rows"><a onClick={() => this.handleEdit(item.id, item.fullname,item.identificacion)}><div className="button-edit-row"><FaRegEdit size={'1.3rem'} /></div></a>
-                                                    <a><div className="button-edit-row"><MdDeleteSweep size={'1.3rem'} /></div></a>
+                                                    <a onClick={()=>this.handleDelete(item.id)}><div className="button-edit-row"><MdDeleteSweep size={'1.3rem'} /></div></a>
                                                 </div></td>
                                             </tr>
                                         )
@@ -298,6 +301,7 @@ const mapDispatchToProps = (dispatch) => ({
     handleBounding: bindActionCreators(changePoints, dispatch),
     handleUltimTable: bindActionCreators(setUltimaTableFocus, dispatch),
     handleUpdate: bindActionCreators(updateDemandante,dispatch),
+    handleDelete: bindActionCreators(deleteDemandante,dispatch)
 })
 export default connect(mapStateToProps, mapDispatchToProps)(TableDemandantes)
 
