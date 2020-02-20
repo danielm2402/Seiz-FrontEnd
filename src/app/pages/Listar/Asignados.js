@@ -26,7 +26,7 @@ class Confirmados extends Component {
           ]
         return (
             <div>
-                <TableAsignados nombre="Embargos" columns={columns} data={this.props.asignados} />
+                <TableAsignados token={this.props.token} username={this.props.username} nombre="Embargos" columns={columns} data={this.props.asignados} />
             </div>
         )
     }

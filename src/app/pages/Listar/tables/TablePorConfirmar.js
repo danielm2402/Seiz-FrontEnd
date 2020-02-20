@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {Link} from 'react-router-dom'
 import {useHistory} from 'react-router-dom'
-
+import axios from 'axios'
 const color=(value)=>{
   switch (value) {
     case 'CONFIRMADO':
@@ -63,7 +63,69 @@ function MaterialTableDemo(props) {
       }
       
       }}
-      data={props.data}
+      data={query =>
+        new Promise((resolve, reject) => {
+            const config = {
+                headers: {
+                  Authorization: 'Bearer ' + props.token,
+                  Accept: 'application/json',
+                },
+                params: {
+                  'estadoEmbargo': 'CONFIRMADO'
+                }
+              };
+              axios.get('https://bancow.finseiz.com/api/v1/embargos/count?estadoEmbargo=SIN_CONFIRMAR',config)
+              .then(response=>{
+                let total
+                var page
+                total=response.data
+                console.log(response)
+                console.log('INFORMACION DEL NUEVO REQUEST')
+                axios.get('https://bancow.finseiz.com/api/v1/embargos/list?estadoEmbargo=SIN_CONFIRMAR&page='+(query.page)+'+&size='+query.pageSize
+                , config)
+                   .then(response1 => {
+                     
+                       var separar = response1.headers.links.split(",")
+                      const array= separar.map((item)=>{
+                         return item.split(";")
+                       })
+                       array.map((item)=>{
+                         item.map((item1)=>{
+                           if(item1.trim() ==='rel="next"'){
+                             console.log(item)
+                             var subcadena=item[0].split('=')[1]
+                             page= subcadena.split('&')[0]
+                      
+                           }
+                          
+                      
+                         }
+           
+                         
+   
+                         )
+                       })
+                       if(page== undefined)
+                       {
+                         page=query.page+1
+                       }
+                       console.log(response1)
+                       console.log(page)
+                     
+                       resolve({
+                           data: response1.data,
+                          page: page-1,
+                          totalCount:total
+                         })
+                   })
+                   
+                   .catch(err => console.log(err.response))
+              
+              })
+            
+              
+        })
+      }
       actions={[
        rowData=> ({
           icon:'edit',

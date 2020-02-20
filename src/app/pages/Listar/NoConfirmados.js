@@ -27,7 +27,7 @@ class Confirmados extends Component {
           ]
         return (
             <div>
-                <TableSinConfirmar nombre="Embargos" columns={columns} data={this.props.NoConfirmados} />
+                <TableSinConfirmar token={this.props.token} nombre="Embargos" columns={columns} data={this.props.NoConfirmados} />
             </div>
         )
     }
