@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import MaterialTableDemo from './MaterialTableDemo'
+import TableAsignados from './tables/TableAsignados'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 import {getEmbargosAsignados} from '../../redux/actions/embargosAction'
@@ -25,7 +26,7 @@ class Confirmados extends Component {
           ]
         return (
             <div>
-                <MaterialTableDemo nombre="Embargos" columns={columns} data={this.props.asignados} />
+                <TableAsignados nombre="Embargos" columns={columns} data={this.props.asignados} />
             </div>
         )
     }

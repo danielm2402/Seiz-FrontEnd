@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import MaterialTableDemo from './MaterialTableDemo'
+import TableSinConfirmar from './tables/TablePorConfirmar'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 import {getEmbargosPorConfirmar} from '../../redux/actions/embargosAction'
@@ -26,7 +27,7 @@ class Confirmados extends Component {
           ]
         return (
             <div>
-                <MaterialTableDemo nombre="Embargos" columns={columns} data={this.props.NoConfirmados} />
+                <TableSinConfirmar nombre="Embargos" columns={columns} data={this.props.NoConfirmados} />
             </div>
         )
     }
