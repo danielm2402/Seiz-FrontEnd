@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './styles.css'
-import { MdNavigateNext, MdNavigateBefore, MdDeleteSweep, MdCheck, MdCancel,MdAdd } from "react-icons/md";
+import nextId from "react-id-generator";
+import { MdNavigateNext, MdNavigateBefore, MdDeleteSweep, MdCheck, MdCancel, MdAdd } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
@@ -11,7 +12,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-import {updateDemandando, deleteDemandado} from '../../../redux/actions/embargosAction'
+import { updateDemandando, deleteDemandado, addDemandado } from '../../../redux/actions/embargosAction'
 class TableDemandado extends Component {
     constructor(props) {
         super(props)
@@ -24,8 +25,15 @@ class TableDemandado extends Component {
             ultimFocus: { id: '', tipo: '' },
             numItems: 0,
             numItemsSiguientes: 5,
-            totalItems:0,
-            totalPages:{exacts:0, numRecorrido:1}
+            totalItems: 0,
+            totalPages: { exacts: 0, numRecorrido: 1 },
+            addRow: false,
+            addRowValues: {
+                nombre: '',
+                tipo: '',
+                identificacion: '',
+                monto: ''
+            }
         }
     }
     componentDidUpdate(prevProps) {
@@ -41,19 +49,19 @@ class TableDemandado extends Component {
             }
 
         }
-        if(this.props.demandados !== prevProps.demandados){
-            if(this.props.demandados.data.length%5===0){
-                this.setState({totalPages:{exacts:(this.props.demandados.data.length/5),numRecorrido:1}})
+        if (this.props.demandados !== prevProps.demandados) {
+            if (this.props.demandados.data.length % 5 === 0) {
+                this.setState({ totalPages: { exacts: (this.props.demandados.data.length / 5), numRecorrido: 1 } })
             }
-            else{
-                this.setState({totalPages:{exacts:(Math.trunc(this.props.demandados.data.length/5))+1,numRecorrido:1}})
+            else {
+                this.setState({ totalPages: { exacts: (Math.trunc(this.props.demandados.data.length / 5)) + 1, numRecorrido: 1 } })
             }
-           
+
         }
     }
     handleEdit = (id, nombre, tipo, identificacion, monto) => {
 
-        this.setState({ itemEdit: id, nombre: nombre, tipo: tipo, identificacion: identificacion, monto: monto },function(){
+        this.setState({ itemEdit: id, nombre: nombre, tipo: tipo, identificacion: identificacion, monto: monto }, function () {
             console.log(this.state)
         })
     }
@@ -61,24 +69,24 @@ class TableDemandado extends Component {
         console.log('cancelando edicion')
         this.setState({ itemEdit: null })
     }
-    handleConfirm=(id)=>{
+    handleConfirm = (id) => {
 
-        const {nombre,tipo,identificacion,monto }=this.state
-        const obj={
+        const { nombre, tipo, identificacion, monto } = this.state
+        const obj = {
             nombres: nombre,
-            tipoIdentificacion:tipo,
-            identificacion:identificacion,
-            montoAEmbargar:monto
+            tipoIdentificacion: tipo,
+            identificacion: identificacion,
+            montoAEmbargar: monto
         }
-       this.props.handleUpdate(id, obj);
-       this.handleCancelEdit()
-    
+        this.props.handleUpdate(id, obj);
+        this.handleCancelEdit()
+
     }
     handleConfirmEdit = (id) => {
         console.log('editaaaaaaando')
         this.setState({ itemEdit: id })
     }
-    handleDelete=(id)=>{
+    handleDelete = (id) => {
         this.props.handleDelete(id)
     }
     focusElement(e, palabra) {
@@ -119,7 +127,7 @@ class TableDemandado extends Component {
         console.log('el id')
         console.log(id)
         console.log(palabra)
-     
+
 
         this.setState({ ultimFocus: { id: id, tipo: column } })
         this.props.handleUltimTable('demandados')
@@ -136,13 +144,13 @@ class TableDemandado extends Component {
                     }
                 })
                 console.log('MANDANDO HANDLE ULTIM TABLE')
-                
+
                 this.props.handleBounding(totalBoundig)
                 this.setState({
                     boundig: { boundig: true, points: totalBoundig }
                 })
             } catch (error) {
-               
+
                 console.log(error)
             }
         }
@@ -176,6 +184,75 @@ class TableDemandado extends Component {
                             <th><div className="title-col">Monto</div></th>
                             <th><div className="title-col">Actions</div></th>
                         </tr>
+                        {this.state.addRow ?
+
+<tr>
+    <td><div className="element-table">
+        <TextField
+            onChange={(e) => this.setState({ addRowValues: { ...this.state.addRowValues, nombre: e.target.value } })}
+            value={this.state.addRowValues.nombre}
+            label="Nombre"
+            margin="normal"
+            onFocus={(e) => {
+                try {
+                    this.focusElement2(e, this.props.resaltado.fields.demandados, this.state.itemEdit, 'nombre', 'nombre')
+                }
+                catch (error) {
+                    console.log(error)
+                }
+            }}
+        />
+    </div></td>
+    <td><div className="element-table">
+        <InputLabel shrink id="demo-simple-select-placeholder-label-label">
+            Tipo
+                      </InputLabel>
+        <Select
+            labelId="demo-simple-select-placeholder-label-label"
+            id="demo-simple-select-placeholder-label"
+            label="Tipo"
+            name="tipo"
+            onChange={(e) => this.setState({ addRowValues: { ...this.state.addRowValues, tipo: e.target.value } })}
+            value={String(this.state.addRowValues.tipo)}
+
+
+        >
+            <MenuItem value={'NO_SELECCIONADO'}>NO_SELECCIONADO</MenuItem>
+            <MenuItem value={'CEDULA'}>CEDULA</MenuItem>
+            <MenuItem value={'CEDULA_EXTRANJERA'}>CEDULA_EXTRANJERA</MenuItem>
+            <MenuItem value={'NIT'}>NIT</MenuItem>
+            <MenuItem value={'TARJETA_IDENTIDAD'}>TARJETA_IDENTIDAD</MenuItem>
+
+        </Select>
+    </div></td>
+    <td><div className="element-table"></div><TextField
+        onChange={(e) => this.setState({ addRowValues: { ...this.state.addRowValues, identificacion: e.target.value } })}
+        value={String(this.state.addRowValues.identificacion)}
+        label="Identificación"
+        margin="normal"
+        onFocus={(e) => {
+            try {
+                this.focusElement2(e, this.props.resaltado.fields.demandados, this.state.itemEdit, 'identificacion', 'identificacion')
+            }
+            catch (error) {
+                console.log(error)
+            }
+        }}
+    /></td>
+    <td><div className="element-table"><TextField
+        onChange={(e) => this.setState({ addRowValues: { ...this.state.addRowValues, monto: e.target.value } })}
+        value={String(this.state.addRowValues.monto)}
+        label="Monto"
+        margin="normal"
+        onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.monto : null)) }}
+    /></div></td>
+    <td><div className="edits-rows">
+        <a onClick={this.handleCancelAdd}><div className="button-edit-row"><MdCancel /></div></a>
+        <a onClick={this.handleConfirmAdd}><div className="button-edit-row"><MdCheck /></div></a>
+
+    </div></td>
+
+</tr> : <></>}
                         {
                             this.props.demandados.data.map((item, index) => {
                                 contador = contador + 1
@@ -190,8 +267,9 @@ class TableDemandado extends Component {
                                                 <td><div className="element-table">{item.identificacion}</div></td>
                                                 <td><div className="element-table">{item.montoAEmbargar}</div></td>
                                                 <td><div className="edits-rows"><a onClick={() => this.handleEdit(item.id, item.nombres, item.tipoIdentificacion, item.identificacion, item.montoAEmbargar)}><div className="button-edit-row"><FaRegEdit size={'1.3rem'} /></div></a>
-                                                    <a onClick={()=>this.handleDelete(item.id)}><div className="button-edit-row"><MdDeleteSweep size={'1.3rem'} /></div></a>
+                                                    <a onClick={() => this.handleDelete(item.id)}><div className="button-edit-row"><MdDeleteSweep size={'1.3rem'} /></div></a>
                                                 </div></td>
+
                                             </tr>
                                         )
                                     }
@@ -218,8 +296,8 @@ class TableDemandado extends Component {
                                                     Tipo
                                                   </InputLabel>
                                                 <Select
-                                                labelId="demo-simple-select-placeholder-label-label"
-                                                id="demo-simple-select-placeholder-label"
+                                                    labelId="demo-simple-select-placeholder-label-label"
+                                                    id="demo-simple-select-placeholder-label"
                                                     label="Tipo"
                                                     name="tipo"
                                                     value={String(this.state.tipo)}
@@ -256,15 +334,18 @@ class TableDemandado extends Component {
                                             /></div></td>
                                             <td><div className="edits-rows">
                                                 <a onClick={this.handleCancelEdit}><div className="button-edit-row"><MdCancel /></div></a>
-                                                <a onClick={(e)=>this.handleConfirm(item.id)}><div className="button-edit-row"><MdCheck /></div></a>
+                                                <a onClick={(e) => this.handleConfirm(item.id)}><div className="button-edit-row"><MdCheck /></div></a>
 
                                             </div></td>
                                         </tr>
                                     )
                                 }
                             }
+
                             )
+
                         }
+                       
 
                     </table>
 
@@ -280,43 +361,70 @@ class TableDemandado extends Component {
                             <th><div className="title-col">Monto</div></th>
                             <th><div className="title-col">Actions</div></th>
                         </tr>
-                        
+                        {this.state.addRow ?
+                            <tr>
+                                <td>Jill</td>
+                                <td>Smith</td>
+                                <td>50</td>
+                            </tr> : <></>}
+
                     </table>
-                    )
+                )
             }
         }
         return (
             <div className="container-table-edit">
                 <div className="table-header">
                     <h5>Demandados</h5>
-                    <a><div className="button-table"><MdAdd size={'1.4rem'}/></div></a>
+                    <a onClick={this.addRow}><div className="button-table"><MdAdd size={'1.4rem'} /></div></a>
                 </div>
                 {renderTable}
                 <div className="buttons-control-table">
 
-                    <a onClick={this.back}><div className="button-table"><MdNavigateBefore  size={'1.4rem'} /></div></a>
-                    <a onClick={this.next}><div className="button-table"><MdNavigateNext  size={'1.4rem'} /></div></a>
+                    <a onClick={this.back}><div className="button-table"><MdNavigateBefore size={'1.4rem'} /></div></a>
+                    <a onClick={this.next}><div className="button-table"><MdNavigateNext size={'1.4rem'} /></div></a>
 
                 </div>
             </div>
         )
     }
+    addRow = () => {
+        this.setState({ addRow: true })
+    }
+    handleCancelAdd = () => {
+        this.setState({ addRow: false, addRowValues: { nombre: '', tipo: '', identificacion: '', monto: '' } })
+    }
+    handleConfirmAdd = () => {
+        const obj = {
+            id: this.props.demandados.data.length + 'local',
+            identificacion: this.state.addRowValues.identificacion,
+            nombres: this.state.addRowValues.nombre,
+            tipoIdentificacion: this.state.addRowValues.tipo,
+            montoAEmbargar: this.state.addRowValues.monto,
+            montoEmbargado: 0,
+            page: 0,
+            esCliente: false,
+            expediente: null,
+            expedientes: []
+        }
+        this.props.handleAddDemandado(obj)
+        this.setState({ addRow: false, addRowValues: { nombre: '', tipo: '', identificacion: '', monto: '' } })
+    }
     next = () => {
 
-        if(this.state.totalPages.numRecorrido<this.state.totalPages.exacts)
-        {
-            
-        this.setState({ totalPages:{...this.state.totalPages, numRecorrido:this.state.totalPages.numRecorrido+1},numItems: this.state.numItemsSiguientes, numItemsSiguientes: this.state.numItemsSiguientes + 5 }, function () {
-            console.log(this.state.totalPages)
-        })
-    }
+        if (this.state.totalPages.numRecorrido < this.state.totalPages.exacts) {
+
+            this.setState({ totalPages: { ...this.state.totalPages, numRecorrido: this.state.totalPages.numRecorrido + 1 }, numItems: this.state.numItemsSiguientes, numItemsSiguientes: this.state.numItemsSiguientes + 5 }, function () {
+                console.log(this.state.totalPages)
+            })
+        }
     }
     back = () => {
-        if(this.state.totalPages.numRecorrido>1)
-        this.setState({ totalPages:{...this.state.totalPages, numRecorrido:this.state.totalPages.numRecorrido-1}, numItems: this.state.numItemsSiguientes - 10, numItemsSiguientes: this.state.numItemsSiguientes - 5 }, function () {
-            console.log(this.state.totalPages)
-           
-        })
+        if (this.state.totalPages.numRecorrido > 1)
+            this.setState({ totalPages: { ...this.state.totalPages, numRecorrido: this.state.totalPages.numRecorrido - 1 }, numItems: this.state.numItemsSiguientes - 10, numItemsSiguientes: this.state.numItemsSiguientes - 5 }, function () {
+                console.log(this.state.totalPages)
+
+            })
     }
 }
 
@@ -331,11 +439,11 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     handleBounding: bindActionCreators(changePoints, dispatch),
     handleUltimTable: bindActionCreators(setUltimaTableFocus, dispatch),
-    handleUpdate: bindActionCreators(updateDemandando,dispatch),
-    handleDelete: bindActionCreators(deleteDemandado,dispatch)
+    handleUpdate: bindActionCreators(updateDemandando, dispatch),
+    handleDelete: bindActionCreators(deleteDemandado, dispatch),
+    handleAddDemandado: bindActionCreators(addDemandado, dispatch),
 
 })
 export default connect(mapStateToProps, mapDispatchToProps)(TableDemandado)
 
 
-   

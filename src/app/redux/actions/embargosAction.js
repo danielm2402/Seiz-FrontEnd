@@ -81,3 +81,11 @@ export const deleteDemandado=(id)=>({
     type:types.DELETE_DEMANDADO,
     id
 })
+export const addDemandado=(data)=>({
+    type:types.CREATE_DEMANDADO,
+    data
+})
+export const addDemandante=(data)=>({
+    type:types.CREATE_DEMANDANTE,
+    data
+})
