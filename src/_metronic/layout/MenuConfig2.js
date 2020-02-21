@@ -62,6 +62,21 @@ export default {
         icon: "flaticon2-calendar-1",
       },
 
+      { section: "Gestión " },
+      {
+        title: "Usuarios",
+        root: true,
+        bullet: "dot",
+        icon: "flaticon-users-1",
+        submenu: [
+          {
+            title: "Listar",
+            bullet: "dot",
+            
+          },
+        ]
+        
+      },
       { section: "Cuenta" },
       {
         title: "Mi Usuario",

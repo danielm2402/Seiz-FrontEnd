@@ -12,6 +12,7 @@ import StickyToolbar from "../../app/partials/layout/StickyToolbar";
 import HTMLClassService from "./HTMLClassService";
 import LayoutConfig from "./LayoutConfig";
 import MenuConfig from "./MenuConfig";
+import MenuConfig2 from './MenuConfig2'
 import LayoutInitializer from "./LayoutInitializer";
 import KtContent from "./KtContent";
 import QuickPanel from "../../app/partials/layout/QuickPanel";
@@ -30,7 +31,8 @@ function Layout({
   selfLayout,
   fitTop,
   fluid,
-  layoutConfig
+  layoutConfig,
+  auth
 }) {
   htmlClassService.setConfig(layoutConfig);
   // scroll to top after location changes
@@ -41,7 +43,7 @@ function Layout({
   return selfLayout !== "blank" ? (
     <LayoutInitializer
       styles={styles}
-      menuConfig={MenuConfig}
+      menuConfig={auth[0].authority==='ROLE_ADMIN'?MenuConfig2:MenuConfig}
       layoutConfig={LayoutConfig}
       htmlClassService={htmlClassService}
     >
@@ -102,8 +104,9 @@ function Layout({
   );
 }
 
-const mapStateToProps = ({ builder: { layoutConfig } }) => ({
+const mapStateToProps = ({ builder: { layoutConfig }, auth:{ user }}) => ({
   layoutConfig,
+  user,
   selfLayout: objectPath.get(layoutConfig, "self.layout"),
   asideDisplay: objectPath.get(layoutConfig, "aside.self.display"),
   subheaderDisplay: objectPath.get(layoutConfig, "subheader.display"),
@@ -112,7 +115,8 @@ const mapStateToProps = ({ builder: { layoutConfig } }) => ({
     "header.self.fixed.desktop"
   ),
   fitTop: objectPath.get(layoutConfig, "content.fit-top"),
-  fluid: objectPath.get(layoutConfig, "content.width") === "fluid"
+  fluid: objectPath.get(layoutConfig, "content.width") === "fluid",
+  auth: objectPath.get(user, "authorities"),
 });
 
 export default withRouter(connect(mapStateToProps)(Layout));
