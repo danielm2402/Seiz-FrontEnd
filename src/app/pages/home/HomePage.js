@@ -12,7 +12,8 @@ import Todos from '../Listar/Todos'
 import Revisar from '../Revisar/Revisar'
 import Confirmar from '../confirmar/Confirmar'
 import { LayoutSplashScreen } from "../../../_metronic";
-
+import Usuarios from '../auth/usuarios/Usuarios'
+import User from '../usuarios/User'
 const GoogleMaterialPage = lazy(() =>
   import("./google-material/GoogleMaterialPage")
 );
@@ -37,6 +38,8 @@ export default function HomePage() {
         <Route path="/listar/no-confirmados" exact component={NoConfirmados}/>
         <Route path="/listar/asignados" exact component={Asignados}/>
         <Route path="/listar/todos" exact component={Todos}/>
+        <Route path="/listar/users" exact component={Usuarios}/>
+        <Route path="/user/:id" exact component={User}/>
         <Redirect to="/error/error-v1" />
       </Switch>
     </Suspense>

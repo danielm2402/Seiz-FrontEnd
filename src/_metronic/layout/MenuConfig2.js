@@ -72,6 +72,7 @@ export default {
           {
             title: "Listar",
             bullet: "dot",
+            page:"listar/users"
             
           },
         ]

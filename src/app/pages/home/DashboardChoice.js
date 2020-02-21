@@ -5,7 +5,7 @@ class DashboardChoice extends Component {
     render() {
         return (
             <div>
-                {this.props.auth=='ROLE_ADMIN'?(<Dashboard></Dashboard>):(<div>HOLA</div>)}
+                {this.props.auth=='ROLE_ADMIN'?(<Dashboard></Dashboard>):(<Dashboard></Dashboard>)}
                 
             </div>
         )
