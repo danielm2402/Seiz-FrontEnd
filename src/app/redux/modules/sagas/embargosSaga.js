@@ -250,7 +250,17 @@ function* confirmarEmbargoSaga(payload) {
   }, config)
     .then(response => response)
     .catch(err => err.response)
+
+    const data1 = yield axios.post('https://bancow.finseiz.com/api/v1/demandados/save?idEmbargo=' + payload.data.id, {
+     demandados:payload.data.demandados
+    },config )
+      .then(response => response)
+      .catch(err => err.response)
+     
+
+    
 console.log(data)
+console.log(data1)
 switch (data.status) {
   case 200:
       yield put(nuevoMensaje('Embargo confirmado correctamente'))
