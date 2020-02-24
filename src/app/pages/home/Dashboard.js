@@ -34,7 +34,7 @@ import SimpleBarChar from './google-material/stadistics/SimpleBarChar'
 import TarjetInficator from './google-material/stadistics/TarjetIndicator'
 import { CircularProgressbar } from 'react-circular-progressbar';
 import { connect } from 'react-redux'
-import MaterialTable from './MaterialTableDemo'
+import TableSinConfirmar from './MaterialTableDemo'
 import ChartArea from './google-material/stadistics/ChartArea'
 import TableUsers from './TableUsers'
 import 'react-circular-progressbar/dist/styles.css';
@@ -106,7 +106,7 @@ function Dashboard(props) {
       <div className="cards-container">
 
         <Link to="/upload">
-          <Tarjet nombre="Subir oficio" width="210px" height="141px" number="10">
+          <Tarjet nombre="Subir oficio" width="210px" height="141px" number={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.total}>
             <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
           <CircularProgressbar strokeWidth={5}value={66} text={'60%'} />
           </div>
@@ -114,35 +114,35 @@ function Dashboard(props) {
         </Link>
 
         <Link to="/listar/no-confirmados">
-          <Tarjet nombre="Confirmar" width="210px" height="141px" number="75">
+          <Tarjet nombre="Por Confirmar" width="210px" height="141px"number={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.PorConfirmar}>
           <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
           <CircularProgressbar strokeWidth={5}value={16} text={'16%'} />
           </div>
           </Tarjet>
         </Link>
         <Link to="/listar/confirmados">
-          <Tarjet nombre="Confirmados" width="210px" height="141px" number="350">
+          <Tarjet nombre="Confirmados" width="210px" height="141px" number={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.confirmados}>
           <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
           <CircularProgressbar strokeWidth={5}value={30} text={'30%'} />
           </div>
           </Tarjet>
         </Link>
         <Link to="/listar/todos">
-          <Tarjet nombre="Buscar" width="210px" height="141px" number="650">
+          <Tarjet nombre="Buscar" width="210px" height="141px" number={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.total}>
           <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
           <CircularProgressbar strokeWidth={5}value={20} text={'20%'} />
           </div>
           </Tarjet>
         </Link>
         <Link>
-          <Tarjet nombre="Cartas" width="210px" height="141px" number="50">
+          <Tarjet nombre="Cartas" width="210px" height="141px" number="5">
           <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
           <CircularProgressbar strokeWidth={5}value={50} text={'50%'} />
           </div>
           </Tarjet>
         </Link>
         <Link to="/listar/asignados">
-          <Tarjet nombre="Asignados" width="210px" height="141px" number="12">
+          <Tarjet nombre="Asignados" width="210px" height="141px" number={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.asignados}>
           <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
           <CircularProgressbar strokeWidth={5}value={46} text={'46%'} />
           </div>
@@ -161,7 +161,7 @@ function Dashboard(props) {
       <div className="container-general">
       <div className="container-left">
         <div className="container-embargos">
-        <MaterialTable data={props.embargos}/>
+        <TableSinConfirmar token={props.token} nombre="Embargos" />
         </div>
         <div className="left-stadistics">
            <div className="comparator">
@@ -239,7 +239,9 @@ function Dashboard(props) {
 }
 
 const mapStateToProps=(state)=>({
-embargos: state.EmbargosReducer.porConfirmar
+  token: state.auth.authToken,
+embargos: state.EmbargosReducer.porConfirmar,
+conteoEmbargos: state.estadisticasReducer.conteo
 })
 const mapDispatchToProps=(dispatch)=>({
   getEmbargos: bindActionCreators(getEmbargosAsignados,dispatch)

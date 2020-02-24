@@ -37,9 +37,11 @@ class Brand extends React.Component {
               id="kt_aside_toggler"
             >
               <span>
+                <img src="../../../../public/media/logos/seiz-logo-collapse.png"/>
                 {/* <AngleDoubleLeftIcon /> */}
               </span>
               <span>
+              <img src="../../../../public/media/logos/seiz-logo-collapse.png"/>
                 {/* <AngleDoubleRightIcon /> */}
               </span>
             </button>
