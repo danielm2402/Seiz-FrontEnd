@@ -4,7 +4,7 @@ import {
 import axios from 'axios';
 import {
   GET_EMBARGO, GET_DEMANDADOS,
-  GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_CONFIRMADOS, GET_EMBARGOS_POR_CONFIRMAR, GET_EMBARGOS_ALL, DELETE_EMBARGO
+  GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_CONFIRMADOS, GET_EMBARGOS_POR_CONFIRMAR, GET_EMBARGOS_ALL, DELETE_EMBARGO, CONFIRMAR_EMBARGO
 } from '../../constants/EmbargosConst';
 import {
   getEmbargosAll, getEmbargosAsignados, getEmbargosPorConfirmar, getEmbargosConfirmados, getDemandadosSuccess, getEmbargoSuccess,
@@ -158,7 +158,7 @@ function* getEmbargoSaga(payload) {
   const data = yield axios.get('https://bancow.finseiz.com/api/v1/embargos/' + payload.id, config)
     .then(response => response)
     .catch(err => err.response)
-    var url=''
+  var url = ''
   switch (data.status) {
     case 200:
       console.log('obteniendo pdf')
@@ -168,30 +168,30 @@ function* getEmbargoSaga(payload) {
         responseType: 'blob', // important
         headers: { Authorization: 'Bearer ' + payload.token, }
       }).then((response) => {
-         url = window.URL.createObjectURL(new Blob([response.data], {type: 'application/pdf'},'view.pdf'));
-      }) );
+        url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }, 'view.pdf'));
+      }));
 
-      const bounding= (yield (axios({
-        url: ((data.data.urlEmbargoFile.split('.pdf')[0])+'.json'),
+      const bounding = (yield (axios({
+        url: ((data.data.urlEmbargoFile.split('.pdf')[0]) + '.json'),
         method: 'GET',
         responseType: 'blob', // important
         headers: { Authorization: 'Bearer ' + payload.token }
       }).then((response) => response.data)))
       console.log(bounding)
-      const file = window.URL.createObjectURL(new Blob([bounding], {type: 'application/json'},'view.json'));
-      const json= yield axios.get(file)
-      .then(response=>response.data)
+      const file = window.URL.createObjectURL(new Blob([bounding], { type: 'application/json' }, 'view.json'));
+      const json = yield axios.get(file)
+        .then(response => response.data)
 
-      const boundingSelector= (yield (axios({
-        url: ((data.data.urlEmbargoFile.split('.pdf')[0])+'.jsonl'),
+      const boundingSelector = (yield (axios({
+        url: ((data.data.urlEmbargoFile.split('.pdf')[0]) + '.jsonl'),
         method: 'GET',
         responseType: 'blob', // important
         headers: { Authorization: 'Bearer ' + payload.token }
       }).then((response) => response.data)))
       console.log(bounding)
-      const file1 = window.URL.createObjectURL(new Blob([boundingSelector], {type: 'application/json'},'view1.json'));
-      const json1= yield axios.get(file1)
-      .then(response=>response.data)
+      const file1 = window.URL.createObjectURL(new Blob([boundingSelector], { type: 'application/json' }, 'view1.json'));
+      const json1 = yield axios.get(file1)
+        .then(response => response.data)
 
       yield put(getEmbargoSuccess(data.data, url, json, json1))
       break;
@@ -226,6 +226,33 @@ function* getDemandadosSaga(payload) {
 
 }
 
+function* confirmarEmbargoSaga(payload) {
+  console.log('CONFIRMANDO EMBARGO');
+  console.log(payload.data)
+  const config = {
+    headers: {
+      Authorization: 'Bearer ' + payload.token,
+      Accept: 'application/json',
+    },
+  };
+  const data = yield axios.post('https://bancow.finseiz.com/api/v1/embargos/' + payload.data.id + '/confirm', {
+    account: payload.data.account,
+    address: payload.data.address,
+    amount: payload.data.amount,
+    city: payload.data.city,
+    docId: payload.data.docId,
+    documentDate: payload.data.documentDate,
+    documentType: payload.data.documentType,
+    embargoType: payload.data.embargoType,
+    reference: payload.data.reference,
+    sender: payload.data.sender
+  }, config)
+    .then(response => response)
+    .catch(err => err.response)
+console.log(data)
+
+}
+
 function* embargosRootSaga() {
   yield all([
     takeEvery(GET_EMBARGOS_CONFIRMADOS, getEmbargosConfirmadosSaga),
@@ -235,6 +262,7 @@ function* embargosRootSaga() {
     takeEvery(DELETE_EMBARGO, deleteEmbargoSaga),
     takeEvery(GET_EMBARGO, getEmbargoSaga),
     takeEvery(GET_DEMANDADOS, getDemandadosSaga),
+    takeEvery(CONFIRMAR_EMBARGO, confirmarEmbargoSaga)
 
 
 

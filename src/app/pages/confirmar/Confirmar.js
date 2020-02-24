@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import TextField from '@material-ui/core/TextField';
 import { FaRegEdit, FaTable } from "react-icons/fa";
 import { MdCancel, MdPhotoSizeSelectSmall, MdNavigateNext, MdNavigateBefore } from "react-icons/md";
-
+import {confirmarEmbargo } from '../../redux/actions/embargosAction'
 import { ProgressBar } from 'react-bootstrap';
 import { setOptions, Document, Page } from "react-pdf";
 import Demandados from './Demandados'
@@ -568,9 +568,8 @@ class Confirmar extends Component {
 
                                 <TableDemandados page={this.state.pageNumber}/>
                                 <TableDemandantes page={this.state.pageNumber} demandantes={this.state.demandantes}/>
-                               {/*  <Demandados add={add} data={this.props.demandados.data} nombre="Demandados" page={this.state.pageNumber} editable={!this.state.disabled} /> */}
-                               {/*  <Demandantes add={add} data={this.state.demandantes} nombre="Demandantes" page={this.state.pageNumber} editable={!this.state.disabled} /> */}
-                               <input type="button" class="confirm-form-btn " value="Confirmar Embargo"/>
+                               
+                               <input onClick={this.confirmarEmbargo} type="button" class="confirm-form-btn " value="Confirmar Embargo"/>
                             </div>
                         </div>
                     </div>}
@@ -580,6 +579,31 @@ class Confirmar extends Component {
     }
     onError(e) {
         console.log(e, 'error in file-viewer');
+    }
+    confirmarEmbargo=()=>{
+        try {
+            console.log('CONFIRMANDO EMBARGO LOCAL')
+            var data={
+                account: this.props.embargo.data.account,
+                address: this.state.direccion,
+                amount: this.props.embargo.data.amount,
+                city: this.state.ciudad,
+                docId: this.props.embargo.data.docId,
+                documentDate: this.state.fecha,
+                documentType: this.state.tipoDocumento,
+                embargoType:this.state.tipoEmbargo,
+                reference: this.props.embargo.data.reference,
+                sender: this.state.entidad,
+                id: this.state.referencia,
+                demandados: this.props.demandados,
+    
+            }
+            this.props.handleConfirmarEmbargo(data, this.props.token)
+            
+        } catch (error) {
+            console.log(error)
+        }
+       
     }
     handleColsTable = (event) => {
         this.setState({ colsEdit: { ...this.state.colsEdit, [event.target.name]: event.target.value } }, function () {
@@ -768,7 +792,8 @@ const mapDispatchToProps = (dispatch) => ({
     handleDemandados: bindActionCreators(getDemandados, dispatch),
     handleBoundingReset: bindActionCreators(resetPoints, dispatch),
     handleRegion: bindActionCreators(nuevaRegion, dispatch),
-    handleTableDemandados: bindActionCreators(obtenerDemandadosTable, dispatch)
+    handleTableDemandados: bindActionCreators(obtenerDemandadosTable, dispatch),
+    handleConfirmarEmbargo: bindActionCreators(confirmarEmbargo,dispatch)
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Confirmar)

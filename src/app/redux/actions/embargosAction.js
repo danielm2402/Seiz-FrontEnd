@@ -89,3 +89,8 @@ export const addDemandante=(data)=>({
     type:types.CREATE_DEMANDANTE,
     data
 })
+export const confirmarEmbargo=(data, token)=>({
+    type:types.CONFIRMAR_EMBARGO,
+    data, 
+    token
+})

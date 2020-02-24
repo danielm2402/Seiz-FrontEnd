@@ -87,12 +87,7 @@ function MaterialTableDemo(props) {
                              page= subcadena.split('&')[0]
                       
                            }
-                          
-                      
                          }
-           
-                         
-   
                          )
                        })
                        if(page== undefined)
@@ -136,14 +131,20 @@ function MaterialTableDemo(props) {
     }}
       editable={{
         onRowDelete: oldData =>
-          new Promise(resolve => {
-            
-            resolve()
-            console.log(oldData)
-            props.handleEliminar(oldData.id, props.token, props.pathname)
-          
-     
-          }),
+        new Promise((resolve, reject) => {
+          const config = {
+              headers: {
+                Authorization: 'Bearer ' + props.token,
+                Accept: 'application/json',
+              },
+            };
+            axios.get('https://bancow.finseiz.com/api/v1/users/'+oldData.id,config)
+            .then(response=>{
+              console.log(response)
+              resolve();
+            })
+
+      })
         
        
     }}
