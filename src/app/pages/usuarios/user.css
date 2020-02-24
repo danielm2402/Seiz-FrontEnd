@@ -1,0 +1,59 @@
+.container-user-config{
+    
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    height: auto;
+    text-align: center;
+}
+.background-user-config{
+    width: 60%;
+    background-color: #fff;
+    height: auto;
+}
+.tittle-user-config{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.container-config{
+    width: 100%;
+    height: auto;
+    background-color: #fff;
+    padding-bottom: 10px;
+}
+.item-config{
+    width: 100%;
+    background-color: #F3F3F3;
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.section-icons{
+    width: 15%;
+    background-color: #CDCDCD;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.content-information{
+    margin-left: 40px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+}
+.content-information-password{
+    margin-left: 40px;
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    
+}
+.container-inputs-text{
+    padding-right: 20px;
+}

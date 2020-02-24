@@ -1,13 +1,13 @@
 
 import React, { useState }  from 'react';
 import MaterialTable,{ MTableCell }  from 'material-table';
-import {deleteEmbargo, getEmbargo, getDemandados} from '../../../redux/actions/embargosAction'
+import {getUser} from '../../../redux/actions/userAction'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import {Link} from 'react-router-dom'
 import {useHistory} from 'react-router-dom'
 import axios from 'axios'
-
+import Infografia from './Infografia'
 const color=(value)=>{
   switch (value) {
     case 'CONFIRMADO':
@@ -112,8 +112,6 @@ function MaterialTableDemo(props) {
                    .catch(err => console.log(err.response))
               
               })
-            
-              
         })
       }
       actions={[
@@ -122,7 +120,6 @@ function MaterialTableDemo(props) {
           tooltip:'Revisar',
           onClick:(event, rowData)=>{
             props.handleView(rowData.id, props.token)
-            props.handleDemandados(rowData.id, props.token)
             history.push(`/user/${rowData.id}`)
           },
         })
@@ -152,8 +149,8 @@ function MaterialTableDemo(props) {
     }}
     detailPanel={rowData => {
       return (
-        <div>
-          Hola mundo
+        <div style={{ marginTop:'10px', marginBottom:'10px', marginLeft:'10px', marginRight:'10px'}}>
+          <Infografia/>
         </div>
       )
     }}
@@ -168,8 +165,8 @@ const mapStateToProps=(state)=>({
   token: state.auth.authToken,
 })
 const mapDispatchToProps = dispatch => ({
-  handleEliminar: bindActionCreators(deleteEmbargo,dispatch),
-  handleView: bindActionCreators(getEmbargo,dispatch),
-  handleDemandados: bindActionCreators(getDemandados, dispatch)
+ 
+  handleView: bindActionCreators(getUser,dispatch),
+ 
   });
 export default connect(mapStateToProps, mapDispatchToProps)(MaterialTableDemo);
