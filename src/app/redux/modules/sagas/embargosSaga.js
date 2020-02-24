@@ -8,8 +8,9 @@ import {
 } from '../../constants/EmbargosConst';
 import {
   getEmbargosAll, getEmbargosAsignados, getEmbargosPorConfirmar, getEmbargosConfirmados, getDemandadosSuccess, getEmbargoSuccess,
-  getEmbargosConfirmadosSuccess, getEmbargosPorConfirmarSuccess, getEmbargosAsignadosSuccess, getEmbargosAllSuccess
+  getEmbargosConfirmadosSuccess, getEmbargosPorConfirmarSuccess, getEmbargosAsignadosSuccess, getEmbargosAllSuccess,nuevoMensaje,resetMensaje
 } from '../../actions/embargosAction'
+
 import { saveAs } from 'file-saver';
 function* getEmbargosConfirmadosSaga(payload) {
   console.log('obteniendo embargos confirmados');
@@ -250,6 +251,16 @@ function* confirmarEmbargoSaga(payload) {
     .then(response => response)
     .catch(err => err.response)
 console.log(data)
+switch (data.status) {
+  case 200:
+      yield put(nuevoMensaje('Embargo confirmado correctamente'))
+    break;
+
+  default:
+    yield put(nuevoMensaje('Embargo no pudo ser confirmado correctamente, contacte a soporte'))
+  
+    break;
+}
 
 }
 

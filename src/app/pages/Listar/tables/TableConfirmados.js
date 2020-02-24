@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import {Link} from 'react-router-dom'
 import {useHistory} from 'react-router-dom'
 import axios from 'axios'
-
+ 
 const color=(value)=>{
   switch (value) {
     case 'CONFIRMADO':

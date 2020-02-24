@@ -94,3 +94,12 @@ export const confirmarEmbargo=(data, token)=>({
     data, 
     token
 })
+
+export const nuevoMensaje=(data)=>({
+    type:types.NUEVO_MESANJE,
+    data, 
+})
+export const resetMensaje=()=>({
+    type:types.RESET_MENSAJE
+})
+

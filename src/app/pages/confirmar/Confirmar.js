@@ -1,8 +1,15 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import { withRouter } from "react-router-dom";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
-import { getDemandados, getEmbargo } from '../../redux/actions/embargosAction'
+import { getDemandados, getEmbargo, resetMensaje} from '../../redux/actions/embargosAction'
 import Tabla from './Tabla'
 import './Tabla.css'
 import { ToastContainer, toast } from 'react-toastify';
@@ -10,7 +17,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import TextField from '@material-ui/core/TextField';
 import { FaRegEdit, FaTable } from "react-icons/fa";
 import { MdCancel, MdPhotoSizeSelectSmall, MdNavigateNext, MdNavigateBefore } from "react-icons/md";
-import {confirmarEmbargo } from '../../redux/actions/embargosAction'
+import { confirmarEmbargo } from '../../redux/actions/embargosAction'
 import { ProgressBar } from 'react-bootstrap';
 import { setOptions, Document, Page } from "react-pdf";
 import Demandados from './Demandados'
@@ -22,6 +29,7 @@ import { changePoints, resetPoints, nuevaRegion, obtenerDemandadosTable } from '
 import TableDemandados from './tables/TableDemandado'
 import TableDemandantes from './tables/TableDemandantes'
 const pdfjsVersion = "2.0.305";
+
 
 setOptions({
     workerSrc: `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsVersion}/pdf.worker.js`
@@ -180,13 +188,13 @@ class Confirmar extends Component {
 
         }
 
-        if(this.props.loadingDemandadosTable!==prevProps.loadingDemandadosTable){
-            if(this.props.loadingDemandadosTable){
+        if (this.props.loadingDemandadosTable !== prevProps.loadingDemandadosTable) {
+            if (this.props.loadingDemandadosTable) {
                 toast.info("Obteniendo demandados");
             }
         }
-        if(this.props.embargo.data.plaintiffs!==prevProps.embargo.data.plaintiffs){
-            this.setState({demandantes: this.props.embargo.data.plaintiffs})
+        if (this.props.embargo.data.plaintiffs !== prevProps.embargo.data.plaintiffs) {
+            this.setState({ demandantes: this.props.embargo.data.plaintiffs })
         }
 
 
@@ -566,24 +574,48 @@ class Confirmar extends Component {
                                     </div> : <></>
                                 }
 
-                                <TableDemandados page={this.state.pageNumber}/>
-                                <TableDemandantes page={this.state.pageNumber} demandantes={this.state.demandantes}/>
-                               
-                               <input onClick={this.confirmarEmbargo} type="button" class="confirm-form-btn " value="Confirmar Embargo"/>
+                                <TableDemandados page={this.state.pageNumber} />
+                                <TableDemandantes page={this.state.pageNumber} demandantes={this.state.demandantes} />
+
+                                <input onClick={this.confirmarEmbargo} type="button" class="confirm-form-btn " value="Confirmar Embargo" />
+            
+                                <Dialog
+                                    open={this.props.mensaje.exist}
+                                    onClose={()=>{this.props.handleResetMsj()
+                                        this.props.history.goBack()}
+                                    }
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">{"Confirmación de embargo"}</DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            {this.props.mensaje.msj}
+          </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+  
+                                        <Button onClick={()=>{this.props.handleResetMsj()
+                                        this.props.history.goBack()
+                                        }} color="primary" autoFocus>
+                                            Aceptar
+          </Button>
+                                    </DialogActions>
+                                </Dialog>
                             </div>
                         </div>
                     </div>}
-                    <ToastContainer />
+                <ToastContainer />
             </div>
         )
     }
     onError(e) {
         console.log(e, 'error in file-viewer');
     }
-    confirmarEmbargo=()=>{
+    confirmarEmbargo = () => {
         try {
             console.log('CONFIRMANDO EMBARGO LOCAL')
-            var data={
+            var data = {
                 account: this.props.embargo.data.account,
                 address: this.state.direccion,
                 amount: this.props.embargo.data.amount,
@@ -591,19 +623,19 @@ class Confirmar extends Component {
                 docId: this.props.embargo.data.docId,
                 documentDate: this.state.fecha,
                 documentType: this.state.tipoDocumento,
-                embargoType:this.state.tipoEmbargo,
+                embargoType: this.state.tipoEmbargo,
                 reference: this.props.embargo.data.reference,
                 sender: this.state.entidad,
                 id: this.state.referencia,
                 demandados: this.props.demandados,
-    
+
             }
             this.props.handleConfirmarEmbargo(data, this.props.token)
-            
+
         } catch (error) {
             console.log(error)
         }
-       
+
     }
     handleColsTable = (event) => {
         this.setState({ colsEdit: { ...this.state.colsEdit, [event.target.name]: event.target.value } }, function () {
@@ -784,7 +816,8 @@ const mapStateToProps = (state) => ({
     json: state.EmbargosReducer.embargo.json,
     resaltado: state.EmbargosReducer.embargo.json1,
     boundingRedux: state.boundingReducer.boundigTable,
-    loadingDemandadosTable: state.boundingReducer.loadingDemandados
+    loadingDemandadosTable: state.boundingReducer.loadingDemandados,
+    mensaje:state.EmbargosReducer.mensaje
 
 })
 const mapDispatchToProps = (dispatch) => ({
@@ -793,7 +826,8 @@ const mapDispatchToProps = (dispatch) => ({
     handleBoundingReset: bindActionCreators(resetPoints, dispatch),
     handleRegion: bindActionCreators(nuevaRegion, dispatch),
     handleTableDemandados: bindActionCreators(obtenerDemandadosTable, dispatch),
-    handleConfirmarEmbargo: bindActionCreators(confirmarEmbargo,dispatch)
+    handleConfirmarEmbargo: bindActionCreators(confirmarEmbargo, dispatch),
+    handleResetMsj: bindActionCreators(resetMensaje, dispatch)
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Confirmar)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Confirmar))
