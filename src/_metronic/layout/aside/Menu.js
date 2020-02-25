@@ -8,8 +8,8 @@ import * as builder from "../../ducks/builder";
 import MenuList from "./MenuList";
 import KTMenu from "../../_assets/js/menu";
 import KTUtil from "../../_assets/js/util";
-
-
+import {asideNoHover, asideHover} from '../../../app/redux/actions/interfazAction'
+import { bindActionCreators } from 'redux';
 
 class AsideLeft extends React.Component {
   asideMenuRef = React.createRef();
@@ -86,6 +86,7 @@ class AsideLeft extends React.Component {
    * @param e Event
    */
   mouseEnter = e => {
+    this.props.handleHover()
     // check if the left aside menu is fixed
     if (document.body.classList.contains("kt-aside--fixed")) {
       if (this.outsideTm) {
@@ -112,6 +113,7 @@ class AsideLeft extends React.Component {
    * @param e Event
    */
   mouseLeave = e => {
+    this.props.handleNoHover()
     if (document.body.classList.contains("kt-aside--fixed")) {
       if (this.insideTm) {
         clearTimeout(this.insideTm);
@@ -196,5 +198,9 @@ const mapStateToProps = store => ({
     toString: true
   })
 });
+const mapDispatchToProps=(dispatch)=>({
+  handleHover: bindActionCreators(asideHover, dispatch),
+  handleNoHover: bindActionCreators(asideNoHover, dispatch)
+})
 
-export default withRouter(connect(mapStateToProps)(AsideLeft));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(AsideLeft));

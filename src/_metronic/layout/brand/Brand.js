@@ -8,13 +8,14 @@ import * as builder from "../../ducks/builder";
 import { ReactComponent as AngleDoubleLeftIcon } from "../assets/layout-svg-icons/Angle-double-left.svg";
 import { ReactComponent as AngleDoubleRightIcon } from "../assets/layout-svg-icons/Angle-double-right.svg";
 
-
 class Brand extends React.Component {
   ktToggleRef = React.createRef();
 
   componentDidMount() {
     // eslint-disable-next-line no-undef
     new KTToggle(this.ktToggleRef.current, this.props.toggleOptions);
+    console.log('EL STOREEEEE')
+    console.log(this.props.hover)
   }
 
   render() {
@@ -27,26 +28,11 @@ class Brand extends React.Component {
           <Link to="">
             <img alt="logo" src={this.props.headerLogo} />
           </Link>
+         
         </div>
+        {this.props.hover?<></>: <div style={{width:'100%',display:'flex', justifyContent:'center', alignItems:'center'}}><img alt="logo" src='/media/logos/seiz-logo-collapse.png'/></div>}
 
-        {this.props.asideSelfMinimizeToggle && (
-          <div className="kt-aside__brand-tools">
-            <button
-              ref={this.ktToggleRef}
-              className="kt-aside__brand-aside-toggler"
-              id="kt_aside_toggler"
-            >
-              <span>
-                <img src="../../../../public/media/logos/seiz-logo-collapse.png"/>
-                {/* <AngleDoubleLeftIcon /> */}
-              </span>
-              <span>
-              <img src="../../../../public/media/logos/seiz-logo-collapse.png"/>
-                {/* <AngleDoubleRightIcon /> */}
-              </span>
-            </button>
-          </div>
-        )}
+       
       </div>
     );
   }
@@ -68,7 +54,8 @@ const mapStateToProps = store => {
       target: "body",
       targetState: "kt-aside--minimize",
       togglerState: "kt-aside__brand-aside-toggler--active"
-    }
+    },
+    hover: store.interfazReducer.hover
   };
 };
 

@@ -7,6 +7,7 @@ import uploadReducer from '../redux/modules/reducers/uploadReducer'
 import EmbargosReducer from '../redux/modules/reducers/EmbargosReducer'
 import userReducer from '../redux/modules/reducers/userReducer'
 import estadisticasReducer from '../redux/modules/reducers/estadisticasReducer'
+import interfazReducer from '../redux/modules/reducers/interfazReducer'
 //sagas
 import uploadSagas from "../redux/modules/sagas/uploadSaga";
 import embargosSagas from '../redux/modules/sagas/embargosSaga'
@@ -22,7 +23,8 @@ export const rootReducer = combineReducers({
   EmbargosReducer,
   boundingReducer,
   userReducer,
-  estadisticasReducer
+  estadisticasReducer,
+  interfazReducer
 });
 
 export function* rootSaga() {

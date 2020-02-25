@@ -1,0 +1,2 @@
+export const ASIDE_HOVER='ASIDE_HOVER';
+export const ASIDE_NO_HOVER='ASIDE_NO_HOVER';
