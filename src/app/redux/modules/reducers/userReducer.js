@@ -1,9 +1,10 @@
 
-import { GET_USER, GET_USER_SUCCESS } from '../../constants/userConst';
+import { GET_USER, GET_USER_SUCCESS, NUEVO_MENSAJE,RESET_MENSAJE } from '../../constants/userConst';
 
 export const Authstate = {
     loading: true,
     user: {},
+    mensaje:{exist:false, msj:''}
 }
 export default function authReducer(state = Authstate, action = {}) {
     switch (action.type) {
@@ -18,7 +19,16 @@ export default function authReducer(state = Authstate, action = {}) {
                 user: action.data,
                 loading: false,
             };
-
+        case NUEVO_MENSAJE:
+            return{
+                ...state,
+                mensaje:{exist:true, msj:action.mensaje}
+            } ;
+        case RESET_MENSAJE:
+            return{
+                ...state,
+                mensaje:{exist:false, msj:''}
+            }    
         default:
             return state;
     }

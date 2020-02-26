@@ -30,7 +30,7 @@ class Brand extends React.Component {
           </Link>
          
         </div>
-        {this.props.hover?<></>: <div style={{width:'100%',display:'flex', justifyContent:'center', alignItems:'center'}}><img alt="logo" src='/media/logos/seiz-logo-collapse.png'/></div>}
+        {this.props.hover?<></>: <div style={{width:'100%',display:'flex', justifyContent:'center', alignItems:'center'}}><img height={'61px'} alt="logo" src='/media/logos/seiz-logo-collapse.png'/></div>}
 
        
       </div>

@@ -4,11 +4,17 @@ import { connect } from 'react-redux';
 import './user.css'
 import { MdPhotoLibrary, MdEmail } from "react-icons/md";
 import Avatar from 'react-avatar';
-import { getUser } from '../../redux/actions/userAction'
+import { getUser, changePassword, resetMensaje, updateUser } from '../../redux/actions/userAction'
 import { FaUserTie, FaLock, FaStar, FaEdit, FaCheck, FaRegWindowClose } from "react-icons/fa";
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 class User extends Component {
     constructor(props) {
         super(props)
@@ -18,7 +24,8 @@ class User extends Component {
             password: '',
             passwordConfirmation: '',
             name: '',
-            surname: ''
+            surname: '',
+            error:false,
         }
 
     }
@@ -42,7 +49,18 @@ class User extends Component {
         this.setState({ isEdit: false })
     }
     handleConfirmEdit = () => {
-        //TODO
+        this.props.handleUpdateUser({
+        email: this.state.email,
+        name: this.state.name,
+        surname: this.state.surname,
+        enabled: this.props.user.user.enabled,
+        embTypes: this.props.user.user.embTypes,
+        roles: this.props.user.user.roles,
+        username: this.props.user.user.username,
+        id: this.props.match.params.id,
+        }, this.props.token)
+        
+        
     }
     render() {
         return (
@@ -76,10 +94,10 @@ class User extends Component {
                                     {this.state.isEdit ?
                                         <div style={{ display: 'flex', flexDirection: 'row' }} >
                                             <div className="container-inputs-text">
-                                                <TextField label="Nombre" value={this.state.name} onChange={(e)=>this.setState({name:e.target.value })} />
+                                                <TextField label="Nombre" value={this.state.name} onChange={(e) => this.setState({ name: e.target.value })} />
                                             </div>
                                             <div className="container-inputs-text">
-                                                <TextField label="Apellido" value={this.state.surname} onChange={(e)=>this.setState({surname:e.target.value })}
+                                                <TextField label="Apellido" value={this.state.surname} onChange={(e) => this.setState({ surname: e.target.value })}
                                                 />
                                             </div>
                                         </div>
@@ -94,10 +112,10 @@ class User extends Component {
                                 </div>
                                 <div className="content-information">
                                     {this.state.isEdit ? <div className="container-inputs-text">
-                                        <TextField label="Email" value={this.state.email} onChange={(e)=>this.setState({email:e.target.value })}
+                                        <TextField label="Email" value={this.state.email} onChange={(e) => this.setState({ email: e.target.value })}
                                         />
-                                    </div>:<h6>{this.state.email}</h6>}
-                                    
+                                    </div> : <h6>{this.state.email}</h6>}
+
                                 </div>
                             </div>
                             <div className="item-config">
@@ -126,10 +144,13 @@ class User extends Component {
                                     </div>
                                     <div className="content-information-password">
                                         <div className="container-inputs-text">
-                                            <TextField label="Contraseña" />
+                                            <TextField label="Contraseña" value={this.state.password} onChange={(e) => { this.setState({ password: e.target.value }) }} />
                                         </div>
                                         <div className="container-inputs-text">
-                                            <TextField label="Confirmar" />
+                                            <TextField label="Confirmar" value={this.state.passwordConfirmation} onChange={(e) => { this.setState({ passwordConfirmation: e.target.value }) }} />
+                                        </div>
+                                        <div className="container-inputs-text">
+                                            <button onClick={() => this.handlePassword({ password: this.state.password, confirm: this.state.passwordConfirmation, id: this.props.match.params.id }, this.props.token)}>Cambiar</button>
                                         </div>
 
 
@@ -141,9 +162,68 @@ class User extends Component {
 
                 </div>
                 }
+                <Dialog
+                    open={this.props.user.mensaje.exist}
+                    onClose={() => {
+                        this.props.handleResetMsj()
+                        this.handleCancelEdit()
+                    }
+                    }
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Confirmación de embargo"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            {this.props.user.mensaje.msj}
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
 
+                        <Button onClick={() => {
+                            this.props.handleResetMsj()
+                            this.handleCancelEdit()
+                        }} color="primary" autoFocus>
+                            Aceptar
+          </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={this.state.error}
+                    onClose={() => {
+                        this.setState({error:false,password: '',
+                        passwordConfirmation: '',})
+                    }
+                    }
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Cambio de contraseña"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            Las contraseñas no coinciden
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+
+                        <Button onClick={() => {
+                           this.setState({error:false,password: '',
+                           passwordConfirmation: '',})
+                        }} color="primary" autoFocus>
+                            Aceptar
+          </Button>
+                    </DialogActions>
+                </Dialog>
             </div>
         )
+    }
+    handlePassword = (data, token) => {
+        if (data.password === data.confirm) {
+            this.props.handleChangePassword(data, token)
+        }
+        else {
+            this.setState({error: true})
+        }
     }
 }
 const mapStateToProps = (state) => ({
@@ -151,6 +231,9 @@ const mapStateToProps = (state) => ({
     user: state.userReducer
 })
 const mapDispatchToProps = (dispatch) => ({
-    handleUserRequest: bindActionCreators(getUser, dispatch)
+    handleUserRequest: bindActionCreators(getUser, dispatch),
+    handleChangePassword: bindActionCreators(changePassword, dispatch),
+    handleResetMsj: bindActionCreators(resetMensaje, dispatch),
+    handleUpdateUser:bindActionCreators(updateUser,dispatch)
 })
 export default connect(mapStateToProps, mapDispatchToProps)(User)

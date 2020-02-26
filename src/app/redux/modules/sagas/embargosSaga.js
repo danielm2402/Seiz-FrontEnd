@@ -3,7 +3,7 @@ import {
 } from 'redux-saga/effects';
 import axios from 'axios';
 import {
-  GET_EMBARGO, GET_DEMANDADOS,
+  GET_EMBARGO, GET_DEMANDADOS,DELETE_DEMANDADO,
   GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_CONFIRMADOS, GET_EMBARGOS_POR_CONFIRMAR, GET_EMBARGOS_ALL, DELETE_EMBARGO, CONFIRMAR_EMBARGO
 } from '../../constants/EmbargosConst';
 import {
@@ -234,9 +234,10 @@ function* confirmarEmbargoSaga(payload) {
     headers: {
       Authorization: 'Bearer ' + payload.token,
       Accept: 'application/json',
+      "Content-Type":"application/json"
     },
   };
-  const data = yield axios.post('https://bancow.finseiz.com/api/v1/embargos/' + payload.data.id + '/confirm', {
+   const data = yield axios.post('https://bancow.finseiz.com/api/v1/embargos/' + payload.data.id + '/confirm', {
     account: payload.data.account,
     address: payload.data.address,
     amount: payload.data.amount,
@@ -251,8 +252,24 @@ function* confirmarEmbargoSaga(payload) {
     .then(response => response)
     .catch(err => err.response)
 
-    const data1 = yield axios.post('https://bancow.finseiz.com/api/v1/demandados/save?idEmbargo=' + payload.data.id, {
-     demandados:payload.data.demandados
+    console.log(payload.data.demandados)
+    const demandados= payload.data.demandados.data.map(demandado=>{
+      return({
+
+        amount: demandado.montoAEmbargar,
+        expedient: demandado.expediente,
+        fullname: demandado.nombres,
+        id: String(demandado.id).includes('local')?null:demandado.id,
+        identification: demandado.identificacion,
+        page: demandado.page,
+        typeIdentification: demandado.tipoIdentificacion        
+        })
+      })
+     
+      console.log((demandados))
+    const data1 = yield axios.post('https://bancow.finseiz.com/api/v1/demandados/save', {
+     demandados:demandados,
+     idEmbargo: payload.data.id
     },config )
       .then(response => response)
       .catch(err => err.response)
@@ -261,7 +278,7 @@ function* confirmarEmbargoSaga(payload) {
     
 console.log(data)
 console.log(data1)
-switch (data.status) {
+ switch (data.status) {
   case 200:
       yield put(nuevoMensaje('Embargo confirmado correctamente'))
     break;
@@ -273,6 +290,21 @@ switch (data.status) {
 }
 
 }
+function* eliminarDemandadoSaga(payload){
+  console.log('DELETE DEMANDADOS')
+  console.log(payload)
+  const config = {
+    headers: {
+      Authorization: 'Bearer ' + payload.token,
+      Accept: 'application/json',
+      "Content-Type":"application/json"
+    },
+  };
+  const data = yield axios.delete('https://bancow.finseiz.com/api/v1/demandados/'+payload.id,config) 
+  .then(response=>response)
+  .catch(error=>error.response)
+  console.log(data)
+}
 
 function* embargosRootSaga() {
   yield all([
@@ -283,8 +315,8 @@ function* embargosRootSaga() {
     takeEvery(DELETE_EMBARGO, deleteEmbargoSaga),
     takeEvery(GET_EMBARGO, getEmbargoSaga),
     takeEvery(GET_DEMANDADOS, getDemandadosSaga),
-    takeEvery(CONFIRMAR_EMBARGO, confirmarEmbargoSaga)
-
+    takeEvery(CONFIRMAR_EMBARGO, confirmarEmbargoSaga),
+    takeEvery(DELETE_DEMANDADO, eliminarDemandadoSaga)
 
 
 

@@ -36,3 +36,15 @@ export const addUserSuccess=(data)=>({
     data
 })
 
+export const changePassword=(data, token)=>({
+    type:types.CHANGE_PASSWORD,
+    data,
+    token
+})
+export const newMensaje=(mensaje)=>({
+    type:types.NUEVO_MENSAJE,
+    mensaje
+})
+export const resetMensaje=()=>({
+    type: types.RESET_MENSAJE
+})

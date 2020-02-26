@@ -74,6 +74,7 @@ function MaterialTableDemo(props) {
                   'estadoEmbargo': 'CONFIRMADO'
                 }
               };
+              console.log('DATOS DE TABLAAAAAAAAAA')
               axios.get('https://bancow.finseiz.com/api/v1/embargos/count?estadoEmbargo=SIN_CONFIRMAR',config)
               .then(response=>{
                 let total
@@ -81,8 +82,8 @@ function MaterialTableDemo(props) {
                 total=response.data
                 console.log(response)
                 console.log('INFORMACION DEL NUEVO REQUEST')
-                axios.get('https://bancow.finseiz.com/api/v1/embargos/list?estadoEmbargo=SIN_CONFIRMAR&page='+(query.page)+'+&size='+query.pageSize
-                , config)
+                axios.post('https://bancow.finseiz.com/api/v1/embargos/list?estadoEmbargo=SIN_CONFIRMAR&page='+(query.page)+'+&size='+query.pageSize
+                ,{}, config)
                    .then(response1 => {
                      
                        var separar = response1.headers.links.split(",")
@@ -97,12 +98,9 @@ function MaterialTableDemo(props) {
                              page= subcadena.split('&')[0]
                       
                            }
-                          
-                      
+
                          }
-           
-                         
-   
+
                          )
                        })
                        if(page== undefined)
@@ -119,7 +117,10 @@ function MaterialTableDemo(props) {
                          })
                    })
                    
-                   .catch(err => console.log(err.response))
+                   .catch(err =>{
+                     console.log('ERROR EN LOS DATOS DE LA TABLA')
+                    console.log(err.response)
+                   } )
               
               })
             

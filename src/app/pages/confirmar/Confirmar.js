@@ -9,7 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import { withRouter } from "react-router-dom";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
-import { getDemandados, getEmbargo, resetMensaje} from '../../redux/actions/embargosAction'
+import { getDemandados, getEmbargo, resetMensaje } from '../../redux/actions/embargosAction'
 import Tabla from './Tabla'
 import './Tabla.css'
 import { ToastContainer, toast } from 'react-toastify';
@@ -578,11 +578,13 @@ class Confirmar extends Component {
                                 <TableDemandantes page={this.state.pageNumber} demandantes={this.state.demandantes} />
 
                                 <input onClick={this.confirmarEmbargo} type="button" class="confirm-form-btn " value="Confirmar Embargo" />
-            
+
                                 <Dialog
                                     open={this.props.mensaje.exist}
-                                    onClose={()=>{this.props.handleResetMsj()
-                                        this.props.history.goBack()}
+                                    onClose={() => {
+                                        this.props.handleResetMsj()
+                                        this.props.history.push('/no-confirmados')
+                                    }
                                     }
                                     aria-labelledby="alert-dialog-title"
                                     aria-describedby="alert-dialog-description"
@@ -591,15 +593,16 @@ class Confirmar extends Component {
                                     <DialogContent>
                                         <DialogContentText id="alert-dialog-description">
                                             {this.props.mensaje.msj}
-          </DialogContentText>
+                                        </DialogContentText>
                                     </DialogContent>
                                     <DialogActions>
-  
-                                        <Button onClick={()=>{this.props.handleResetMsj()
-                                        this.props.history.goBack()
+
+                                        <Button onClick={() => {
+                                            this.props.handleResetMsj()
+                                            this.props.history.push('/no-confirmados')
                                         }} color="primary" autoFocus>
                                             Aceptar
-          </Button>
+                                          </Button>
                                     </DialogActions>
                                 </Dialog>
                             </div>
@@ -817,7 +820,7 @@ const mapStateToProps = (state) => ({
     resaltado: state.EmbargosReducer.embargo.json1,
     boundingRedux: state.boundingReducer.boundigTable,
     loadingDemandadosTable: state.boundingReducer.loadingDemandados,
-    mensaje:state.EmbargosReducer.mensaje
+    mensaje: state.EmbargosReducer.mensaje
 
 })
 const mapDispatchToProps = (dispatch) => ({

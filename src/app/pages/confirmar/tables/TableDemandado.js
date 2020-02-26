@@ -87,7 +87,7 @@ class TableDemandado extends Component {
         this.setState({ itemEdit: id })
     }
     handleDelete = (id) => {
-        this.props.handleDelete(id)
+        this.props.handleDelete(id, this.props.token)
     }
     focusElement(e, palabra) {
         console.log(e.target.name)
@@ -496,8 +496,8 @@ const mapStateToProps = (state) => ({
     demandados: state.EmbargosReducer.demandados,
     resaltado: state.EmbargosReducer.embargo.json1,
     bounding: state.boundingReducer.palabra,
-    tablaBounding: state.boundingReducer.tabla
-
+    tablaBounding: state.boundingReducer.tabla,
+    token: state.auth.authToken,
 })
 const mapDispatchToProps = (dispatch) => ({
     handleBounding: bindActionCreators(changePoints, dispatch),

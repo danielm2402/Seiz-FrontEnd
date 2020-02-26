@@ -81,8 +81,8 @@ function MaterialTableDemo(props) {
                 total=response.data
                 console.log(response)
                 console.log('INFORMACION DEL NUEVO REQUEST')
-                axios.get('https://bancow.finseiz.com/api/v1/embargos/list?estadoEmbargo=SIN_CONFIRMAR&page='+(query.page)+'+&size='+query.pageSize
-                , config)
+                axios.post('https://bancow.finseiz.com/api/v1/embargos/list?estadoEmbargo=SIN_CONFIRMAR&page='+(query.page)+'+&size='+query.pageSize
+                ,{}, config)
                    .then(response1 => {
                      
                        var separar = response1.headers.links.split(",")
