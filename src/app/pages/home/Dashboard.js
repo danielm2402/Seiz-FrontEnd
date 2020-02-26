@@ -108,43 +108,45 @@ function Dashboard(props) {
         <Link to="/upload">
           <Tarjet nombre="Subir oficio" width="210px" height="141px" number={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.total}>
             <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
-          <CircularProgressbar strokeWidth={5}value={66} text={'60%'} />
+         
           </div>
           </Tarjet>
         </Link>
 
         <Link to="/listar/no-confirmados">
-          <Tarjet nombre="Por Confirmar" width="210px" height="141px"number={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.PorConfirmar}>
+          <Tarjet nombre="Sin Confirmar" width="210px" height="141px"number={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.PorConfirmar}>
           <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
-          <CircularProgressbar strokeWidth={5}value={16} text={'16%'} />
+          <CircularProgressbar strokeWidth={5}value={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.porcentajePorConfirmar} text={props.conteoEmbargos.loading?'0%':(String(props.conteoEmbargos.data.porcentajePorConfirmar)).concat('%')} />
           </div>
           </Tarjet>
         </Link>
         <Link to="/listar/confirmados">
           <Tarjet nombre="Confirmados" width="210px" height="141px" number={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.confirmados}>
           <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
-          <CircularProgressbar strokeWidth={5}value={30} text={'30%'} />
+          <CircularProgressbar strokeWidth={5} value={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.porcentajeConfirmados} text={props.conteoEmbargos.loading?'0%':(String(props.conteoEmbargos.data.porcentajeConfirmados)).concat('%')} />
           </div>
           </Tarjet>
         </Link>
         <Link to="/listar/todos">
           <Tarjet nombre="Buscar" width="210px" height="141px" number={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.total}>
           <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
-          <CircularProgressbar strokeWidth={5}value={20} text={'20%'} />
+         
           </div>
           </Tarjet>
         </Link>
         <Link>
-          <Tarjet nombre="Cartas" width="210px" height="141px" number="5">
+          <Tarjet nombre="Cartas" width="210px" height="141px" number={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.cartas}>
           <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
-          <CircularProgressbar strokeWidth={5}value={50} text={'50%'} />
+          <CircularProgressbar strokeWidth={5}value={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.porcentajeCartas} text={props.conteoEmbargos.loading?'0%':(String(props.conteoEmbargos.data.porcentajeCartas)).concat('%')} />
+          
           </div>
           </Tarjet>
         </Link>
         <Link to="/listar/asignados">
           <Tarjet nombre="Asignados" width="210px" height="141px" number={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.asignados}>
           <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
-          <CircularProgressbar strokeWidth={5}value={46} text={'46%'} />
+          <CircularProgressbar strokeWidth={5}value={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.porcentajeAsignados} text={props.conteoEmbargos.loading?'0%':(String(props.conteoEmbargos.data.porcentajeAsignados)).concat('%')} />
+          
           </div>
           </Tarjet>
         </Link>
