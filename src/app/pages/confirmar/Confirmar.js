@@ -583,7 +583,7 @@ class Confirmar extends Component {
                                     open={this.props.mensaje.exist}
                                     onClose={() => {
                                         this.props.handleResetMsj()
-                                        this.props.history.push('/no-confirmados')
+                                        this.props.history.push('/listar/no-confirmados')
                                     }
                                     }
                                     aria-labelledby="alert-dialog-title"
@@ -599,7 +599,7 @@ class Confirmar extends Component {
 
                                         <Button onClick={() => {
                                             this.props.handleResetMsj()
-                                            this.props.history.push('/no-confirmados')
+                                            this.props.history.push('/listar/no-confirmados')
                                         }} color="primary" autoFocus>
                                             Aceptar
                                           </Button>
@@ -631,7 +631,7 @@ class Confirmar extends Component {
                 sender: this.state.entidad,
                 id: this.state.referencia,
                 demandados: this.props.demandados,
-
+                demandantes:this.props.embargo.data.plaintiffs
             }
             this.props.handleConfirmarEmbargo(data, this.props.token)
 

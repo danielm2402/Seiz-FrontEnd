@@ -236,7 +236,7 @@ function* confirmarEmbargoSaga(payload) {
       Accept: 'application/json',
       "Content-Type":"application/json"
     },
-  };
+  }; 
    const data = yield axios.post('https://bancow.finseiz.com/api/v1/embargos/' + payload.data.id + '/confirm', {
     account: payload.data.account,
     address: payload.data.address,
@@ -252,10 +252,8 @@ function* confirmarEmbargoSaga(payload) {
     .then(response => response)
     .catch(err => err.response)
 
-    console.log(payload.data.demandados)
     const demandados= payload.data.demandados.data.map(demandado=>{
       return({
-
         amount: demandado.montoAEmbargar,
         expedient: demandado.expediente,
         fullname: demandado.nombres,
@@ -266,18 +264,37 @@ function* confirmarEmbargoSaga(payload) {
         })
       })
      
-      console.log((demandados))
+    if(demandados.length>0){
+
     const data1 = yield axios.post('https://bancow.finseiz.com/api/v1/demandados/save', {
      demandados:demandados,
      idEmbargo: payload.data.id
     },config )
       .then(response => response)
       .catch(err => err.response)
-     
+      console.log(data1)
+    }
 
+  
+    const demandantes= payload.data.demandantes.map(demandante=>{
+      return({
+        ...demandante,
+        id:String(demandante.id).includes('local')?null:demandante.id
+      })
+    })
+    if(demandantes.length>0)
+    {
+     const data2= yield axios.post('https://bancow.finseiz.com/api/v1/demandantes/save',{
     
-console.log(data)
-console.log(data1)
+        demandantes:demandantes,
+        idEmbargo:payload.data.id
+
+     }, config) 
+     .then(response=>response)
+     .catch(err=>err.response)
+     console.log(data2)
+    }
+
  switch (data.status) {
   case 200:
       yield put(nuevoMensaje('Embargo confirmado correctamente'))
