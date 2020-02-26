@@ -64,8 +64,11 @@ function MaterialTableDemo(props) {
                   'estadoEmbargo': 'CONFIRMADO'
                 }
               };
-              axios.get('https://bancow.finseiz.com/api/v1/embargos/count?estadoEmbargo=CONFIRMADO',config)
+              console.log('VOLVIENDO A LISTAR')
+              axios.get('https://bancow.finseiz.com/api/v1/users/list?size=2',config)
               .then(response=>{
+               
+                console.log(response)
                 let total
                 var page
                 total=response.data
@@ -74,15 +77,14 @@ function MaterialTableDemo(props) {
                 axios.get('https://bancow.finseiz.com/api/v1/users/list?page='+(query.page)+'+&size='+query.pageSize
                 , config)
                    .then(response1 => {
-                     
-                       var separar = response1.headers.links.split(",")
+                       var separar = response.headers.links.split(",")
                       const array= separar.map((item)=>{
                          return item.split(";")
                        })
                        array.map((item)=>{
                          item.map((item1)=>{
-                           if(item1.trim() ==='rel="next"'){
-                             console.log(item)
+                           if(item1.trim() ==='rel="last"'){
+                            
                              var subcadena=item[0].split('=')[1]
                              page= subcadena.split('&')[0]
                       
@@ -94,13 +96,13 @@ function MaterialTableDemo(props) {
                        {
                          page=query.page+1
                        }
-                       console.log(response1)
+                       console.log('LA RESPUESTA DE LA SOLICITUD ES:')
                        console.log(page)
                      
                        resolve({
                            data: response1.data,
-                          page: page-1,
-                          totalCount:total
+                          page: response1.data.length-1,
+                          totalCount:(page*2)
                          })
                    })
                    
@@ -120,11 +122,12 @@ function MaterialTableDemo(props) {
         })
       ]}
       options={{
-        filtering: true,
+       
+        filtering: false,
         pageSize: 20,
         pageSizeOptions: [],
         toolbar: true,
-        paging: true,
+        paging: false,
         rowStyle: {
           backgroundColor: '#EEE',
         }
