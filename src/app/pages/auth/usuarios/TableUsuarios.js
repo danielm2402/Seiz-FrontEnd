@@ -74,7 +74,7 @@ function MaterialTableDemo(props) {
                 total=response.data
                 console.log(response)
                 console.log('INFORMACION DEL NUEVO REQUEST')
-                axios.get('https://bancow.finseiz.com/api/v1/users/list?page='+(query.page)+'+&size='+query.pageSize
+                axios.get('https://bancow.finseiz.com/api/v1/users/list?'+'size=50'
                 , config)
                    .then(response1 => {
                        var separar = response.headers.links.split(",")

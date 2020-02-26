@@ -65,6 +65,8 @@ function MaterialTableDemo(props) {
       }}
       data={query =>
         new Promise((resolve, reject) => {
+          console.log('QUERYYY')
+          console.log(query.page)
             const config = {
                 headers: {
                   Authorization: 'Bearer ' + props.token,
@@ -79,9 +81,7 @@ function MaterialTableDemo(props) {
                 let total
                 var page
                 total=response.data
-                console.log(response)
-                console.log('INFORMACION DEL NUEVO REQUEST')
-                axios.post('https://bancow.finseiz.com/api/v1/embargos/list?estadoEmbargo=CONFIRMADO&page='+(query.page)+'+&size='+query.pageSize
+                axios.post('https://bancow.finseiz.com/api/v1/embargos/list?estadoEmbargo=CONFIRMADO&page='+(query.page)+'&size='+query.pageSize
                ,{} , config)
                    .then(response1 => {
                      
@@ -89,29 +89,24 @@ function MaterialTableDemo(props) {
                       const array= separar.map((item)=>{
                          return item.split(";")
                        })
+                       console.log('BANDERAAAAA')
                        array.map((item)=>{
                          item.map((item1)=>{
-                           if(item1.trim() ==='rel="next"'){
-                             console.log(item)
+                           console.log(item1)
+                           if(item1.trim() ==='rel="next"'){                   
                              var subcadena=item[0].split('=')[1]
                              page= subcadena.split('&')[0]
-                      
                            }
-                          
-                      
+
                          }
-           
-                         
-   
                          )
                        })
                        if(page== undefined)
                        {
                          page=query.page+1
                        }
+                       
                        console.log(response1)
-                       console.log(page)
-                     
                        resolve({
                            data: response1.data,
                           page: page-1,
