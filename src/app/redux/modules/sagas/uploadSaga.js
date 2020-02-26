@@ -8,6 +8,7 @@ import {
 import {
 uploadFailed, uploadSuccess
 }from '../../actions/uploadAction'
+import * as auth from "../../../store/ducks/auth.duck";
 
 function* uploadSaga(payload) {
     console.log('upload desde saga...');
@@ -17,7 +18,7 @@ function* uploadSaga(payload) {
     const config = {
         headers: {  
             Authorization: 'Bearer ' + payload.token, 
-           
+            'Content-Type':'application/pdf'
         }
     };
     const data= yield axios.post('https://bancow.finseiz.com/api/v1/embargos/upload',bodyFormData, config)
@@ -27,9 +28,14 @@ function* uploadSaga(payload) {
     switch (data.status) {
         case 200:
             yield put(uploadSuccess())
+            
         break;
+        case 401:
+            yield put(auth.actions.logout())
+            break;
     
         default:
+            
             yield put(uploadFailed())
             break;
     }

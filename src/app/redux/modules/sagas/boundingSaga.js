@@ -9,8 +9,8 @@ import {
 import {
     obtenerDemandadosTableSuccess
 } from '../../actions/boundingAction'
-import{getDemandadosSuccess} from '../../actions/embargosAction'
-
+import { getDemandadosSuccess } from '../../actions/embargosAction'
+import * as auth from "../../../store/ducks/auth.duck";
 function* obtenerDemandadosTableSaga(payload) {
     console.log('OBTENIENDO DEMANDADOS TABLA saga...');
     console.log(payload.vertices)
@@ -24,30 +24,30 @@ function* obtenerDemandadosTableSaga(payload) {
         }
     };
     const data = yield axios.post('https://bancow.finseiz.com/api/v1/demandados/seiz/extractTable', {
-        
-        verticalLines:[],
-        pageNumber:(payload.page-1),
-        boundingPoly:{vertices:payload.vertices},
-        keyColumns:payload.columns
+
+        verticalLines: [],
+        pageNumber: (payload.page - 1),
+        boundingPoly: { vertices: payload.vertices },
+        keyColumns: payload.columns
     }, config)
         .then(response => response)
         .catch(error => error.response)
     console.log(data)
     switch (data.status) {
         case 200:
-            const vector=data.data.map((item)=>{
-                  return JSON.parse(item.content)
-            
+            const vector = data.data.map((item) => {
+                return JSON.parse(item.content)
+
             })
-            var cont=0;
-            const vectorEdit= vector.map((item)=>{
-                cont=cont+1;
-                return{
+            var cont = 0;
+            const vectorEdit = vector.map((item) => {
+                cont = cont + 1;
+                return {
                     id: cont,
-                    nombres:item.nombre,
-                    identificacion:item.identificacion,
-                    montoAEmbargar:item.monto,
-                    tipoIdentificacion:'NO_SELECCIONADO'
+                    nombres: item.nombre,
+                    identificacion: item.identificacion,
+                    montoAEmbargar: item.monto,
+                    tipoIdentificacion: 'NO_SELECCIONADO'
                 }
             })
             console.log('EL VECTOR EDIT')
@@ -55,7 +55,10 @@ function* obtenerDemandadosTableSaga(payload) {
             yield put(getDemandadosSuccess(vectorEdit))
             yield put(obtenerDemandadosTableSuccess(vectorEdit))
             break;
-    
+        case 401:
+            yield put(auth.actions.logout())
+            break;
+
         default:
             break;
     }

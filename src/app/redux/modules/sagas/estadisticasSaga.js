@@ -5,6 +5,7 @@ import {
 import axios from 'axios';
 import { CONTEO_EMBARGOS, CONTEO_EMBARGOS_SUCCESS, STATS_USER, STATS_USER_SUCCESS, STATS_GENERAL, STATS_GENERAL_SUCCESS } from '../../constants/estadisticasConst'
 import {getConteoEmbargosSuccess } from '../../actions/estadisticasAction'
+import * as auth from "../../../store/ducks/auth.duck";
 function* conteoEmbargosSaga(payload) {
     console.log('OBTENIENDO contengo embargos saga...');
     const config = {
