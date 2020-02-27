@@ -63,10 +63,13 @@ export const getDemandadosSuccess=(data)=>({
     data
 })
 
-export const updateDemandando=(id, data)=>({
+export const updateDemandando=(id, data, demandados, token, idDoc)=>({
     type:types.UPDATE_DEMANDADO,
     id,
-    data
+    data,
+    idDoc,
+    token,
+    demandados
 })
 export const updateDemandante=(id, data)=>({
     type:types.UPDATE_DEMANDANTE,
@@ -82,13 +85,16 @@ export const deleteDemandado=(id, token)=>({
     id,
     token
 })
-export const addDemandado=(data)=>({
+export const addDemandado=(data, demandados, token, id)=>({
     type:types.CREATE_DEMANDADO,
-    data
+    data,
+    demandados,
+    token,
+    id
 })
 export const addDemandante=(data)=>({
     type:types.CREATE_DEMANDANTE,
-    data
+    data,
 })
 export const confirmarEmbargo=(data, token)=>({
     type:types.CONFIRMAR_EMBARGO,
@@ -103,4 +109,23 @@ export const nuevoMensaje=(data)=>({
 export const resetMensaje=()=>({
     type:types.RESET_MENSAJE
 })
+export const saveDemandados=(data, token,id)=>({
+    type:types.SAVE_DEMANDADOS,
+    data,
+    token,
+    id
+})
+
+export const getDemandadosUpdateTable=(id, token)=>({
+    type:types.GET_DEMANDADOS_UPDATE_TABLE,
+    id,
+    token
+})
+
+export const getDemandadosUpdateTableSuccess=(data)=>({
+    type:types.GET_DEMANDADOS_UPDATE_TABLE_SUCCESS,
+    data
+})
+
+
 

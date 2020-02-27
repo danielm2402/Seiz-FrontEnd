@@ -2,13 +2,15 @@ import {
   call, fork, put, take, takeEvery, all
 } from 'redux-saga/effects';
 import axios from 'axios';
-import {
-  GET_EMBARGO, GET_DEMANDADOS, DELETE_DEMANDADO,
+import {UPDATE_DEMANDADO,
+  GET_EMBARGO, GET_DEMANDADOS, DELETE_DEMANDADO, SAVE_DEMANDADOS, GET_DEMANDADOS_UPDATE_TABLE, CREATE_DEMANDADO,
   GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_CONFIRMADOS, GET_EMBARGOS_POR_CONFIRMAR, GET_EMBARGOS_ALL, DELETE_EMBARGO, CONFIRMAR_EMBARGO
 } from '../../constants/EmbargosConst';
 import {
+  getDemandados,
   getEmbargosAll, getEmbargosAsignados, getEmbargosPorConfirmar, getEmbargosConfirmados, getDemandadosSuccess, getEmbargoSuccess,
   getEmbargosConfirmadosSuccess, getEmbargosPorConfirmarSuccess, getEmbargosAsignadosSuccess, getEmbargosAllSuccess, nuevoMensaje, resetMensaje
+  , getDemandadosUpdateTable, getDemandadosUpdateTableSuccess
 } from '../../actions/embargosAction'
 import * as auth from "../../../store/ducks/auth.duck";
 import { saveAs } from 'file-saver';
@@ -58,9 +60,9 @@ function* getEmbargosSinConfirmarSaga(payload) {
     case 200:
       yield put(getEmbargosPorConfirmarSuccess(data.data))
       break;
-      case 401:
-        yield put(auth.actions.logout())
-        break;
+    case 401:
+      yield put(auth.actions.logout())
+      break;
     default:
       break;
   }
@@ -85,9 +87,9 @@ function* getEmbargosAsignadosSaga(payload) {
     case 200:
       yield put(getEmbargosAsignadosSuccess(data.data))
       break;
-      case 401:
-        yield put(auth.actions.logout())
-        break;
+    case 401:
+      yield put(auth.actions.logout())
+      break;
     default:
       break;
   }
@@ -109,9 +111,9 @@ function* getEmbargosAllSaga(payload) {
     case 200:
       yield put(getEmbargosAllSuccess(data.data))
       break;
-      case 401:
-        yield put(auth.actions.logout())
-        break;
+    case 401:
+      yield put(auth.actions.logout())
+      break;
     default:
       break;
   }
@@ -143,7 +145,7 @@ function* deleteEmbargoSaga(payload) {
         yield put(getEmbargosAll(payload.token))
       }
       break;
-      case 401:
+    case 401:
       yield put(auth.actions.logout())
       break;
 
@@ -208,9 +210,9 @@ function* getEmbargoSaga(payload) {
 
       yield put(getEmbargoSuccess(data.data, url, json, json1))
       break;
-      case 401:
-        yield put(auth.actions.logout())
-        break;  
+    case 401:
+      yield put(auth.actions.logout())
+      break;
 
     default:
       break;
@@ -235,9 +237,9 @@ function* getDemandadosSaga(payload) {
     case 200:
       yield put(getDemandadosSuccess(data.data))
       break;
-      case 401:
-        yield put(auth.actions.logout())
-        break;
+    case 401:
+      yield put(auth.actions.logout())
+      break;
     default:
       break;
   }
@@ -315,9 +317,9 @@ function* confirmarEmbargoSaga(payload) {
     case 200:
       yield put(nuevoMensaje('Embargo confirmado correctamente'))
       break;
-      case 401:
-        yield put(auth.actions.logout())
-        break;
+    case 401:
+      yield put(auth.actions.logout())
+      break;
     default:
       yield put(nuevoMensaje('Embargo no pudo ser confirmado correctamente, contacte a soporte'))
 
@@ -343,10 +345,181 @@ function* eliminarDemandadoSaga(payload) {
     case 401:
       yield put(auth.actions.logout())
       break;
-  
+
     default:
       break;
   }
+}
+function* saveDemandadosSaga(payload) {
+  console.log('SALVANDO DEMANDADOS')
+  console.log(payload.data)
+  const config = {
+    headers: {
+      Authorization: 'Bearer ' + payload.token,
+      Accept: 'application/json',
+      "Content-Type": "application/json"
+    },
+  };
+  const demandados = payload.data.map(demandado => {
+    return ({
+      amount: demandado.montoAEmbargar,
+      expedient: demandado.expediente,
+      fullname: demandado.nombres,
+      id: String(demandado.id).includes('local') ? null : demandado.id,
+      identification: demandado.identificacion,
+      page: demandado.page,
+      typeIdentification: demandado.tipoIdentificacion
+    })
+  })
+
+  if (demandados.length > 0) {
+    const data1 = yield axios.post('https://bancow.finseiz.com/api/v1/demandados/save', {
+      demandados: demandados,
+      idEmbargo: payload.id
+    }, config)
+      .then(response => response)
+      .catch(err => err.response)
+    console.log(data1)
+    switch (data1.status) {
+      case 200:
+        console.log("200000")
+        yield put(getDemandadosUpdateTable(payload.id, payload.token))
+        break;
+
+      default:
+        break;
+    }
+  }
+}
+function* crearDemandadoSaga(payload) {
+  console.log('GET demandado');
+  const config = {
+    headers: {
+      Authorization: 'Bearer ' + payload.token,
+      Accept: 'application/json',
+    },
+    params: {
+      'idEmbargo': payload.id
+    }
+  };
+  console.log('MIDDLEWAREEEE')
+  console.log(payload.demandados)
+  console.log(payload.data)
+  var demandados = [payload.data, ...payload.demandados]
+  const demandadosReq = demandados.map(demandado => {
+    return ({
+      amount: demandado.montoAEmbargar,
+      expedient: demandado.expediente,
+      fullname: demandado.nombres,
+      id: String(demandado.id).includes('local') ? null : demandado.id,
+      identification: demandado.identificacion,
+      page: demandado.page,
+      typeIdentification: demandado.tipoIdentificacion
+    })
+  })
+
+  if (demandadosReq.length > 0) {
+    const data1 = yield axios.post('https://bancow.finseiz.com/api/v1/demandados/save', {
+      demandados: demandadosReq,
+      idEmbargo: payload.id
+    }, config)
+      .then(response => response)
+      .catch(err => err.response)
+    console.log(data1)
+    switch (data1.status) {
+      case 200:
+        const data = yield axios.get('https://bancow.finseiz.com/api/v1/demandados/list', config)
+          .then(response => response)
+          .catch(err => err.response)
+          console.log(data)
+          switch (data.status) {
+            case 200:
+              yield put(getDemandadosUpdateTableSuccess(data.data));
+              break;
+          
+            default:
+              break;
+          }
+        
+        break;
+
+      default:
+        break;
+    }
+
+
+  }
+}
+
+function* updateDemandadoSaga(payload) {
+  console.log('GET demandado');
+  const config = {
+    headers: {
+      Authorization: 'Bearer ' + payload.token,
+      Accept: 'application/json',
+    },
+    params: {
+      'idEmbargo': payload.idDoc
+    }
+  };
+  console.log('MIDDLEWAREEEE')
+  console.log(payload.demandados)
+  console.log(payload.data)
+  
+  const demandadosReq = payload.demandados.map(demandado => {
+    if(demandado.id==payload.id){
+      return ({
+        amount: payload.data.montoAEmbargar,
+        expedient: demandado.expediente,
+        fullname: payload.data.nombres,
+        id:payload.id,
+        identification: payload.data.identificacion,
+        page: demandado.page,
+        typeIdentification: payload.data.tipoIdentificacion
+      })
+    }
+    return ({
+      amount: demandado.montoAEmbargar,
+      expedient: demandado.expediente,
+      fullname: demandado.nombres,
+      id: String(demandado.id).includes('local') ? null : demandado.id,
+      identification: demandado.identificacion,
+      page: demandado.page,
+      typeIdentification: demandado.tipoIdentificacion
+    })
+  })
+  console.log(demandadosReq)
+   if (demandadosReq.length > 0) {
+    const data1 = yield axios.post('https://bancow.finseiz.com/api/v1/demandados/save', {
+      demandados: demandadosReq,
+      idEmbargo: payload.idDoc
+    }, config)
+      .then(response => response)
+      .catch(err => err.response)
+    console.log(data1)
+    switch (data1.status) {
+      case 200:
+        const data = yield axios.get('https://bancow.finseiz.com/api/v1/demandados/list', config)
+          .then(response => response)
+          .catch(err => err.response)
+          console.log(data)
+          switch (data.status) {
+            case 200:
+              yield put(getDemandadosUpdateTableSuccess(data.data));
+              break;
+          
+            default:
+              break;
+          }
+        
+        break;
+
+      default:
+        break;
+    }
+
+
+  } 
 }
 
 function* embargosRootSaga() {
@@ -359,7 +532,11 @@ function* embargosRootSaga() {
     takeEvery(GET_EMBARGO, getEmbargoSaga),
     takeEvery(GET_DEMANDADOS, getDemandadosSaga),
     takeEvery(CONFIRMAR_EMBARGO, confirmarEmbargoSaga),
-    takeEvery(DELETE_DEMANDADO, eliminarDemandadoSaga)
+    takeEvery(DELETE_DEMANDADO, eliminarDemandadoSaga),
+    takeEvery(SAVE_DEMANDADOS, saveDemandadosSaga),
+    takeEvery(CREATE_DEMANDADO, crearDemandadoSaga),
+    takeEvery(UPDATE_DEMANDADO,updateDemandadoSaga)
+
 
 
 

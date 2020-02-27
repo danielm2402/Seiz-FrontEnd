@@ -35,12 +35,11 @@ class TableDemandantes extends Component {
     componentDidUpdate(prevProps) {
 
         if (this.props.bounding !== prevProps.bounding) {
-            console.log('NUEVA PALABRAAAA')
-            console.log(this.props.tablaBounding)
+
             if (this.props.tablaBounding == 'demandantes') {
-                console.log('CAMBIANDO LA PALABRA DEL INPUT')
+               
                 this.setState({ [this.state.ultimFocus.tipo]: this.props.bounding }, function () {
-                    console.log(this.state.nombre)
+                    
                 })
             }
 
@@ -119,10 +118,7 @@ class TableDemandantes extends Component {
         }
     }
     focusElement2(e, palabra, id, tipo, column) {
-        console.log('el id')
-        console.log(id)
-        console.log(palabra)
-
+       
 
         this.setState({ ultimFocus: { id: id, tipo: column } })
         this.props.handleUltimTable('demandantes')

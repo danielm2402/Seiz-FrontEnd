@@ -2,7 +2,7 @@
 import {
     GET_DEMANDADOS_SUCCESS, GET_EMBARGO_SUCCESS, GET_EMBARGOS_CONFIRMADOS, GET_EMBARGO, GET_DEMANDADOS, GET_EMBARGOS_CONFIRMADOS_SUCCESS, GET_EMBARGOS_POR_CONFIRMAR, GET_EMBARGOS_POR_CONFIRMAR_SUCCESS,
     GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_ASIGNADOS_SUCCESS, GET_EMBARGOS_ALL, GET_EMBARGOS_ALL_SUCCESS, UPDATE_DEMANDADO, UPDATE_DEMANDANTE,DELETE_DEMANDANTE,DELETE_DEMANDADO, CREATE_DEMANDANTE, CREATE_DEMANDADO
-    ,NUEVO_MESANJE, RESET_MENSAJE
+    ,NUEVO_MESANJE, RESET_MENSAJE, GET_DEMANDADOS_UPDATE_TABLE_SUCCESS, GET_DEMANDADOS_UPDATE_TABLE
 } from '../../constants/EmbargosConst';
 
 export const Authstate = {
@@ -12,7 +12,7 @@ export const Authstate = {
     asignados: [],
     all: [],
     embargo: { loading: true, data: { plaintiffs: [] }, document: null, json: null, json1: null },
-    demandados: { loading: true, data: [] },
+    demandados: { isUpdate:false ,loading: true, data: []},
     mensaje:{exist:false, msj:''}
 
 }
@@ -69,13 +69,19 @@ export default function authReducer(state = Authstate, action = {}) {
         case GET_DEMANDADOS:
             return {
                 ...state,
-                demandados: { loading: true, data: [] }
+                demandados: {isUpdate:false,loading: true, data: [] }
             }
+        
         case GET_DEMANDADOS_SUCCESS:
             return {
                 ...state,
-                demandados: { loading: false, data: action.data }
+                demandados: { isUpdate:false, loading: false, data: action.data}
             }
+        case GET_DEMANDADOS_UPDATE_TABLE_SUCCESS:
+            return{
+                ...state,
+                demandados: {isUpdate:false,loading: false, data: action.data}
+            }    
         case GET_EMBARGO_SUCCESS:
             return {
                 ...state,
@@ -127,7 +133,7 @@ export default function authReducer(state = Authstate, action = {}) {
         case CREATE_DEMANDADO:
             return{
                 ...state,
-                demandados:{loading:false, data:[action.data,...state.demandados.data]}
+                demandados:{isUpdate:true,loading:false, data:[action.data,...state.demandados.data]}
             } 
         case CREATE_DEMANDANTE:
             return{

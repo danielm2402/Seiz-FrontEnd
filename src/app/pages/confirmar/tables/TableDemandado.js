@@ -12,7 +12,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-import { updateDemandando, deleteDemandado, addDemandado } from '../../../redux/actions/embargosAction'
+import { updateDemandando, deleteDemandado, addDemandado,saveDemandados } from '../../../redux/actions/embargosAction'
+
 class TableDemandado extends Component {
     constructor(props) {
         super(props)
@@ -39,34 +40,35 @@ class TableDemandado extends Component {
     componentDidUpdate(prevProps) {
 
         if (this.props.bounding !== prevProps.bounding) {
-            console.log('NUEVA PALABRAAAA')
-            console.log(this.props.tablaBounding)
+           
             if (this.props.tablaBounding == 'demandados') {
-                console.log('CAMBIANDO LA PALABRA DEL INPUT')
+                
                 this.setState({ [this.state.ultimFocus.tipo]: this.props.bounding }, function () {
-                    console.log(this.state.nombre)
+                    
                 })
             }
 
         }
         if (this.props.demandados !== prevProps.demandados) {
+           
             if (this.props.demandados.data.length % 5 === 0) {
                 this.setState({ totalPages: { exacts: (this.props.demandados.data.length / 5), numRecorrido: 1 } })
             }
             else {
                 this.setState({ totalPages: { exacts: (Math.trunc(this.props.demandados.data.length / 5)) + 1, numRecorrido: 1 } })
             }
+            
 
         }
     }
     handleEdit = (id, nombre, tipo, identificacion, monto) => {
 
         this.setState({ itemEdit: id, nombre: nombre, tipo: tipo, identificacion: identificacion, monto: monto }, function () {
-            console.log(this.state)
+            
         })
     }
     handleCancelEdit = () => {
-        console.log('cancelando edicion')
+       
         this.setState({ itemEdit: null })
     }
     handleConfirm = (id) => {
@@ -78,42 +80,40 @@ class TableDemandado extends Component {
             identificacion: identificacion,
             montoAEmbargar: monto
         }
-        this.props.handleUpdate(id, obj);
+        this.props.handleUpdate(id, obj,this.props.demandados.data, this.props.token, this.props.idDocumento);
         this.handleCancelEdit()
 
     }
     handleConfirmEdit = (id) => {
-        console.log('editaaaaaaando')
+        
         this.setState({ itemEdit: id })
     }
     handleDelete = (id) => {
         this.props.handleDelete(id, this.props.token)
     }
     focusElement(e, palabra) {
-        console.log(e.target.name)
+       
         // this.setState({ actualFocus: e.target.name })
         if (this.props.resaltado !== "") {
-            console.log(e.target.value)
-            console.log(palabra)
+           
             try {
                 let vectorLocation = [];
                 let totalBoundig = [];
                 for (const prop in palabra.fieldInstances) {
-                    console.log(`palabra.fieldInstances.${prop}`);
+                    
                     for (const prop1 in palabra.fieldInstances[prop].parts) {
-                        console.log(palabra.fieldInstances[prop].parts[prop1])
+                       
                         vectorLocation.push({ start: palabra.fieldInstances[prop].parts[prop1].startLocation, end: palabra.fieldInstances[prop].parts[prop1].endLocation, page: palabra.fieldInstances[prop].parts[prop1].page })
                     }
                 }
-                console.log(vectorLocation)
+               
                 vectorLocation.map((item) => {
                     var iterador = item.start
                     for (iterador; iterador <= item.end; iterador++) {
                         totalBoundig.push(this.props.json.pages[this.props.page - 1].words[iterador].boundingPoly.vertices)
                     }
                 })
-                console.log('totalboundig')
-                console.log(totalBoundig)
+               
 
                 this.props.handleBounding(totalBoundig)
                 this.setState({
@@ -470,7 +470,9 @@ class TableDemandado extends Component {
             expediente: null,
             expedientes: []
         }
-        this.props.handleAddDemandado(obj)
+        this.props.handleAddDemandado(obj, this.props.demandados.data, this.props.token, this.props.idDocumento)
+       
+           
         this.setState({ addRow: false, addRowValues: { nombre: '', tipo: 'NO_SELECCIONADO', identificacion: '', monto: '' } })
     }
     next = () => {
@@ -478,14 +480,14 @@ class TableDemandado extends Component {
         if (this.state.totalPages.numRecorrido < this.state.totalPages.exacts) {
 
             this.setState({ totalPages: { ...this.state.totalPages, numRecorrido: this.state.totalPages.numRecorrido + 1 }, numItems: this.state.numItemsSiguientes, numItemsSiguientes: this.state.numItemsSiguientes + 5 }, function () {
-                console.log(this.state.totalPages)
+                
             })
         }
     }
     back = () => {
         if (this.state.totalPages.numRecorrido > 1)
             this.setState({ totalPages: { ...this.state.totalPages, numRecorrido: this.state.totalPages.numRecorrido - 1 }, numItems: this.state.numItemsSiguientes - 10, numItemsSiguientes: this.state.numItemsSiguientes - 5 }, function () {
-                console.log(this.state.totalPages)
+                
 
             })
     }
@@ -505,6 +507,7 @@ const mapDispatchToProps = (dispatch) => ({
     handleUpdate: bindActionCreators(updateDemandando, dispatch),
     handleDelete: bindActionCreators(deleteDemandado, dispatch),
     handleAddDemandado: bindActionCreators(addDemandado, dispatch),
+    handleSaveDemandados: bindActionCreators(saveDemandados,dispatch),
 
 })
 export default connect(mapStateToProps, mapDispatchToProps)(TableDemandado)

@@ -14,8 +14,7 @@ class Brand extends React.Component {
   componentDidMount() {
     // eslint-disable-next-line no-undef
     new KTToggle(this.ktToggleRef.current, this.props.toggleOptions);
-    console.log('EL STOREEEEE')
-    console.log(this.props.hover)
+   
   }
 
   render() {

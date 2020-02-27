@@ -180,7 +180,7 @@ function Dashboard(props) {
               <ChartArea/>
             </div>
             <div className="confirmar">
-            <CircularProgressbar strokeWidth={5}value={50} text={'80%'}></CircularProgressbar>
+            <CircularProgressbar strokeWidth={5}value={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.porcentajeAsignados} text={props.conteoEmbargos.loading?'0%':(String(props.conteoEmbargos.data.porcentajeAsignados)).concat('%')}></CircularProgressbar>
             </div>
           </div>
           <div className="container-bottom">

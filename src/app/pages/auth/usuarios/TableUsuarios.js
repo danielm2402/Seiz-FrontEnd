@@ -64,16 +64,15 @@ function MaterialTableDemo(props) {
                   'estadoEmbargo': 'CONFIRMADO'
                 }
               };
-              console.log('VOLVIENDO A LISTAR')
+           
               axios.get('https://bancow.finseiz.com/api/v1/users/list?size=2',config)
               .then(response=>{
                
-                console.log(response)
+              
                 let total
                 var page
                 total=response.data
-                console.log(response)
-                console.log('INFORMACION DEL NUEVO REQUEST')
+               
                 axios.get('https://bancow.finseiz.com/api/v1/users/list?'+'size=50'
                 , config)
                    .then(response1 => {
@@ -96,8 +95,7 @@ function MaterialTableDemo(props) {
                        {
                          page=query.page+1
                        }
-                       console.log('LA RESPUESTA DE LA SOLICITUD ES:')
-                       console.log(page)
+                      
                      
                        resolve({
                            data: response1.data,
@@ -143,7 +141,7 @@ function MaterialTableDemo(props) {
             };
             axios.get('https://bancow.finseiz.com/api/v1/users/'+oldData.id,config)
             .then(response=>{
-              console.log(response)
+              
               resolve();
             })
 

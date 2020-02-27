@@ -98,12 +98,7 @@ class StrippedTable extends Component {
         Accept: 'application/json'
       }
     };
-    console.log(this.state.nombre);
-    console.log(this.state.direccion)
-    console.log(this.state.subdominio);
-    console.log(this.state.latitud);
-    console.log(this.state.longitud);
-    console.log(this.state.postal);
+   
     
     console.log('http://orionph.com/api/v1/propiedad/actualizar/' + this.state.idAct);
 

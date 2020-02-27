@@ -40,8 +40,7 @@ function MaterialTableDemo(props) {
       ]}
       components={{
         Cell: props => {
-          console.log('LA CELDA TABLE')
-          console.log(props);
+         
           if(props.columnDef.field=='status'){
           return (
             
@@ -79,8 +78,7 @@ function MaterialTableDemo(props) {
                 let total
                 var page
                 total=response.data
-                console.log(response)
-                console.log('INFORMACION DEL NUEVO REQUEST')
+                
                 axios.post('https://bancow.finseiz.com/api/v1/embargos/list?estadoEmbargo=SIN_CONFIRMAR&page='+(query.page)+'&size='+query.pageSize
                 ,{}, config)
                    .then(response1 => {
@@ -92,7 +90,7 @@ function MaterialTableDemo(props) {
                        array.map((item)=>{
                          item.map((item1)=>{
                            if(item1.trim() ==='rel="next"'){
-                             console.log(item)
+
                              var subcadena=item[0].split('=')[1]
                              page= subcadena.split('&')[0]
                       
@@ -109,8 +107,7 @@ function MaterialTableDemo(props) {
                        {
                          page=query.page+1
                        }
-                       console.log(response1)
-                       console.log(page)
+
                      
                        resolve({
                            data: response1.data,

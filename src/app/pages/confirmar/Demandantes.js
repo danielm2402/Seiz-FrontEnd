@@ -28,30 +28,28 @@ class Demandantes extends Component {
 
   }
   focusElement(e, palabra) {
-    console.log(e.target.name)
+   
     // this.setState({ actualFocus: e.target.name })
     if (this.props.resaltado !== "") {
-      console.log(e.target.value)
-      console.log(palabra)
+     
       try {
         let vectorLocation = [];
         let totalBoundig = [];
         for (const prop in palabra.fieldInstances) {
-          console.log(`palabra.fieldInstances.${prop}`);
+         
           for (const prop1 in palabra.fieldInstances[prop].parts) {
-            console.log(palabra.fieldInstances[prop].parts[prop1])
+           
             vectorLocation.push({ start: palabra.fieldInstances[prop].parts[prop1].startLocation, end: palabra.fieldInstances[prop].parts[prop1].endLocation, page: palabra.fieldInstances[prop].parts[prop1].page })
           }
         }
-        console.log(vectorLocation)
+       
         vectorLocation.map((item) => {
           var iterador = item.start
           for (iterador; iterador <= item.end; iterador++) {
             totalBoundig.push(this.props.json.pages[this.props.page - 1].words[iterador].boundingPoly.vertices)
           }
         })
-        console.log('totalboundig')
-        console.log(totalBoundig)
+        
 
         this.props.handleBounding(totalBoundig)
         this.setState({
@@ -62,28 +60,25 @@ class Demandantes extends Component {
     }
   }
   focusElement2(e, palabra, id, tipo, column) {
-    console.log('el id')
-    console.log(id)
-    console.log(palabra)
+    
     this.setState({ ultimFocus: { id: id, tipo: column } })
     if (this.props.resaltado !== "") {
       try {
         let vectorLocation = [];
         let totalBoundig = [];
         const row = palabra.fieldInstances[id].parts[tipo]
-        console.log(row)
+       
         vectorLocation.push({ start: row.startLocation, end: row.endLocation, page: row.page })
 
 
-        console.log(vectorLocation)
+       
         vectorLocation.map((item) => {
           var iterador = item.start
           for (iterador; iterador <= item.end; iterador++) {
             totalBoundig.push(this.props.json.pages[this.props.page - 1].words[iterador].boundingPoly.vertices)
           }
         })
-        console.log('totalboundig')
-        console.log(totalBoundig)
+        
 
         this.props.handleBounding(totalBoundig)
         this.setState({
