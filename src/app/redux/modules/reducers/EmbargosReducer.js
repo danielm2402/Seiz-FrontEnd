@@ -2,7 +2,7 @@
 import {
     GET_DEMANDADOS_SUCCESS, GET_EMBARGO_SUCCESS, GET_EMBARGOS_CONFIRMADOS, GET_EMBARGO, GET_DEMANDADOS, GET_EMBARGOS_CONFIRMADOS_SUCCESS, GET_EMBARGOS_POR_CONFIRMAR, GET_EMBARGOS_POR_CONFIRMAR_SUCCESS,
     GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_ASIGNADOS_SUCCESS, GET_EMBARGOS_ALL, GET_EMBARGOS_ALL_SUCCESS, UPDATE_DEMANDADO, UPDATE_DEMANDANTE,DELETE_DEMANDANTE,DELETE_DEMANDADO, CREATE_DEMANDANTE, CREATE_DEMANDADO
-    ,NUEVO_MESANJE, RESET_MENSAJE, GET_DEMANDADOS_UPDATE_TABLE_SUCCESS, GET_DEMANDADOS_UPDATE_TABLE
+    ,NUEVO_MESANJE, RESET_MENSAJE, GET_DEMANDADOS_UPDATE_TABLE_SUCCESS, GET_DEMANDANTES_UPDATE_TABLE_SUCCESS
 } from '../../constants/EmbargosConst';
 
 export const Authstate = {
@@ -81,7 +81,12 @@ export default function authReducer(state = Authstate, action = {}) {
             return{
                 ...state,
                 demandados: {isUpdate:false,loading: false, data: action.data}
-            }    
+            }
+        case GET_DEMANDANTES_UPDATE_TABLE_SUCCESS:
+            return{
+                ...state,
+                embargo: {...state.embargo, data: {...state.embargo.data, plaintiffs: action.data }},
+            }       
         case GET_EMBARGO_SUCCESS:
             return {
                 ...state,

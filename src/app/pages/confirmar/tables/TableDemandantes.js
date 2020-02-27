@@ -365,7 +365,7 @@ class TableDemandantes extends Component {
             fullname: this.state.addRowValues.nombre,
             identificacion: this.state.addRowValues.identificacion,
         }
-        this.props.handleAddDemandado(obj)
+        this.props.handleAddDemandado(obj, this.props.demandantes, this.props.token, this.props.idDocumento)
         this.setState({ addRow: false, addRow: false, addRowValues: { nombre: '', identificacion: '', } })
     }
     next = () => {
@@ -396,7 +396,8 @@ const mapStateToProps = (state) => ({
     resaltado: state.EmbargosReducer.embargo.json1,
     bounding: state.boundingReducer.palabra,
     tablaBounding: state.boundingReducer.tabla,
-    embargo: state.EmbargosReducer.embargo.loading
+    embargo: state.EmbargosReducer.embargo.loading,
+    token: state.auth.authToken
 })
 const mapDispatchToProps = (dispatch) => ({
     handleBounding: bindActionCreators(changePoints, dispatch),

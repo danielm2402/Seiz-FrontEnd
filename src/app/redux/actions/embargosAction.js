@@ -92,9 +92,12 @@ export const addDemandado=(data, demandados, token, id)=>({
     token,
     id
 })
-export const addDemandante=(data)=>({
+export const addDemandante=(data, demandantes, token, id)=>({
     type:types.CREATE_DEMANDANTE,
     data,
+    demandantes,
+    token,
+    id
 })
 export const confirmarEmbargo=(data, token)=>({
     type:types.CONFIRMAR_EMBARGO,
@@ -126,6 +129,12 @@ export const getDemandadosUpdateTableSuccess=(data)=>({
     type:types.GET_DEMANDADOS_UPDATE_TABLE_SUCCESS,
     data
 })
+export const getDemandantesUpdateTableSuccess=(data)=>({
+    type:types.GET_DEMANDANTES_UPDATE_TABLE_SUCCESS,
+    data
+})
+
+
 
 
 

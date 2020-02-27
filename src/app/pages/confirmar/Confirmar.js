@@ -562,7 +562,7 @@ class Confirmar extends Component {
                                 }
 
                                 <TableDemandados page={this.state.pageNumber} idDocumento={this.props.match.params.id} />
-                                <TableDemandantes page={this.state.pageNumber} demandantes={this.state.demandantes} />
+                                <TableDemandantes page={this.state.pageNumber} demandantes={this.state.demandantes} idDocumento={this.props.match.params.id} />
 
                                 <input onClick={this.confirmarEmbargo} type="button" class="confirm-form-btn " value="Confirmar Embargo" />
 

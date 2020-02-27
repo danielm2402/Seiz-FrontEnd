@@ -2,12 +2,12 @@ import {
   call, fork, put, take, takeEvery, all
 } from 'redux-saga/effects';
 import axios from 'axios';
-import {UPDATE_DEMANDADO,
+import {UPDATE_DEMANDADO,CREATE_DEMANDANTE,
   GET_EMBARGO, GET_DEMANDADOS, DELETE_DEMANDADO, SAVE_DEMANDADOS, GET_DEMANDADOS_UPDATE_TABLE, CREATE_DEMANDADO,
   GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_CONFIRMADOS, GET_EMBARGOS_POR_CONFIRMAR, GET_EMBARGOS_ALL, DELETE_EMBARGO, CONFIRMAR_EMBARGO
 } from '../../constants/EmbargosConst';
 import {
-  getDemandados,
+  getDemandados,getDemandantesUpdateTableSuccess,
   getEmbargosAll, getEmbargosAsignados, getEmbargosPorConfirmar, getEmbargosConfirmados, getDemandadosSuccess, getEmbargoSuccess,
   getEmbargosConfirmadosSuccess, getEmbargosPorConfirmarSuccess, getEmbargosAsignadosSuccess, getEmbargosAllSuccess, nuevoMensaje, resetMensaje
   , getDemandadosUpdateTable, getDemandadosUpdateTableSuccess
@@ -256,8 +256,8 @@ function* confirmarEmbargoSaga(payload) {
       "Content-Type": "application/json"
     },
   };
-  const data = yield axios.post('https://bancow.finseiz.com/api/v1/embargos/' + payload.data.id + '/confirm', {
-    account: payload.data.account,
+  const data = yield axios.post('https://bancow.finseiz.com/api/v1/embargos/confirm', {
+  embargo: { account: payload.data.account,
     address: payload.data.address,
     amount: payload.data.amount,
     city: payload.data.city,
@@ -266,7 +266,10 @@ function* confirmarEmbargoSaga(payload) {
     documentType: payload.data.documentType,
     embargoType: payload.data.embargoType,
     reference: payload.data.reference,
-    sender: payload.data.sender
+    sender: payload.data.sender,
+    idEmbargo: payload.data.id },
+
+    
   }, config)
     .then(response => response)
     .catch(err => err.response)
@@ -312,7 +315,7 @@ function* confirmarEmbargoSaga(payload) {
       .catch(err => err.response)
     console.log(data2)
   }
-
+console.log(data)
   switch (data.status) {
     case 200:
       yield put(nuevoMensaje('Embargo confirmado correctamente'))
@@ -450,6 +453,59 @@ function* crearDemandadoSaga(payload) {
 
   }
 }
+function* crearDemandanteSaga(payload) {
+  console.log('GET demandado');
+  const config = {
+    headers: {
+      Authorization: 'Bearer ' + payload.token,
+      Accept: 'application/json',
+    },
+   
+  };
+  console.log('MIDDLEWAREEEE DEMANDANTES')
+  console.log(payload.demandantes)
+  console.log(payload.data)
+ var demandantesReq = [payload.data, ...payload.demandantes]
+ console.log(demandantes)
+  const demandantes= demandantesReq.map(demandante => {
+    return ({
+      ...demandante,
+      id: String(demandante.id).includes('local') ? null : demandante.id,
+    })
+  })
+  if (demandantes.length > 0) {
+    const data1 = yield axios.post('https://bancow.finseiz.com/api/v1/demandantes/save', {
+      
+        demandantes,
+        idEmbargo: payload.id
+      
+    }, config)
+      .then(response => response)
+      .catch(err => err.response)
+    console.log(data1)
+    switch (data1.status) {
+      case 201:
+        const data = yield axios.get('https://bancow.finseiz.com/api/v1/embargos/' + payload.id, config)
+        .then(response => response)
+        .catch(err => err.response)
+        console.log(data)
+        switch (data.status) {
+          case 200:
+           yield put(getDemandantesUpdateTableSuccess(data.data.plaintiffs)) 
+            break;
+        
+          default:
+            break;
+        }
+        break;
+
+      default:
+        break;
+    }
+
+
+  } 
+}
 
 function* updateDemandadoSaga(payload) {
   console.log('GET demandado');
@@ -535,6 +591,7 @@ function* embargosRootSaga() {
     takeEvery(DELETE_DEMANDADO, eliminarDemandadoSaga),
     takeEvery(SAVE_DEMANDADOS, saveDemandadosSaga),
     takeEvery(CREATE_DEMANDADO, crearDemandadoSaga),
+    takeEvery(CREATE_DEMANDANTE, crearDemandanteSaga),
     takeEvery(UPDATE_DEMANDADO,updateDemandadoSaga)
 
 
