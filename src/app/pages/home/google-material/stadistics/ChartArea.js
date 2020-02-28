@@ -31,14 +31,7 @@ export default class Example extends PureComponent {
   static jsfiddleUrl = 'https://jsfiddle.net/alidingling/9xopwa9v/';
   componentDidMount() {
  
-    const config = {
-      headers: {
-        Authorization: 'Bearer ' ,
-      },
-    };
-    const data = axios.get('https://bancow.finseiz.com/api/v1/stats/', config)
-      .then(response => response)
-      .catch(error => error.response)
+   
   }
 
   render() {

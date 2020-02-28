@@ -81,7 +81,7 @@ class TableDemandantes extends Component {
 
     }
     handleDelete = (id) => {
-        this.props.handleDelete(id)
+        this.props.handleDelete(id, this.props.token)
     }
     focusElement(e, palabra) {
         console.log(e.target.name)

@@ -76,9 +76,10 @@ export const updateDemandante=(id, data)=>({
     id,
     data
 })
-export const deleteDemandante=(id)=>({
+export const deleteDemandante=(id, token)=>({
     type:types.DELETE_DEMANDANTE,
-    id
+    id,
+    token 
 })
 export const deleteDemandado=(id, token)=>({
     type:types.DELETE_DEMANDADO,

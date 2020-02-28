@@ -99,8 +99,7 @@ function Dashboard(props) {
     }),
     [brandColor, dangerColor, primaryColor, successColor]
   );
-  useEffect(() => {
-   props.getEmbargos()}, []);
+ 
   return (
     <>
       <div className="cards-container">

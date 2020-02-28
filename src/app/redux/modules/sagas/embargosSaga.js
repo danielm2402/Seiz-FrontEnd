@@ -2,12 +2,13 @@ import {
   call, fork, put, take, takeEvery, all
 } from 'redux-saga/effects';
 import axios from 'axios';
-import {UPDATE_DEMANDADO,CREATE_DEMANDANTE,
+import {
+  UPDATE_DEMANDADO, CREATE_DEMANDANTE, DELETE_DEMANDANTE,UPDATE_DEMANDANTE,
   GET_EMBARGO, GET_DEMANDADOS, DELETE_DEMANDADO, SAVE_DEMANDADOS, GET_DEMANDADOS_UPDATE_TABLE, CREATE_DEMANDADO,
   GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_CONFIRMADOS, GET_EMBARGOS_POR_CONFIRMAR, GET_EMBARGOS_ALL, DELETE_EMBARGO, CONFIRMAR_EMBARGO
 } from '../../constants/EmbargosConst';
 import {
-  getDemandados,getDemandantesUpdateTableSuccess,
+  getDemandados, getDemandantesUpdateTableSuccess,
   getEmbargosAll, getEmbargosAsignados, getEmbargosPorConfirmar, getEmbargosConfirmados, getDemandadosSuccess, getEmbargoSuccess,
   getEmbargosConfirmadosSuccess, getEmbargosPorConfirmarSuccess, getEmbargosAsignadosSuccess, getEmbargosAllSuccess, nuevoMensaje, resetMensaje
   , getDemandadosUpdateTable, getDemandadosUpdateTableSuccess
@@ -33,7 +34,7 @@ function* getEmbargosConfirmadosSaga(payload) {
     case 200:
       yield put(getEmbargosConfirmadosSuccess(data.data))
       break;
-    case 401:
+    case 403:
       yield put(auth.actions.logout())
       break;
     default:
@@ -60,7 +61,7 @@ function* getEmbargosSinConfirmarSaga(payload) {
     case 200:
       yield put(getEmbargosPorConfirmarSuccess(data.data))
       break;
-    case 401:
+    case 403:
       yield put(auth.actions.logout())
       break;
     default:
@@ -87,7 +88,7 @@ function* getEmbargosAsignadosSaga(payload) {
     case 200:
       yield put(getEmbargosAsignadosSuccess(data.data))
       break;
-    case 401:
+    case 403:
       yield put(auth.actions.logout())
       break;
     default:
@@ -111,7 +112,7 @@ function* getEmbargosAllSaga(payload) {
     case 200:
       yield put(getEmbargosAllSuccess(data.data))
       break;
-    case 401:
+    case 403:
       yield put(auth.actions.logout())
       break;
     default:
@@ -145,7 +146,7 @@ function* deleteEmbargoSaga(payload) {
         yield put(getEmbargosAll(payload.token))
       }
       break;
-    case 401:
+    case 403:
       yield put(auth.actions.logout())
       break;
 
@@ -210,7 +211,7 @@ function* getEmbargoSaga(payload) {
 
       yield put(getEmbargoSuccess(data.data, url, json, json1))
       break;
-    case 401:
+    case 403:
       yield put(auth.actions.logout())
       break;
 
@@ -237,7 +238,7 @@ function* getDemandadosSaga(payload) {
     case 200:
       yield put(getDemandadosSuccess(data.data))
       break;
-    case 401:
+    case 403:
       yield put(auth.actions.logout())
       break;
     default:
@@ -257,19 +258,21 @@ function* confirmarEmbargoSaga(payload) {
     },
   };
   const data = yield axios.post('https://bancow.finseiz.com/api/v1/embargos/confirm', {
-  embargo: { account: payload.data.account,
-    address: payload.data.address,
-    amount: payload.data.amount,
-    city: payload.data.city,
-    docId: payload.data.docId,
-    documentDate: payload.data.documentDate,
-    documentType: payload.data.documentType,
-    embargoType: payload.data.embargoType,
-    reference: payload.data.reference,
-    sender: payload.data.sender,
-    idEmbargo: payload.data.id },
+    embargo: {
+      account: payload.data.account,
+      address: payload.data.address,
+      amount: payload.data.amount,
+      city: payload.data.city,
+      docId: payload.data.docId,
+      documentDate: payload.data.documentDate,
+      documentType: payload.data.documentType,
+      embargoType: payload.data.embargoType,
+      reference: payload.data.reference,
+      sender: payload.data.sender,
+      idEmbargo: payload.data.id
+    },
 
-    
+
   }, config)
     .then(response => response)
     .catch(err => err.response)
@@ -315,12 +318,12 @@ function* confirmarEmbargoSaga(payload) {
       .catch(err => err.response)
     console.log(data2)
   }
-console.log(data)
+  console.log(data)
   switch (data.status) {
     case 200:
       yield put(nuevoMensaje('Embargo confirmado correctamente'))
       break;
-    case 401:
+    case 403:
       yield put(auth.actions.logout())
       break;
     default:
@@ -345,7 +348,30 @@ function* eliminarDemandadoSaga(payload) {
     .catch(error => error.response)
   console.log(data)
   switch (data.value) {
-    case 401:
+    case 403:
+      yield put(auth.actions.logout())
+      break;
+
+    default:
+      break;
+  }
+}
+function* deleteDemandanteSaga(payload) {
+  console.log('DELETE DEMANDANTE')
+  console.log(payload)
+  const config = {
+    headers: {
+      Authorization: 'Bearer ' + payload.token,
+      Accept: 'application/json',
+      "Content-Type": "application/json"
+    },
+  };
+  const data = yield axios.delete('https://bancow.finseiz.com/api/v1/demandantes/' + payload.id, config)
+    .then(response => response)
+    .catch(error => error.response)
+  console.log(data)
+  switch (data.value) {
+    case 403:
       yield put(auth.actions.logout())
       break;
 
@@ -434,16 +460,16 @@ function* crearDemandadoSaga(payload) {
         const data = yield axios.get('https://bancow.finseiz.com/api/v1/demandados/list', config)
           .then(response => response)
           .catch(err => err.response)
-          console.log(data)
-          switch (data.status) {
-            case 200:
-              yield put(getDemandadosUpdateTableSuccess(data.data));
-              break;
-          
-            default:
-              break;
-          }
-        
+        console.log(data)
+        switch (data.status) {
+          case 200:
+            yield put(getDemandadosUpdateTableSuccess(data.data));
+            break;
+
+          default:
+            break;
+        }
+
         break;
 
       default:
@@ -460,14 +486,14 @@ function* crearDemandanteSaga(payload) {
       Authorization: 'Bearer ' + payload.token,
       Accept: 'application/json',
     },
-   
+
   };
   console.log('MIDDLEWAREEEE DEMANDANTES')
   console.log(payload.demandantes)
   console.log(payload.data)
- var demandantesReq = [payload.data, ...payload.demandantes]
- console.log(demandantes)
-  const demandantes= demandantesReq.map(demandante => {
+  var demandantesReq = [payload.data, ...payload.demandantes]
+  console.log(demandantes)
+  const demandantes = demandantesReq.map(demandante => {
     return ({
       ...demandante,
       id: String(demandante.id).includes('local') ? null : demandante.id,
@@ -475,10 +501,10 @@ function* crearDemandanteSaga(payload) {
   })
   if (demandantes.length > 0) {
     const data1 = yield axios.post('https://bancow.finseiz.com/api/v1/demandantes/save', {
-      
-        demandantes,
-        idEmbargo: payload.id
-      
+
+      demandantes,
+      idEmbargo: payload.id
+
     }, config)
       .then(response => response)
       .catch(err => err.response)
@@ -486,14 +512,14 @@ function* crearDemandanteSaga(payload) {
     switch (data1.status) {
       case 201:
         const data = yield axios.get('https://bancow.finseiz.com/api/v1/embargos/' + payload.id, config)
-        .then(response => response)
-        .catch(err => err.response)
+          .then(response => response)
+          .catch(err => err.response)
         console.log(data)
         switch (data.status) {
           case 200:
-           yield put(getDemandantesUpdateTableSuccess(data.data.plaintiffs)) 
+            yield put(getDemandantesUpdateTableSuccess(data.data.plaintiffs))
             break;
-        
+
           default:
             break;
         }
@@ -504,7 +530,7 @@ function* crearDemandanteSaga(payload) {
     }
 
 
-  } 
+  }
 }
 
 function* updateDemandadoSaga(payload) {
@@ -521,14 +547,14 @@ function* updateDemandadoSaga(payload) {
   console.log('MIDDLEWAREEEE')
   console.log(payload.demandados)
   console.log(payload.data)
-  
+
   const demandadosReq = payload.demandados.map(demandado => {
-    if(demandado.id==payload.id){
+    if (demandado.id == payload.id) {
       return ({
         amount: payload.data.montoAEmbargar,
         expedient: demandado.expediente,
         fullname: payload.data.nombres,
-        id:payload.id,
+        id: payload.id,
         identification: payload.data.identificacion,
         page: demandado.page,
         typeIdentification: payload.data.tipoIdentificacion
@@ -545,7 +571,7 @@ function* updateDemandadoSaga(payload) {
     })
   })
   console.log(demandadosReq)
-   if (demandadosReq.length > 0) {
+  if (demandadosReq.length > 0) {
     const data1 = yield axios.post('https://bancow.finseiz.com/api/v1/demandados/save', {
       demandados: demandadosReq,
       idEmbargo: payload.idDoc
@@ -558,16 +584,16 @@ function* updateDemandadoSaga(payload) {
         const data = yield axios.get('https://bancow.finseiz.com/api/v1/demandados/list', config)
           .then(response => response)
           .catch(err => err.response)
-          console.log(data)
-          switch (data.status) {
-            case 200:
-              yield put(getDemandadosUpdateTableSuccess(data.data));
-              break;
-          
-            default:
-              break;
-          }
-        
+        console.log(data)
+        switch (data.status) {
+          case 200:
+            yield put(getDemandadosUpdateTableSuccess(data.data));
+            break;
+
+          default:
+            break;
+        }
+
         break;
 
       default:
@@ -575,7 +601,17 @@ function* updateDemandadoSaga(payload) {
     }
 
 
-  } 
+  }
+}
+function* updateDemandanteSaga(payload){
+  console.log('GET demandado');
+  const config = {
+    headers: {
+      Authorization: 'Bearer ' + payload.token,
+      Accept: 'application/json',
+    },
+  };
+  const data= yield axios.put('https://bancow.finseiz.com/api/v1/demandantes/'+payload.id,{},config)
 }
 
 function* embargosRootSaga() {
@@ -592,8 +628,10 @@ function* embargosRootSaga() {
     takeEvery(SAVE_DEMANDADOS, saveDemandadosSaga),
     takeEvery(CREATE_DEMANDADO, crearDemandadoSaga),
     takeEvery(CREATE_DEMANDANTE, crearDemandanteSaga),
-    takeEvery(UPDATE_DEMANDADO,updateDemandadoSaga)
-
+    takeEvery(UPDATE_DEMANDADO, updateDemandadoSaga),
+    takeEvery(UPDATE_DEMANDANTE, updateDemandanteSaga),
+    
+    takeEvery(DELETE_DEMANDANTE, deleteDemandanteSaga),
 
 
 

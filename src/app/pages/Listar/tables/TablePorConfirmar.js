@@ -145,9 +145,7 @@ function MaterialTableDemo(props) {
         pageSizeOptions: [],
         toolbar: true,
         paging: true,
-        rowStyle: {
-          backgroundColor: '#EEE',
-        }
+        
     }}
       editable={{
         onRowDelete: oldData =>
