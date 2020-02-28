@@ -12,7 +12,7 @@ const color=(value)=>{
     case 'CONFIRMADO':
       return '#03A9F4'
     case 'SIN_CONFIRMAR':
-      return '#F44336'
+      return '#FBE6ED'
       case 'COMPLETO':
       return '#4CAF50'
     default:
@@ -20,7 +20,6 @@ const color=(value)=>{
      
   }
 }
-
 function MaterialTableDemo(props) {
   let history=useHistory()
   return (
@@ -49,7 +48,7 @@ function MaterialTableDemo(props) {
       
             >
               {props.columnDef.field=='status'?
-              <span style={{backgroundColor:color(props.value), borderRadius:'3px'}}>{props.value}</span>:<></>}
+              <div style={{backgroundColor:color(props.value), borderRadius:'3px', padding:'10px', color:'#C15C83', fontFamily:'Poppins,Helvetica,sans-serif !important', fontWeight:'500' }}>{props.value}</div>:<></>}
               </MTableCell>
           );
         }
@@ -145,6 +144,7 @@ function MaterialTableDemo(props) {
         pageSizeOptions: [],
         toolbar: true,
         paging: true,
+        search: false
         
     }}
       editable={{

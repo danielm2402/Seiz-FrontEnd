@@ -7,21 +7,32 @@ import { connect } from 'react-redux';
 import {Link} from 'react-router-dom'
 import {useHistory} from 'react-router-dom'
 import axios from 'axios'
- 
 const color=(value)=>{
   switch (value) {
     case 'CONFIRMADO':
       return '#EBEFF9'
     case 'SIN_CONFIRMAR':
-      return '#F44336'
+      return '#FBE6ED'
       case 'COMPLETO':
-      return '#4CAF50'
+      return '#E2F2EF'
     default:
       return '#ffffff'
      
   }
 }
-
+const colorText=(value)=>{
+    switch (value) {
+      case 'CONFIRMADO':
+        return '#6971B8'
+      case 'SIN_CONFIRMAR':
+        return '#C15C83'
+        case 'COMPLETO':
+        return '#33AE89'
+      default:
+        return '#ffffff'
+       
+    }
+  }
 function MaterialTableDemo(props) {
   let history=useHistory()
   return (
@@ -41,7 +52,8 @@ function MaterialTableDemo(props) {
       ]}
       components={{
         Cell: props => {
-          
+          console.log('LA CELDA TABLE')
+          console.log(props);
           if(props.columnDef.field=='status'){
           return (
             
@@ -49,7 +61,7 @@ function MaterialTableDemo(props) {
       
             >
               {props.columnDef.field=='status'?
-             <div style={{backgroundColor:color(props.value), borderRadius:'3px', padding:'10px', color:'#6971B8', fontFamily:'Poppins,Helvetica,sans-serif !important', fontWeight:'500' }}>{props.value}</div>:<></>}
+              <div style={{backgroundColor:color(props.value), borderRadius:'3px', padding:'10px', color:colorText(props.value), fontFamily:'Poppins,Helvetica,sans-serif !important', fontWeight:'500' }}>{props.value}</div>:<></>}
               </MTableCell>
           );
         }
@@ -65,48 +77,49 @@ function MaterialTableDemo(props) {
       }}
       data={query =>
         new Promise((resolve, reject) => {
-          console.log('QUERYYY')
-          console.log(query.page)
             const config = {
                 headers: {
                   Authorization: 'Bearer ' + props.token,
                   Accept: 'application/json',
                 },
-                params: {
-                  'estadoEmbargo': 'CONFIRMADO'
-                }
+            
               };
-              axios.get('https://bancow.finseiz.com/api/v1/embargos/count?estadoEmbargo=CONFIRMADO',config)
+              console.log('DATOS DE TABLAAAAAAAAAA')
+              axios.get('https://bancow.finseiz.com/api/v1/embargos/count',config)
               .then(response=>{
                 let total
                 var page
                 total=response.data
-                axios.post('https://bancow.finseiz.com/api/v1/embargos/list?estadoEmbargo=CONFIRMADO&page='+(query.page)+'&size='+query.pageSize
-               ,{} , config)
+                console.log(response)
+                console.log('INFORMACION DEL NUEVO REQUEST')
+                axios.post('https://bancow.finseiz.com/api/v1/embargos/list?page='+(query.page)+'&size='+query.pageSize
+                ,{}, config)
                    .then(response1 => {
                      
                        var separar = response1.headers.links.split(",")
                       const array= separar.map((item)=>{
                          return item.split(";")
                        })
-                       console.log('BANDERAAAAA')
                        array.map((item)=>{
                          item.map((item1)=>{
-                           console.log(item1)
-                           if(item1.trim() ==='rel="next"'){                   
+                           if(item1.trim() ==='rel="next"'){
+                             console.log(item)
                              var subcadena=item[0].split('=')[1]
                              page= subcadena.split('&')[0]
+                      
                            }
 
                          }
+
                          )
                        })
                        if(page== undefined)
                        {
                          page=query.page+1
                        }
-                       
                        console.log(response1)
+                       console.log(page)
+                     
                        resolve({
                            data: response1.data,
                           page: page-1,
@@ -114,7 +127,10 @@ function MaterialTableDemo(props) {
                          })
                    })
                    
-                   .catch(err => console.log(err.response))
+                   .catch(err =>{
+                     console.log('ERROR EN LOS DATOS DE LA TABLA')
+                    console.log(err.response)
+                   } )
               
               })
             
@@ -122,24 +138,36 @@ function MaterialTableDemo(props) {
         })
       }
       actions={[
-       rowData=>({
-          icon:'remove_red_eye',
-          tooltip:'Ver',
-          disabled: rowData.status=='SIN_CONFIRMAR',
+       rowData=> ({
+          icon:'edit',
+          tooltip:'Revisar',
+          disabled: rowData.status=='CONFIRMADO'||rowData.status=='COMPLETO',
           onClick:(event, rowData)=>{
             props.handleView(rowData.id, props.token)
             props.handleDemandados(rowData.id, props.token)
-            history.push(`/view/${rowData.id}`)
+            history.push(`/confirm/${rowData.id}`)
           },
+          
         }),
+        rowData=>({
+            icon:'remove_red_eye',
+            tooltip:'Ver',
+            disabled: rowData.status=='SIN_CONFIRMAR',
+            onClick:(event, rowData)=>{
+              props.handleView(rowData.id, props.token)
+              props.handleDemandados(rowData.id, props.token)
+              history.push(`/view/${rowData.id}`)
+            },
+          })
       ]}
       options={{
         filtering: true,
-        pageSize: 20,
+        pageSize: 19,
         pageSizeOptions: [],
         toolbar: true,
         paging: true,
         search: false
+        
     }}
       editable={{
         onRowDelete: oldData =>
