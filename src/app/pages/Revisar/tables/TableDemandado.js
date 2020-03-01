@@ -49,7 +49,7 @@ class TableDemandado extends Component {
             if(this.props.tablaBounding=='demandadosadd'){
                 console.log('NUEVA PALABRA PARA EL EDIT Y ES:')
                 console.log(this.props.bounding)
-                this.setState({addRowValues:{...this.state.addRowValues, [this.state.ultimFocus.tipo]:this.props.bounding}}, function(){
+                this.setState({addRowValues:{...this.state.addRowValues, [this.state.ultimFocus.tipo]:this.state[this.state.ultimFocus.tipo]+this.props.bounding}}, function(){
                     console.log(this.state.addRowValues)
                 })
             }

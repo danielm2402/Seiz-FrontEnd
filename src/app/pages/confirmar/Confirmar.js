@@ -731,8 +731,10 @@ class Confirmar extends Component {
                 })
                 //palabra= this.state[this.state.actualFocus]+palabra
                 this.props.handleRegion(palabra)
-               
-                this.setState({ [this.state.actualFocus]: palabra })
+               if(this.props.tablaBounding=='documento'){
+                this.setState({ [this.state.actualFocus]: this.state[this.state.actualFocus]+palabra })
+               }
+                
                 // console.log(this.state[this.state.actualFocus])
             })
 
@@ -802,7 +804,8 @@ const mapStateToProps = (state) => ({
     resaltado: state.EmbargosReducer.embargo.json1,
     boundingRedux: state.boundingReducer.boundigTable,
     loadingDemandadosTable: state.boundingReducer.loadingDemandados,
-    mensaje: state.EmbargosReducer.mensaje
+    mensaje: state.EmbargosReducer.mensaje,
+    tablaBounding: state.boundingReducer.tabla,
 
 })
 const mapDispatchToProps = (dispatch) => ({

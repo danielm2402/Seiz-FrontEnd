@@ -716,12 +716,14 @@ class Revisar extends Component {
                     palabra = palabra + ' ' + item.text
 
                 })
-               // palabra= this.state[this.state.actualFocus]==''||this.state[this.state.actualFocus]===undefined?palabra:this.state[this.state.actualFocus]+palabra
+              
                 
                 this.props.handleRegion(palabra)
+                if(this.props.tablaBounding=='documento'){
+                    this.setState({ [this.state.actualFocus]:this.state[this.state.actualFocus]+palabra })
+                   }
                
-                this.setState({ [this.state.actualFocus]: palabra })
-                // console.log(this.state[this.state.actualFocus])
+                
             })
 
             const ctx = this.refs.canvas.getContext('2d');

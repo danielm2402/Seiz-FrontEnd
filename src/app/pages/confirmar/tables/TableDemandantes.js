@@ -38,16 +38,13 @@ class TableDemandantes extends Component {
            
             if (this.props.tablaBounding == 'demandantes') {
               
-                console.log('ULTIMO FOCUS')
-                console.log()
-                console.log(this.state[this.state.ultimFocus.tipo])
+              
                 this.setState({[this.state.ultimFocus.tipo]:(this.state[this.state.ultimFocus.tipo]===undefined?'':this.state[this.state.ultimFocus.tipo]).concat(this.props.bounding)})
             }
             if(this.props.tablaBounding=='demandantesadd'){
-                console.log('NUEVA PALABRA PARA EL EDIT Y ES:')
-                console.log(this.props.bounding)
-                this.setState({addRowValues:{...this.state.addRowValues, [this.state.ultimFocus.tipo]:this.props.bounding}}, function(){
-                    console.log(this.state.addRowValues)
+               
+                this.setState({addRowValues:{...this.state.addRowValues, [this.state.ultimFocus.tipo]:this.state[this.state.ultimFocus.tipo]+this.props.bounding}}, function(){
+                   
                 })
             }
 
