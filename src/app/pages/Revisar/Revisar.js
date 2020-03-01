@@ -24,7 +24,7 @@ import Demandantes from './Demandantes';
 import chroma from 'chroma-js';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import { changePoints, resetPoints, nuevaRegion, obtenerDemandadosTable } from '../../redux/actions/boundingAction'
+import { changePoints, resetPoints, nuevaRegion, obtenerDemandadosTable, setUltimaTableFocus } from '../../redux/actions/boundingAction'
 import TableDemandados from './tables/TableDemandado'
 import TableDemandantes from './tables/TableDemandantes'
 const pdfjsVersion = "2.0.305";
@@ -205,7 +205,7 @@ class Revisar extends Component {
         this.props.handleBoundingReset()
     }
     focusElement(e, palabra) {
-
+        this.props.handleUltimFocus('documento')
         console.log(e.target.name)
         this.setState({ actualFocus: e.target.name })
         if (this.props.resaltado !== "") {
@@ -813,6 +813,7 @@ const mapStateToProps = (state) => ({
 
 })
 const mapDispatchToProps = (dispatch) => ({
+    handleUltimFocus:bindActionCreators(setUltimaTableFocus, dispatch),
     handleEmbargo: bindActionCreators(getEmbargo, dispatch),
     handleDemandados: bindActionCreators(getDemandados, dispatch),
     handleBoundingReset: bindActionCreators(resetPoints, dispatch),
