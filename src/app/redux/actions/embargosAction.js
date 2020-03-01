@@ -135,6 +135,13 @@ export const getDemandantesUpdateTableSuccess=(data)=>({
     type:types.GET_DEMANDANTES_UPDATE_TABLE_SUCCESS,
     data
 })
+export const updateEmbargo=(data, token)=>({
+    type:types.UPDATE_EMBARGO,
+    data,
+    token
+})
+
+
 
 
 

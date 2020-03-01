@@ -3,7 +3,7 @@ import {
 } from 'redux-saga/effects';
 import axios from 'axios';
 import {
-  UPDATE_DEMANDADO, CREATE_DEMANDANTE, DELETE_DEMANDANTE,UPDATE_DEMANDANTE,
+  UPDATE_DEMANDADO, CREATE_DEMANDANTE, DELETE_DEMANDANTE,UPDATE_DEMANDANTE, UPDATE_EMBARGO,
   GET_EMBARGO, GET_DEMANDADOS, DELETE_DEMANDADO, SAVE_DEMANDADOS, GET_DEMANDADOS_UPDATE_TABLE, CREATE_DEMANDADO,
   GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_CONFIRMADOS, GET_EMBARGOS_POR_CONFIRMAR, GET_EMBARGOS_ALL, DELETE_EMBARGO, CONFIRMAR_EMBARGO
 } from '../../constants/EmbargosConst';
@@ -624,6 +624,44 @@ function* updateDemandanteSaga(payload){
   console.log(data)
 }
 
+function* updateEmbargoSaga(payload){
+  console.log('UPDATE EMBARGO');
+  console.log(payload.data)
+  const config = {
+    headers: {
+      Authorization: 'Bearer ' + payload.token,
+      Accept: 'application/json',
+    },
+  };
+  const data= yield axios.put('https://bancow.finseiz.com/api/v1/embargos',{
+    account: payload.data.account,
+    address: payload.data.address,
+    amount: payload.data.amount,
+    city: payload.data.city,
+    docId: payload.data.docId,
+    documentDate: payload.data.documentDate,
+    documentType: payload.data.documentType,
+    embargoType: payload.data.embargoType,
+    id: payload.data.id,
+    reference: payload.data.reference,
+    sender: payload.data.sender
+    
+},config)
+  .then(response=>response)
+  .catch(err=>err.response)
+  console.log(data)
+  switch (data.status) {
+    case 200:
+      yield put(nuevoMensaje('Embargo actualizado correctamente'))
+    break;
+  
+    default:
+      yield put(nuevoMensaje('Error al actualizar embargo, contacte al administrador'))
+      break;
+  }
+}
+
+
 function* embargosRootSaga() {
   yield all([
     takeEvery(GET_EMBARGOS_CONFIRMADOS, getEmbargosConfirmadosSaga),
@@ -642,6 +680,7 @@ function* embargosRootSaga() {
     takeEvery(UPDATE_DEMANDANTE, updateDemandanteSaga),
     
     takeEvery(DELETE_DEMANDANTE, deleteDemandanteSaga),
+    takeEvery(UPDATE_EMBARGO, updateEmbargoSaga)
 
 
 

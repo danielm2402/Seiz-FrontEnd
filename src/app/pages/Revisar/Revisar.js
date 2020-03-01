@@ -2,15 +2,21 @@ import React, { Component } from 'react'
 import ReactDOM from 'react-dom';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
-import { getDemandados, getEmbargo } from '../../redux/actions/embargosAction'
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Button from '@material-ui/core/Button';
 import Tabla from './Tabla'
 import './Tabla.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TextField from '@material-ui/core/TextField';
 import { FaRegEdit, FaTable } from "react-icons/fa";
-import { MdCancel, MdPhotoSizeSelectSmall, MdNavigateNext, MdNavigateBefore } from "react-icons/md";
-
+import { MdCancel, MdPhotoSizeSelectSmall, MdNavigateNext, MdNavigateBefore, MdDone } from "react-icons/md";
+import { updateEmbargo } from '../../redux/actions/embargosAction'
+import { getDemandados, getEmbargo, resetMensaje, saveDemandados } from '../../redux/actions/embargosAction'
 import { ProgressBar } from 'react-bootstrap';
 import { setOptions, Document, Page } from "react-pdf";
 import Demandados from './Demandados'
@@ -180,13 +186,13 @@ class Revisar extends Component {
 
         }
 
-        if(this.props.loadingDemandadosTable!==prevProps.loadingDemandadosTable){
-            if(this.props.loadingDemandadosTable){
+        if (this.props.loadingDemandadosTable !== prevProps.loadingDemandadosTable) {
+            if (this.props.loadingDemandadosTable) {
                 toast.info("Obteniendo demandados");
             }
         }
-        if(this.props.embargo.data.plaintiffs!==prevProps.embargo.data.plaintiffs){
-            this.setState({demandantes: this.props.embargo.data.plaintiffs})
+        if (this.props.embargo.data.plaintiffs !== prevProps.embargo.data.plaintiffs) {
+            this.setState({ demandantes: this.props.embargo.data.plaintiffs })
         }
 
 
@@ -366,10 +372,10 @@ class Revisar extends Component {
                                             {
                                                 this.state.boundig.points.map((item) => {
                                                     return (
-                                                        <polygon fill="#90FEA5" fill-opacity="0.4" points={`${(item[0].x) * 612} ${(item[0].y) * 792}, 
-                                        ${(item[1].x) * 612} ${(item[1].y) * 792}, 
-                                        ${(item[2].x) * 612} ${(item[2].y) * 792}, 
-                                        ${(item[3].x) * 612} ${(item[3].y) * 792}`} />)
+                                                        <polygon fill="#90FEA5" fill-opacity="0.4" points={`${(item[0].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[0].y) * this.props.json.pages[this.state.pageNumber-1].height}, 
+                                        ${(item[1].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[1].y) * this.props.json.pages[this.state.pageNumber-1].height}, 
+                                        ${(item[2].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[2].y) * this.props.json.pages[this.state.pageNumber-1].height}, 
+                                        ${(item[3].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[3].y) * this.props.json.pages[this.state.pageNumber-1].height}`} />)
                                                 })
                                             }
                                         </svg> : <></>
@@ -379,16 +385,16 @@ class Revisar extends Component {
                                             {
                                                 this.props.boundingRedux.points.map((item) => {
                                                     return (
-                                                        <polygon fill="#90FEA5" fill-opacity="0.4" points={`${(item[0].x) * 612} ${(item[0].y) * 792}, 
-                                        ${(item[1].x) * 612} ${(item[1].y) * 792}, 
-                                        ${(item[2].x) * 612} ${(item[2].y) * 792}, 
-                                        ${(item[3].x) * 612} ${(item[3].y) * 792}`} />)
+                                                        <polygon fill="#90FEA5" fill-opacity="0.4" points={`${(item[0].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[0].y) * this.props.json.pages[this.state.pageNumber-1].height}, 
+                                        ${(item[1].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[1].y) * this.props.json.pages[this.state.pageNumber-1].height}, 
+                                        ${(item[2].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[2].y) * this.props.json.pages[this.state.pageNumber-1].height}, 
+                                        ${(item[3].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[3].y) * this.props.json.pages[this.state.pageNumber-1].height}`} />)
                                                 })
                                             }
                                         </svg> : <></>
                                     }
 
-                                    <canvas ref="canvas" width="612" height="792" className="canvas-edit"
+                                    <canvas ref="canvas" width={this.props.json.pages[this.state.pageNumber-1].width} height={this.props.json.pages[this.state.pageNumber-1].height} className="canvas-edit"
                                         onMouseDown={
                                             e => {
                                                 let nativeEvent = e.nativeEvent;
@@ -418,7 +424,7 @@ class Revisar extends Component {
                             <div className="section-table">
                                 <div className="buttons-edits">
 
-                                    {!this.state.disabled ? <button onClick={this.handleCancel}><MdCancel size="1.5em" color={"#BDD535"} /></button> : <button onClick={this.handleEdit}><FaRegEdit size="1.5em" color={"#BDD535"} /></button>}
+                                    {!this.state.disabled ? <div> <button onClick={this.handleConfirmEdit}><MdDone size="1.5em" color={"#BDD535"} /></button> <button onClick={this.handleCancel}><MdCancel size="1.5em" color={"#BDD535"} /></button>  </div> : <button onClick={this.handleEdit}><FaRegEdit size="1.5em" color={"#BDD535"} /></button>}
                                 </div>
                                 <div className="information-card">
                                     <label for="entidad">Entidad Remitente</label>
@@ -566,14 +572,38 @@ class Revisar extends Component {
                                     </div> : <></>
                                 }
 
-                                <TableDemandados page={this.state.pageNumber}/>
-                                <TableDemandantes page={this.state.pageNumber} demandantes={this.state.demandantes}/>
-                               {/*  <Demandados add={add} data={this.props.demandados.data} nombre="Demandados" page={this.state.pageNumber} editable={!this.state.disabled} /> */}
-                               {/*  <Demandantes add={add} data={this.state.demandantes} nombre="Demandantes" page={this.state.pageNumber} editable={!this.state.disabled} /> */}
+                                <TableDemandados page={this.state.pageNumber} idDocumento={this.props.match.params.id} />
+                                <TableDemandantes page={this.state.pageNumber} demandantes={this.state.demandantes} idDocumento={this.props.match.params.id} />
+                                <Dialog
+                                    open={this.props.mensaje.exist}
+                                    onClose={() => {
+                                        this.props.handleResetMsj()
+                        
+                                    }
+                                    }
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">{"Confirmación de embargo"}</DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            {this.props.mensaje.msj}
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+
+                                        <Button onClick={() => {
+                                            this.props.handleResetMsj()
+                                            
+                                        }} color="primary" autoFocus>
+                                            Aceptar
+                                          </Button>
+                                    </DialogActions>
+                                </Dialog>
                             </div>
                         </div>
                     </div>}
-                    <ToastContainer />
+                <ToastContainer />
             </div>
         )
     }
@@ -586,11 +616,9 @@ class Revisar extends Component {
         })
     }
     handleMouseDown(event) { //added code here
-        console.log(this.state.editCanvas)
-        console.log(this.state.activeModeTable)
+      
         if (this.state.editCanvas && !this.state.activeModeTable) {
-            console.log('DOWN')
-            console.log(event);
+           
             this.setState({
                 isDown: true,
                 isDownCount: 1,
@@ -604,8 +632,7 @@ class Revisar extends Component {
         }
 
         if (!this.state.editCanvas && this.state.activeModeTable) {
-            console.log('DOWN')
-            console.log(event);
+         
             this.setState({
                 isDown: true,
                 isDownCount: 1,
@@ -660,8 +687,7 @@ class Revisar extends Component {
         }
     }
     handleMouseUp(event) {
-        console.log(this.state.editCanvas)
-        console.log(this.state.activeModeTable)
+       
         if (this.state.editCanvas && !this.state.activeModeTable) {
             var x = event.offsetX;
             var y = event.offsetY;
@@ -670,24 +696,29 @@ class Revisar extends Component {
             this.setState({
                 rectangle: { x: this.state.previousPointX, y: this.state.previousPointY, width: width, height: height }
             }, function () {
+                
                 let vector = []
 
                 this.props.json.pages[this.state.pageNumber - 1].words.map((item) => {
-                    var x = ((((item.boundingPoly.vertices[1].x)) + ((item.boundingPoly.vertices[0].x))) / 2) * 612
-                    var y = ((((item.boundingPoly.vertices[3].y)) + ((item.boundingPoly.vertices[0].y))) / 2) * 792
+                   
+                    var x = ((((item.boundingPoly.vertices[1].x)) + ((item.boundingPoly.vertices[0].x))) / 2) * this.props.json.pages[this.state.pageNumber-1].width
+                    var y = ((((item.boundingPoly.vertices[3].y)) + ((item.boundingPoly.vertices[0].y))) / 2) * this.props.json.pages[this.state.pageNumber-1].height
 
                     if ((x > this.state.previousPointX && x < (this.state.rectangle.width + this.state.previousPointX) && ((y > this.state.previousPointY) && (y < this.state.rectangle.height + this.state.previousPointY)))) {
-
+                        console.log(item)
                         vector.push(item)
                     }
                 })
+                console.log('EL VECTOR')
+                console.log(vector)
                 var palabra = ''
                 vector.map((item) => {
                     palabra = palabra + ' ' + item.text
 
                 })
+                
                 this.props.handleRegion(palabra)
-                console.log(palabra)
+               
                 this.setState({ [this.state.actualFocus]: palabra })
                 // console.log(this.state[this.state.actualFocus])
             })
@@ -714,12 +745,11 @@ class Revisar extends Component {
                 rectangle: { x: this.state.previousPointX, y: this.state.previousPointY, width: width, height: height }
             }, function () {
 
-                console.log(this.state.rectangle.x / 612, this.state.rectangle.y / 792)
                 const verti = [
-                    { x: (this.state.rectangle.x / 612), y: (this.state.rectangle.y / 792) },
-                    { x: (this.state.rectangle.x + this.state.rectangle.width) / 612, y: this.state.rectangle.y / 792 },
-                    { x: (this.state.rectangle.x + this.state.rectangle.width) / 612, y: (this.state.rectangle.y + this.state.rectangle.height) / 792 },
-                    { x: (this.state.rectangle.x / 612), y: (this.state.rectangle.y + this.state.rectangle.height) / 792 },
+                    { x: (this.state.rectangle.x / this.props.json.pages[this.state.pageNumber-1].width), y: (this.state.rectangle.y / this.props.json.pages[this.state.pageNumber-1].height) },
+                    { x: (this.state.rectangle.x + this.state.rectangle.width) / this.props.json.pages[this.state.pageNumber-1].width, y: this.state.rectangle.y / this.props.json.pages[this.state.pageNumber-1].height },
+                    { x: (this.state.rectangle.x + this.state.rectangle.width) / this.props.json.pages[this.state.pageNumber-1].width, y: (this.state.rectangle.y + this.state.rectangle.height) / this.props.json.pages[this.state.pageNumber-1].height },
+                    { x: (this.state.rectangle.x / this.props.json.pages[this.state.pageNumber-1].width), y: (this.state.rectangle.y + this.state.rectangle.height) / this.props.json.pages[this.state.pageNumber-1].height },
 
                 ]
                 const columns = {
@@ -728,8 +758,7 @@ class Revisar extends Component {
                     expendiente: String(this.state.colsEdit.expediente),
                     monto: String(this.state.colsEdit.monto)
                 }
-                console.log(verti)
-                console.log(columns)
+                
                 this.setState({ tablePoints: verti, tableCols: columns })
 
             })
@@ -747,6 +776,24 @@ class Revisar extends Component {
         }
 
     }
+    handleConfirmEdit = () => {
+        const obj = {
+            account: this.props.embargo.data.account,
+            address: this.state.direccion,
+            amount: this.props.embargo.data.amount,
+            city: this.state.ciudad,
+            docId: this.props.embargo.data.docId,
+            documentDate: this.state.fecha,
+            documentType: this.state.tipoDocumento,
+            embargoType: this.state.tipoEmbargo,
+            id: this.state.referencia,
+            reference: this.props.embargo.data.reference,
+            sender: this.state.entidad
+        }
+
+        this.props.handleConfirmarEmbargo(obj, this.props.token)
+        this.handleCancel()
+    }
 }
 
 const mapStateToProps = (state) => ({
@@ -759,7 +806,9 @@ const mapStateToProps = (state) => ({
     json: state.EmbargosReducer.embargo.json,
     resaltado: state.EmbargosReducer.embargo.json1,
     boundingRedux: state.boundingReducer.boundigTable,
-    loadingDemandadosTable: state.boundingReducer.loadingDemandados
+    loadingDemandadosTable: state.boundingReducer.loadingDemandados,
+    mensaje: state.EmbargosReducer.mensaje,
+    
 
 })
 const mapDispatchToProps = (dispatch) => ({
@@ -767,7 +816,10 @@ const mapDispatchToProps = (dispatch) => ({
     handleDemandados: bindActionCreators(getDemandados, dispatch),
     handleBoundingReset: bindActionCreators(resetPoints, dispatch),
     handleRegion: bindActionCreators(nuevaRegion, dispatch),
-    handleTableDemandados: bindActionCreators(obtenerDemandadosTable, dispatch)
+    handleTableDemandados: bindActionCreators(obtenerDemandadosTable, dispatch),
+    handleConfirmarEmbargo: bindActionCreators(updateEmbargo, dispatch),
+    handleResetMsj: bindActionCreators(resetMensaje, dispatch),
+    handleSaveDemandados: bindActionCreators(saveDemandados, dispatch),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Revisar)
