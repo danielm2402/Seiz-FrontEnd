@@ -25,7 +25,7 @@ import Demandantes from './Demandantes';
 import chroma from 'chroma-js';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import { changePoints, resetPoints, nuevaRegion, obtenerDemandadosTable } from '../../redux/actions/boundingAction'
+import { changePoints, resetPoints, nuevaRegion, obtenerDemandadosTable, setUltimaTableFocus } from '../../redux/actions/boundingAction'
 import TableDemandados from './tables/TableDemandado'
 import TableDemandantes from './tables/TableDemandantes'
 const pdfjsVersion = "2.0.305";
@@ -205,7 +205,7 @@ class Confirmar extends Component {
     }
     focusElement(e, palabra) {
 
-      
+        this.props.handleUltimFocus('documento')
         this.setState({ actualFocus: e.target.name })
         if (this.props.resaltado !== "") {
           
@@ -729,7 +729,7 @@ class Confirmar extends Component {
                     palabra = palabra + ' ' + item.text
 
                 })
-                palabra= this.state[this.state.actualFocus]+palabra
+                //palabra= this.state[this.state.actualFocus]+palabra
                 this.props.handleRegion(palabra)
                
                 this.setState({ [this.state.actualFocus]: palabra })
@@ -806,6 +806,7 @@ const mapStateToProps = (state) => ({
 
 })
 const mapDispatchToProps = (dispatch) => ({
+    handleUltimFocus:bindActionCreators(setUltimaTableFocus, dispatch),
     handleEmbargo: bindActionCreators(getEmbargo, dispatch),
     handleDemandados: bindActionCreators(getDemandados, dispatch),
     handleBoundingReset: bindActionCreators(resetPoints, dispatch),
