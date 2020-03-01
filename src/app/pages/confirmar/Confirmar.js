@@ -361,10 +361,10 @@ class Confirmar extends Component {
                                             {
                                                 this.state.boundig.points.map((item) => {
                                                     return (
-                                                        <polygon fill="#90FEA5" fill-opacity="0.4" points={`${(item[0].x) * 612} ${(item[0].y) * 792}, 
-                                        ${(item[1].x) * 612} ${(item[1].y) * 792}, 
-                                        ${(item[2].x) * 612} ${(item[2].y) * 792}, 
-                                        ${(item[3].x) * 612} ${(item[3].y) * 792}`} />)
+                                                        <polygon fill="#90FEA5" fill-opacity="0.4" points={`${(item[0].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[0].y) * this.props.json.pages[this.state.pageNumber-1].height}, 
+                                        ${(item[1].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[1].y) * this.props.json.pages[this.state.pageNumber-1].height}, 
+                                        ${(item[2].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[2].y) * this.props.json.pages[this.state.pageNumber-1].height}, 
+                                        ${(item[3].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[3].y) * this.props.json.pages[this.state.pageNumber-1].height}`} />)
                                                 })
                                             }
                                         </svg> : <></>
@@ -374,16 +374,16 @@ class Confirmar extends Component {
                                             {
                                                 this.props.boundingRedux.points.map((item) => {
                                                     return (
-                                                        <polygon fill="#90FEA5" fill-opacity="0.4" points={`${(item[0].x) * 612} ${(item[0].y) * 792}, 
-                                        ${(item[1].x) * 612} ${(item[1].y) * 792}, 
-                                        ${(item[2].x) * 612} ${(item[2].y) * 792}, 
-                                        ${(item[3].x) * 612} ${(item[3].y) * 792}`} />)
+                                                        <polygon fill="#90FEA5" fill-opacity="0.4" points={`${(item[0].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[0].y) * this.props.json.pages[this.state.pageNumber-1].height}, 
+                                        ${(item[1].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[1].y) * this.props.json.pages[this.state.pageNumber-1].height}, 
+                                        ${(item[2].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[2].y) * this.props.json.pages[this.state.pageNumber-1].height}, 
+                                        ${(item[3].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[3].y) * this.props.json.pages[this.state.pageNumber-1].height}`} />)
                                                 })
                                             }
                                         </svg> : <></>
                                     }
 
-                                    <canvas ref="canvas" width="612" height="792" className="canvas-edit"
+                                    <canvas ref="canvas" width={this.props.json.pages[this.state.pageNumber-1].width} height={this.props.json.pages[this.state.pageNumber-1].height} className="canvas-edit"
                                         onMouseDown={
                                             e => {
                                                 let nativeEvent = e.nativeEvent;
@@ -716,8 +716,8 @@ class Confirmar extends Component {
                 let vector = []
 
                 this.props.json.pages[this.state.pageNumber - 1].words.map((item) => {
-                    var x = ((((item.boundingPoly.vertices[1].x)) + ((item.boundingPoly.vertices[0].x))) / 2) * 612
-                    var y = ((((item.boundingPoly.vertices[3].y)) + ((item.boundingPoly.vertices[0].y))) / 2) * 792
+                    var x = ((((item.boundingPoly.vertices[1].x)) + ((item.boundingPoly.vertices[0].x))) / 2) * this.props.json.pages[this.state.pageNumber-1].width
+                    var y = ((((item.boundingPoly.vertices[3].y)) + ((item.boundingPoly.vertices[0].y))) / 2) * this.props.json.pages[this.state.pageNumber-1].height
 
                     if ((x > this.state.previousPointX && x < (this.state.rectangle.width + this.state.previousPointX) && ((y > this.state.previousPointY) && (y < this.state.rectangle.height + this.state.previousPointY)))) {
 
@@ -758,10 +758,10 @@ class Confirmar extends Component {
             }, function () {
 
                 const verti = [
-                    { x: (this.state.rectangle.x / 612), y: (this.state.rectangle.y / 792) },
-                    { x: (this.state.rectangle.x + this.state.rectangle.width) / 612, y: this.state.rectangle.y / 792 },
-                    { x: (this.state.rectangle.x + this.state.rectangle.width) / 612, y: (this.state.rectangle.y + this.state.rectangle.height) / 792 },
-                    { x: (this.state.rectangle.x / 612), y: (this.state.rectangle.y + this.state.rectangle.height) / 792 },
+                    { x: (this.state.rectangle.x / this.props.json.pages[this.state.pageNumber-1].width), y: (this.state.rectangle.y / this.props.json.pages[this.state.pageNumber-1].height) },
+                    { x: (this.state.rectangle.x + this.state.rectangle.width) / this.props.json.pages[this.state.pageNumber-1].width, y: this.state.rectangle.y / this.props.json.pages[this.state.pageNumber-1].height },
+                    { x: (this.state.rectangle.x + this.state.rectangle.width) / this.props.json.pages[this.state.pageNumber-1].width, y: (this.state.rectangle.y + this.state.rectangle.height) / this.props.json.pages[this.state.pageNumber-1].height },
+                    { x: (this.state.rectangle.x / this.props.json.pages[this.state.pageNumber-1].width), y: (this.state.rectangle.y + this.state.rectangle.height) / this.props.json.pages[this.state.pageNumber-1].height },
 
                 ]
                 const columns = {
