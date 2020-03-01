@@ -43,10 +43,15 @@ class TableDemandado extends Component {
            
             if (this.props.tablaBounding == 'demandados') {
               
-                console.log('ULTIMO FOCUS')
-                console.log()
-                console.log(this.state[this.state.ultimFocus.tipo])
+               
                 this.setState({[this.state.ultimFocus.tipo]:this.state[this.state.ultimFocus.tipo]+ this.props.bounding})
+            }
+            if(this.props.tablaBounding=='demandadosadd'){
+                console.log('NUEVA PALABRA PARA EL EDIT Y ES:')
+                console.log(this.props.bounding)
+                this.setState({addRowValues:{...this.state.addRowValues, [this.state.ultimFocus.tipo]:this.props.bounding}}, function(){
+                    console.log(this.state.addRowValues)
+                })
             }
 
         }
@@ -195,10 +200,13 @@ class TableDemandado extends Component {
                                         margin="normal"
                                         onFocus={(e) => {
                                             try {
+                                                this.props.handleUltimTable('demandadosadd')
                                                 this.focusElement2(e, this.props.resaltado.fields.demandados, this.state.itemEdit, 'nombre', 'nombre')
                                             }
                                             catch (error) {
-                                              
+                                                this.setState({ ultimFocus: { id: this.state.itemEdit, tipo: 'nombre' } }, function(){
+                                                    console.log(this.state.ultimFocus)
+                                                })
                                                 console.log(error)
                                             }
                                         }}
@@ -233,9 +241,13 @@ class TableDemandado extends Component {
                                     margin="normal"
                                     onFocus={(e) => {
                                         try {
+                                            this.props.handleUltimTable('demandadosadd')
                                             this.focusElement2(e, this.props.resaltado.fields.demandados, this.state.itemEdit, 'identificacion', 'identificacion')
                                         }
                                         catch (error) {
+                                            this.setState({ ultimFocus: { id: this.state.itemEdit, tipo: 'identificacion' } }, function(){
+                                                console.log(this.state.ultimFocus)
+                                            })
                                             console.log(error)
                                         }
                                     }}
@@ -245,7 +257,12 @@ class TableDemandado extends Component {
                                     value={String(this.state.addRowValues.monto)}
                                     label="Monto"
                                     margin="normal"
-                                    onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.monto : null)) }}
+                                    onFocus={(e) => { 
+                                        this.props.handleUltimTable('demandadosadd')
+                                        this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.monto : null))
+                                        this.setState({ ultimFocus: { id: this.state.itemEdit, tipo: 'monto' } }, function(){
+                                            console.log(this.state.ultimFocus)
+                                        }) }}
                                 /></div></td>
                                 <td><div className="edits-rows">
                                     <a onClick={this.handleCancelAdd}><div className="button-edit-row"><MdCancel /></div></a>
