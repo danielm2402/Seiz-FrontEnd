@@ -66,7 +66,7 @@ function* updateUserSaga(payload) {
 
     };
     const data = yield axios.put('https://bancow.finseiz.com/api/v1/users/' + payload.data.id, {
-        entity: {
+        
             email: payload.data.email,
             name: payload.data.name,
             enabled: payload.data.enabled,
@@ -74,7 +74,7 @@ function* updateUserSaga(payload) {
             embTypes: payload.data.embTypes,
             roles: payload.data.roles,
             username: payload.data.username
-        }
+        
     }, config)
         .then(response => response)
         .catch(error => error.response)

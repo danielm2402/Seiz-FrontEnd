@@ -258,7 +258,7 @@ function* confirmarEmbargoSaga(payload) {
     },
   };
   const data = yield axios.post('https://bancow.finseiz.com/api/v1/embargos/confirm', {
-    embargo: {
+    
       account: payload.data.account,
       address: payload.data.address,
       amount: payload.data.amount,
@@ -267,11 +267,11 @@ function* confirmarEmbargoSaga(payload) {
       documentDate: payload.data.documentDate,
       documentType: payload.data.documentType,
       embargoType: payload.data.embargoType,
+      id:payload.data.id,
       reference: payload.data.reference,
       sender: payload.data.sender,
-      idEmbargo: payload.data.id
-    },
-
+ 
+    
 
   }, config)
     .then(response => response)
@@ -604,14 +604,24 @@ function* updateDemandadoSaga(payload) {
   }
 }
 function* updateDemandanteSaga(payload){
-  console.log('GET demandado');
+  console.log('UPDATE DEMANDANTE');
+  console.log(payload.data)
   const config = {
     headers: {
       Authorization: 'Bearer ' + payload.token,
       Accept: 'application/json',
     },
   };
-  const data= yield axios.put('https://bancow.finseiz.com/api/v1/demandantes/'+payload.id,{},config)
+  const data= yield axios.put('https://bancow.finseiz.com/api/v1/demandantes/{id}',{
+   
+      id: payload.id,
+      identificacion:payload.data.identificacion,
+      nombres:payload.data.nombres
+    
+},config)
+  .then(response=>response)
+  .catch(err=>err.response)
+  console.log(data)
 }
 
 function* embargosRootSaga() {

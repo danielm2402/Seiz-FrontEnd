@@ -76,7 +76,7 @@ class TableDemandantes extends Component {
             identificacion: identificacion,
 
         }
-        this.props.handleUpdate(id, obj);
+        this.props.handleUpdate(id, obj, this.props.token);
         this.handleCancelEdit()
 
     }

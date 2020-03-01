@@ -71,10 +71,11 @@ export const updateDemandando=(id, data, demandados, token, idDoc)=>({
     token,
     demandados
 })
-export const updateDemandante=(id, data)=>({
+export const updateDemandante=(id, data, token)=>({
     type:types.UPDATE_DEMANDANTE,
     id,
-    data
+    data,
+    token
 })
 export const deleteDemandante=(id, token)=>({
     type:types.DELETE_DEMANDANTE,
