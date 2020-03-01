@@ -43,8 +43,10 @@ class TableDemandado extends Component {
            
             if (this.props.tablaBounding == 'demandados') {
               
-                console.log(this.props.bounding)
-                this.setState({nombre:this.props.bounding})
+                console.log('ULTIMO FOCUS')
+                console.log()
+                console.log(this.state[this.state.ultimFocus.tipo])
+                this.setState({[this.state.ultimFocus.tipo]:this.state[this.state.ultimFocus.tipo]+ this.props.bounding})
             }
 
         }
@@ -322,9 +324,14 @@ class TableDemandado extends Component {
                                                 margin="normal"
                                                 onFocus={(e) => {
                                                     try {
+                                                        this.props.handleUltimTable('demandados')
                                                         this.focusElement2(e, this.props.resaltado.fields.demandados, this.state.itemEdit, 'identificacion', 'identificacion')
                                                     }
                                                     catch (error) {
+                                                        this.setState({ ultimFocus: { id: item.id, tipo: 'identificacion' } }, function(){
+                                                            console.log(this.state.ultimFocus)
+                                                        })
+                                                        console.log(error)
                                                         console.log(error)
                                                     }
                                                 }}
@@ -334,7 +341,12 @@ class TableDemandado extends Component {
                                                 value={this.state.monto}
                                                 label="Monto"
                                                 margin="normal"
-                                                onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.monto : null)) }}
+                                                onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.monto : null))
+                                                this.setState({ ultimFocus: { id: item.id, tipo: 'monto' } }, function(){
+                                                    console.log(this.state.ultimFocus)
+                                                })
+                                               
+                                            }}
                                             /></div></td>
                                             <td><div className="edits-rows">
                                                 <a onClick={this.handleCancelEdit}><div className="button-edit-row"><MdCancel /></div></a>

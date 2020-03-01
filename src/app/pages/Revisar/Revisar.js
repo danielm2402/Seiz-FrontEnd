@@ -716,7 +716,7 @@ class Revisar extends Component {
                     palabra = palabra + ' ' + item.text
 
                 })
-                palabra= this.state[this.state.actualFocus]+palabra
+               // palabra= this.state[this.state.actualFocus]==''||this.state[this.state.actualFocus]===undefined?palabra:this.state[this.state.actualFocus]+palabra
                 
                 this.props.handleRegion(palabra)
                
