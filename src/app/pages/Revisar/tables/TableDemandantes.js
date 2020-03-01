@@ -35,12 +35,13 @@ class TableDemandantes extends Component {
     componentDidUpdate(prevProps) {
 
         if (this.props.bounding !== prevProps.bounding) {
-
+           
             if (this.props.tablaBounding == 'demandantes') {
-               
-                this.setState({ [this.state.ultimFocus.tipo]: this.props.bounding }, function () {
-                    
-                })
+              
+                console.log('ULTIMO FOCUS')
+                console.log()
+                console.log(this.state[this.state.ultimFocus.tipo])
+                this.setState({[this.state.ultimFocus.tipo]:(this.state[this.state.ultimFocus.tipo]===undefined?'':this.state[this.state.ultimFocus.tipo]).concat(this.props.bounding)})
             }
 
         }
@@ -242,9 +243,13 @@ class TableDemandantes extends Component {
                                                     margin="normal"
                                                     onFocus={(e) => {
                                                         try {
+                                                            this.props.handleUltimTable('demandantes')
                                                             this.focusElement2(e, this.props.resaltado.fields.demandantes, this.state.itemEdit, 'nombre', 'nombre')
                                                         }
                                                         catch (error) {
+                                                            this.setState({ ultimFocus: { id: item.id, tipo: 'nombre' } }, function(){
+                                                                console.log(this.state.ultimFocus)
+                                                            })
                                                             console.log(error)
                                                         }
                                                     }}
@@ -253,13 +258,16 @@ class TableDemandantes extends Component {
                                             <td><div className="element-table"></div><TextField
                                                 onChange={(e) => this.setState({ identificacion: e.target.value })}
                                                 value={this.state.identificacion}
-                                                label="Identificación"
                                                 margin="normal"
                                                 onFocus={(e) => {
                                                     try {
+                                                        this.props.handleUltimTable('demandantes')
                                                         this.focusElement2(e, this.props.resaltado.fields.demandantes, this.state.itemEdit, 'identificacion', 'identificacion')
                                                     }
                                                     catch (error) {
+                                                        this.setState({ ultimFocus: { id: item.id, tipo: 'identificacion' } }, function(){
+                                                            console.log(this.state.ultimFocus)
+                                                        })
                                                         console.log(error)
                                                     }
                                                 }}

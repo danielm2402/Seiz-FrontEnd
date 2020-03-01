@@ -342,6 +342,7 @@ class TableDemandado extends Component {
                                                 label="Monto"
                                                 margin="normal"
                                                 onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.monto : null))
+                                                this.props.handleUltimTable('demandados')
                                                 this.setState({ ultimFocus: { id: item.id, tipo: 'monto' } }, function(){
                                                     console.log(this.state.ultimFocus)
                                                 })
