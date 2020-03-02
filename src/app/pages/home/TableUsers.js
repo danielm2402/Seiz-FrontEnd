@@ -15,6 +15,7 @@ export default function RenderImage(props) {
         ]}
         data={props.data}  
         options={{
+          search:false,
           filtering: false,
           paging: false,
           pageSize: 5,

@@ -17,6 +17,7 @@ import NewUsers from "../../widgets/NewUsers";
 import LatestUpdates from "../../widgets/LatestUpdates";
 import BestSellers from "../../widgets/BestSellers";
 import RecentActivities from "../../widgets/RecentActivities";
+import MyRecentActivities from "../../widgets/MyRecentActivities";
 import PortletHeaderDropdown from "../../partials/content/CustomDropdowns/PortletHeaderDropdown";
 import { MdVideoLibrary, MdFileUpload, MdFileDownload, MdCloudUpload, MdSearch, MdEmail, MdNotificationsActive } from "react-icons/md";
 import { FaSearch, FaCheck, FaUpload, FaEye } from "react-icons/fa";
@@ -232,7 +233,7 @@ function Dashboard(props) {
           </div>
         </div>
         <div className="col-xl-4">
-          <RecentActivities />
+          <MyRecentActivities />
         </div>
       </div>
     </>

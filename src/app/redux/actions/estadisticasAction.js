@@ -38,5 +38,36 @@ export const getStatsRankingUserSuccess=(data)=>({
     data
 });
 
+export const statsMeMvp=(token)=>({
+    type: types.STATS_ME_MVP,
+    token
+});
+export const statsMeMvpSuccess=(data)=>({
+    type: types.STATS_ME_MVP_SUCCESS,
+    data
+});
+
+export const getHistorial=(token)=>({
+    type: types.GET_HISTORIAL,
+    token
+});
+export const getHistorialSuccess=(data)=>({
+    type: types.GET_HISTORIAL_SUCCESS,
+    data
+});
+
+export const getHistorialMe=(token, user)=>({
+    type: types.GET_HISTORIAL_ME,
+    token,
+    user
+});
+export const getHistorialSuccessMe=(data)=>({
+    type: types.GET_HISTORIAL_SUCCESS_ME,
+    data
+});
+
+
+
+
 
 

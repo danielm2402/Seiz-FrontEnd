@@ -31,7 +31,7 @@ export default class Example extends PureComponent {
   static jsfiddleUrl = 'https://jsfiddle.net/alidingling/9xopwa9v/';
   componentDidMount() {
  
-   
+    
   }
 
   render() {

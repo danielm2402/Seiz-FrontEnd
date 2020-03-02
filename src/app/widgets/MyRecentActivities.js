@@ -19,7 +19,7 @@ function RecentActivities(props) {
       <div className="kt-portlet kt-portlet--height-fluid">
         <div className="kt-portlet__head">
           <div className="kt-portlet__head-label">
-            <h3 className="kt-portlet__head-title">Ultimos embargos confirmados</h3>
+            <h3 className="kt-portlet__head-title">Mis ultimos embargos confirmados</h3>
           </div>
          
         </div>
@@ -67,7 +67,7 @@ function RecentActivities(props) {
   );
 }
 const mapStateToProps=(state)=>({
- historial: state.estadisticasReducer.historial
+ historial: state.estadisticasReducer.myHistorial
 })
 const mapDispatchToProps=(dispatch)=>({
  
