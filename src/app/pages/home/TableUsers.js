@@ -1,24 +1,24 @@
 import React, { useState }  from 'react';
 import MaterialTable from 'material-table';
-export default function RenderImage() {
+import Avatar from 'react-avatar';
+export default function RenderImage(props) {
     return (
       <MaterialTable
         title="Ranking"
         columns={[
-          { title: 'Avatar', field: 'imageUrl', render: rowData => <img src={rowData.imageUrl} style={{width: 40, borderRadius: '50%'}}/> },
-          { title: 'Name', field: 'name' },
-          { title: 'Surname', field: 'surname' },
-          { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
-          {
-            title: 'Birth Place',
-            field: 'birthCity',
-            lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
-          },
+          { title: 'Avatar', field: 'imageUrl', render: rowData =>  <Avatar size={'60px'} name={rowData.name} /> },
+          { title: 'Nombre', field: 'name' },
+          { title: 'Apellido', field: 'surname' },
+          { title: 'Usuario', field: 'username'},
+          { title: 'Email', field: 'email'},
+         
         ]}
-        data={[
-          { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63, imageUrl: 'https://avatars0.githubusercontent.com/u/7895451?s=460&v=4' },
-          { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34, imageUrl: 'https://avatars0.githubusercontent.com/u/7895451?s=460&v=4' },
-        ]}        
+        data={props.data}  
+        options={{
+          filtering: false,
+          paging: false,
+          pageSize: 5,
+        }}      
       />
     )
   }

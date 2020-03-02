@@ -4,7 +4,7 @@ import {
 } from 'redux-saga/effects';
 import axios from 'axios';
 import { CONTEO_EMBARGOS,STATS_RANKING_USER, CONTEO_EMBARGOS_SUCCESS, STATS_USER, STATS_USER_SUCCESS, STATS_GENERAL, STATS_GENERAL_SUCCESS } from '../../constants/estadisticasConst'
-import { getConteoEmbargosSuccess } from '../../actions/estadisticasAction'
+import { getConteoEmbargosSuccess,getStatsRankingUserSuccess } from '../../actions/estadisticasAction'
 import * as auth from "../../../store/ducks/auth.duck";
 
 function* conteoEmbargosSaga(payload) {
@@ -72,6 +72,26 @@ function* rankingUsersSaga(payload){
     .then(response=>response)
     .catch(error=>error.response)
     console.log(data)
+    switch (data.status) {
+        case 200:
+          let vector=[]
+                for(var i=0; i<data.data.length; i++){
+                  var element=yield  axios.get('https://bancow.finseiz.com/api/v1/users/'+data.data[i].user, config)
+                  .then(response=>response.data)
+                  .catch(err=>err.response)
+                  vector.push(element)
+                  
+                }
+                
+          
+            yield put(getStatsRankingUserSuccess(vector))
+      
+            
+            break;
+    
+        default:
+            break;
+    }
 }
 
 function* userRootSaga() {

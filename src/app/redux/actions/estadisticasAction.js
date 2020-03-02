@@ -33,5 +33,10 @@ export const getStatsRankingUser=(token)=>({
     type: types.STATS_RANKING_USER,
     token
 });
+export const getStatsRankingUserSuccess=(data)=>({
+    type: types.STATS_RANKING_USER_SUCCESS,
+    data
+});
+
 
 

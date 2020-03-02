@@ -183,7 +183,7 @@ function Dashboard(props) {
             </div>
           </div>
           <div className="container-bottom">
-            <TableUsers/>
+            <TableUsers data={props.usersRanking}/>
           </div>
       </div>
       </div>
@@ -242,7 +242,8 @@ function Dashboard(props) {
 const mapStateToProps=(state)=>({
   token: state.auth.authToken,
 embargos: state.EmbargosReducer.porConfirmar,
-conteoEmbargos: state.estadisticasReducer.conteo
+conteoEmbargos: state.estadisticasReducer.conteo,
+usersRanking: state.estadisticasReducer.ranking
 })
 const mapDispatchToProps=(dispatch)=>({
   getEmbargos: bindActionCreators(getEmbargosAsignados,dispatch)
