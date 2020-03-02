@@ -67,6 +67,17 @@ export const getHistorialSuccessMe=(data)=>({
 });
 
 
+export const getBarrasSemanales=(token, user)=>({
+    type: types.GET_BARRAS_SEMANALES,
+    token,
+    user
+});
+export const getBarrasSemanalesSuccess=(data)=>({
+    type: types.GET_BARRAS_SEMANALES_SUCCESS,
+    data
+});
+
+
 
 
 

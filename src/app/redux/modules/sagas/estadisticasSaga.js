@@ -3,7 +3,7 @@ import {
     call, fork, put, take, takeEvery, all
 } from 'redux-saga/effects';
 import axios from 'axios';
-import { GET_HISTORIAL_ME,GET_HISTORIAL, CONTEO_EMBARGOS, STATS_RANKING_USER, STATS_ME_MVP, CONTEO_EMBARGOS_SUCCESS, STATS_USER, STATS_USER_SUCCESS, STATS_GENERAL, STATS_GENERAL_SUCCESS } from '../../constants/estadisticasConst'
+import { GET_BARRAS_SEMANALES,GET_HISTORIAL_ME,GET_HISTORIAL, CONTEO_EMBARGOS, STATS_RANKING_USER, STATS_ME_MVP, CONTEO_EMBARGOS_SUCCESS, STATS_USER, STATS_USER_SUCCESS, STATS_GENERAL, STATS_GENERAL_SUCCESS } from '../../constants/estadisticasConst'
 import { getHistorialSuccessMe,getConteoEmbargosSuccess,getHistorialSuccess, getStatsRankingUserSuccess } from '../../actions/estadisticasAction'
 import * as auth from "../../../store/ducks/auth.duck";
 
@@ -185,8 +185,30 @@ function* getHistorialMeSaga(payload) {
 
 }
 
+function* getBarrasSemanalesSaga(payload) {
+    console.log('OBTENIENDO HISTORIAL')
+    const config = {
+        headers: {
+            Authorization: 'Bearer ' + payload.token,
+            'Content-Type': 'application/json'
+        },
+    };
+    console.log('FECHA DE CADA DIA DE LA ANTERIOR SEMANA')
+    var fechaActual = new Date();
+    var dia= new Date(fechaActual.getTime())
+    console.log(dia.getFullYear())
+   console.log(dia.getMonth()+1)
+   console.log(dia.getDay())
 
-
+ 
+   var diasARestar= 6+dia.getUTCDay()
+   var fechaInicio= new Date(`${dia.getMonth()+1}/${dia.getDay()+1}/${dia.getFullYear()}`)
+   console.log(fechaInicio)
+   fechaInicio.setDate(fechaInicio.getDate() - diasARestar);
+  console.log(fechaInicio)
+  
+   
+}
 
 function* userRootSaga() {
     yield all([
@@ -195,6 +217,7 @@ function* userRootSaga() {
         takeEvery(STATS_ME_MVP, statsMeMvpSaga),
         takeEvery(GET_HISTORIAL, getHistorialSaga),
         takeEvery(GET_HISTORIAL_ME, getHistorialMeSaga),
+        takeEvery(GET_BARRAS_SEMANALES, getBarrasSemanalesSaga),
         
 
 
