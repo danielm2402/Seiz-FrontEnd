@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
-import {addFile} from '../../redux/actions/uploadAction'
+import {addFile, setPositionProcess, resetMensaje} from '../../redux/actions/uploadAction'
+
+
 import Second from './Second'
 import './First.css'
 class First extends Component {
@@ -12,6 +14,7 @@ class First extends Component {
         }
     }
     onChangeHandler=event=>{
+        this.props.handlePosition(1)
         this.setState({
           files:event.target.files,
         }, function(){
@@ -54,10 +57,12 @@ class First extends Component {
     }
 }
 const mapDispatchToProps=(dispatch)=>({
-    handleAddFile: bindActionCreators(addFile,dispatch)
+    handleAddFile: bindActionCreators(addFile,dispatch),
+    handlePosition: bindActionCreators(setPositionProcess,dispatch)
 })
 const mapStateToProps=(state)=>({
-    token: state.auth.authToken
+    token: state.auth.authToken,
+    mensaje: state.uploadReducer.mensaje
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(First)

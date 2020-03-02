@@ -6,36 +6,68 @@ import {
     UPLOAD_REQUEST
 } from '../../constants/UploadConsts';
 import {
-uploadFailed, uploadSuccess
-}from '../../actions/uploadAction'
+    uploadFailed, uploadSuccess,uploadMensaje
+} from '../../actions/uploadAction'
 import * as auth from "../../../store/ducks/auth.duck";
 
 function* uploadSaga(payload) {
     console.log('upload desde saga...');
-    console.log(payload.array)
+    console.log(payload.array[0])
     var bodyFormData = new FormData();
-    bodyFormData.append('files',payload.array[0]); 
-    const config = {
-        headers: {  
-            Authorization: 'Bearer ' + payload.token, 
-            'Content-Type':'application/pdf'
+    bodyFormData.append('files', payload.array[0], 'file.pdf');
+    console.log(bodyFormData)
+
+    const instance = axios.create({
+        baseURL: 'https://bancow.finseiz.com/api/v1',
+        timeout: 50000,
+        transformRequest: [(data, headers) => {
+            delete headers.common["Content-Type"]
+            return data
+        }]
+      });
+
+    const data=yield fetch('https://bancow.finseiz.com/api/v1/embargos/upload', 
+      {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Bearer ' + payload.token,
+            
+        },
+        body: bodyFormData
+      }
+    )
+    .then(response => response.json())
+    .catch(error => error.response.json())
+   
+    /* const data = yield instance.post('/embargos/upload', {files:bodyFormData}, {
+        headers: {
+            'Authorization': 'Bearer ' + payload.token,
+
+            //'Content-Type': 'multipart/form-data'
+            
+            "Content-Type": `multipart/form-data; boundary=${bodyFormData._boundary}`,
+
+            //'content-Type':'multipart/mixed'
+            
         }
-    };
-    const data= yield axios.post('https://bancow.finseiz.com/api/v1/embargos/upload',bodyFormData, config)
-    .then(response=>response)
-    .catch(error=>error.response)
+        ,
+        data: {},
+    })
+        .then(response => response)
+        .catch(error => error.response) */
     console.log(data)
     switch (data.status) {
         case 200:
+            yield put(uploadMensaje('Documentos subidos con éxito'))
             yield put(uploadSuccess())
-            
-        break;
+
+            break;
         case 401:
             yield put(auth.actions.logout())
             break;
-    
+
         default:
-            
+            yield put(uploadMensaje('Error al subir documentos, contacte al administrador'))
             yield put(uploadFailed())
             break;
     }
@@ -45,7 +77,7 @@ function* uploadSaga(payload) {
 function* uploadRootSaga() {
     yield all([
         takeEvery(UPLOAD_REQUEST, uploadSaga),
-       
+
     ])
 }
 

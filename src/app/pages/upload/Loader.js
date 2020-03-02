@@ -3,7 +3,13 @@ import { ProgressBar } from 'react-bootstrap';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 import { Redirect } from "react-router-dom";
-
+import {resetMensaje } from '../../redux/actions/uploadAction'
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 //import {ModalContainer, ModalDialog} from 'react-modal-dialog';
 import './Sencond.css'
 class Loader extends Component {
@@ -29,9 +35,39 @@ class Loader extends Component {
                  </div>:
 
                 <div>
-                    <Redirect to='/dashboard'/>;
+                    <Redirect to='/upload'/>
                 </div> 
                 }
+
+<Dialog
+                    open={this.props.mensaje.exist}
+                    onClose={() => {
+                        this.props.goToStep(1)
+                        this.props.handleResetMensaje()
+                        
+                    }
+                    }
+                    aria-labelledby="alert-dialog-title"
+                    aria-describedby="alert-dialog-description"
+                >
+                    <DialogTitle id="alert-dialog-title">{"Confirmación de embargo"}</DialogTitle>
+                    <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            {this.props.mensaje.mensaje}
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+
+                        <Button onClick={() => {
+                            this.props.goToStep(1)
+                            this.props.handleResetMensaje()
+                            
+                        }} color="primary" autoFocus>
+                            Aceptar
+                                          </Button>
+                    </DialogActions>
+                </Dialog>
+
                 
             </div>
         )
@@ -39,9 +75,10 @@ class Loader extends Component {
 }
 
 const mapStateToProps=(state)=>({
-    loading: state.uploadReducer.loading
+    loading: state.uploadReducer.loading,
+    mensaje: state.uploadReducer.mensaje
 })
 const mapDispatchToProps=(dispatch)=>({
-
+    handleResetMensaje: bindActionCreators(resetMensaje, dispatch)
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Loader)

@@ -3,7 +3,7 @@ import {
     call, fork, put, take, takeEvery, all
 } from 'redux-saga/effects';
 import axios from 'axios';
-import { CONTEO_EMBARGOS, CONTEO_EMBARGOS_SUCCESS, STATS_USER, STATS_USER_SUCCESS, STATS_GENERAL, STATS_GENERAL_SUCCESS } from '../../constants/estadisticasConst'
+import { CONTEO_EMBARGOS,STATS_RANKING_USER, CONTEO_EMBARGOS_SUCCESS, STATS_USER, STATS_USER_SUCCESS, STATS_GENERAL, STATS_GENERAL_SUCCESS } from '../../constants/estadisticasConst'
 import { getConteoEmbargosSuccess } from '../../actions/estadisticasAction'
 import * as auth from "../../../store/ducks/auth.duck";
 
@@ -50,10 +50,34 @@ function* conteoEmbargosSaga(payload) {
 
 
 }
+function* rankingUsersSaga(payload){
+    const config = {
+        headers: {
+            Authorization: 'Bearer ' + payload.token,
+            'Content-Type': 'application/json'
+        },
+       
+    };
+    var fecha=new Date();
+    
+    var HaceUnaSemanaNoFormat=(new Date(fecha.getTime() - (24*60*60*1000)*7))
+    var HaceUnaSemana=(new Date(fecha.getTime() - (24*60*60*1000)*7)).toISOString().split('T')[0];
+    var HaceUnaSemanaFormat=HaceUnaSemana.split('-')
+    var ultimoDia= (new Date(fecha.getTime()).toISOString().split('T')[0]).split('-')
+   
+    console.log(HaceUnaSemanaFormat)
+    console.log(ultimoDia);
+   
+    const data= yield axios.get('https://bancow.finseiz.com/api/v1/stats/users?filter=CONFIRMED&page=0&range='+HaceUnaSemanaFormat[0]+'.'+HaceUnaSemanaFormat[1]+'.'+HaceUnaSemanaFormat[2]+'-'+ultimoDia[0]+'.'+ultimoDia[1]+'.'+ultimoDia[2]+'&size=10',config)
+    .then(response=>response)
+    .catch(error=>error.response)
+    console.log(data)
+}
 
 function* userRootSaga() {
     yield all([
         takeEvery(CONTEO_EMBARGOS, conteoEmbargosSaga),
+        takeEvery(STATS_RANKING_USER, rankingUsersSaga),
 
     ])
 }

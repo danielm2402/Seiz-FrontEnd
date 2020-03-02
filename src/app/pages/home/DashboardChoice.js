@@ -2,10 +2,11 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Dashboard from './Dashboard'
 import { bindActionCreators } from 'redux';
-import {getConteoEmbargos} from '../../redux/actions/estadisticasAction'
+import {getConteoEmbargos, getStatsRankingUser} from '../../redux/actions/estadisticasAction'
 class DashboardChoice extends Component {
     componentDidMount(){
         this.props.handleConteoEmbargos(this.props.token, this.props.user)
+        this.props.handleRanking(this.props.token)
     }
     render() {
         return (
@@ -22,6 +23,7 @@ const mapStateToProps=(state)=>({
     user: state.auth.user.username
 })
 const mapDispatchToProps=(dispatch)=>({
-    handleConteoEmbargos: bindActionCreators(getConteoEmbargos,dispatch)
+    handleConteoEmbargos: bindActionCreators(getConteoEmbargos,dispatch),
+    handleRanking: bindActionCreators(getStatsRankingUser, dispatch)
 })
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardChoice)

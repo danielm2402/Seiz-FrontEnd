@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 
-import { uploadRequest } from '../../redux/actions/uploadAction'
+import { uploadRequest,setPositionProcess } from '../../redux/actions/uploadAction'
 import './Sencond.css'
 import axios from 'axios'
 import { TiDocumentText } from "react-icons/ti";
@@ -35,6 +35,7 @@ class Second extends Component {
 
     handleLoad = () => {
         console.log('LOADING');
+        this.props.handlePosition(2)
         this.props.handleRequest(this.state.files, this.props.token)
         this.props.nextStep()
     }
@@ -51,7 +52,7 @@ class Second extends Component {
                     {this.state.files.map((item) => {
                         return (
                             <div className="container-item-document">
-                                <TiDocumentText style={{ color:'#ffffff', width: '200px', height: '200px' }} />
+                                <TiDocumentText style={{ color:'#E7E7E7', width: '200px', height: '200px' }} />
                                 <p>{item.name}</p>
                             </div>
                         )
@@ -67,6 +68,7 @@ class Second extends Component {
 }
 
 const mapDisptachToProps = (dispatch) => ({
+    handlePosition: bindActionCreators(setPositionProcess,dispatch),
     handleRequest: bindActionCreators(uploadRequest, dispatch)
 })
 const mapStateToProps = (state) => ({

@@ -18,3 +18,19 @@ export const addFile=(file)=>({
 export const updateLoader=()=>({
     type: types.UPDATE_LOADER
 })
+export const setPositionProcess=(item)=>({
+    type: types.SET_POSITION_PROCESS,
+    item
+})
+export const uploadMensaje=(mensaje)=>({
+    type: types.UPLOAD_MENSAJE,
+    mensaje
+})
+export const resetMensaje=()=>({
+    type: types.RESET_MENSAJE,
+    
+})
+
+
+
+
