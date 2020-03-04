@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Dashboard from './Dashboard'
 import { bindActionCreators } from 'redux';
-import {getConteoEmbargos, getStatsRankingUser,getHistorial,getHistorialMe,getBarrasSemanales,statsMeMvp,getStadisticsUserGeneral} from '../../redux/actions/estadisticasAction'
+import {getConteoEmbargos, getStatsRankingUser,getHistorial,getHistorialMe,getBarrasSemanales,statsMeMvp,getStadisticsUserGeneral,getPolygon} from '../../redux/actions/estadisticasAction'
 class DashboardChoice extends Component {
     componentDidMount(){
         this.props.handleConteoEmbargos(this.props.token, this.props.user)
@@ -12,6 +12,8 @@ class DashboardChoice extends Component {
         this.props.handleBarrasSemanales(this.props.token, this.props.user)
         this.props.handleMvp(this.props.token)
         this.props.handleOthersStadistics(this.props.token)
+        this.props.handlePolygon(this.props.token, this.props.user)
+        
     }
     render() {
         return (
@@ -34,7 +36,8 @@ const mapDispatchToProps=(dispatch)=>({
     handleHistorialMe:bindActionCreators(getHistorialMe,dispatch),
     handleBarrasSemanales: bindActionCreators(getBarrasSemanales,dispatch),
     handleMvp: bindActionCreators(statsMeMvp, dispatch),
-    handleOthersStadistics: bindActionCreators(getStadisticsUserGeneral,dispatch)
+    handleOthersStadistics: bindActionCreators(getStadisticsUserGeneral,dispatch),
+    handlePolygon: bindActionCreators(getPolygon,dispatch)
     
 })
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardChoice)

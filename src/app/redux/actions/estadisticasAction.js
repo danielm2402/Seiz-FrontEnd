@@ -86,6 +86,18 @@ export const getStadisticsUserGeneralSuccess=(data)=>({
     data
 });
 
+export const getPolygon=(token, user)=>({
+    type: types.GET_POLYGON,
+    token,
+    user
+});
+export const getPolygonSuccess=(data)=>({
+    type: types.GET_POLYGON_SUCCESS,
+    data
+});
+
+
+
 
 
 

@@ -1,9 +1,9 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Component } from 'react';
 import {
   Radar, RadarChart, PolarGrid, Legend,
   PolarAngleAxis, PolarRadiusAxis,ResponsiveContainer
 } from 'recharts';
-
+import { connect } from 'react-redux'
 const data = [
   {
     subject: 'Enviados', A: 120, B: 110, fullMark: 150,
@@ -25,13 +25,36 @@ const data = [
   },
 ];
 
-export default class Example extends PureComponent {
+class Example extends Component {
   static jsfiddleUrl = 'https://jsfiddle.net/alidingling/dpgb3xjq/';
 
   render() {
+   
+    
+        const{AsignadosVsConfirmados,MvpConfirmadosVsMe,PromConfirmadoVsMe,MvpSubidosVsMe,PromedioSubidosVsMe,MvpAsignadosVsMe}=this.props.poly
+        const data1 = [
+          {
+            subject: 'Asignados vs Confirmados', A: AsignadosVsConfirmados.other, B: AsignadosVsConfirmados.me, fullMark: AsignadosVsConfirmados.tope,
+          },
+          {
+            subject: 'CONFIRM: MVP vs Me', A: MvpConfirmadosVsMe.other, B: MvpConfirmadosVsMe.me, fullMark: MvpConfirmadosVsMe.tope,
+          },
+          {
+            subject: 'CONFIRM: Prom vs Me', A: PromConfirmadoVsMe.other, B: PromConfirmadoVsMe.me, fullMark: PromConfirmadoVsMe.tope,
+          },
+          {
+            subject: 'UPLOAD: MVP vs Me', A: MvpSubidosVsMe.other, B: MvpSubidosVsMe.me, fullMark: MvpSubidosVsMe.tope,
+          },
+          {
+            subject: 'UPLOAD: Prom vs Me', A: PromedioSubidosVsMe.other, B: PromedioSubidosVsMe.me, fullMark: PromedioSubidosVsMe.tope,
+          },
+          {
+            subject: 'ASSIGNED: MVP vs Me', A: MvpAsignadosVsMe.other, B: MvpAsignadosVsMe.me, fullMark: MvpAsignadosVsMe.tope,
+          },
+        ];
     return (
       <ResponsiveContainer>
-      <RadarChart  outerRadius={150} data={data}>
+      <RadarChart  outerRadius={150} data={data1}>
         <PolarGrid />
         <PolarAngleAxis dataKey="subject" />
         <PolarRadiusAxis angle={30} domain={[0, 150]} />
@@ -43,3 +66,9 @@ export default class Example extends PureComponent {
     );
   }
 }
+
+const mapStateToProps=(state)=>({
+  poly: state.estadisticasReducer.polygon
+})
+export default connect(mapStateToProps)(Example)
+

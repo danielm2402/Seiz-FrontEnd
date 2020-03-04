@@ -1,18 +1,29 @@
 
-import {GET_ESTADISTICAS_USER_GENERAL_SUCCESS,GET_HISTORIAL_SUCCESS, GET_HISTORIAL_SUCCESS_ME,GET_BARRAS_SEMANALES_SUCCESS,STATS_ME_MVP_SUCCESS,
-    CONTEO_EMBARGOS,STATS_RANKING_USER_SUCCESS, CONTEO_EMBARGOS_SUCCESS, STATS_USER, STATS_USER_SUCCESS, STATS_GENERAL, STATS_GENERAL_SUCCESS
+import {
+    GET_POLYGON_SUCCESS, GET_ESTADISTICAS_USER_GENERAL_SUCCESS, GET_HISTORIAL_SUCCESS, GET_HISTORIAL_SUCCESS_ME, GET_BARRAS_SEMANALES_SUCCESS, STATS_ME_MVP_SUCCESS,
+    CONTEO_EMBARGOS, STATS_RANKING_USER_SUCCESS, CONTEO_EMBARGOS_SUCCESS, STATS_USER, STATS_USER_SUCCESS, STATS_GENERAL, STATS_GENERAL_SUCCESS
 } from '../../constants/estadisticasConst';
 
 export const Authstate = {
     conteo: { loading: true, data: {} },
     users: { loading: true, data: [] },
     general: { loading: true, data: [] },
-    ranking:[],
-    historial:[],
-    myHistorial:[],
-    semanal:{general:[[],[],[],[],[],[]], user:[[],[],[],[],[],[]]},
-    mvpSemana:[{},{},{},{},{},{}],
-    userStatsOther:{upload:[[],[],[],[],[],[]], userAssig: [[],[],[],[],[],[]]}
+    ranking: [],
+    historial: [],
+    myHistorial: [],
+    semanal: { general: [[], [], [], [], [], []], user: [[], [], [], [], [], []] },
+    mvpSemana: [{}, {}, {}, {}, {}, {}],
+    userStatsOther: { upload: [[], [], [], [], [], []], userAssig: [[], [], [], [], [], []] },
+
+    polygon: {
+        AsignadosVsConfirmados: { other: 0, me: 0, tope: 150 },
+        MvpConfirmadosVsMe: { other: 0, me: 0, tope: 150 },
+        PromConfirmadoVsMe: { other: 0, me: 0, tope: 150 },
+        MvpSubidosVsMe: { other: 0, me: 0, tope: 150 },
+        PromedioSubidosVsMe: { other: 0, me: 0, tope: 150 },
+        MvpAsignadosVsMe: { other: 0, me: 0, tope: 150 }
+    }
+
 }
 export default function authReducer(state = Authstate, action = {}) {
     switch (action.type) {
@@ -47,36 +58,42 @@ export default function authReducer(state = Authstate, action = {}) {
                 general: { loading: false, data: action.data }
             }
         case STATS_RANKING_USER_SUCCESS:
-            return{
+            return {
                 ...state,
-                ranking:action.data
+                ranking: action.data
             }
         case GET_HISTORIAL_SUCCESS:
-            return{
+            return {
                 ...state,
-                historial:action.data
+                historial: action.data
             }
         case GET_HISTORIAL_SUCCESS_ME:
-            return{
+            return {
                 ...state,
-                myHistorial:action.data
-            }  
+                myHistorial: action.data
+            }
         case GET_BARRAS_SEMANALES_SUCCESS:
-            return{
+            return {
                 ...state,
-                semanal:{general:action.data.general, user:action.data.user}
-            } 
+                semanal: { general: action.data.general, user: action.data.user }
+            }
         case STATS_ME_MVP_SUCCESS:
-            return{
+            return {
                 ...state,
-                mvpSemana:action.data.reverse()
+                mvpSemana: action.data.reverse()
 
-            }  
+            }
         case GET_ESTADISTICAS_USER_GENERAL_SUCCESS:
-            return{
+            return {
                 ...state,
-                userStatsOther:{upload:action.data.upload, userAssig:action.data.userAssig}
-            }                   
+                userStatsOther: { upload: action.data.upload, userAssig: action.data.userAssig }
+            }
+        case GET_POLYGON_SUCCESS:
+            return {
+                ...state,
+                polygon: action.data
+
+            }
         default:
             return state;
     }

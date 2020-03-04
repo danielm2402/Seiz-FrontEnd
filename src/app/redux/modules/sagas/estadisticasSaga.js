@@ -3,8 +3,8 @@ import {
     call, fork, put, take, takeEvery, all
 } from 'redux-saga/effects';
 import axios from 'axios';
-import { GET_BARRAS_SEMANALES, GET_HISTORIAL_ME, GET_HISTORIAL, CONTEO_EMBARGOS, STATS_RANKING_USER, STATS_ME_MVP, CONTEO_EMBARGOS_SUCCESS, STATS_USER, STATS_USER_SUCCESS, STATS_GENERAL, STATS_GENERAL_SUCCESS, GET_ESTADISTICAS_USER_GENERAL } from '../../constants/estadisticasConst'
-import { statsMeMvpSuccess, getHistorialSuccessMe, getConteoEmbargosSuccess, getHistorialSuccess, getStatsRankingUserSuccess, getBarrasSemanalesSuccess, getStadisticsUserGeneralSuccess } from '../../actions/estadisticasAction'
+import { GET_BARRAS_SEMANALES, GET_POLYGON, GET_HISTORIAL_ME, GET_HISTORIAL, CONTEO_EMBARGOS, STATS_RANKING_USER, STATS_ME_MVP, CONTEO_EMBARGOS_SUCCESS, STATS_USER, STATS_USER_SUCCESS, STATS_GENERAL, STATS_GENERAL_SUCCESS, GET_ESTADISTICAS_USER_GENERAL } from '../../constants/estadisticasConst'
+import { getPolygonSuccess,statsMeMvpSuccess, getHistorialSuccessMe, getConteoEmbargosSuccess, getHistorialSuccess, getStatsRankingUserSuccess, getBarrasSemanalesSuccess, getStadisticsUserGeneralSuccess } from '../../actions/estadisticasAction'
 import * as auth from "../../../store/ducks/auth.duck";
 var jwtDecode = require('jwt-decode');
 function* conteoEmbargosSaga(payload) {
@@ -60,22 +60,22 @@ function* rankingUsersSaga(payload) {
     };
     var fechaActual = new Date();
     var dia = new Date(fechaActual.getTime())
-    console.log(dia)
+
 
     var fecha1 = new Date(dia);
-    console.log(fecha1)
+
     var diapararestar = fecha1.getUTCDay();
     let dias1
     if (diapararestar == 0) {
         dias1 = (-6);
         fecha1.setDate((fecha1.getDate() + dias1) + 1)
-        
+
     } else {
         dias1 = (diapararestar - 1) * (-1);
         fecha1.setDate(fecha1.getDate() + dias1);
         fecha1.setDate(fecha1.getDate() - 7)
     }
-    
+
     var Lunes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
     fecha1.setDate(fecha1.getDate() + 1);
     var Martes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
@@ -136,16 +136,16 @@ function* statsMeMvpSaga(payload) {
 
     var fechaActual = new Date();
     var dia = new Date(fechaActual.getTime())
-    console.log(dia)
+
 
     var fecha1 = new Date(dia);
-    console.log(fecha1)
+
     var diapararestar = fecha1.getUTCDay();
     let dias1
     if (diapararestar == 0) {
         dias1 = (-6);
         fecha1.setDate((fecha1.getDate() + dias1) + 1)
-        
+
     } else {
         dias1 = (diapararestar - 1) * (-1);
         fecha1.setDate(fecha1.getDate() + dias1);
@@ -241,24 +241,22 @@ function* getBarrasSemanalesSaga(payload) {
 
     var fechaActual = new Date();
     var dia = new Date(fechaActual.getTime())
-    console.log(dia)
+
 
     var fecha1 = new Date(dia);
-    console.log(fecha1)
+
     var diapararestar = fecha1.getUTCDay();
     let dias1
     if (diapararestar == 0) {
         dias1 = (-6);
         fecha1.setDate((fecha1.getDate() + dias1) + 1)
-        
+
     } else {
         dias1 = (diapararestar - 1) * (-1);
         fecha1.setDate(fecha1.getDate() + dias1);
         fecha1.setDate(fecha1.getDate() - 7)
     }
-    console.log('LA FECHA DE INICIO ES')
-    console.log(fecha1)
-    
+
 
 
     var Lunes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
@@ -359,24 +357,21 @@ function* getEstadisticasUserGeneralSaga(payload) {
 
     var fechaActual = new Date();
     var dia = new Date(fechaActual.getTime())
-    console.log(dia)
 
     var fecha1 = new Date(dia);
-    console.log(fecha1)
+
     var diapararestar = fecha1.getUTCDay();
     let dias1
     if (diapararestar == 0) {
         dias1 = (-6);
         fecha1.setDate((fecha1.getDate() + dias1) + 1)
-        
+
     } else {
         dias1 = (diapararestar - 1) * (-1);
         fecha1.setDate(fecha1.getDate() + dias1);
         fecha1.setDate(fecha1.getDate() - 7)
     }
-    console.log('LA FECHA DE INICIO ES')
-    console.log(fecha1)
-    
+
 
 
     var Lunes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
@@ -400,7 +395,7 @@ function* getEstadisticasUserGeneralSaga(payload) {
     Sabado = Sabado.split('-')
     Domingo = Domingo.split('-')
 
-    
+
 
     const id = jwtDecode(payload.token).userId
 
@@ -464,6 +459,87 @@ function* getEstadisticasUserGeneralSaga(payload) {
     yield put(getStadisticsUserGeneralSuccess(dataStats))
 
 }
+function* polygonStadisticSaga(payload) {
+    const config = {
+        headers: {
+            Authorization: 'Bearer ' + payload.token,
+            'Content-Type': 'application/json'
+        },
+    };
+    var fechaActual = new Date();
+    var dia = new Date(fechaActual.getTime())
+    console.log(dia.getFullYear())
+    console.log(dia.getMonth() + 1)
+    console.log(dia.getDay() + 1)
+    const id = jwtDecode(payload.token).userId
+
+    const data1 = yield axios.get('https://bancow.finseiz.com/api/v1/embargos/count?assignedTo=' + payload.user, config)
+        .then(response => response)
+        .catch(err => err.response)
+    const data = yield axios.get('https://bancow.finseiz.com/api/v1/embargos/count?estadoEmbargo=SIN_CONFIRMAR"', config)
+        .then(response => response)
+        .catch(err => err.response)
+    const data4 = yield axios.get('https://bancow.finseiz.com/api/v1/embargos/count', config)
+        .then(response => response)
+        .catch(error => error.response)
+    const data2 = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=CONFIRMED&periodU=D`, config)
+        .then(response => response)
+        .catch(error => error.response)
+    const Mvp = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users?filter=CONFIRMED&page=0&range=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&size=1`, config)
+        .then(response => response)
+        .catch(err => err.response)
+    const mvpStats = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${Mvp.data.length!==0?Mvp.data[0].user:id}?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=CONFIRMED&periodU=D`, config)
+
+    const data3 = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=CONFIRMED&periodU=D`, config)
+        .then(response => response)
+        .catch(err => err.response)
+    const data5 = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${Mvp.data.length!==0?Mvp.data[0].user:id}?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=UPLOADED&periodU=D`, config)
+        .then(response => response)
+        .catch(err => err.response)
+    const data6 = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=UPLOADED&periodU=D`, config)
+        .then(response => response)
+        .catch(err => err.response)
+    const data7 = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=UPLOADED&periodU=D`, config)
+        .then(response => response)
+        .catch(err => err.response)
+    const data8 = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${Mvp.data.length!==0?Mvp.data[0].user:id}?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=ASSIGNED&periodU=D`, config)
+        .then(response => response)
+        .catch(err => err.response)
+    const data9= yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=ASSIGNED&periodU=D`, config)
+    .then(response => response)
+    .catch(err => err.response) 
+
+    console.log(data)
+    console.log(data1)
+    console.log(data2)
+    console.log(data3)
+    console.log(data4)
+    console.log(data5)
+    console.log(data6)
+    console.log(data7)
+    console.log(data8)
+    console.log(data9)
+    console.log(mvpStats)
+
+
+
+
+
+
+
+
+
+
+    const datasend = {
+        AsignadosVsConfirmados:{ other: data9.data.length==0?0:data9.data.stat,me:data2.data.length==0?0:data2.data.stat, tope: 150 },
+        MvpConfirmadosVsMe:{ other: mvpStats.data.length==0?0:mvpStats.data.stat, me: data2.data.length==0?0:data2.data.stat, tope:150 },
+        PromConfirmadoVsMe:{ other: data3.data.length==0?0:data3.data.stat, me: data2.data.length==0?0:data2.data.stat, tope:150 },
+        MvpSubidosVsMe:{ other: data5.data.length==0?0:data5.data.stat, me: data6.data.length==0?0:data6.data.stat, tope: 150},
+        PromedioSubidosVsMe:{ other: data7.data.length==0?0:data7.data.stat, me: data6.data.length?0:data6.data.stat, tope: 150 },
+        MvpAsignadosVsMe:{ other:data8.data.length==0?0:data8.data.stat, me:data9.data.length==0?0:data9.data.stat, tope:150},
+    }
+    yield put(getPolygonSuccess(datasend))
+}
 
 
 function* userRootSaga() {
@@ -475,10 +551,7 @@ function* userRootSaga() {
         takeEvery(GET_HISTORIAL_ME, getHistorialMeSaga),
         takeEvery(GET_BARRAS_SEMANALES, getBarrasSemanalesSaga),
         takeEvery(GET_ESTADISTICAS_USER_GENERAL, getEstadisticasUserGeneralSaga),
-
-
-
-
+        takeEvery(GET_POLYGON, polygonStadisticSaga),
 
     ])
 }
