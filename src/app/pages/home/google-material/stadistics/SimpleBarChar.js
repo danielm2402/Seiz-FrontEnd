@@ -1,41 +1,57 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent,Component } from 'react';
 import {
   BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend,ResponsiveContainer,
 } from 'recharts';
+import { connect } from 'react-redux'
 
-const data = [
-  {
-    name: 'Lunes', uv: 4000, pv: 2400, amt: 2400,
-  },
-  {
-    name: 'Martes', uv: 3000, pv: 1398, amt: 2210,
-  },
-  {
-    name: 'Miercoles', uv: 2000, pv: 9800, amt: 2290,
-  },
-  {
-    name: 'Jueves', uv: 2780, pv: 3908, amt: 2000,
-  },
-  {
-    name: 'Viernes', uv: 1890, pv: 4800, amt: 2181,
-  },
-  {
-    name: 'Sábado', uv: 2390, pv: 3800, amt: 2500,
-  },
-  {
-    name: 'Domingo', uv: 3490, pv: 4300, amt: 2100,
-  },
-];
 
-export default class Example extends PureComponent {
+
+class Example extends Component {
+  constructor(props){
+    super(props)
+    this.state={}
+  }
   static jsfiddleUrl = 'https://jsfiddle.net/alidingling/30763kr7/';
+  componentDidUpdate(prevProps, prevState){
+    if(prevProps.datos!==this.props.datos)
+    {console.log('SE ACTUALIZÓ EL COMPONENTE NUEVO')
+    console.log(this.props.datos)
+    const { user, general}= this.props.datos
+    console.log(user)
+    console.log(general)
+
+  }
+    
+  }
 
   render() {
+    const {user, general}= this.props.datos
+    const data1=[{
+      name: `Lunes ${general[0].length==''?0:general[0][0].date}`, Me: user[0].length==0?0:user[0][0].stat, Prom: general[0].length==0?0:general[0][0].stat
+    },
+    {
+      name: `Martes ${general[1].length==''?0:general[1][0].date}`,  Me: user[1].length==0?0:user[1][0].stat, Prom:general[1].length==0?0:general[1][0].stat
+    },
+    {
+      name: `Miercoles ${general[2].length==''?0:general[2][0].date}`,  Me: user[2].length==0?0:user[2][0].stat, Prom:general[2].length==0?0:general[2][0].stat
+    },
+    {
+      name: `Jueves ${general[3].length==''?0:general[3][0].date}`,  Me: user[3].length==0?0:user[3][0].stat, Prom:general[3].length==0?0:general[3][0].stat
+    },
+    {
+      name: `Viernes ${general[4].length==''?0:general[4][0].date}`, Me: user[4].length==0?0:user[4][0].stat, Prom:general[4].length==0?0:general[4][0].stat
+    },
+    {
+      name: `Sábado ${general[5].length==''?0:general[5][0].date}`,  Me: user[5].length==0?0:user[5][0].stat, Prom:general[5].length==0?0:general[5][0].stat
+    },
+    ]
+    console.log('EL DATA 111111')
+    console.log(data1)
     return (
         <ResponsiveContainer>
       <BarChart
         
-        data={data}
+        data={data1}
         margin={{
           top: 5, right: 30, left: 20, bottom: 5,
         }}
@@ -45,10 +61,15 @@ export default class Example extends PureComponent {
         <YAxis />
         <Tooltip />
         <Legend />
-        <Bar dataKey="pv" fill="#8884d8" />
-        <Bar dataKey="uv" fill="#82ca9d" />
+        <Bar dataKey="Prom" fill="#8884d8" />
+        <Bar dataKey="Me" fill="#82ca9d" />
       </BarChart>
       </ResponsiveContainer>
     );
   }
 }
+const mapStateToProps=(state)=>({
+  datos: state.estadisticasReducer.semanal
+})
+export default connect(mapStateToProps, null)(Example)
+

@@ -4,7 +4,7 @@ import {
 } from 'redux-saga/effects';
 import axios from 'axios';
 import { GET_BARRAS_SEMANALES, GET_HISTORIAL_ME, GET_HISTORIAL, CONTEO_EMBARGOS, STATS_RANKING_USER, STATS_ME_MVP, CONTEO_EMBARGOS_SUCCESS, STATS_USER, STATS_USER_SUCCESS, STATS_GENERAL, STATS_GENERAL_SUCCESS } from '../../constants/estadisticasConst'
-import { getHistorialSuccessMe, getConteoEmbargosSuccess, getHistorialSuccess, getStatsRankingUserSuccess } from '../../actions/estadisticasAction'
+import { getHistorialSuccessMe, getConteoEmbargosSuccess, getHistorialSuccess, getStatsRankingUserSuccess, getBarrasSemanalesSuccess } from '../../actions/estadisticasAction'
 import * as auth from "../../../store/ducks/auth.duck";
 var jwtDecode = require('jwt-decode');
 function* conteoEmbargosSaga(payload) {
@@ -202,7 +202,7 @@ function* getBarrasSemanalesSaga(payload) {
     console.log(dia.getDay() + 1)
 
 
-    var diasARestar = 6 + dia.getUTCDay()
+    var diasARestar = 5 + dia.getUTCDay()
     var fechaInicio = new Date(`${dia.getMonth() + 1}/${dia.getDay() + 1}/${dia.getFullYear()}`)
     console.log(fechaInicio)
     fechaInicio.setDate(fechaInicio.getDate() - diasARestar);
@@ -299,6 +299,8 @@ function* getBarrasSemanalesSaga(payload) {
     console.log(vectorResponse)
    
     console.log(vectorUser)
+    const dataStats={general:vectorResponse, user: vectorUser}
+    yield put(getBarrasSemanalesSuccess(dataStats))
 }
 
 function* userRootSaga() {
