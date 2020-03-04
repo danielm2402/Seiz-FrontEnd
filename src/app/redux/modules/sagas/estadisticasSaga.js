@@ -4,7 +4,7 @@ import {
 } from 'redux-saga/effects';
 import axios from 'axios';
 import { GET_BARRAS_SEMANALES, GET_POLYGON, GET_HISTORIAL_ME, GET_HISTORIAL, CONTEO_EMBARGOS, STATS_RANKING_USER, STATS_ME_MVP, CONTEO_EMBARGOS_SUCCESS, STATS_USER, STATS_USER_SUCCESS, STATS_GENERAL, STATS_GENERAL_SUCCESS, GET_ESTADISTICAS_USER_GENERAL } from '../../constants/estadisticasConst'
-import { getPolygonSuccess,statsMeMvpSuccess, getHistorialSuccessMe, getConteoEmbargosSuccess, getHistorialSuccess, getStatsRankingUserSuccess, getBarrasSemanalesSuccess, getStadisticsUserGeneralSuccess } from '../../actions/estadisticasAction'
+import { getPolygonSuccess, statsMeMvpSuccess, getHistorialSuccessMe, getConteoEmbargosSuccess, getHistorialSuccess, getStatsRankingUserSuccess, getBarrasSemanalesSuccess, getStadisticsUserGeneralSuccess } from '../../actions/estadisticasAction'
 import * as auth from "../../../store/ducks/auth.duck";
 var jwtDecode = require('jwt-decode');
 function* conteoEmbargosSaga(payload) {
@@ -172,14 +172,19 @@ function* statsMeMvpSaga(payload) {
     Sabado = Sabado.split('-')
     Domingo = Domingo.split('-')
 
+    try {
 
 
-    const Mvp = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users?filter=CONFIRMED&page=0&range=${Lunes[0]}.${Lunes[1]}.${Lunes[2]}-${Sabado[0]}.${Sabado[1]}.${Sabado[2]}&size=1`, config)
-        .then(response => response)
-        .catch(err => err.response)
 
-    const mvpStats = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${Mvp.data[0].user}?dateRange=${Lunes[0]}.${Lunes[1]}.${Lunes[2]}-${Sabado[0]}.${Sabado[1]}.${Sabado[2]}&filter=CONFIRMED&periodU=D`, config)
-    yield put(statsMeMvpSuccess(mvpStats.data))
+        const Mvp = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users?filter=CONFIRMED&page=0&range=${Lunes[0]}.${Lunes[1]}.${Lunes[2]}-${Sabado[0]}.${Sabado[1]}.${Sabado[2]}&size=1`, config)
+            .then(response => response)
+            .catch(err => err.response)
+
+        const mvpStats = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${Mvp.data[0].user}?dateRange=${Lunes[0]}.${Lunes[1]}.${Lunes[2]}-${Sabado[0]}.${Sabado[1]}.${Sabado[2]}&filter=CONFIRMED&periodU=D`, config)
+        yield put(statsMeMvpSuccess(mvpStats.data))
+    } catch (error) {
+
+    }
 }
 
 function* getHistorialSaga(payload) {
@@ -281,70 +286,75 @@ function* getBarrasSemanalesSaga(payload) {
     Domingo = Domingo.split('-')
 
 
+    try {
 
 
-    const rLunes =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${Lunes[0]}.${Lunes[1]}.${Lunes[2]}-${Lunes[0]}.${Lunes[1]}.${Lunes[2]}&filter=CONFIRMED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const rMartes =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${Martes[0]}.${Martes[1]}.${Martes[2]}-${Martes[0]}.${Martes[1]}.${Martes[2]}&filter=CONFIRMED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const rMiercoles =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${Miercoles[0]}.${Miercoles[1]}.${Miercoles[2]}-${Miercoles[0]}.${Miercoles[1]}.${Miercoles[2]}&filter=CONFIRMED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const rJueves =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${Jueves[0]}.${Jueves[1]}.${Jueves[2]}-${Jueves[0]}.${Jueves[1]}.${Jueves[2]}&filter=CONFIRMED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const rViernes =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${Viernes[0]}.${Viernes[1]}.${Viernes[2]}-${Viernes[0]}.${Viernes[1]}.${Viernes[2]}&filter=CONFIRMED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const rSabado =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${Sabado[0]}.${Sabado[1]}.${Sabado[2]}-${Sabado[0]}.${Sabado[1]}.${Sabado[2]}&filter=CONFIRMED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
 
-    const vectorResponse = [rLunes.data, rMartes.data, rMiercoles.data, rJueves.data, rViernes.data, rSabado.data]
+        const rLunes =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${Lunes[0]}.${Lunes[1]}.${Lunes[2]}-${Lunes[0]}.${Lunes[1]}.${Lunes[2]}&filter=CONFIRMED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const rMartes =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${Martes[0]}.${Martes[1]}.${Martes[2]}-${Martes[0]}.${Martes[1]}.${Martes[2]}&filter=CONFIRMED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const rMiercoles =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${Miercoles[0]}.${Miercoles[1]}.${Miercoles[2]}-${Miercoles[0]}.${Miercoles[1]}.${Miercoles[2]}&filter=CONFIRMED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const rJueves =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${Jueves[0]}.${Jueves[1]}.${Jueves[2]}-${Jueves[0]}.${Jueves[1]}.${Jueves[2]}&filter=CONFIRMED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const rViernes =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${Viernes[0]}.${Viernes[1]}.${Viernes[2]}-${Viernes[0]}.${Viernes[1]}.${Viernes[2]}&filter=CONFIRMED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const rSabado =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${Sabado[0]}.${Sabado[1]}.${Sabado[2]}-${Sabado[0]}.${Sabado[1]}.${Sabado[2]}&filter=CONFIRMED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
 
-
-    const id = jwtDecode(payload.token).userId
+        const vectorResponse = [rLunes.data, rMartes.data, rMiercoles.data, rJueves.data, rViernes.data, rSabado.data]
 
 
-    //STATS USER
-
-    const uLunes =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Lunes[0]}.${Lunes[1]}.${Lunes[2]}-${Lunes[0]}.${Lunes[1]}.${Lunes[2]}&filter=CONFIRMED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const uMartes =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Martes[0]}.${Martes[1]}.${Martes[2]}-${Martes[0]}.${Martes[1]}.${Martes[2]}&filter=CONFIRMED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const uMiercoles =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Miercoles[0]}.${Miercoles[1]}.${Miercoles[2]}-${Miercoles[0]}.${Miercoles[1]}.${Miercoles[2]}&filter=CONFIRMED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const uJueves =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Jueves[0]}.${Jueves[1]}.${Jueves[2]}-${Jueves[0]}.${Jueves[1]}.${Jueves[2]}&filter=CONFIRMED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const uViernes =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Viernes[0]}.${Viernes[1]}.${Viernes[2]}-${Viernes[0]}.${Viernes[1]}.${Viernes[2]}&filter=CONFIRMED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const uSabado =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Sabado[0]}.${Sabado[1]}.${Sabado[2]}-${Domingo[0]}.${Sabado[1]}.${Sabado[2]}&filter=CONFIRMED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const vectorUser = [uLunes.data, uMartes.data, uMiercoles.data, uJueves.data, uViernes.data, uSabado.data]
+        const id = jwtDecode(payload.token).userId
 
 
-    const dataStats = { general: vectorResponse, user: vectorUser }
-    yield put(getBarrasSemanalesSuccess(dataStats))
+        //STATS USER
+
+        const uLunes =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Lunes[0]}.${Lunes[1]}.${Lunes[2]}-${Lunes[0]}.${Lunes[1]}.${Lunes[2]}&filter=CONFIRMED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const uMartes =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Martes[0]}.${Martes[1]}.${Martes[2]}-${Martes[0]}.${Martes[1]}.${Martes[2]}&filter=CONFIRMED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const uMiercoles =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Miercoles[0]}.${Miercoles[1]}.${Miercoles[2]}-${Miercoles[0]}.${Miercoles[1]}.${Miercoles[2]}&filter=CONFIRMED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const uJueves =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Jueves[0]}.${Jueves[1]}.${Jueves[2]}-${Jueves[0]}.${Jueves[1]}.${Jueves[2]}&filter=CONFIRMED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const uViernes =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Viernes[0]}.${Viernes[1]}.${Viernes[2]}-${Viernes[0]}.${Viernes[1]}.${Viernes[2]}&filter=CONFIRMED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const uSabado =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Sabado[0]}.${Sabado[1]}.${Sabado[2]}-${Domingo[0]}.${Sabado[1]}.${Sabado[2]}&filter=CONFIRMED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const vectorUser = [uLunes.data, uMartes.data, uMiercoles.data, uJueves.data, uViernes.data, uSabado.data]
+
+
+        const dataStats = { general: vectorResponse, user: vectorUser }
+        yield put(getBarrasSemanalesSuccess(dataStats))
+    } catch (error) {
+
+    }
 }
 function* getEstadisticasUserGeneralSaga(payload) {
 
@@ -401,62 +411,68 @@ function* getEstadisticasUserGeneralSaga(payload) {
 
 
     //STATS USER
-
-    const uLunes =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Lunes[0]}.${Lunes[1]}.${Lunes[2]}-${Lunes[0]}.${Lunes[1]}.${Lunes[2]}&filter=UPLOADED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const uMartes =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Martes[0]}.${Martes[1]}.${Martes[2]}-${Martes[0]}.${Martes[1]}.${Martes[2]}&filter=UPLOADED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const uMiercoles =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Miercoles[0]}.${Miercoles[1]}.${Miercoles[2]}-${Miercoles[0]}.${Miercoles[1]}.${Miercoles[2]}&filter=UPLOADED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const uJueves =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Jueves[0]}.${Jueves[1]}.${Jueves[2]}-${Jueves[0]}.${Jueves[1]}.${Jueves[2]}&filter=UPLOADED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const uViernes =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Viernes[0]}.${Viernes[1]}.${Viernes[2]}-${Viernes[0]}.${Viernes[1]}.${Viernes[2]}&filter=UPLOADED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const uSabado =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Sabado[0]}.${Sabado[1]}.${Sabado[2]}-${Domingo[0]}.${Sabado[1]}.${Sabado[2]}&filter=UPLOADED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const vectorUser = [uLunes.data, uMartes.data, uMiercoles.data, uJueves.data, uViernes.data, uSabado.data]
+    try {
 
 
-    const aLunes =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Lunes[0]}.${Lunes[1]}.${Lunes[2]}-${Lunes[0]}.${Lunes[1]}.${Lunes[2]}&filter=ASSIGNED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const aMartes =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Martes[0]}.${Martes[1]}.${Martes[2]}-${Martes[0]}.${Martes[1]}.${Martes[2]}&filter=ASSIGNED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const aMiercoles =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Miercoles[0]}.${Miercoles[1]}.${Miercoles[2]}-${Miercoles[0]}.${Miercoles[1]}.${Miercoles[2]}&filter=ASSIGNED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const aJueves =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Jueves[0]}.${Jueves[1]}.${Jueves[2]}-${Jueves[0]}.${Jueves[1]}.${Jueves[2]}&filter=ASSIGNED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const aViernes =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Viernes[0]}.${Viernes[1]}.${Viernes[2]}-${Viernes[0]}.${Viernes[1]}.${Viernes[2]}&filter=ASSIGNED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const aSabado =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Sabado[0]}.${Sabado[1]}.${Sabado[2]}-${Domingo[0]}.${Sabado[1]}.${Sabado[2]}&filter=ASSIGNED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-    const vectorUserAssig = [aLunes.data, aMartes.data, aMiercoles.data, aJueves.data, aViernes.data, aSabado.data]
 
-    const dataStats = { upload: vectorUser, userAssig: vectorUserAssig }
-    yield put(getStadisticsUserGeneralSuccess(dataStats))
+        const uLunes =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Lunes[0]}.${Lunes[1]}.${Lunes[2]}-${Lunes[0]}.${Lunes[1]}.${Lunes[2]}&filter=UPLOADED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const uMartes =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Martes[0]}.${Martes[1]}.${Martes[2]}-${Martes[0]}.${Martes[1]}.${Martes[2]}&filter=UPLOADED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const uMiercoles =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Miercoles[0]}.${Miercoles[1]}.${Miercoles[2]}-${Miercoles[0]}.${Miercoles[1]}.${Miercoles[2]}&filter=UPLOADED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const uJueves =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Jueves[0]}.${Jueves[1]}.${Jueves[2]}-${Jueves[0]}.${Jueves[1]}.${Jueves[2]}&filter=UPLOADED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const uViernes =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Viernes[0]}.${Viernes[1]}.${Viernes[2]}-${Viernes[0]}.${Viernes[1]}.${Viernes[2]}&filter=UPLOADED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const uSabado =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Sabado[0]}.${Sabado[1]}.${Sabado[2]}-${Domingo[0]}.${Sabado[1]}.${Sabado[2]}&filter=UPLOADED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const vectorUser = [uLunes.data, uMartes.data, uMiercoles.data, uJueves.data, uViernes.data, uSabado.data]
+
+
+        const aLunes =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Lunes[0]}.${Lunes[1]}.${Lunes[2]}-${Lunes[0]}.${Lunes[1]}.${Lunes[2]}&filter=ASSIGNED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const aMartes =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Martes[0]}.${Martes[1]}.${Martes[2]}-${Martes[0]}.${Martes[1]}.${Martes[2]}&filter=ASSIGNED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const aMiercoles =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Miercoles[0]}.${Miercoles[1]}.${Miercoles[2]}-${Miercoles[0]}.${Miercoles[1]}.${Miercoles[2]}&filter=ASSIGNED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const aJueves =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Jueves[0]}.${Jueves[1]}.${Jueves[2]}-${Jueves[0]}.${Jueves[1]}.${Jueves[2]}&filter=ASSIGNED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const aViernes =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Viernes[0]}.${Viernes[1]}.${Viernes[2]}-${Viernes[0]}.${Viernes[1]}.${Viernes[2]}&filter=ASSIGNED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const aSabado =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Sabado[0]}.${Sabado[1]}.${Sabado[2]}-${Domingo[0]}.${Sabado[1]}.${Sabado[2]}&filter=ASSIGNED&periodU=D`, config)
+                .then(response => response)
+                .catch(err => err.response)
+        const vectorUserAssig = [aLunes.data, aMartes.data, aMiercoles.data, aJueves.data, aViernes.data, aSabado.data]
+
+        const dataStats = { upload: vectorUser, userAssig: vectorUserAssig }
+        yield put(getStadisticsUserGeneralSuccess(dataStats))
+    } catch (error) {
+
+    }
 
 }
 function* polygonStadisticSaga(payload) {
@@ -472,73 +488,70 @@ function* polygonStadisticSaga(payload) {
     console.log(dia.getMonth() + 1)
     console.log(dia.getDay() + 1)
     const id = jwtDecode(payload.token).userId
-
-    const data1 = yield axios.get('https://bancow.finseiz.com/api/v1/embargos/count?assignedTo=' + payload.user, config)
-        .then(response => response)
-        .catch(err => err.response)
-    const data = yield axios.get('https://bancow.finseiz.com/api/v1/embargos/count?estadoEmbargo=SIN_CONFIRMAR"', config)
-        .then(response => response)
-        .catch(err => err.response)
-    const data4 = yield axios.get('https://bancow.finseiz.com/api/v1/embargos/count', config)
-        .then(response => response)
-        .catch(error => error.response)
-    const data2 = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=CONFIRMED&periodU=D`, config)
-        .then(response => response)
-        .catch(error => error.response)
-    const Mvp = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users?filter=CONFIRMED&page=0&range=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&size=1`, config)
-        .then(response => response)
-        .catch(err => err.response)
-    const mvpStats = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${Mvp.data.length!==0?Mvp.data[0].user:id}?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=CONFIRMED&periodU=D`, config)
-
-    const data3 = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=CONFIRMED&periodU=D`, config)
-        .then(response => response)
-        .catch(err => err.response)
-    const data5 = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${Mvp.data.length!==0?Mvp.data[0].user:id}?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=UPLOADED&periodU=D`, config)
-        .then(response => response)
-        .catch(err => err.response)
-    const data6 = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=UPLOADED&periodU=D`, config)
-        .then(response => response)
-        .catch(err => err.response)
-    const data7 = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=UPLOADED&periodU=D`, config)
-        .then(response => response)
-        .catch(err => err.response)
-    const data8 = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${Mvp.data.length!==0?Mvp.data[0].user:id}?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=ASSIGNED&periodU=D`, config)
-        .then(response => response)
-        .catch(err => err.response)
-    const data9= yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=ASSIGNED&periodU=D`, config)
-    .then(response => response)
-    .catch(err => err.response) 
-
-    console.log(data)
-    console.log(data1)
-    console.log(data2)
-    console.log(data3)
-    console.log(data4)
-    console.log(data5)
-    console.log(data6)
-    console.log(data7)
-    console.log(data8)
-    console.log(data9)
-    console.log(mvpStats)
+    try {
 
 
 
+        const data1 = yield axios.get('https://bancow.finseiz.com/api/v1/embargos/count?assignedTo=' + payload.user, config)
+            .then(response => response)
+            .catch(err => err.response)
+        const data = yield axios.get('https://bancow.finseiz.com/api/v1/embargos/count?estadoEmbargo=SIN_CONFIRMAR"', config)
+            .then(response => response)
+            .catch(err => err.response)
+        const data4 = yield axios.get('https://bancow.finseiz.com/api/v1/embargos/count', config)
+            .then(response => response)
+            .catch(error => error.response)
+        const data2 = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=CONFIRMED&periodU=D`, config)
+            .then(response => response)
+            .catch(error => error.response)
+        const Mvp = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users?filter=CONFIRMED&page=0&range=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&size=1`, config)
+            .then(response => response)
+            .catch(err => err.response)
+        const mvpStats = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${Mvp.data.length !== 0 ? Mvp.data[0].user : id}?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=CONFIRMED&periodU=D`, config)
 
+        const data3 = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=CONFIRMED&periodU=D`, config)
+            .then(response => response)
+            .catch(err => err.response)
+        const data5 = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${Mvp.data.length !== 0 ? Mvp.data[0].user : id}?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=UPLOADED&periodU=D`, config)
+            .then(response => response)
+            .catch(err => err.response)
+        const data6 = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=UPLOADED&periodU=D`, config)
+            .then(response => response)
+            .catch(err => err.response)
+        const data7 = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=UPLOADED&periodU=D`, config)
+            .then(response => response)
+            .catch(err => err.response)
+        const data8 = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${Mvp.data.length !== 0 ? Mvp.data[0].user : id}?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=ASSIGNED&periodU=D`, config)
+            .then(response => response)
+            .catch(err => err.response)
+        const data9 = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}?dateRange=${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}-${dia.getFullYear()}.${String("00" + (dia.getMonth() + 1)).slice(-2)}.${String("00" + (dia.getDay() + 1)).slice(-2)}&filter=ASSIGNED&periodU=D`, config)
+            .then(response => response)
+            .catch(err => err.response)
 
+        console.log(data)
+        console.log(data1)
+        console.log(data2)
+        console.log(data3)
+        console.log(data4)
+        console.log(data5)
+        console.log(data6)
+        console.log(data7)
+        console.log(data8)
+        console.log(data9)
+        console.log(mvpStats)
 
+        const datasend = {
+            AsignadosVsConfirmados: { other: data9.data.length == 0 ? 0 : data9.data.stat, me: data2.data.length == 0 ? 0 : data2.data.stat, tope: 150 },
+            MvpConfirmadosVsMe: { other: mvpStats.data.length == 0 ? 0 : mvpStats.data.stat, me: data2.data.length == 0 ? 0 : data2.data.stat, tope: 150 },
+            PromConfirmadoVsMe: { other: data3.data.length == 0 ? 0 : data3.data.stat, me: data2.data.length == 0 ? 0 : data2.data.stat, tope: 150 },
+            MvpSubidosVsMe: { other: data5.data.length == 0 ? 0 : data5.data.stat, me: data6.data.length == 0 ? 0 : data6.data.stat, tope: 150 },
+            PromedioSubidosVsMe: { other: data7.data.length == 0 ? 0 : data7.data.stat, me: data6.data.length ? 0 : data6.data.stat, tope: 150 },
+            MvpAsignadosVsMe: { other: data8.data.length == 0 ? 0 : data8.data.stat, me: data9.data.length == 0 ? 0 : data9.data.stat, tope: 150 },
+        }
+        yield put(getPolygonSuccess(datasend))
+    } catch (error) {
 
-
-
-
-    const datasend = {
-        AsignadosVsConfirmados:{ other: data9.data.length==0?0:data9.data.stat,me:data2.data.length==0?0:data2.data.stat, tope: 150 },
-        MvpConfirmadosVsMe:{ other: mvpStats.data.length==0?0:mvpStats.data.stat, me: data2.data.length==0?0:data2.data.stat, tope:150 },
-        PromConfirmadoVsMe:{ other: data3.data.length==0?0:data3.data.stat, me: data2.data.length==0?0:data2.data.stat, tope:150 },
-        MvpSubidosVsMe:{ other: data5.data.length==0?0:data5.data.stat, me: data6.data.length==0?0:data6.data.stat, tope: 150},
-        PromedioSubidosVsMe:{ other: data7.data.length==0?0:data7.data.stat, me: data6.data.length?0:data6.data.stat, tope: 150 },
-        MvpAsignadosVsMe:{ other:data8.data.length==0?0:data8.data.stat, me:data9.data.length==0?0:data9.data.stat, tope:150},
     }
-    yield put(getPolygonSuccess(datasend))
 }
 
 
