@@ -4,7 +4,7 @@ import {
 } from 'redux-saga/effects';
 import axios from 'axios';
 import { GET_BARRAS_SEMANALES, GET_HISTORIAL_ME, GET_HISTORIAL, CONTEO_EMBARGOS, STATS_RANKING_USER, STATS_ME_MVP, CONTEO_EMBARGOS_SUCCESS, STATS_USER, STATS_USER_SUCCESS, STATS_GENERAL, STATS_GENERAL_SUCCESS } from '../../constants/estadisticasConst'
-import { getHistorialSuccessMe, getConteoEmbargosSuccess, getHistorialSuccess, getStatsRankingUserSuccess, getBarrasSemanalesSuccess } from '../../actions/estadisticasAction'
+import { statsMeMvpSuccess,getHistorialSuccessMe, getConteoEmbargosSuccess, getHistorialSuccess, getStatsRankingUserSuccess, getBarrasSemanalesSuccess } from '../../actions/estadisticasAction'
 import * as auth from "../../../store/ducks/auth.duck";
 var jwtDecode = require('jwt-decode');
 function* conteoEmbargosSaga(payload) {
@@ -58,19 +58,43 @@ function* rankingUsersSaga(payload) {
         },
 
     };
-    var fecha = new Date();
+    var fechaActual = new Date();
+    var dia = new Date(fechaActual.getTime())
+    console.log(dia.getFullYear())
+    console.log(dia.getMonth() + 1)
+    console.log(dia.getDay() + 1)
 
-    var HaceUnaSemanaNoFormat = (new Date(fecha.getTime() - (24 * 60 * 60 * 1000) * 7))
-    var HaceUnaSemana = (new Date(fecha.getTime() - (24 * 60 * 60 * 1000) * 7)).toISOString().split('T')[0];
-    var HaceUnaSemanaFormat = HaceUnaSemana.split('-')
-    var ultimoDia = (new Date(fecha.getTime()).toISOString().split('T')[0]).split('-')
 
-    console.log(HaceUnaSemanaFormat)
-    console.log(ultimoDia);
+    var diasARestar = 5 + dia.getUTCDay()
+    var fechaInicio = new Date(`${dia.getMonth() + 1}/${dia.getDay() + 1}/${dia.getFullYear()}`)
+    console.log(fechaInicio)
+    fechaInicio.setDate(fechaInicio.getDate() - diasARestar);
+    var Lunes = new Date(fechaInicio.getTime() - (fechaInicio.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+    fechaInicio.setDate(fechaInicio.getDate() + 1);
+    var Martes = new Date(fechaInicio.getTime() - (fechaInicio.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+    fechaInicio.setDate(fechaInicio.getDate() + 1);
+    var Miercoles = new Date(fechaInicio.getTime() - (fechaInicio.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+    fechaInicio.setDate(fechaInicio.getDate() + 1);
+    var Jueves = new Date(fechaInicio.getTime() - (fechaInicio.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+    fechaInicio.setDate(fechaInicio.getDate() + 1);
+    var Viernes = new Date(fechaInicio.getTime() - (fechaInicio.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+    fechaInicio.setDate(fechaInicio.getDate() + 1);
+    var Sabado = new Date(fechaInicio.getTime() - (fechaInicio.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+    fechaInicio.setDate(fechaInicio.getDate() + 1);
+    var Domingo = new Date(fechaInicio.getTime() - (fechaInicio.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
 
-    const data = yield axios.get('https://bancow.finseiz.com/api/v1/stats/users?filter=CONFIRMED&page=0&range=' + HaceUnaSemanaFormat[0] + '.' + HaceUnaSemanaFormat[1] + '.' + HaceUnaSemanaFormat[2] + '-' + ultimoDia[0] + '.' + ultimoDia[1] + '.' + ultimoDia[2] + '&size=10', config)
+    Lunes = Lunes.split('-')
+    Martes = Martes.split('-')
+    Miercoles = Miercoles.split('-')
+    Jueves = Jueves.split('-')
+    Viernes = Viernes.split('-')
+    Sabado = Sabado.split('-')
+    Domingo = Domingo.split('-')
+
+    const data = yield axios.get('https://bancow.finseiz.com/api/v1/stats/users?filter=CONFIRMED&page=0&range=' + Lunes[0] + '.' + Lunes[1] + '.' + Lunes[2] + '-' + Sabado[0] + '.' + Sabado[1] + '.' + Sabado[2] + '&size=5', config)
         .then(response => response)
         .catch(error => error.response)
+        console.log('LOS MVP PARA COMPARAR')
     console.log(data)
     switch (data.status) {
         case 200:
@@ -102,40 +126,50 @@ function* statsMeMvpSaga(payload) {
         },
 
     };
-    var fecha = new Date();
-
-    var HaceUnaSemanaNoFormat = (new Date(fecha.getTime() - (24 * 60 * 60 * 1000) * 7))
-    var HaceUnaSemana = (new Date(fecha.getTime() - (24 * 60 * 60 * 1000) * 7)).toISOString().split('T')[0];
-    var HaceUnaSemanaFormat = HaceUnaSemana.split('-')
-    var ultimoDia = (new Date(fecha.getTime()).toISOString().split('T')[0]).split('-')
-
-    console.log(HaceUnaSemanaFormat)
-    console.log(ultimoDia);
-
-    const data = yield axios.get('https://bancow.finseiz.com/api/v1/stats/users?filter=CONFIRMED&page=0&range=' + HaceUnaSemanaFormat[0] + '.' + HaceUnaSemanaFormat[1] + '.' + HaceUnaSemanaFormat[2] + '-' + ultimoDia[0] + '.' + ultimoDia[1] + '.' + ultimoDia[2] + '&size=10', config)
-        .then(response => response)
-        .catch(error => error.response)
-    console.log(data)
-    switch (data.status) {
-        case 200:
-            let vector = []
-            for (var i = 0; i < data.data.length; i++) {
-                var element = yield axios.get('https://bancow.finseiz.com/api/v1/users/' + data.data[i].user, config)
-                    .then(response => response.data)
-                    .catch(err => err.response)
-                vector.push(element)
-
-            }
 
 
-            yield put(getStatsRankingUserSuccess(vector))
+    var fechaActual = new Date();
+    var dia = new Date(fechaActual.getTime())
+    console.log(dia.getFullYear())
+    console.log(dia.getMonth() + 1)
+    console.log(dia.getDay() + 1)
 
 
-            break;
+    var diasARestar = 5 + dia.getUTCDay()
+    var fechaInicio = new Date(`${dia.getMonth() + 1}/${dia.getDay() + 1}/${dia.getFullYear()}`)
+    console.log(fechaInicio)
+    fechaInicio.setDate(fechaInicio.getDate() - diasARestar);
+    var Lunes = new Date(fechaInicio.getTime() - (fechaInicio.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+    fechaInicio.setDate(fechaInicio.getDate() + 1);
+    var Martes = new Date(fechaInicio.getTime() - (fechaInicio.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+    fechaInicio.setDate(fechaInicio.getDate() + 1);
+    var Miercoles = new Date(fechaInicio.getTime() - (fechaInicio.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+    fechaInicio.setDate(fechaInicio.getDate() + 1);
+    var Jueves = new Date(fechaInicio.getTime() - (fechaInicio.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+    fechaInicio.setDate(fechaInicio.getDate() + 1);
+    var Viernes = new Date(fechaInicio.getTime() - (fechaInicio.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+    fechaInicio.setDate(fechaInicio.getDate() + 1);
+    var Sabado = new Date(fechaInicio.getTime() - (fechaInicio.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+    fechaInicio.setDate(fechaInicio.getDate() + 1);
+    var Domingo = new Date(fechaInicio.getTime() - (fechaInicio.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
 
-        default:
-            break;
-    }
+    Lunes = Lunes.split('-')
+    Martes = Martes.split('-')
+    Miercoles = Miercoles.split('-')
+    Jueves = Jueves.split('-')
+    Viernes = Viernes.split('-')
+    Sabado = Sabado.split('-')
+    Domingo = Domingo.split('-')
+
+   
+    const Mvp = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users?filter=CONFIRMED&page=0&range=${Lunes[0]}.${Lunes[1]}.${Lunes[2]}-${Sabado[0]}.${Sabado[1]}.${Sabado[2]}&size=1`, config)
+            .then(response => response)
+            .catch(err => err.response)
+            console.log('MVP STATS')
+            console.log(Mvp)
+            console.log(Mvp.data[0].user)
+    const mvpStats= yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${Mvp.data[0].user}?dateRange=${Lunes[0]}.${Lunes[1]}.${Lunes[2]}-${Sabado[0]}.${Sabado[1]}.${Sabado[2]}&filter=CONFIRMED&periodU=D`, config)        
+    yield put(statsMeMvpSuccess(mvpStats.data))
 }
 
 function* getHistorialSaga(payload) {

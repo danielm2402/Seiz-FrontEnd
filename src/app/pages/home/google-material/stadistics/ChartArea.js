@@ -1,8 +1,10 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Component } from 'react';
 import {
   ComposedChart, Line, Area, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   Legend, Scatter,
 } from 'recharts';
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux';
 import axios from 'axios'
 
 
@@ -27,14 +29,38 @@ const data = [
   },
 ];
 
-export default class Example extends PureComponent {
+class Example extends Component {
   static jsfiddleUrl = 'https://jsfiddle.net/alidingling/9xopwa9v/';
-  componentDidMount() {
- 
-    
-  }
+  constructor(props){
+    super(props)
+    this.state={
 
+    }
+  }
+ 
   render() {
+    const{me, prom, mvp}=this.props
+    const lengthMvp= mvp.length
+    const data = [
+      {
+        name: 'Lun', mvp: lengthMvp>0?mvp[0].stat:0, Me: me[0].length==0?0:me[0][0].stat, prom: prom[0].length==0?0:prom[0][0].stat,
+      },
+      {
+        name: 'Mar', mvp:lengthMvp>1?mvp[1].stat:0,  Me: me[1].length==0?0:me[1][0].stat, prom: prom[1].length==0?0:prom[1][0].stat,
+      },
+      {
+        name: 'Mie', mvp: lengthMvp>2?mvp[2].stat:0,  Me: me[2].length==0?0:me[2][0].stat, prom: prom[2].length==0?0:prom[2][0].stat,
+      },
+      {
+        name: 'Jue', mvp: lengthMvp>3?mvp[3].stat:0,  Me: me[3].length==0?0:me[3][0].stat, prom: prom[3].length==0?0:prom[3][0].stat,
+      },
+      {
+        name: 'Vie', mvp: lengthMvp>4?mvp[4].stat:0,  Me: me[4].length==0?0:me[4][0].stat, prom: prom[4].length==0?0:prom[4][0].stat,
+      },
+      {
+        name: 'Sáb', mvp: lengthMvp>5?mvp[5].stat:0,  Me: me[5].length==0?0:me[5][0].stat, prom: prom[5].length==0?0:prom[5][0].stat,
+      },
+    ];
     return (
       <ResponsiveContainer>
         <ComposedChart
@@ -58,3 +84,10 @@ export default class Example extends PureComponent {
     );
   }
 }
+const mapStateToProps=(state)=>({
+  me: state.estadisticasReducer.semanal.user,
+  prom: state.estadisticasReducer.semanal.general,
+  mvp: state.estadisticasReducer.mvpSemana
+
+})
+export default connect(mapStateToProps,null)(Example)

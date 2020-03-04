@@ -27,22 +27,22 @@ class Example extends Component {
   render() {
     const {user, general}= this.props.datos
     const data1=[{
-      name: `Lunes ${general[0].length==''?0:general[0][0].date}`, Me: user[0].length==0?0:user[0][0].stat, Prom: general[0].length==0?0:general[0][0].stat
+      name: `Lunes ${general[0].length==0?'':general[0][0].date}`, Me: user[0].length==0?0:user[0][0].stat, Prom: general[0].length==0?0:general[0][0].stat
     },
     {
-      name: `Martes ${general[1].length==''?0:general[1][0].date}`,  Me: user[1].length==0?0:user[1][0].stat, Prom:general[1].length==0?0:general[1][0].stat
+      name: `Martes ${general[1].length==0?'':general[1][0].date}`,  Me: user[1].length==0?0:user[1][0].stat, Prom:general[1].length==0?0:general[1][0].stat
     },
     {
-      name: `Miercoles ${general[2].length==''?0:general[2][0].date}`,  Me: user[2].length==0?0:user[2][0].stat, Prom:general[2].length==0?0:general[2][0].stat
+      name: `Miercoles ${general[2].length==0?'':general[2][0].date}`,  Me: user[2].length==0?0:user[2][0].stat, Prom:general[2].length==0?0:general[2][0].stat
     },
     {
-      name: `Jueves ${general[3].length==''?0:general[3][0].date}`,  Me: user[3].length==0?0:user[3][0].stat, Prom:general[3].length==0?0:general[3][0].stat
+      name: `Jueves ${general[3].length==0?'':general[3][0].date}`,  Me: user[3].length==0?0:user[3][0].stat, Prom:general[3].length==0?0:general[3][0].stat
     },
     {
-      name: `Viernes ${general[4].length==''?0:general[4][0].date}`, Me: user[4].length==0?0:user[4][0].stat, Prom:general[4].length==0?0:general[4][0].stat
+      name: `Viernes ${general[4].length==0?'':general[4][0].date}`, Me: user[4].length==0?0:user[4][0].stat, Prom:general[4].length==0?0:general[4][0].stat
     },
     {
-      name: `Sábado ${general[5].length==''?0:general[5][0].date}`,  Me: user[5].length==0?0:user[5][0].stat, Prom:general[5].length==0?0:general[5][0].stat
+      name: `Sábado ${general[5].length==0?'':general[5][0].date}`,  Me: user[5].length==0?0:user[5][0].stat, Prom:general[5].length==0?0:general[5][0].stat
     },
     ]
     console.log('EL DATA 111111')

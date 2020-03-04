@@ -1,5 +1,5 @@
 
-import {GET_HISTORIAL_SUCCESS, GET_HISTORIAL_SUCCESS_ME,GET_BARRAS_SEMANALES_SUCCESS,
+import {GET_HISTORIAL_SUCCESS, GET_HISTORIAL_SUCCESS_ME,GET_BARRAS_SEMANALES_SUCCESS,STATS_ME_MVP_SUCCESS,
     CONTEO_EMBARGOS,STATS_RANKING_USER_SUCCESS, CONTEO_EMBARGOS_SUCCESS, STATS_USER, STATS_USER_SUCCESS, STATS_GENERAL, STATS_GENERAL_SUCCESS
 } from '../../constants/estadisticasConst';
 
@@ -10,7 +10,8 @@ export const Authstate = {
     ranking:[],
     historial:[],
     myHistorial:[],
-    semanal:{general:[[],[],[],[],[],[]], user:[[],[],[],[],[],[]]}
+    semanal:{general:[[],[],[],[],[],[]], user:[[],[],[],[],[],[]]},
+    mvpSemana:[{},{},{},{},{},{}]
 }
 export default function authReducer(state = Authstate, action = {}) {
     switch (action.type) {
@@ -63,7 +64,13 @@ export default function authReducer(state = Authstate, action = {}) {
             return{
                 ...state,
                 semanal:{general:action.data.general, user:action.data.user}
-            }              
+            } 
+        case STATS_ME_MVP_SUCCESS:
+            return{
+                ...state,
+                mvpSemana:action.data
+
+            }                 
         default:
             return state;
     }
