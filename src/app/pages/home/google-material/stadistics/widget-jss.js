@@ -169,7 +169,7 @@ const styles = theme => ({
   pinkProgress: {
     color: colorfull[0],
     '& div': {
-      backgroundColor: colorfull[0],
+      backgroundColor: '#98A8FF',
     }
   },
   greenProgress: {
@@ -179,15 +179,15 @@ const styles = theme => ({
     }
   },
   orangeProgress: {
-    color: colorfull[4],
+    color: colorfull[0],
     '& div': {
-      backgroundColor: colorfull[4],
+      backgroundColor: '#EC417A',
     }
   },
   purpleProgress: {
     color: colorfull[1],
     '& div': {
-      backgroundColor: colorfull[1],
+      backgroundColor: '#8074ED',
     }
   },
   blueProgress: {

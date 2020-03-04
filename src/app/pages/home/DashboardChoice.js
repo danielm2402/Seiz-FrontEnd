@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Dashboard from './Dashboard'
 import { bindActionCreators } from 'redux';
-import {getConteoEmbargos, getStatsRankingUser,getHistorial,getHistorialMe,getBarrasSemanales,statsMeMvp} from '../../redux/actions/estadisticasAction'
+import {getConteoEmbargos, getStatsRankingUser,getHistorial,getHistorialMe,getBarrasSemanales,statsMeMvp,getStadisticsUserGeneral} from '../../redux/actions/estadisticasAction'
 class DashboardChoice extends Component {
     componentDidMount(){
         this.props.handleConteoEmbargos(this.props.token, this.props.user)
@@ -11,6 +11,7 @@ class DashboardChoice extends Component {
         this.props.handleHistorialMe(this.props.token, this.props.user)
         this.props.handleBarrasSemanales(this.props.token, this.props.user)
         this.props.handleMvp(this.props.token)
+        this.props.handleOthersStadistics(this.props.token)
     }
     render() {
         return (
@@ -32,7 +33,8 @@ const mapDispatchToProps=(dispatch)=>({
     handleHistorialGeneral: bindActionCreators(getHistorial, dispatch),
     handleHistorialMe:bindActionCreators(getHistorialMe,dispatch),
     handleBarrasSemanales: bindActionCreators(getBarrasSemanales,dispatch),
-    handleMvp: bindActionCreators(statsMeMvp, dispatch)
+    handleMvp: bindActionCreators(statsMeMvp, dispatch),
+    handleOthersStadistics: bindActionCreators(getStadisticsUserGeneral,dispatch)
     
 })
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardChoice)

@@ -5,7 +5,9 @@ import Grid from '@material-ui/core/Grid';
 import classNames from 'classnames';
 import Dvr from '@material-ui/icons/Dvr';
 import CheckCircle from '@material-ui/icons/CheckCircle';
-import Healing from '@material-ui/icons/Healing';
+import Healing from '@material-ui/icons/Publish';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux'
 import FilterCenterFocus from '@material-ui/icons/FilterCenterFocus';
 import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
@@ -39,6 +41,54 @@ const color = ({
 
 class PerformanceChartWidget extends PureComponent {
   render() {
+
+    const {user, userOther}= this.props
+    const dataPerformance = [
+      {
+        name: 'Lunes',
+        Confirmados: user[0].length==0?0:user[0][0].stat,
+        Subidos: userOther.upload[0].length==0?0:userOther.upload[0][0].stat,
+        Asignados: userOther.userAssig[0].length==0?0:userOther.userAssig[0][0].stat,
+       
+      },
+      {
+        name: 'Martes',
+        Confirmados: user[1].length==0?0:user[1][0].stat,
+        Subidos: userOther.upload[1].length==0?0:userOther.upload[1][0].stat,
+        Asignados: userOther.userAssig[1].length==0?0:userOther.userAssig[1][0].stat,
+     
+      },
+      {
+        name: 'Miercoles',
+        Confirmados: user[2].length==0?0:user[2][0].stat,
+        Subidos: userOther.upload[2].length==0?0:userOther.upload[2][0].stat,
+        Asignados: userOther.userAssig[2].length==0?0:userOther.userAssig[2][0].stat,
+        
+      },
+      {
+        name: 'Jueves',
+        Confirmados: user[3].length==0?0:user[3][0].stat,
+        Subidos: userOther.upload[3].length==0?0:userOther.upload[3][0].stat,
+        Asignados: userOther.userAssig[3].length==0?0:userOther.userAssig[3][0].stat,
+       
+      },
+      {
+        name: 'Viernes',
+        Confirmados: user[4].length==0?0:user[4][0].stat,
+        Subidos: userOther.upload[4].length==0?0:userOther.upload[4][0].stat,
+        Asignados: userOther.userAssig[4].length==0?0:userOther.userAssig[4][0].stat,
+        
+      },
+      {
+        name: 'Sábado',
+        Confirmados: user[5].length==0?0:user[5][0].stat,
+        Subidos: userOther.upload[5].length==0?0:userOther.upload[5][0].stat,
+        Asignados: userOther.userAssig[5].length==0?0:userOther.userAssig[5][0].stat,
+       
+      }
+    ];
+
+
     const { classes, intl } = this.props;
     return (
       <PapperBlock whiteBg noMargin title={intl.formatMessage(messages.performance_indicator)} icon="timeline" desc="">
@@ -50,9 +100,9 @@ class PerformanceChartWidget extends PureComponent {
                   <Dvr />
                 </Avatar>
                 <Typography variant="h6">
-                  <span className={classes.orangeText}>40</span>
+                  <span className={classes.orangeText}>{this.props.conteoEmbargos.loading?0:this.props.conteoEmbargos.data.asignados}</span>
                   <Typography noWrap>
-                    Propietarios
+                    Asignados
                   </Typography>
                 </Typography>
               </li>
@@ -61,9 +111,9 @@ class PerformanceChartWidget extends PureComponent {
                   <CheckCircle />
                 </Avatar>
                 <Typography variant="h6">
-                  <span className={classes.indigoText}>125</span>
+                  <span className={classes.indigoText}>{this.props.conteoEmbargos.loading?0:this.props.conteoEmbargos.data.confirmados}</span>
                   <Typography noWrap>
-                   Propiedades
+                   Confirmados
                   </Typography>
                 </Typography>
               </li>
@@ -72,9 +122,10 @@ class PerformanceChartWidget extends PureComponent {
                   <Healing />
                 </Avatar>
                 <Typography variant="h6">
-                  
+                <span className={classes.indigoText}>{this.props.conteoEmbargos.loading?0:this.props.conteoEmbargos.data.total}</span>
+                
                   <Typography noWrap>
-                    Plan: Básico
+                    Subidos
                   </Typography>
                 </Typography>
               </li>
@@ -90,10 +141,10 @@ class PerformanceChartWidget extends PureComponent {
                     <YAxis axisLine={false} tickSize={3} tickLine={false} tick={{ stroke: 'none' }} />
                     <CartesianGrid vertical={false} strokeDasharray="3 3" />
                     <Tooltip />
-                    <Area type="basis" stackId="2" dataKey="Task" stroke="none" fill={color.secondary} />
-                    <Area type="monotone" stackId="1" stroke="none" dataKey="Attend" fill={color.fourth} />
+                    <Area type="basis" stackId="2" dataKey="Subidos" stroke="none" fill={color.secondary} />
+                    <Area type="monotone" stackId="1" stroke="none" dataKey="Confirmados" fill={color.fourth} />
                     <Area type="monotone" stackId="3" dataKey="Referrals" stroke="none" fill={color.main} />
-                    <Line type="monotone" dataKey="Complaint" strokeWidth={2} stroke={color.third} />
+                    <Line type="monotone" dataKey="Asignados" strokeWidth={2} stroke={color.third} />
                   </ComposedChart>
                 </ResponsiveContainer>
               </div>
@@ -108,18 +159,17 @@ class PerformanceChartWidget extends PureComponent {
             <Divider className={classes.divider} />
             <ul className={classes.secondaryWrap}>
               <li>
-                <Typography gutterBottom>Monto actual</Typography>
-                <Typography gutterBottom>$50.345.00</Typography>
+                <Typography gutterBottom>Confirmados</Typography>
+           
                 <LinearProgress variant="determinate" className={classNames(classes.progress, classes.pinkProgress)} value={100} />
               </li>
               <li>
-                <Typography gutterBottom>Cantidad de usuarios</Typography>
-                <Typography gutterBottom>1345</Typography>
+                <Typography gutterBottom>Subidos</Typography>
+            
                 <LinearProgress variant="determinate" className={classNames(classes.progress, classes.purpleProgress)} value={100} />
               </li>
               <li>
-                <Typography gutterBottom>PQRS</Typography>
-                <Typography gutterBottom>5</Typography>
+                <Typography gutterBottom>Asignados</Typography>
                 <LinearProgress variant="determinate" className={classNames(classes.progress, classes.orangeProgress)} value={100} />
               </li>
           
@@ -138,4 +188,10 @@ PerformanceChartWidget.propTypes = {
   intl: intlShape.isRequired
 };
 
-export default withStyles(styles)(injectIntl(PerformanceChartWidget));
+const mapStateToProps=(state)=>({
+  conteoEmbargos: state.estadisticasReducer.conteo,
+  user:state.estadisticasReducer.semanal.user,
+  userOther:state.estadisticasReducer.userStatsOther
+
+})
+export default withStyles(styles)(injectIntl(connect(mapStateToProps, null)(PerformanceChartWidget)));

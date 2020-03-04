@@ -77,6 +77,16 @@ export const getBarrasSemanalesSuccess=(data)=>({
     data
 });
 
+export const getStadisticsUserGeneral=(token)=>({
+    type: types.GET_ESTADISTICAS_USER_GENERAL,
+    token,
+});
+export const getStadisticsUserGeneralSuccess=(data)=>({
+    type: types.GET_ESTADISTICAS_USER_GENERAL_SUCCESS,
+    data
+});
+
+
 
 
 
