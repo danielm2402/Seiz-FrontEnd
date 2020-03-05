@@ -182,7 +182,7 @@ class PerformanceChartWidget extends PureComponent {
     );
   }
 }
-
+ 
 PerformanceChartWidget.propTypes = {
   classes: PropTypes.object.isRequired,
   intl: intlShape.isRequired

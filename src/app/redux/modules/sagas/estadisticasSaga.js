@@ -6,6 +6,7 @@ import axios from 'axios';
 import { GET_BARRAS_SEMANALES, GET_POLYGON, GET_HISTORIAL_ME, GET_HISTORIAL, CONTEO_EMBARGOS, STATS_RANKING_USER, STATS_ME_MVP, CONTEO_EMBARGOS_SUCCESS, STATS_USER, STATS_USER_SUCCESS, STATS_GENERAL, STATS_GENERAL_SUCCESS, GET_ESTADISTICAS_USER_GENERAL } from '../../constants/estadisticasConst'
 import { getPolygonSuccess, statsMeMvpSuccess, getHistorialSuccessMe, getConteoEmbargosSuccess, getHistorialSuccess, getStatsRankingUserSuccess, getBarrasSemanalesSuccess, getStadisticsUserGeneralSuccess } from '../../actions/estadisticasAction'
 import * as auth from "../../../store/ducks/auth.duck";
+import { FormattedDate } from 'react-intl';
 var jwtDecode = require('jwt-decode');
 function* conteoEmbargosSaga(payload) {
 
@@ -59,11 +60,11 @@ function* rankingUsersSaga(payload) {
 
     };
     var fechaActual = new Date();
-    var dia = new Date(fechaActual.getTime())
-
+    var dia = new Date(fechaActual.getTime()- (fechaActual.getTimezoneOffset() * 60000 )).toISOString()
+    .split("T")[0];
 
     var fecha1 = new Date(dia);
-
+    
     var diapararestar = fecha1.getUTCDay();
     let dias1
     if (diapararestar == 0) {
@@ -73,8 +74,9 @@ function* rankingUsersSaga(payload) {
     } else {
         dias1 = (diapararestar - 1) * (-1);
         fecha1.setDate(fecha1.getDate() + dias1);
-        fecha1.setDate(fecha1.getDate() - 7)
+        fecha1.setDate(fecha1.getDate() - 6)
     }
+    
 
     var Lunes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
     fecha1.setDate(fecha1.getDate() + 1);
@@ -135,11 +137,11 @@ function* statsMeMvpSaga(payload) {
 
 
     var fechaActual = new Date();
-    var dia = new Date(fechaActual.getTime())
-
+    var dia = new Date(fechaActual.getTime()- (fechaActual.getTimezoneOffset() * 60000 )).toISOString()
+    .split("T")[0];
 
     var fecha1 = new Date(dia);
-
+    
     var diapararestar = fecha1.getUTCDay();
     let dias1
     if (diapararestar == 0) {
@@ -149,8 +151,9 @@ function* statsMeMvpSaga(payload) {
     } else {
         dias1 = (diapararestar - 1) * (-1);
         fecha1.setDate(fecha1.getDate() + dias1);
-        fecha1.setDate(fecha1.getDate() - 7)
+        fecha1.setDate(fecha1.getDate() - 6)
     }
+    
     var Lunes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
     fecha1.setDate(fecha1.getDate() + 1);
     var Martes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
@@ -245,11 +248,11 @@ function* getBarrasSemanalesSaga(payload) {
     };
 
     var fechaActual = new Date();
-    var dia = new Date(fechaActual.getTime())
-
+    var dia = new Date(fechaActual.getTime()- (fechaActual.getTimezoneOffset() * 60000 )).toISOString()
+    .split("T")[0];
 
     var fecha1 = new Date(dia);
-
+    
     var diapararestar = fecha1.getUTCDay();
     let dias1
     if (diapararestar == 0) {
@@ -259,10 +262,10 @@ function* getBarrasSemanalesSaga(payload) {
     } else {
         dias1 = (diapararestar - 1) * (-1);
         fecha1.setDate(fecha1.getDate() + dias1);
-        fecha1.setDate(fecha1.getDate() - 7)
+        fecha1.setDate(fecha1.getDate() - 6)
     }
-
-
+    console.log('LA FECHA DE INICIO ES')
+    console.log(fecha1)
 
     var Lunes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
     fecha1.setDate(fecha1.getDate() + 1);
@@ -366,10 +369,11 @@ function* getEstadisticasUserGeneralSaga(payload) {
     };
 
     var fechaActual = new Date();
-    var dia = new Date(fechaActual.getTime())
+    var dia = new Date(fechaActual.getTime()- (fechaActual.getTimezoneOffset() * 60000 )).toISOString()
+    .split("T")[0];
 
     var fecha1 = new Date(dia);
-
+    
     var diapararestar = fecha1.getUTCDay();
     let dias1
     if (diapararestar == 0) {
@@ -379,10 +383,9 @@ function* getEstadisticasUserGeneralSaga(payload) {
     } else {
         dias1 = (diapararestar - 1) * (-1);
         fecha1.setDate(fecha1.getDate() + dias1);
-        fecha1.setDate(fecha1.getDate() - 7)
+        fecha1.setDate(fecha1.getDate() - 6)
     }
-
-
+    
 
     var Lunes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
     fecha1.setDate(fecha1.getDate() + 1);
@@ -484,9 +487,6 @@ function* polygonStadisticSaga(payload) {
     };
     var fechaActual = new Date();
     var dia = new Date(fechaActual.getTime())
-    console.log(dia.getFullYear())
-    console.log(dia.getMonth() + 1)
-    console.log(dia.getDay() + 1)
     const id = jwtDecode(payload.token).userId
     try {
 
@@ -528,17 +528,6 @@ function* polygonStadisticSaga(payload) {
             .then(response => response)
             .catch(err => err.response)
 
-        console.log(data)
-        console.log(data1)
-        console.log(data2)
-        console.log(data3)
-        console.log(data4)
-        console.log(data5)
-        console.log(data6)
-        console.log(data7)
-        console.log(data8)
-        console.log(data9)
-        console.log(mvpStats)
 
         const datasend = {
             AsignadosVsConfirmados: { other: data9.data.length == 0 ? 0 : data9.data.stat, me: data2.data.length == 0 ? 0 : data2.data.stat, tope: 150 },
