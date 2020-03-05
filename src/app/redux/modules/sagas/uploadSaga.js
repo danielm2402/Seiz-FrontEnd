@@ -36,25 +36,10 @@ function* uploadSaga(payload) {
         body: bodyFormData
       }
     )
-    .then(response => response.json())
-    .catch(error => error.response.json())
+    .then(response => response)
+    .catch(error => error.response)
    
-    /* const data = yield instance.post('/embargos/upload', {files:bodyFormData}, {
-        headers: {
-            'Authorization': 'Bearer ' + payload.token,
-
-            //'Content-Type': 'multipart/form-data'
-            
-            "Content-Type": `multipart/form-data; boundary=${bodyFormData._boundary}`,
-
-            //'content-Type':'multipart/mixed'
-            
-        }
-        ,
-        data: {},
-    })
-        .then(response => response)
-        .catch(error => error.response) */
+   
     console.log(data)
     switch (data.status) {
         case 200:
