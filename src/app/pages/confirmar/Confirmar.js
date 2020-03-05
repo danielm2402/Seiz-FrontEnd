@@ -15,7 +15,7 @@ import './Tabla.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TextField from '@material-ui/core/TextField';
-import { FaRegEdit, FaTable } from "react-icons/fa";
+import { FaRegEdit, FaTable, FaFileExcel } from "react-icons/fa";
 import { MdCancel, MdPhotoSizeSelectSmall, MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import { confirmarEmbargo } from '../../redux/actions/embargosAction'
 import { ProgressBar } from 'react-bootstrap';
@@ -288,6 +288,9 @@ class Confirmar extends Component {
        
         this.props.handleTableDemandados(this.state.tablePoints, this.state.tableCols, this.props.match.params.id, this.state.pageNumber, this.props.token)
     }
+    goToExcel=()=>{
+        this.props.history.push('/upload/excel/'+this.props.match.params.id)
+    }
 
     render() {
         const { pageNumber, numPages } = this.state;
@@ -413,7 +416,7 @@ class Confirmar extends Component {
                             <div className="section-table">
                                 <div className="buttons-edits">
 
-                                    {!this.state.disabled ? <button onClick={this.handleCancel}><MdCancel size="1.5em" color={"#BDD535"} /></button> : <button onClick={this.handleEdit}><FaRegEdit size="1.5em" color={"#BDD535"} /></button>}
+                                    {!this.state.disabled ?<div> <button onClick={this.goToExcel}><FaFileExcel size="1.5em" color={"#BDD535"} /></button> <button onClick={this.handleCancel}><MdCancel size="1.5em" color={"#BDD535"} /></button></div> : <button onClick={this.handleEdit}><FaRegEdit size="1.5em" color={"#BDD535"} /></button>}
                                 </div>
                                 <div className="information-card">
                                     <label for="entidad">Entidad Remitente</label>

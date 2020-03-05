@@ -1,0 +1,135 @@
+.container-todo-process{
+    background-color: #fff;
+    width: 100%;
+    height: auto; 
+}
+.header-process{
+    display: flex;
+    width: 100%;
+    height: 90px;
+}
+.container-process{
+    width: 80%;
+    height: 90px;
+    background-color: #F8F8F8;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: row;
+}
+.container-title{
+    width: 20%;
+    height: 90px;
+    background-color: #E7E7E7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.element-process{
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 22%;
+}
+.item-section{
+    width: 70%;
+    height: 100%;
+    background-color: #F8F8F8;
+}
+
+
+.pointer {
+    width: 100%;
+    height: 90px;
+    position: relative;
+    background: #BDD535;
+  }
+  .pointer:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-left: 45px solid #F8F8F8;
+    border-top: 45px solid transparent;
+    border-bottom: 45px solid transparent;
+  }
+  .pointer:before {
+    content: "";
+    position: absolute;
+    right: -45px;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-left: 45px solid #BDD535;
+    border-top: 45px solid transparent;
+    border-bottom: 45px solid transparent;
+  }
+
+  .pointerdes {
+    width: 100%;
+    height: 90px;
+    position: relative;
+    background: #E7E7E7;
+  }
+  .pointerdes:after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-left: 45px solid #F8F8F8;
+    border-top: 45px solid transparent;
+    border-bottom: 45px solid transparent;
+  }
+  .pointerdes:before {
+    content: "";
+    position: absolute;
+    right: -45px;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-left: 45px solid #E7E7E7;
+    border-top: 45px solid transparent;
+    border-bottom: 45px solid transparent;
+  }
+
+  .pointerinit {
+    width: 100%;
+    height: 90px;
+    position: relative;
+    background: #BDD535;
+  }
+ 
+  .pointerinit:before {
+    content: "";
+    position: absolute;
+    right: -45px;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-left: 45px solid #BDD535;
+    border-top: 45px solid transparent;
+    border-bottom: 45px solid transparent;
+  }
+
+  .pointerinitdes {
+    width: 100%;
+    height: 90px;
+    position: relative;
+    background: #E7E7E7;
+  }
+ 
+  .pointerinitdes:before {
+    content: "";
+    position: absolute;
+    right: -45px;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-left: 45px solid #E7E7E7;
+    border-top: 45px solid transparent;
+    border-bottom: 45px solid transparent;
+  }

@@ -1,0 +1,30 @@
+.contenedor-upload{
+    width: 100%;
+    height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.upload-file{
+    width: 400px;
+    height: 400px;
+    background-color: #BDD535;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.upload-cov{
+    width: 370px;
+    height: 370px;
+    border: 2px dashed #fff;
+    background-color: #BDD535;
+    border-radius: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.image-upload>input {
+    display: none;
+  }

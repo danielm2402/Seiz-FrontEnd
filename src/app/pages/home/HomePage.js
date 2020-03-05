@@ -14,6 +14,7 @@ import Confirmar from '../confirmar/Confirmar'
 import { LayoutSplashScreen } from "../../../_metronic";
 import Usuarios from '../auth/usuarios/Usuarios'
 import User from '../usuarios/User'
+import UploadExcel from '../uploadExcel/Upload'
 const GoogleMaterialPage = lazy(() =>
   import("./google-material/GoogleMaterialPage")
 );
@@ -31,7 +32,7 @@ export default function HomePage() {
         }
         <Route path="/builder" component={Builder} />
         <Route path="/dashboard" component={DashboardChoice} />
-        <Route path="/upload" component={Upload}/>
+        <Route path="/upload" exact component={Upload}/>
         <Route path="/listar/confirmados" exact component={Confirmados}/>
         <Route path="/view/:id" component={Revisar}/>
         <Route path="/confirm/:id" component={Confirmar}/>
@@ -40,6 +41,7 @@ export default function HomePage() {
         <Route path="/listar/todos" exact component={Todos}/>
         <Route path="/listar/users" exact component={Usuarios}/>
         <Route path="/user/:id" exact component={User}/>
+        <Route path="/upload/excel/:id" exact component={UploadExcel}/>
         <Redirect to="/error/error-v1" />
       </Switch>
     </Suspense>
