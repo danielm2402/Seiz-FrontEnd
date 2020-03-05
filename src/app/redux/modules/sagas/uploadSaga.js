@@ -14,8 +14,13 @@ function* uploadSaga(payload) {
     console.log('upload desde saga...');
     console.log(payload.array[0])
     var bodyFormData = new FormData();
-    bodyFormData.append('files', payload.array[0], 'file.pdf');
-    console.log(bodyFormData)
+
+    payload.array.forEach((item) => {
+        bodyFormData.append('files', item, `${item.name}`);
+    });
+
+    /* bodyFormData.append('files', payload.array[0], 'file.pdf');
+    console.log(bodyFormData) */
 
     const instance = axios.create({
         baseURL: 'https://bancow.finseiz.com/api/v1',
