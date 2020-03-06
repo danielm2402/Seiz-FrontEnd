@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
-import { addFile, setPositionProcess, resetMensaje } from '../../redux/actions/uploadAction'
+import { uploadExcel} from '../../redux/actions/excelActions'
 import { make_cols } from './MakeColumns';
 import { SheetJSFT } from './types';
 import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
@@ -22,8 +22,16 @@ class First extends Component {
         this.handleFile = this.handleFile.bind(this);
         this.onChangeHandler = this.onChangeHandler.bind(this);
     }
+
+    componentDidUpdate(prevProps, prevState){
+        if(this.props.upload!==prevProps.upload){
+            if(this.props.upload.data==200){
+                this.props.nextStep()
+            }
+        }
+    }
     onChangeHandler(event) {
-        this.props.handlePosition(1)
+       
         this.setState({
             files: event.target.files,
         }, function () {
@@ -39,17 +47,15 @@ class First extends Component {
                     }
                 )
             }
-            console.log('urlsss')
-            console.log(urls)
-            this.props.handleAddFile(urls)
+            console.log('EL TOKEN ES:',this.props.token)
+            this.props.handleAddFile(this.state.files[0], this.props.id, this.props.token )
 
-           
-            
 
         })
         if (event.target.files && event.target.files[0]) this.setState({ file: event.target.files[0] },function(){
             console.log(this.state.file)
         });  
+       
     }
 
     handleFile() {
@@ -96,9 +102,6 @@ class First extends Component {
                             
                         </div>
                     </div>
-                    <input type='submit'
-                                value="Subir"
-                                onClick={this.handleFile} />
                 </div>
 
             </div>
@@ -106,12 +109,14 @@ class First extends Component {
     }
 }
 const mapDispatchToProps = (dispatch) => ({
-    handleAddFile: bindActionCreators(addFile, dispatch),
-    handlePosition: bindActionCreators(setPositionProcess, dispatch)
+    handleAddFile: bindActionCreators(uploadExcel, dispatch),
+   
 })
 const mapStateToProps = (state) => ({
     token: state.auth.authToken,
-    mensaje: state.uploadReducer.mensaje
+    mensaje: state.excelReducer.mensaje,
+    upload: state.excelReducer.upload,
+    
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(First)

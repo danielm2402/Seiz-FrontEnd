@@ -14,6 +14,8 @@ class Upload extends Component {
     componentDidMount() {
         this.props.handlePosition(0)
         this.props.updateLoader()
+        console.log('LAS PROPS DE STEP')
+       console.log(this.props.match.params.id)
     }
     componentWillMount() {
         this.props.updateLoader()
@@ -21,37 +23,9 @@ class Upload extends Component {
     render() {
         return (
             <div className="container-todo-process">
-                <div className="header-process">
-                    <div className="container-title">
-                        <h5>Subir Oficios</h5>
-                    </div>
-                    <div className="container-process">
-                        <div className="element-process">
-                            <div style={{display:'flex', justifyContent:'space-around', alignItems:'center'}} className={this.props.item === 0 ? "pointerinit" : "pointerinitdes"}>
-                                <h5>Cargar</h5>
-                                <h5>1/3</h5>
-                            </div>
-
-                        </div>
-
-                        <div className="element-process">
-                            <div style={{ paddingLeft:'25px', display:'flex', justifyContent:'space-around', alignItems:'center'}}  className={this.props.item === 1 ? "pointer" : "pointerdes"}>
-                            <h5>Procesar</h5>
-                                <h5>2/3</h5>
-                            </div>
-
-                        </div>
-                        <div className="element-process">
-                            <div style={{paddingLeft:'25px', display:'flex', justifyContent:'space-around', alignItems:'center'}} className={this.props.item === 2 ? "pointer" : "pointerdes"}>
-                            <h5>Resultado</h5>
-                                <h5>3/3</h5>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
+                
                 <StepWizard>
-                    <First />
+                    <First id={this.props.match.params.id} />
                     <Second />
                     <Loader />
                     <Resultados />
