@@ -22,3 +22,15 @@ export const resetMensaje=()=>({
 
 });
 
+export const getPreview=(id, token)=>({
+    type: types.GET_PREVIEW,
+    id,
+    token
+});
+
+export const getPreviewSuccess=(data)=>({
+    type: types.GET_PREVIEW_SUCCESS,
+    data
+});
+
+

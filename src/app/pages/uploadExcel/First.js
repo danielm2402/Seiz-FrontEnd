@@ -25,7 +25,7 @@ class First extends Component {
 
     componentDidUpdate(prevProps, prevState){
         if(this.props.upload!==prevProps.upload){
-            if(this.props.upload.data==200){
+            if(this.props.upload.data.response==200){
                 this.props.nextStep()
             }
         }
@@ -103,6 +103,7 @@ class First extends Component {
                         </div>
                     </div>
                 </div>
+                <button onClick={()=>this.props.nextStep()}> IR</button>
 
             </div>
         )
