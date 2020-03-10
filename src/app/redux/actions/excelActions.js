@@ -33,4 +33,11 @@ export const getPreviewSuccess=(data)=>({
     data
 });
 
+export const loadDemandados=(data, id, token)=>({
+    type:types.LOAD_DEMANDADOS,
+    data,
+    id,
+    token
+})
+
 

@@ -4,7 +4,7 @@ import {
 } from 'redux-saga/effects';
 import axios from 'axios';
 import {
-    UPLOAD_EXCEL, GET_PREVIEW
+    UPLOAD_EXCEL, GET_PREVIEW,LOAD_DEMANDADOS
 } from '../../constants/excelConst';
 import {
     uploadExcelSuccess, mensajeExcel, getPreview, getPreviewSuccess
@@ -96,12 +96,29 @@ function* getPreviewSaga(payload) {
     console.log(data)
 }
 
+function* loadDemandados(payload){
+    console.log('LOAD DEMANDADOS');
+    const config = {
+        headers: {
+            'Authorization': 'Bearer ' + payload.token,
+        },
+    }
+
+    const data = yield  axios.post('https://bancow.finseiz.com/api/v1/embargos/loadDemandados?idEmbargo=' + payload.id,{
+
+    },config)
+        .then(response => response)
+        .catch(err => err.response)
+
+    console.log(data)        
+}
+
 
 function* excelRootSaga() {
     yield all([
         takeEvery(UPLOAD_EXCEL, uploadExcelSaga),
         takeEvery(GET_PREVIEW, getPreviewSaga),
-
+        takeEvery(LOAD_DEMANDADOS,loadDemandados)
 
     ])
 }

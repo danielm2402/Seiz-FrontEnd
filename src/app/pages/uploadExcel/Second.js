@@ -3,6 +3,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 
 import { uploadRequest, setPositionProcess } from '../../redux/actions/uploadAction'
+import {loadDemandados} from '../../redux/actions/excelActions'
 import './Sencond.css'
 import axios from 'axios'
 import { TiDocumentText } from "react-icons/ti";
@@ -142,16 +143,20 @@ class Second extends Component {
                             </div>
                         </div>
                     </div>
-                    <input onClick={this.confirmarEmbargo} type="button" class="confirm-form-btn " value="Cargar" />
+                    <input onClick={this.loadDemandados} type="button" class="confirm-form-btn " value="Cargar" />
                 </div>
             </div>
         )
+    }
+    loadDemandados=()=>{
+        this.props.loadDemandados()
     }
 }
 
 const mapDisptachToProps = (dispatch) => ({
     handlePosition: bindActionCreators(setPositionProcess, dispatch),
-    handleRequest: bindActionCreators(uploadRequest, dispatch)
+    handleRequest: bindActionCreators(uploadRequest, dispatch),
+    loadDemandados: bindActionCreators(loadDemandados, dispatch)
 })
 const mapStateToProps = (state) => ({
     files: state.uploadReducer.files,
