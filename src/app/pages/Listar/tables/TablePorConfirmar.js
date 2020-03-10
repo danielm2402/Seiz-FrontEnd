@@ -31,8 +31,8 @@ function MaterialTableDemo(props) {
         {title:'Id', field:'id'},
         { title: 'Demandante', field: 'plaintiffs[0].fullname'},
         { title: 'Ciudad', field: 'city'},
-        { title: 'Estado', field: 'status'},
-        { title: 'Tipo', field: 'embargoType'},
+        { title: 'Estado', field: 'status', filtering: false},
+        { title: 'Tipo', field: 'embargoType', filtering: false},
         { title: 'Fecha de carga', field: 'createdAt'},
         { title: 'Fecha Oficio', field: 'documentDate'},
    
@@ -64,14 +64,27 @@ function MaterialTableDemo(props) {
       }}
       data={query =>
         new Promise((resolve, reject) => {
+          console.log('QUERYYY')
+          console.log(query)
+          console.log(query.page)
+          let params= {}
+          if(query.filters.length!==0){
+           for (let i = 0; i < query.filters.length; i++) {
+             if(query.filters[i].column.title==='Demandante')
+             params={...params,'entidadRemitente':query.filters[i].value}
+             else{
+              params={...params,[(query.filters[i].column.title).toLowerCase()]:query.filters[i].value}
+             }
+             
+           }
+           console.log(params)
+          }
             const config = {
                 headers: {
                   Authorization: 'Bearer ' + props.token,
                   Accept: 'application/json',
                 },
-                params: {
-                  'estadoEmbargo': 'CONFIRMADO'
-                }
+                params
               };
               console.log('DATOS DE TABLAAAAAAAAAA')
               axios.get('https://bancow.finseiz.com/api/v1/embargos/count?estadoEmbargo=SIN_CONFIRMAR',config)

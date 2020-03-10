@@ -44,21 +44,17 @@ function MaterialTableDemo(props) {
         {title:'Id', field:'id'},
         { title: 'Demandante', field: 'plaintiffs[0].fullname'},
         { title: 'Ciudad', field: 'city'},
-        { title: 'Estado', field: 'status'},
-        { title: 'Tipo', field: 'embargoType'},
+        { title: 'Estado', field: 'status', lookup:{CONFIRMADO:'CONFIRMADO',SIN_CONFIRMAR:'SIN_CONFIRMAR',COMPLETO:'COMPLETO', FINALIZADO:'FINALIZADO'}},
+        { title: 'Tipo', field: 'embargoType', filtering: false},
         { title: 'Fecha de carga', field: 'createdAt'},
         { title: 'Fecha Oficio', field: 'documentDate'},
    
       ]}
       components={{
         Cell: props => {
-          console.log('LA CELDA TABLE')
-          console.log(props);
           if(props.columnDef.field=='status'){
           return (
-            
             <MTableCell
-      
             >
               {props.columnDef.field=='status'?
               <div style={{backgroundColor:color(props.value), borderRadius:'3px', padding:'10px', color:colorText(props.value), fontFamily:'Poppins,Helvetica,sans-serif !important', fontWeight:'500' }}>{props.value}</div>:<></>}
@@ -77,14 +73,37 @@ function MaterialTableDemo(props) {
       }}
       data={query =>
         new Promise((resolve, reject) => {
+          console.log('QUERYYY')
+          console.log(query)
+          console.log(query.page)
+          let params= {}
+          if(query.filters.length!==0){
+           for (let i = 0; i < query.filters.length; i++) {
+             switch (query.filters[i].column.title) {
+               case 'Demandante':
+                params={...params,'entidadRemitente':query.filters[i].value}
+                break;
+                case 'Estado':
+                  params={...params,'estadoEmbargo':query.filters[i].value[0]}
+                break;
+               default:
+                params={...params,[(query.filters[i].column.title).toLowerCase()]:query.filters[i].value}
+                break;
+                 
+             }
+             
+              
+             }
+             
+           }
             const config = {
                 headers: {
                   Authorization: 'Bearer ' + props.token,
                   Accept: 'application/json',
                 },
-            
+                params
               };
-              console.log('DATOS DE TABLAAAAAAAAAA')
+
               axios.get('https://bancow.finseiz.com/api/v1/embargos/count',config)
               .then(response=>{
                 let total
