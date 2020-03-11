@@ -59,7 +59,7 @@ function MyPdfViewer(props) {
     }, [rectangle]);
 
     const canvasRef = useRef(null);
-
+    const canvRef= useRef(null)
     const { pdfDocument, pdfPage } = usePdf({
         file: props.document,
         page,
@@ -69,14 +69,13 @@ function MyPdfViewer(props) {
     function handleMouseDown(event, ctx) { //added code here
 
         if (!activeModeTable) {
+            ctx.canvas.width=ctx.canvas.offsetWidth
+            ctx.canvas.height=ctx.canvas.offsetHeight
             setDown(true)
             setDownCount(1)
             setPreviousPointX(event.offsetX)
             setPreviousPointY(event.offsetY)
-
-
         }
-
     }
     function handleMouseMove(event, ctx) {
         if (!activeModeTable) {
@@ -85,16 +84,17 @@ function MyPdfViewer(props) {
 
             if (isDown) {
 
-                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); //clear canvas
+                ctx.clearRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight); //clear canvas
                 ctx.beginPath();
                 ctx.fillStyle = "rgba(0,0,0, 0.4)";
-                ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.width);
+                ctx.fillRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight);
                 var width = x - previousPointX;
                 var height = y - previousPointY;
                 ctx.beginPath();
                 ctx.lineWidth = "1";
                 ctx.strokeStyle = "red";
                 ctx.fillStyle = "rgba(118,225,17, 0.5)";
+            
                 ctx.fillRect(previousPointX, previousPointY, width, height);
                 ctx.stroke();
             }
@@ -109,11 +109,11 @@ function MyPdfViewer(props) {
             var y = event.offsetY;
             var width = x - previousPointX;
             var height = y - previousPointY;
-
+          
             setRectangle({ x: previousPointX, y: previousPointY, width: width, height: height })
 
 
-            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.width); //clear canvas
+            ctx.clearRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight); //clear canvas
             ctx.beginPath();
             setDown(false)
 
@@ -129,32 +129,31 @@ function MyPdfViewer(props) {
 
                     <div style={{ position: 'relative' }}>
 
-                        <canvas style={{ position: 'absolute' }} ref={canvasRef}
-                            onMouseDown={
-                                e => {
-                                    let nativeEvent = e.nativeEvent;
-                                    const canvas = canvasRef.current
-                                    const ctx = canvas.getContext('2d')
-                                    handleMouseDown(nativeEvent, ctx);
-                                }}
-                            onMouseMove={
-                                e => {
-                                    let nativeEvent = e.nativeEvent;
-                                    const canvas = canvasRef.current
-                                    const ctx = canvas.getContext('2d')
-                                    handleMouseMove(nativeEvent, ctx);
-                                }}
+                        <canvas style={{ position: 'absolute' }} ref={canvasRef}/>
 
-                            onMouseUp={
-                                e => {
-                                    let nativeEvent = e.nativeEvent;
-                                    const canvas = canvasRef.current
-                                    const ctx = canvas.getContext('2d')
-                                    handleMouseUp(nativeEvent, ctx);
-                                }
-                            } />
+                        <canvas height="792" width="612" style={{ position: 'absolute'} } ref={canvRef}
+                          onMouseDown={
+                            e => {
+                                let nativeEvent = e.nativeEvent;
+                                const canvas = canvRef.current
+                                const ctx = canvas.getContext('2d')
+                                handleMouseDown(nativeEvent, ctx);
+                            }}
+                        onMouseMove={
+                            e => {
+                                let nativeEvent = e.nativeEvent;
+                                const canvas = canvRef.current
+                                const ctx = canvas.getContext('2d')
+                                handleMouseMove(nativeEvent, ctx);
+                            }}
 
-                        <canvas height="792" width="612"  style={{ position: 'absolute'} } />
+                        onMouseUp={
+                            e => {
+                                let nativeEvent = e.nativeEvent;
+                                const canvas = canvRef.current
+                                const ctx = canvas.getContext('2d')
+                                handleMouseUp(nativeEvent, ctx);
+                            }}  />
                     </div>
                     {Boolean(pdfDocument && pdfDocument.numPages) && (
                         <nav>
