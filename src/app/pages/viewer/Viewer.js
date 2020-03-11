@@ -127,7 +127,7 @@ function MyPdfViewer(props) {
                             const canvas = canvasRef.current
                             const ctx = canvas.getContext('2d')
                             handleMouseMove(nativeEvent, ctx);
-                        }}    
+                        }}     
                 
             onMouseUp={
                 e => {
