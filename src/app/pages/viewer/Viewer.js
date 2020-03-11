@@ -9,7 +9,7 @@ import './Viewer.css'
 const PDFDocumentWrapper = styled.div`
   canvas {
     width: 100% !important;
- 
+    height: auto !important
     
   }
 `;
@@ -154,7 +154,7 @@ function MyPdfViewer(props) {
                                 }
                             } />
 
-                        <canvas style={{ position: 'absolute', height:props.json.pages[page - 1].height}} ></canvas>
+                        <canvas height="792" width="612"  style={{ position: 'absolute'} } />
                     </div>
                     {Boolean(pdfDocument && pdfDocument.numPages) && (
                         <nav>
