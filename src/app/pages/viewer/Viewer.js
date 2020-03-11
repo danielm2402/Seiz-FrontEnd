@@ -33,16 +33,21 @@ function MyPdfViewer(props) {
     const [previousPointY, setPreviousPointY] = useState(0)
     const [activeModeTable, setActiveModeTable] = useState(false)
     const [rectangle, setRectangle] = useState({})
-
+    const canvRef= useRef(null)
     React.useEffect(() => {
+        const canvas = canvRef.current
+        const ctx = canvas.getContext('2d')
+        console.log(rectangle)
         let vector = []
 
         props.json.pages[page - 1].words.map((item) => {
-            var x = ((((item.boundingPoly.vertices[1].x)) + ((item.boundingPoly.vertices[0].x))) / 2) * props.json.pages[page - 1].width
-            var y = ((((item.boundingPoly.vertices[3].y)) + ((item.boundingPoly.vertices[0].y))) / 2) * props.json.pages[page - 1].height
+            var x = ((((item.boundingPoly.vertices[1].x)) + ((item.boundingPoly.vertices[0].x))) / 2) * ctx.canvas.width
+            var y = ((((item.boundingPoly.vertices[3].y)) + ((item.boundingPoly.vertices[0].y))) / 2) * ctx.canvas.height
 
-            if ((x > previousPointX && x < (rectangle.width + previousPointX) && ((y > previousPointY) && (y < rectangle.height + previousPointY)))) {
-
+            if ((x > rectangle.x && x < (rectangle.width + rectangle.x) && ((y > rectangle.y) && (y < rectangle.height + rectangle.y)))) {
+                console.log('EL PROMEDIO ES')
+                console.log(x)
+                console.log(y)
                 vector.push(item)
             }
         })
@@ -55,11 +60,12 @@ function MyPdfViewer(props) {
         props.handleRegion(palabra)
         if (props.tablaBounding == 'documento') {
         }
+       
 
     }, [rectangle]);
 
     const canvasRef = useRef(null);
-    const canvRef= useRef(null)
+   
     const { pdfDocument, pdfPage } = usePdf({
         file: props.document,
         page,
