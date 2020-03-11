@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useRef } from 'react'
 import ReactDOM from 'react-dom';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -30,6 +30,7 @@ import TableDemandados from './tables/TableDemandado'
 import TableDemandantes from './tables/TableDemandantes'
 import styled from 'styled-components';
 import Pdf from '@mikecousins/react-pdf';
+import Viewer from '../viewer/Viewer'
 const pdfjsVersion = "2.0.305";
 
 const PDFDocumentWrapper = styled.div`
@@ -90,6 +91,7 @@ const colourStyles = {
 class Confirmar extends Component {
     constructor(props) {
         super(props)
+        this.canvasRef = React.createRef();
         this.state = {
             view: '',
             json: '',
@@ -300,6 +302,8 @@ class Confirmar extends Component {
     }
 
     render() {
+
+
         const { pageNumber, numPages } = this.state;
 
 
@@ -393,27 +397,10 @@ class Confirmar extends Component {
                                         </svg> : <></>
                                     }
 
-                                    <canvas id="canvas" width="200" height="50" ref="canvas"
-                                        onMouseDown={
-                                            e => {
-                                                let nativeEvent = e.nativeEvent;
-                                                this.handleMouseDown(nativeEvent);
-                                            }}
-                                        onMouseMove={
-                                            e => {
-                                                let nativeEvent = e.nativeEvent;
-                                                this.handleMouseMove(nativeEvent);
-                                            }}
-                                        onMouseUp={
-                                            e => {
-                                                let nativeEvent = e.nativeEvent;
-                                                this.handleMouseUp(nativeEvent);
-                                            }}
-                                    ></canvas>
-                                    <PDFDocumentWrapper>
-                                        <Pdf file={this.props.document} page={pageNumber} scale={1} />
-                                    </PDFDocumentWrapper>
+                                    
 
+                                    
+                                    <Viewer></Viewer>
 
 
                                 </div>
