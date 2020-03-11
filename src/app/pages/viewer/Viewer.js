@@ -1,13 +1,24 @@
 import React, { useState, useRef } from 'react';
+import ReactDOM from 'react-dom'
 import { usePdf } from '@mikecousins/react-pdf';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 import styled from 'styled-components';
 import { changePoints, resetPoints, nuevaRegion, obtenerDemandadosTable, setUltimaTableFocus } from '../../redux/actions/boundingAction'
+import './Viewer.css'
 const PDFDocumentWrapper = styled.div`
   canvas {
     width: 100% !important;
+ 
+    
+  }
+`;
+
+const canvasEdit = styled.div`
+  canvas {
+    width: 100% !important;
     height: auto !important;
+    
   }
 `;
 
@@ -63,7 +74,7 @@ function MyPdfViewer(props) {
             setPreviousPointX(event.offsetX)
             setPreviousPointY(event.offsetY)
 
-           
+
         }
 
     }
@@ -71,7 +82,7 @@ function MyPdfViewer(props) {
         if (!activeModeTable) {
             var x = event.offsetX;
             var y = event.offsetY;
-           
+
             if (isDown) {
 
                 ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); //clear canvas
@@ -101,7 +112,7 @@ function MyPdfViewer(props) {
 
             setRectangle({ x: previousPointX, y: previousPointY, width: width, height: height })
 
-           
+
             ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.width); //clear canvas
             ctx.beginPath();
             setDown(false)
@@ -110,66 +121,78 @@ function MyPdfViewer(props) {
     }
 
     return (
-        <PDFDocumentWrapper>
-            <div>
-                {!pdfDocument && <span>Loading...</span>}
-                <canvas  ref={canvasRef}
-                    onMouseDown={
-                        e => {
-                            let nativeEvent = e.nativeEvent;
-                            const canvas = canvasRef.current
-                            const ctx = canvas.getContext('2d')
-                            handleMouseDown(nativeEvent, ctx);
-                        }}
-                   onMouseMove={
-                        e => {
-                            let nativeEvent = e.nativeEvent;
-                            const canvas = canvasRef.current
-                            const ctx = canvas.getContext('2d')
-                            handleMouseMove(nativeEvent, ctx);
-                        }}     
-                
-            onMouseUp={
-                e => {
-                    let nativeEvent = e.nativeEvent;
-                    const canvas = canvasRef.current
-                    const ctx = canvas.getContext('2d')
-                    handleMouseUp(nativeEvent, ctx);
-                }
-                }  />
-                {Boolean(pdfDocument && pdfDocument.numPages) && (
-                    <nav>
-                        <ul className="pager">
-                            <li className="previous">
-                                <button disabled={page === 1} onClick={() => setPage(page - 1)}>
-                                    Previous
+        <div style={{ height: '75vw' }}>
+            <PDFDocumentWrapper>
+                <div>
+
+                    {!pdfDocument && <span>Loading...</span>}
+
+                    <div style={{ position: 'relative' }}>
+
+                        <canvas style={{ position: 'absolute' }} ref={canvasRef}
+                            onMouseDown={
+                                e => {
+                                    let nativeEvent = e.nativeEvent;
+                                    const canvas = canvasRef.current
+                                    const ctx = canvas.getContext('2d')
+                                    handleMouseDown(nativeEvent, ctx);
+                                }}
+                            onMouseMove={
+                                e => {
+                                    let nativeEvent = e.nativeEvent;
+                                    const canvas = canvasRef.current
+                                    const ctx = canvas.getContext('2d')
+                                    handleMouseMove(nativeEvent, ctx);
+                                }}
+
+                            onMouseUp={
+                                e => {
+                                    let nativeEvent = e.nativeEvent;
+                                    const canvas = canvasRef.current
+                                    const ctx = canvas.getContext('2d')
+                                    handleMouseUp(nativeEvent, ctx);
+                                }
+                            } />
+
+                        <canvas style={{ position: 'absolute', height:props.json.pages[page - 1].height}} ></canvas>
+                    </div>
+                    {Boolean(pdfDocument && pdfDocument.numPages) && (
+                        <nav>
+                            <ul className="pager">
+                                <li className="previous">
+                                    <button disabled={page === 1} onClick={() => setPage(page - 1)}>
+                                        Previous
               </button>
-                            </li>
-                            <li className="next">
-                                <button
-                                    disabled={page === pdfDocument.numPages}
-                                    onClick={() => setPage(page + 1)}
-                                >
-                                    Next
+                                </li>
+                                <li className="next">
+                                    <button
+                                        disabled={page === pdfDocument.numPages}
+                                        onClick={() => setPage(page + 1)}
+                                    >
+                                        Next
               </button>
-                            </li>
-                        </ul>
-                    </nav>
-                )}
-            </div>
-        </PDFDocumentWrapper>
+                                </li>
+                            </ul>
+                        </nav>
+                    )}
+
+                </div>
+            </PDFDocumentWrapper>
+
+        </div>
+
     );
 }
 
-    const mapStateToProps = (state) => ({
-        json: state.EmbargosReducer.embargo.json,
-        document: state.EmbargosReducer.embargo.document,
-        tablaBounding: state.boundingReducer.tabla,
+const mapStateToProps = (state) => ({
+    json: state.EmbargosReducer.embargo.json,
+    document: state.EmbargosReducer.embargo.document,
+    tablaBounding: state.boundingReducer.tabla,
 
-    })
-    const mapDispatchToProps = (dispatch) => ({
+})
+const mapDispatchToProps = (dispatch) => ({
 
-        handleRegion: bindActionCreators(nuevaRegion, dispatch),
+    handleRegion: bindActionCreators(nuevaRegion, dispatch),
 
-    })
-    export default connect(mapStateToProps, mapDispatchToProps)(MyPdfViewer)
+})
+export default connect(mapStateToProps, mapDispatchToProps)(MyPdfViewer)
