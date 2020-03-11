@@ -1,4 +1,5 @@
 .container-view{
+    width: 100%;
     display: flex;
     flex-direction: row;
     background: #ccc;
@@ -12,7 +13,7 @@
   padding-bottom: 10px;
 }
 .container-document{
-  
+  width: 100%;
     padding: 10px;
     padding-top: 50px;
   background: #EBECF1;
@@ -108,10 +109,17 @@
   z-index: 99999999;
 }
 .canvas-edit{
+  width: auto;
   cursor: crosshair;
   position: absolute;
- 
-  z-index: 99999999999;
+  height: auto;
+  
+}
+#canvas{
+  background:#c0c0c0;
+  width:100%;
+  height:auto;
+  position: relative;
 }
 
 .document-tools{
@@ -157,6 +165,7 @@
   justify-content: flex-start;
 }
 .section-document{
+  width: 45%;
   background-color: #fff;
 
 }

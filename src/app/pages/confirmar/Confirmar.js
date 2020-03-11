@@ -28,9 +28,15 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { changePoints, resetPoints, nuevaRegion, obtenerDemandadosTable, setUltimaTableFocus } from '../../redux/actions/boundingAction'
 import TableDemandados from './tables/TableDemandado'
 import TableDemandantes from './tables/TableDemandantes'
+import styled from 'styled-components';
 const pdfjsVersion = "2.0.305";
 
-
+const PDFDocumentWrapper = styled.div`
+  canvas {
+    width: 100% !important;
+    height: auto !important;
+  }
+`;
 setOptions({
     workerSrc: `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsVersion}/pdf.worker.js`
 });
@@ -385,8 +391,8 @@ class Confirmar extends Component {
                                             }
                                         </svg> : <></>
                                     }
-
-                                    <canvas ref="canvas" width={this.props.json.pages[this.state.pageNumber-1].width} height={this.props.json.pages[this.state.pageNumber-1].height} className="canvas-edit"
+                                     
+                                    <canvas id="canvas" width="200" height="50" ref="canvas"
                                         onMouseDown={
                                             e => {
                                                 let nativeEvent = e.nativeEvent;
@@ -402,13 +408,16 @@ class Confirmar extends Component {
                                                 let nativeEvent = e.nativeEvent;
                                                 this.handleMouseUp(nativeEvent);
                                             }}
-                                    />
+                                    ></canvas>
+                                  
+                                    <PDFDocumentWrapper>
                                     <Document
                                         file={this.props.document}
                                         onLoadSuccess={this.onDocumentLoadSuccess}
                                     >
                                         <Page pageNumber={pageNumber} />
                                     </Document>
+                                    </PDFDocumentWrapper>
 
 
                                 </div>
