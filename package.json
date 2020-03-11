@@ -39,6 +39,7 @@
     "@material-ui/lab": "^4.0.0-alpha.29",
     "@material-ui/pickers": "^3.2.7",
     "@material-ui/styles": "^4.5.0",
+    "@mikecousins/react-pdf": "^5.5.1",
     "@react-pdf/renderer": "^1.6.8",
     "@tanem/svg-injector": "^8.0.34",
     "axios": "^0.19.1",

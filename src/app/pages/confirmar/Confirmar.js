@@ -29,6 +29,7 @@ import { changePoints, resetPoints, nuevaRegion, obtenerDemandadosTable, setUlti
 import TableDemandados from './tables/TableDemandado'
 import TableDemandantes from './tables/TableDemandantes'
 import styled from 'styled-components';
+import Pdf from '@mikecousins/react-pdf';
 const pdfjsVersion = "2.0.305";
 
 const PDFDocumentWrapper = styled.div`
@@ -123,9 +124,9 @@ class Confirmar extends Component {
         this.handleMouseUp = this.handleMouseUp.bind(this);
     }
     modeTable = () => {
-        
+
         this.setState({ activeModeTable: true, editCanvas: false, obtenerDemandados: false }, function () {
-           
+
         })
     }
     onDocumentLoad = ({ numPages }) => {
@@ -134,13 +135,13 @@ class Confirmar extends Component {
 
     componentDidMount() {
 
-       
+
         this.props.handleEmbargo(this.props.match.params.id, this.props.token)
         this.props.handleDemandados(this.props.match.params.id, this.props.token)
 
     }
     componentDidUpdate(prevProps, prevState) {
-       
+
         if (this.props.document !== prevProps.document) {
 
             this.setState({
@@ -161,7 +162,7 @@ class Confirmar extends Component {
 
 
             }, function () {
-               
+
             })
 
         }
@@ -177,7 +178,7 @@ class Confirmar extends Component {
 
         if (this.props.demandados !== prevProps.demandados) {
             if (this.props.demandados.data.length > 0) {
-               
+
                 let vectorDemandados = {}
                 for (let index = 0; index < this.props.demandados.data.length; index++) {
                     vectorDemandados = { ...vectorDemandados, ['nombre' + this.props.demandados.data[index].id]: this.props.demandados.data[index].nombres }
@@ -185,7 +186,7 @@ class Confirmar extends Component {
 
                 }
                 this.setState({ demandados: vectorDemandados }, () => {
-                    
+
                 })
             }
 
@@ -214,25 +215,25 @@ class Confirmar extends Component {
         this.props.handleUltimFocus('documento')
         this.setState({ actualFocus: e.target.name })
         if (this.props.resaltado !== "") {
-          
+
             try {
                 let vectorLocation = [];
                 let totalBoundig = [];
                 for (const prop in palabra.fieldInstances) {
-                 
+
                     for (const prop1 in palabra.fieldInstances[prop].parts) {
-                       
+
                         vectorLocation.push({ start: palabra.fieldInstances[prop].parts[prop1].startLocation, end: palabra.fieldInstances[prop].parts[prop1].endLocation, page: palabra.fieldInstances[prop].parts[prop1].page })
                     }
                 }
-                
+
                 vectorLocation.map((item) => {
                     var iterador = item.start
                     for (iterador; iterador <= item.end; iterador++) {
                         totalBoundig.push(this.props.json.pages[this.state.pageNumber - 1].words[iterador].boundingPoly.vertices)
                     }
                 })
-               
+
                 this.setState({
                     boundig: { boundig: true, points: totalBoundig }
                 })
@@ -243,7 +244,7 @@ class Confirmar extends Component {
 
     }
     focusElement2(e, palabra, id, tipo) {
-       
+
         if (this.props.resaltado !== "") {
             try {
 
@@ -251,18 +252,18 @@ class Confirmar extends Component {
                 let vectorLocation = [];
                 let totalBoundig = [];
                 const row = palabra.fieldInstances[id].parts[tipo]
-               
+
                 vectorLocation.push({ start: row.startLocation, end: row.endLocation, page: row.page })
 
 
-              
+
                 vectorLocation.map((item) => {
                     var iterador = item.start
                     for (iterador; iterador <= item.end; iterador++) {
                         totalBoundig.push(this.props.json.pages[0].words[iterador].boundingPoly.vertices)
                     }
                 })
-                
+
                 this.setState({
                     boundig: { boundig: true, points: totalBoundig }
                 })
@@ -275,27 +276,27 @@ class Confirmar extends Component {
         this.setState({
             [event.target.name]: event.target.value
         }, function () {
-           
+
         })
     }
 
     editCanvas = () => {
-       
+
         this.setState({ editCanvas: true, activeModeTable: false, obtenerDemandados: false }, function () {
-          
+
         })
     }
     obtenerDemandados = () => {
         const ctx = this.refs.canvas.getContext('2d');
         ctx.clearRect(0, 0, this.refs.canvas.width, this.refs.canvas.height); //clear canvas
         ctx.beginPath();
-       
+
         this.setState({ obtenerDemandados: false })
-       
+
         this.props.handleTableDemandados(this.state.tablePoints, this.state.tableCols, this.props.match.params.id, this.state.pageNumber, this.props.token)
     }
-    goToExcel=()=>{
-        this.props.history.push('/upload/excel/'+this.props.match.params.id)
+    goToExcel = () => {
+        this.props.history.push('/upload/excel/' + this.props.match.params.id)
     }
 
     render() {
@@ -370,10 +371,10 @@ class Confirmar extends Component {
                                             {
                                                 this.state.boundig.points.map((item) => {
                                                     return (
-                                                        <polygon fill="#90FEA5" fill-opacity="0.4" points={`${(item[0].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[0].y) * this.props.json.pages[this.state.pageNumber-1].height}, 
-                                        ${(item[1].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[1].y) * this.props.json.pages[this.state.pageNumber-1].height}, 
-                                        ${(item[2].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[2].y) * this.props.json.pages[this.state.pageNumber-1].height}, 
-                                        ${(item[3].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[3].y) * this.props.json.pages[this.state.pageNumber-1].height}`} />)
+                                                        <polygon fill="#90FEA5" fill-opacity="0.4" points={`${(item[0].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[0].y) * this.props.json.pages[this.state.pageNumber - 1].height}, 
+                                        ${(item[1].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[1].y) * this.props.json.pages[this.state.pageNumber - 1].height}, 
+                                        ${(item[2].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[2].y) * this.props.json.pages[this.state.pageNumber - 1].height}, 
+                                        ${(item[3].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[3].y) * this.props.json.pages[this.state.pageNumber - 1].height}`} />)
                                                 })
                                             }
                                         </svg> : <></>
@@ -383,15 +384,15 @@ class Confirmar extends Component {
                                             {
                                                 this.props.boundingRedux.points.map((item) => {
                                                     return (
-                                                        <polygon fill="#90FEA5" fill-opacity="0.4" points={`${(item[0].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[0].y) * this.props.json.pages[this.state.pageNumber-1].height}, 
-                                        ${(item[1].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[1].y) * this.props.json.pages[this.state.pageNumber-1].height}, 
-                                        ${(item[2].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[2].y) * this.props.json.pages[this.state.pageNumber-1].height}, 
-                                        ${(item[3].x) * this.props.json.pages[this.state.pageNumber-1].width} ${(item[3].y) * this.props.json.pages[this.state.pageNumber-1].height}`} />)
+                                                        <polygon fill="#90FEA5" fill-opacity="0.4" points={`${(item[0].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[0].y) * this.props.json.pages[this.state.pageNumber - 1].height}, 
+                                        ${(item[1].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[1].y) * this.props.json.pages[this.state.pageNumber - 1].height}, 
+                                        ${(item[2].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[2].y) * this.props.json.pages[this.state.pageNumber - 1].height}, 
+                                        ${(item[3].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[3].y) * this.props.json.pages[this.state.pageNumber - 1].height}`} />)
                                                 })
                                             }
                                         </svg> : <></>
                                     }
-                                     
+
                                     <canvas id="canvas" width="200" height="50" ref="canvas"
                                         onMouseDown={
                                             e => {
@@ -409,15 +410,10 @@ class Confirmar extends Component {
                                                 this.handleMouseUp(nativeEvent);
                                             }}
                                     ></canvas>
-                                  
                                     <PDFDocumentWrapper>
-                                    <Document
-                                        file={this.props.document}
-                                        onLoadSuccess={this.onDocumentLoadSuccess}
-                                    >
-                                        <Page pageNumber={pageNumber} />
-                                    </Document>
+                                        <Pdf file={this.props.document} page={pageNumber} scale={1} />
                                     </PDFDocumentWrapper>
+
 
 
                                 </div>
@@ -425,7 +421,7 @@ class Confirmar extends Component {
                             <div className="section-table">
                                 <div className="buttons-edits">
 
-                                    {!this.state.disabled ?<div> <button onClick={this.goToExcel}><FaFileExcel size="1.5em" color={"#BDD535"} /></button> <button onClick={this.handleCancel}><MdCancel size="1.5em" color={"#BDD535"} /></button></div> : <button onClick={this.handleEdit}><FaRegEdit size="1.5em" color={"#BDD535"} /></button>}
+                                    {!this.state.disabled ? <div> <button onClick={this.goToExcel}><FaFileExcel size="1.5em" color={"#BDD535"} /></button> <button onClick={this.handleCancel}><MdCancel size="1.5em" color={"#BDD535"} /></button></div> : <button onClick={this.handleEdit}><FaRegEdit size="1.5em" color={"#BDD535"} /></button>}
                                 </div>
                                 <div className="information-card">
                                     <label for="entidad">Entidad Remitente</label>
@@ -616,7 +612,7 @@ class Confirmar extends Component {
     }
     confirmarEmbargo = () => {
         try {
-            
+
             var data = {
                 account: this.props.embargo.data.account,
                 address: this.state.direccion,
@@ -630,10 +626,10 @@ class Confirmar extends Component {
                 sender: this.state.entidad,
                 id: this.state.referencia,
                 demandados: this.props.demandados,
-                demandantes:this.props.embargo.data.plaintiffs
+                demandantes: this.props.embargo.data.plaintiffs
             }
             this.props.handleConfirmarEmbargo(data, this.props.token)
-            
+
         } catch (error) {
             console.log(error)
         }
@@ -641,13 +637,13 @@ class Confirmar extends Component {
     }
     handleColsTable = (event) => {
         this.setState({ colsEdit: { ...this.state.colsEdit, [event.target.name]: event.target.value } }, function () {
-            
+
         })
     }
     handleMouseDown(event) { //added code here
-      
+
         if (this.state.editCanvas && !this.state.activeModeTable) {
-           
+
             this.setState({
                 isDown: true,
                 isDownCount: 1,
@@ -661,7 +657,7 @@ class Confirmar extends Component {
         }
 
         if (!this.state.editCanvas && this.state.activeModeTable) {
-         
+
             this.setState({
                 isDown: true,
                 isDownCount: 1,
@@ -716,7 +712,7 @@ class Confirmar extends Component {
         }
     }
     handleMouseUp(event) {
-       
+
         if (this.state.editCanvas && !this.state.activeModeTable) {
             var x = event.offsetX;
             var y = event.offsetY;
@@ -728,8 +724,8 @@ class Confirmar extends Component {
                 let vector = []
 
                 this.props.json.pages[this.state.pageNumber - 1].words.map((item) => {
-                    var x = ((((item.boundingPoly.vertices[1].x)) + ((item.boundingPoly.vertices[0].x))) / 2) * this.props.json.pages[this.state.pageNumber-1].width
-                    var y = ((((item.boundingPoly.vertices[3].y)) + ((item.boundingPoly.vertices[0].y))) / 2) * this.props.json.pages[this.state.pageNumber-1].height
+                    var x = ((((item.boundingPoly.vertices[1].x)) + ((item.boundingPoly.vertices[0].x))) / 2) * this.props.json.pages[this.state.pageNumber - 1].width
+                    var y = ((((item.boundingPoly.vertices[3].y)) + ((item.boundingPoly.vertices[0].y))) / 2) * this.props.json.pages[this.state.pageNumber - 1].height
 
                     if ((x > this.state.previousPointX && x < (this.state.rectangle.width + this.state.previousPointX) && ((y > this.state.previousPointY) && (y < this.state.rectangle.height + this.state.previousPointY)))) {
 
@@ -743,10 +739,10 @@ class Confirmar extends Component {
                 })
                 //palabra= this.state[this.state.actualFocus]+palabra
                 this.props.handleRegion(palabra)
-               if(this.props.tablaBounding=='documento'){
-                this.setState({ [this.state.actualFocus]: this.state[this.state.actualFocus]+palabra })
-               }
-                
+                if (this.props.tablaBounding == 'documento') {
+                    this.setState({ [this.state.actualFocus]: this.state[this.state.actualFocus] + palabra })
+                }
+
                 // console.log(this.state[this.state.actualFocus])
             })
 
@@ -773,10 +769,10 @@ class Confirmar extends Component {
             }, function () {
 
                 const verti = [
-                    { x: (this.state.rectangle.x / this.props.json.pages[this.state.pageNumber-1].width), y: (this.state.rectangle.y / this.props.json.pages[this.state.pageNumber-1].height) },
-                    { x: (this.state.rectangle.x + this.state.rectangle.width) / this.props.json.pages[this.state.pageNumber-1].width, y: this.state.rectangle.y / this.props.json.pages[this.state.pageNumber-1].height },
-                    { x: (this.state.rectangle.x + this.state.rectangle.width) / this.props.json.pages[this.state.pageNumber-1].width, y: (this.state.rectangle.y + this.state.rectangle.height) / this.props.json.pages[this.state.pageNumber-1].height },
-                    { x: (this.state.rectangle.x / this.props.json.pages[this.state.pageNumber-1].width), y: (this.state.rectangle.y + this.state.rectangle.height) / this.props.json.pages[this.state.pageNumber-1].height },
+                    { x: (this.state.rectangle.x / this.props.json.pages[this.state.pageNumber - 1].width), y: (this.state.rectangle.y / this.props.json.pages[this.state.pageNumber - 1].height) },
+                    { x: (this.state.rectangle.x + this.state.rectangle.width) / this.props.json.pages[this.state.pageNumber - 1].width, y: this.state.rectangle.y / this.props.json.pages[this.state.pageNumber - 1].height },
+                    { x: (this.state.rectangle.x + this.state.rectangle.width) / this.props.json.pages[this.state.pageNumber - 1].width, y: (this.state.rectangle.y + this.state.rectangle.height) / this.props.json.pages[this.state.pageNumber - 1].height },
+                    { x: (this.state.rectangle.x / this.props.json.pages[this.state.pageNumber - 1].width), y: (this.state.rectangle.y + this.state.rectangle.height) / this.props.json.pages[this.state.pageNumber - 1].height },
 
                 ]
                 const columns = {
@@ -785,7 +781,7 @@ class Confirmar extends Component {
                     expendiente: String(this.state.colsEdit.expediente),
                     monto: String(this.state.colsEdit.monto)
                 }
-                
+
                 this.setState({ tablePoints: verti, tableCols: columns })
 
             })
@@ -821,7 +817,7 @@ const mapStateToProps = (state) => ({
 
 })
 const mapDispatchToProps = (dispatch) => ({
-    handleUltimFocus:bindActionCreators(setUltimaTableFocus, dispatch),
+    handleUltimFocus: bindActionCreators(setUltimaTableFocus, dispatch),
     handleEmbargo: bindActionCreators(getEmbargo, dispatch),
     handleDemandados: bindActionCreators(getDemandados, dispatch),
     handleBoundingReset: bindActionCreators(resetPoints, dispatch),
@@ -829,7 +825,7 @@ const mapDispatchToProps = (dispatch) => ({
     handleTableDemandados: bindActionCreators(obtenerDemandadosTable, dispatch),
     handleConfirmarEmbargo: bindActionCreators(confirmarEmbargo, dispatch),
     handleResetMsj: bindActionCreators(resetMensaje, dispatch),
-    handleSaveDemandados: bindActionCreators(saveDemandados,dispatch),
+    handleSaveDemandados: bindActionCreators(saveDemandados, dispatch),
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Confirmar))
