@@ -41,13 +41,11 @@ function MyPdfViewer(props) {
         let vector = []
 
         props.json.pages[page - 1].words.map((item) => {
-            var x = ((((item.boundingPoly.vertices[1].x)) + ((item.boundingPoly.vertices[0].x))) / 2) * ctx.canvas.width
+            var x = (((item.boundingPoly.vertices[1].x)) + ((item.boundingPoly.vertices[0].x))) / 2 * ctx.canvas.width
             var y = ((((item.boundingPoly.vertices[3].y)) + ((item.boundingPoly.vertices[0].y))) / 2) * ctx.canvas.height
 
             if ((x > rectangle.x && x < (rectangle.width + rectangle.x) && ((y > rectangle.y) && (y < rectangle.height + rectangle.y)))) {
-                console.log('EL PROMEDIO ES')
-                console.log(x)
-                console.log(y)
+                
                 vector.push(item)
             }
         })
@@ -61,7 +59,6 @@ function MyPdfViewer(props) {
         if (props.tablaBounding == 'documento') {
         }
        
-
     }, [rectangle]);
 
     const canvasRef = useRef(null);
@@ -75,8 +72,13 @@ function MyPdfViewer(props) {
     function handleMouseDown(event, ctx) { //added code here
 
         if (!activeModeTable) {
-            ctx.canvas.width=ctx.canvas.offsetWidth
-            ctx.canvas.height=ctx.canvas.offsetHeight
+            const canvas = canvasRef.current
+            const ctx1 = canvas.getContext('2d')
+            console.log(ctx1)
+
+            ctx.canvas.width=ctx1.canvas.offsetWidth
+            ctx.canvas.height=ctx1.canvas.offsetHeight
+            console.log(ctx)
             setDown(true)
             setDownCount(1)
             setPreviousPointX(event.offsetX)
@@ -161,25 +163,7 @@ function MyPdfViewer(props) {
                                 handleMouseUp(nativeEvent, ctx);
                             }}  />
                     </div>
-                    {Boolean(pdfDocument && pdfDocument.numPages) && (
-                        <nav>
-                            <ul className="pager">
-                                <li className="previous">
-                                    <button disabled={page === 1} onClick={() => setPage(page - 1)}>
-                                        Previous
-              </button>
-                                </li>
-                                <li className="next">
-                                    <button
-                                        disabled={page === pdfDocument.numPages}
-                                        onClick={() => setPage(page + 1)}
-                                    >
-                                        Next
-              </button>
-                                </li>
-                            </ul>
-                        </nav>
-                    )}
+                    
 
                 </div>
             </PDFDocumentWrapper>
