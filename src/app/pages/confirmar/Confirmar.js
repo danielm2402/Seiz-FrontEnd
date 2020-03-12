@@ -243,7 +243,7 @@ class Confirmar extends Component {
                 vectorLocation.map((item) => {
                     var iterador = item.start
                     for (iterador; iterador <= item.end; iterador++) {
-                        totalBoundig.push(this.props.json.pages[this.state.pageNumber - 1].words[iterador].boundingPoly.vertices)
+                        totalBoundig.push([...this.props.json.pages[item.page].words[iterador].boundingPoly.vertices, item.page])
                     }
                 })
                 this.props.handleBounding(totalBoundig)
