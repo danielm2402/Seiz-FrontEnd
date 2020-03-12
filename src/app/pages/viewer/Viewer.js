@@ -63,6 +63,8 @@ function MyPdfViewer(props) {
     React.useEffect(() => {
         const canvas = canvRef.current
         const ctx = canvas.getContext('2d')
+        ctx.clearRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight); //clear canvas
+        ctx.beginPath();
         if(props.points.length!==0){
             ctx.fillStyle = "rgba(49,206,28,0.5)";
             props.points.map(item=>{
@@ -111,9 +113,9 @@ function MyPdfViewer(props) {
                 var width = x - previousPointX;
                 var height = y - previousPointY;
                 ctx.beginPath();
-                ctx.lineWidth = "1";
-                ctx.strokeStyle = "red";
-                ctx.fillStyle = "rgba(118,225,17, 0.5)";
+                ctx.lineWidth = "3";
+                ctx.strokeStyle = "green";
+                ctx.fillStyle = "rgba(255,255,255, 0.3)";
             
                 ctx.fillRect(previousPointX, previousPointY, width, height);
                 ctx.stroke();
