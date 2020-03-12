@@ -219,3 +219,16 @@ padding: 0 25px;
 -moz-transition: all 0.4s;
 transition: all 0.4s;
 }
+
+.btn-herramienta{
+  width: 36px;
+  height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.btn-herramienta:hover{
+  background-color: #283048;
+  color:#fff;
+  border-radius: 5px;
+}

@@ -353,12 +353,13 @@ class Confirmar extends Component {
                                                 <button disabled={true} ><MdNavigateNext size="1.5em" color={"#BDD535"} /></button>}
 
                                         </div>
-                                        {this.state.disabled ? <></> :
+                                        
                                             <div className="tools-page-right">
-                                                <button className="button-select" onClick={this.editCanvas}><MdPhotoSizeSelectSmall size="1.5em" color={"#BDD535"} /></button>
-                                                <button onClick={this.modeTable}><FaTable size="1.5em" color={"#BDD535"} /></button>
+                                                <a className="btn-herramienta" onClick={this.editCanvas}><MdPhotoSizeSelectSmall size="1.5em" color={"#fff"} /></a>
+                                                
+                                                <a onClick={this.modeTable} className="btn-herramienta"><FaTable size="1.5em" color={"#fff"} /></a>
                                                 {this.state.obtenerDemandados ? <button onClick={this.obtenerDemandados}>Obtener</button> : <></>}
-                                            </div>}
+                                            </div>
                                     </div>
                                 </div>
                                 <div className="container-document">
