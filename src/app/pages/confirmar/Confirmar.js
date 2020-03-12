@@ -332,25 +332,25 @@ class Confirmar extends Component {
                             <div className="section-document">
                                 <div className="tools-doc">
                                     <div className="tools-edit" >
-                                        <div className="tools-edit-num">
-                                            <h5> {this.state.pageNumber}/{this.state.numPages}</h5>
+                                        <div style={{paddingLeft:'10px'}} className="tools-edit-num">
+                                            <h5 style={{color:'#fff'}}> {this.state.pageNumber}/{this.state.numPages}</h5>
                                         </div>
                                         <div className="tools-edit-change">
                                             {this.state.numPages > 1 && this.state.pageNumber > 1 ?
-                                                <button onClick={() => {
+                                                <a className="btn-herramienta" onClick={() => {
                                                     this.setState({ pageNumber: this.state.pageNumber - 1 })
                                                     this.props.handleChangePage(this.state.pageNumber - 1)
-                                                }}><MdNavigateBefore size="1.5em" color={"#BDD535"} /></button>
-                                                : <button disabled={true}><MdNavigateBefore size="1.5em" color={"#BDD535"} /></button>}
+                                                }}><MdNavigateBefore size="1.5em" color={"#fff"} /></a>
+                                                : <a className="btn-herramienta" disabled={true}><MdNavigateBefore size="1.7em" color={"#fff"} /></a>}
                                         </div>
                                     </div>
                                     <div className="tools-page">
                                         <div className="tools-page-center">
                                             {this.state.numPages > 1 && this.state.pageNumber < this.state.numPages ?
-                                                <button onClick={() => {
+                                                <a className="btn-herramienta" onClick={() => {
                                                     this.setState({ pageNumber: this.state.pageNumber + 1 })
-                                                    this.props.handleChangePage(this.state.pageNumber + 1 )}}><MdNavigateNext size="1.5em" color={"#BDD535"} /></button> :
-                                                <button disabled={true} ><MdNavigateNext size="1.5em" color={"#BDD535"} /></button>}
+                                                    this.props.handleChangePage(this.state.pageNumber + 1 )}}><MdNavigateNext size="1.7em" color={"#fff"} /></a> :
+                                                <a className="btn-herramienta" disabled={true} ><MdNavigateNext size="1.7em" color={"#fff"} /></a>}
 
                                         </div>
                                         

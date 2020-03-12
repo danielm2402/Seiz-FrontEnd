@@ -229,6 +229,9 @@ transition: all 0.4s;
 }
 .btn-herramienta:hover{
   background-color: #283048;
-  color:#fff;
+  fill:#fff;
   border-radius: 5px;
+}
+.btn-herramienta svg:hover{
+  fill:#c0c4d1
 }
