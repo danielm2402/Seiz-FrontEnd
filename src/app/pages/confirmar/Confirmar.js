@@ -137,9 +137,9 @@ class Confirmar extends Component {
 
     componentDidMount() {
 
-
         this.props.handleEmbargo(this.props.match.params.id, this.props.token)
         this.props.handleDemandados(this.props.match.params.id, this.props.token)
+        
 
     }
     componentDidUpdate(prevProps, prevState) {
@@ -217,6 +217,7 @@ class Confirmar extends Component {
 
     }
     handleEdit = () => {
+        console.log('EDITANDO')
         this.setState({ disabled: false })
     }
     handleCancel = () => {
@@ -314,26 +315,6 @@ class Confirmar extends Component {
 
     render() {
 
-
-        const { pageNumber, numPages } = this.state;
-
-
-        var add = null
-        this.props.disabled == true ?
-            add = null
-            : add = newData =>
-                new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        {
-                            const data = this.state.data;
-                            data.push(newData);
-                            this.setState({ data }, () => resolve());
-                        }
-                        resolve()
-                    }, 1000)
-                })
-
-
         return (
             <div>
 
@@ -381,36 +362,27 @@ class Confirmar extends Component {
                                     </div>
                                 </div>
                                 <div className="container-document">
-
-
-                                   
-
-                                    
-
-                                    
                                     <Viewer></Viewer>
-
-
                                 </div>
                             </div>
                             <div className="section-table">
                                 <div className="buttons-edits">
 
-                                    {!this.state.disabled ? <div> <button onClick={this.goToExcel}><FaFileExcel size="1.5em" color={"#BDD535"} /></button> <button onClick={this.handleCancel}><MdCancel size="1.5em" color={"#BDD535"} /></button></div> : <button onClick={this.handleEdit}><FaRegEdit size="1.5em" color={"#BDD535"} /></button>}
+                                    <div> <button onClick={this.goToExcel}><FaFileExcel size="1.5em" color={"#BDD535"}/></button> </div>
                                 </div>
                                 <div className="information-card">
                                     <label for="entidad">Entidad Remitente</label>
-                                    <input id="entidad" name="entidad" value={this.state.entidad} onChange={this.handleInput} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.entidadRemitente : null)) }} />
+                                    <input id="entidad" name="entidad" value={this.state.entidad} onChange={this.handleInput}  onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.entidadRemitente : null)) }} />
                                     <div className="section-information-cols">
                                         <div className="section-information-col">
                                             <label for="ciudad" >Ciudad</label>
-                                            <input id="ciudad" name="ciudad" value={this.state.ciudad} onChange={this.handleInput} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.ciudad : null)) }} />
+                                            <input id="ciudad" name="ciudad" value={this.state.ciudad} onChange={this.handleInput}  onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.ciudad : null)) }} />
                                             <label for="referencia">Referencia</label>
-                                            <input id="referencia" name="referencia" value={this.state.referencia} onChange={this.handleInput} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.referencia : null)) }} />
+                                            <input id="referencia" name="referencia" value={this.state.referencia} onChange={this.handleInput} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.referencia : null)) }} />
                                             <label>Tipo de embargo</label>
                                             <div className="select-input" style={{ zIndex: 999999999 }}>
                                                 <Select
-                                                    disabled={this.state.disabled}
+                                                    
                                                     labelId="demo-simple-select-label"
                                                     id="tipoEmbargo"
                                                     name="tipoEmbargo"
@@ -428,14 +400,13 @@ class Confirmar extends Component {
                                         </div>
                                         <div className="section-information-col">
                                             <label for="direccion">Direccion</label>
-                                            <input id="direccion" name="direccion" value={this.state.direccion} onChange={this.handleInput} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.direccion : null)) }} />
+                                            <input id="direccion" name="direccion" value={this.state.direccion} onChange={this.handleInput} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.direccion : null)) }} />
                                             <label for="fecha">Fecha</label>
-                                            <input id="fecha" name="fecha" value={this.state.fecha} onChange={this.handleInput} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.fecha : null)) }} />
+                                            <input id="fecha" name="fecha" value={this.state.fecha} onChange={this.handleInput} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.fecha : null)) }} />
                                             <label>Tipo de documento</label>
                                             <div className="select-input">
                                                 <Select
                                                     name="tipoDocumento"
-                                                    disabled={this.state.disabled}
                                                     id="tipoDocumento"
                                                     name="tipoDocumento"
                                                     value={String(this.state.tipoDocumento)}
