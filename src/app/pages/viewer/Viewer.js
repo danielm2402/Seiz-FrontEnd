@@ -66,7 +66,7 @@ function MyPdfViewer(props) {
         ctx.clearRect(0, 0, ctx.canvas.clientWidth, ctx.canvas.clientHeight); //clear canvas
         ctx.beginPath();
         if(props.points.length!==0){
-            ctx.fillStyle = "rgba(49,206,28,0.5)";
+            ctx.fillStyle = "rgba(0, 255, 26, 0.47)";
             props.points.map(item=>{
                 ctx.fillRect((item[0].x)*ctx.canvas.width, ((item[0].y)*ctx.canvas.height)-3 ,((item[1].x)-(item[0].x))*ctx.canvas.width ,(((item[3].y)-(item[0].y))*ctx.canvas.height)+5);
             })

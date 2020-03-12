@@ -203,6 +203,17 @@ class Confirmar extends Component {
             this.setState({ demandantes: this.props.embargo.data.plaintiffs })
         }
 
+        if (this.props.bounding !== prevProps.bounding) {
+           
+            if (this.props.tablaBounding == 'documento') {
+              
+              
+                this.setState({[this.state.actualFocus]:(this.state[this.state.actualFocus]===undefined?'':this.state[this.state.actualFocus]).concat(this.props.bounding)})
+            }
+           
+
+        }
+
 
     }
     handleEdit = () => {
@@ -235,7 +246,7 @@ class Confirmar extends Component {
                         totalBoundig.push(this.props.json.pages[this.state.pageNumber - 1].words[iterador].boundingPoly.vertices)
                     }
                 })
-
+                this.props.handleBounding(totalBoundig)
                 this.setState({
                     boundig: { boundig: true, points: totalBoundig }
                 })
@@ -776,12 +787,14 @@ const mapStateToProps = (state) => ({
     loadingDemandadosTable: state.boundingReducer.loadingDemandados,
     mensaje: state.EmbargosReducer.mensaje,
     tablaBounding: state.boundingReducer.tabla,
+    bounding: state.boundingReducer.palabra,
 
 })
 const mapDispatchToProps = (dispatch) => ({
     handleUltimFocus: bindActionCreators(setUltimaTableFocus, dispatch),
     handleEmbargo: bindActionCreators(getEmbargo, dispatch),
     handleDemandados: bindActionCreators(getDemandados, dispatch),
+    handleBounding: bindActionCreators(changePoints, dispatch),
     handleBoundingReset: bindActionCreators(resetPoints, dispatch),
     handleRegion: bindActionCreators(nuevaRegion, dispatch),
     handleTableDemandados: bindActionCreators(obtenerDemandadosTable, dispatch),
