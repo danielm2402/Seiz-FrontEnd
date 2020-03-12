@@ -370,32 +370,7 @@ class Confirmar extends Component {
                                 <div className="container-document">
 
 
-                                    {this.state.boundig.points.length > 0 ?
-                                        <svg className="lienzo" xmlns="http://www.w3.org/2000/svg">
-                                            {
-                                                this.state.boundig.points.map((item) => {
-                                                    return (
-                                                        <polygon fill="#90FEA5" fill-opacity="0.4" points={`${(item[0].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[0].y) * this.props.json.pages[this.state.pageNumber - 1].height}, 
-                                        ${(item[1].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[1].y) * this.props.json.pages[this.state.pageNumber - 1].height}, 
-                                        ${(item[2].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[2].y) * this.props.json.pages[this.state.pageNumber - 1].height}, 
-                                        ${(item[3].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[3].y) * this.props.json.pages[this.state.pageNumber - 1].height}`} />)
-                                                })
-                                            }
-                                        </svg> : <></>
-                                    }
-                                    {this.props.boundingRedux.points.length > 0 ?
-                                        <svg className="lienzo" xmlns="http://www.w3.org/2000/svg">
-                                            {
-                                                this.props.boundingRedux.points.map((item) => {
-                                                    return (
-                                                        <polygon fill="#90FEA5" fill-opacity="0.4" points={`${(item[0].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[0].y) * this.props.json.pages[this.state.pageNumber - 1].height}, 
-                                        ${(item[1].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[1].y) * this.props.json.pages[this.state.pageNumber - 1].height}, 
-                                        ${(item[2].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[2].y) * this.props.json.pages[this.state.pageNumber - 1].height}, 
-                                        ${(item[3].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[3].y) * this.props.json.pages[this.state.pageNumber - 1].height}`} />)
-                                                })
-                                            }
-                                        </svg> : <></>
-                                    }
+                                   
 
                                     
 

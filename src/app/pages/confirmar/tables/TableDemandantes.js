@@ -139,7 +139,7 @@ class TableDemandantes extends Component {
                         totalBoundig.push(this.props.json.pages[this.props.page - 1].words[iterador].boundingPoly.vertices)
                     }
                 })
-                console.log('MANDANDO HANDLE ULTIM TABLE')
+               
 
                 this.props.handleBounding(totalBoundig)
                 this.setState({
