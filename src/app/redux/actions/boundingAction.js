@@ -34,5 +34,11 @@ export const setUltimaTableFocus=(table)=>({
     type: types.TABLE_ULTIMO_FOCUS,
     table
 })
+export const setPage=(page)=>({
+    type: types.CHANGE_PAGE,
+    page
+})
+
+
 
 

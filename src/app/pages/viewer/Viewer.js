@@ -33,7 +33,15 @@ function MyPdfViewer(props) {
     const [previousPointY, setPreviousPointY] = useState(0)
     const [activeModeTable, setActiveModeTable] = useState(false)
     const [rectangle, setRectangle] = useState({})
+
     const canvRef= useRef(null)
+    const canvasRef = useRef(null);
+   
+    const { pdfDocument, pdfPage } = usePdf({
+        file: props.document,
+        page,
+        canvasRef,
+    });
     React.useEffect(() => {
         const canvas = canvRef.current
         const ctx = canvas.getContext('2d')
@@ -70,18 +78,14 @@ function MyPdfViewer(props) {
             props.points.map(item=>{
                 ctx.fillRect((item[0].x)*ctx.canvas.width, ((item[0].y)*ctx.canvas.height)-3 ,((item[1].x)-(item[0].x))*ctx.canvas.width ,(((item[3].y)-(item[0].y))*ctx.canvas.height)+5);
             })
-                     
-           
         }
        
     }, [props.points]);
-    const canvasRef = useRef(null);
-   
-    const { pdfDocument, pdfPage } = usePdf({
-        file: props.document,
-        page,
-        canvasRef,
-    });
+    React.useEffect(()=>{
+        console.log('SET PAGE')
+            setPage(props.page)
+    },[props.page])
+    
 
     function handleMouseDown(event, ctx) { //added code here
 
@@ -191,7 +195,8 @@ const mapStateToProps = (state) => ({
     json: state.EmbargosReducer.embargo.json,
     document: state.EmbargosReducer.embargo.document,
     tablaBounding: state.boundingReducer.tabla,
-    points: state.boundingReducer.boundigTable.points
+    points: state.boundingReducer.boundigTable.points,
+    page: state.boundingReducer.page
 
 })
 const mapDispatchToProps = (dispatch) => ({

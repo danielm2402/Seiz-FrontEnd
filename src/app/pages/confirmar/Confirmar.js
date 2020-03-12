@@ -25,7 +25,7 @@ import Demandantes from './Demandantes';
 import chroma from 'chroma-js';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import { changePoints, resetPoints, nuevaRegion, obtenerDemandadosTable, setUltimaTableFocus } from '../../redux/actions/boundingAction'
+import { changePoints, resetPoints, nuevaRegion, obtenerDemandadosTable, setUltimaTableFocus, setPage } from '../../redux/actions/boundingAction'
 import TableDemandados from './tables/TableDemandado'
 import TableDemandantes from './tables/TableDemandantes'
 import styled from 'styled-components';
@@ -105,13 +105,13 @@ class Confirmar extends Component {
             fecha: props.embargo.data.documentDate,
             tipoEmbargo: '',
             tipoDocumento: '',
-            disabled: true,
+            disabled: false,
             boundig: { boundig: false, points: [] },
             demandantes: [],
             isDown: false,
             previousPointX: '',
             previousPointY: '',
-            editCanvas: false,
+            editCanvas: true,
             actualFocus: '',
             rectangle: {},
             demandados: [],
@@ -352,21 +352,23 @@ class Confirmar extends Component {
                                 <div className="tools-doc">
                                     <div className="tools-edit" >
                                         <div className="tools-edit-num">
-                                            <label> {this.state.pageNumber}/{this.state.numPages}</label>
+                                            <h5> {this.state.pageNumber}/{this.state.numPages}</h5>
                                         </div>
                                         <div className="tools-edit-change">
                                             {this.state.numPages > 1 && this.state.pageNumber > 1 ?
                                                 <button onClick={() => {
-
                                                     this.setState({ pageNumber: this.state.pageNumber - 1 })
+                                                    this.props.handleChangePage(this.state.pageNumber - 1)
                                                 }}><MdNavigateBefore size="1.5em" color={"#BDD535"} /></button>
-                                                : <button disabled={true}  ><MdNavigateBefore size="1.5em" color={"#BDD535"} /></button>}
+                                                : <button disabled={true}><MdNavigateBefore size="1.5em" color={"#BDD535"} /></button>}
                                         </div>
                                     </div>
                                     <div className="tools-page">
                                         <div className="tools-page-center">
                                             {this.state.numPages > 1 && this.state.pageNumber < this.state.numPages ?
-                                                <button onClick={() => this.setState({ pageNumber: this.state.pageNumber + 1 })}><MdNavigateNext size="1.5em" color={"#BDD535"} /></button> :
+                                                <button onClick={() => {
+                                                    this.setState({ pageNumber: this.state.pageNumber + 1 })
+                                                    this.props.handleChangePage(this.state.pageNumber + 1 )}}><MdNavigateNext size="1.5em" color={"#BDD535"} /></button> :
                                                 <button disabled={true} ><MdNavigateNext size="1.5em" color={"#BDD535"} /></button>}
 
                                         </div>
@@ -801,6 +803,7 @@ const mapDispatchToProps = (dispatch) => ({
     handleConfirmarEmbargo: bindActionCreators(confirmarEmbargo, dispatch),
     handleResetMsj: bindActionCreators(resetMensaje, dispatch),
     handleSaveDemandados: bindActionCreators(saveDemandados, dispatch),
+    handleChangePage: bindActionCreators(setPage, dispatch),
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Confirmar))
