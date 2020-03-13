@@ -41,6 +41,7 @@ function MyPdfViewer(props) {
         file: props.document,
         page,
         canvasRef,
+        scale:3
     });
     React.useEffect(() => {
         const canvas = canvRef.current
