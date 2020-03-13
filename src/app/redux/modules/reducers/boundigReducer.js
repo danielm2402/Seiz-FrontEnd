@@ -1,5 +1,5 @@
 
-import { CHANGE_PAGE,POINTS, RESET_POINTS, NUEVA_REGION, RESET_REGION,TABLE_ULTIMO_FOCUS,OBTENER_DEMANDADOS_TABLE, OBTENER_DEMANDADOS_TABLE_SUCCESS
+import { MODE_SELECT,CHANGE_PAGE,POINTS, RESET_POINTS, NUEVA_REGION, RESET_REGION,TABLE_ULTIMO_FOCUS,OBTENER_DEMANDADOS_TABLE, OBTENER_DEMANDADOS_TABLE_SUCCESS
 } from '../../constants/boundingConst.js';
 
 export const Boundingstate = {
@@ -7,7 +7,8 @@ export const Boundingstate = {
     palabra:'',
     tabla:'',
     loadingDemandados:false,
-    page:1
+    page:1,
+    mode: 'MANUAL'
 }
 export default function boundingReducer(state = Boundingstate, action={}){
     switch (action.type) {
@@ -53,7 +54,12 @@ export default function boundingReducer(state = Boundingstate, action={}){
             return{
                 ...state,
                 page:action.page
-            }     
+            }  
+        case MODE_SELECT:
+            return{
+                ...state,
+                mode:action.mode
+            }       
         default:
             return state;
     }

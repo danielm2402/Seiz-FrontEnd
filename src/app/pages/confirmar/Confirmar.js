@@ -25,7 +25,7 @@ import Demandantes from './Demandantes';
 import chroma from 'chroma-js';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import { changePoints, resetPoints, nuevaRegion, obtenerDemandadosTable, setUltimaTableFocus, setPage } from '../../redux/actions/boundingAction'
+import { changePoints, resetPoints, nuevaRegion, obtenerDemandadosTable, setUltimaTableFocus, setPage, setMode } from '../../redux/actions/boundingAction'
 import TableDemandados from './tables/TableDemandado'
 import TableDemandantes from './tables/TableDemandantes'
 import styled from 'styled-components';
@@ -135,7 +135,7 @@ class Confirmar extends Component {
         this.handleMouseUp = this.handleMouseUp.bind(this);
     }
     modeTable = () => {
-
+        this.props.handleChangeMode('TABLE')
         this.setState({ activeModeTable: true, editCanvas: false, obtenerDemandados: false }, function () {
 
         })
@@ -304,7 +304,7 @@ class Confirmar extends Component {
     }
 
     editCanvas = () => {
-
+        this.props.handleChangeMode('MANUAL')
         this.setState({ editCanvas: true, activeModeTable: false, obtenerDemandados: false }, function () {
 
         })
@@ -792,6 +792,7 @@ const mapDispatchToProps = (dispatch) => ({
     handleResetMsj: bindActionCreators(resetMensaje, dispatch),
     handleSaveDemandados: bindActionCreators(saveDemandados, dispatch),
     handleChangePage: bindActionCreators(setPage, dispatch),
+    handleChangeMode: bindActionCreators(setMode,dispatch),
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Confirmar))

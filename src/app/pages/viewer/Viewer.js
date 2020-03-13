@@ -95,7 +95,7 @@ function MyPdfViewer(props) {
 
     function handleMouseDown(event, ctx) { //added code here
 
-        if (!activeModeTable) {
+        if (props.mode==='MANUAL') {
             const canvas = canvasRef.current
             const ctx1 = canvas.getContext('2d')
             console.log(ctx1)
@@ -110,7 +110,7 @@ function MyPdfViewer(props) {
         }
     }
     function handleMouseMove(event, ctx) {
-        if (!activeModeTable) {
+        if (props.mode==='MANUAL') {
             var x = event.offsetX;
             var y = event.offsetY;
 
@@ -136,7 +136,7 @@ function MyPdfViewer(props) {
 
     function handleMouseUp(event, ctx) {
 
-        if (!activeModeTable) {
+        if (props.mode==='MANUAL') {
             var x = event.offsetX;
             var y = event.offsetY;
             var width = x - previousPointX;
@@ -202,7 +202,8 @@ const mapStateToProps = (state) => ({
     document: state.EmbargosReducer.embargo.document,
     tablaBounding: state.boundingReducer.tabla,
     points: state.boundingReducer.boundigTable.points,
-    page: state.boundingReducer.page
+    page: state.boundingReducer.page,
+    mode: state.boundingReducer.mode
 
 })
 const mapDispatchToProps = (dispatch) => ({

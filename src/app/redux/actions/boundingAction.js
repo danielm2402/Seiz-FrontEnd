@@ -39,6 +39,9 @@ export const setPage=(page)=>({
     page
 })
 
-
+export const setMode=(mode)=>({
+    type: types.MODE_SELECT,
+    mode
+})
 
 
