@@ -31,6 +31,15 @@ import TableDemandantes from './tables/TableDemandantes'
 import styled from 'styled-components';
 import Pdf from '@mikecousins/react-pdf';
 import Viewer from '../viewer/Viewer'
+import Icon from '@material-ui/core/Icon';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+
+const theme = createMuiTheme({
+    palette: {
+        primary: { 500: '#337ab7' },
+        
+    },
+});
 const pdfjsVersion = "2.0.305";
 
 const PDFDocumentWrapper = styled.div`
@@ -139,7 +148,7 @@ class Confirmar extends Component {
 
         this.props.handleEmbargo(this.props.match.params.id, this.props.token)
         this.props.handleDemandados(this.props.match.params.id, this.props.token)
-        
+
 
     }
     componentDidUpdate(prevProps, prevState) {
@@ -204,13 +213,13 @@ class Confirmar extends Component {
         }
 
         if (this.props.bounding !== prevProps.bounding) {
-           
+
             if (this.props.tablaBounding == 'documento') {
-              
-              
-                this.setState({[this.state.actualFocus]:(this.state[this.state.actualFocus]===undefined?'':this.state[this.state.actualFocus]).concat(this.props.bounding)})
+
+
+                this.setState({ [this.state.actualFocus]: (this.state[this.state.actualFocus] === undefined ? '' : this.state[this.state.actualFocus]).concat(this.props.bounding) })
             }
-           
+
 
         }
 
@@ -332,8 +341,8 @@ class Confirmar extends Component {
                             <div className="section-document">
                                 <div className="tools-doc">
                                     <div className="tools-edit" >
-                                        <div style={{paddingLeft:'10px'}} className="tools-edit-num">
-                                            <h5 style={{color:'#fff'}}> {this.state.pageNumber}/{this.state.numPages}</h5>
+                                        <div style={{ paddingLeft: '10px' }} className="tools-edit-num">
+                                            <h5 style={{ color: '#fff' }}> {this.state.pageNumber}/{this.state.numPages}</h5>
                                         </div>
                                         <div className="tools-edit-change">
                                             {this.state.numPages > 1 && this.state.pageNumber > 1 ?
@@ -349,17 +358,18 @@ class Confirmar extends Component {
                                             {this.state.numPages > 1 && this.state.pageNumber < this.state.numPages ?
                                                 <a className="btn-herramienta" onClick={() => {
                                                     this.setState({ pageNumber: this.state.pageNumber + 1 })
-                                                    this.props.handleChangePage(this.state.pageNumber + 1 )}}><MdNavigateNext size="1.7em" color={"#fff"} /></a> :
+                                                    this.props.handleChangePage(this.state.pageNumber + 1)
+                                                }}><MdNavigateNext size="1.7em" color={"#fff"} /></a> :
                                                 <a className="btn-herramienta" disabled={true} ><MdNavigateNext size="1.7em" color={"#fff"} /></a>}
 
                                         </div>
-                                        
-                                            <div className="tools-page-right">
-                                                <a className="btn-herramienta" onClick={this.editCanvas}><MdPhotoSizeSelectSmall size="1.5em" color={"#fff"} /></a>
-                                                
-                                                <a onClick={this.modeTable} className="btn-herramienta"><FaTable size="1.5em" color={"#fff"} /></a>
-                                                {this.state.obtenerDemandados ? <button onClick={this.obtenerDemandados}>Obtener</button> : <></>}
-                                            </div>
+
+                                        <div className="tools-page-right">
+                                            <a className="btn-herramienta" onClick={this.editCanvas}><MdPhotoSizeSelectSmall size="1.5em" color={"#fff"} /></a>
+
+                                            <a onClick={this.modeTable} className="btn-herramienta"><FaTable size="1.5em" color={"#fff"} /></a>
+                                            {this.state.obtenerDemandados ? <button onClick={this.obtenerDemandados}>Obtener</button> : <></>}
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="container-document">
@@ -369,21 +379,21 @@ class Confirmar extends Component {
                             <div className="section-table">
                                 <div className="buttons-edits">
 
-                                    <div> <button onClick={this.goToExcel}><FaFileExcel size="1.5em" color={"#BDD535"}/></button> </div>
+                                    <div> <button onClick={this.goToExcel}><FaFileExcel size="1.5em" color={"#BDD535"} /></button> </div>
                                 </div>
                                 <div className="information-card">
                                     <label for="entidad">Entidad Remitente</label>
-                                    <input id="entidad" name="entidad" value={this.state.entidad} onChange={this.handleInput}  onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.entidadRemitente : null)) }} />
+                                    <input id="entidad" name="entidad" value={this.state.entidad} onChange={this.handleInput} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.entidadRemitente : null)) }} />
                                     <div className="section-information-cols">
                                         <div className="section-information-col">
                                             <label for="ciudad" >Ciudad</label>
-                                            <input id="ciudad" name="ciudad" value={this.state.ciudad} onChange={this.handleInput}  onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.ciudad : null)) }} />
+                                            <input id="ciudad" name="ciudad" value={this.state.ciudad} onChange={this.handleInput} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.ciudad : null)) }} />
                                             <label for="referencia">Referencia</label>
                                             <input id="referencia" name="referencia" value={this.state.referencia} onChange={this.handleInput} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.referencia : null)) }} />
                                             <label>Tipo de embargo</label>
                                             <div className="select-input" style={{ zIndex: 999999999 }}>
                                                 <Select
-                                                    
+
                                                     labelId="demo-simple-select-label"
                                                     id="tipoEmbargo"
                                                     name="tipoEmbargo"
@@ -518,8 +528,14 @@ class Confirmar extends Component {
 
                                 <TableDemandados page={this.state.pageNumber} idDocumento={this.props.match.params.id} />
                                 <TableDemandantes page={this.state.pageNumber} demandantes={this.state.demandantes} idDocumento={this.props.match.params.id} />
+                                <div style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+                                <MuiThemeProvider theme={theme}>
+                                    <Button onClick={this.confirmarEmbargo} variant="contained" endIcon={<Icon>send</Icon>} color="primary">
+                                        Confirmar
+                                 </Button>
+                                </MuiThemeProvider>
+                                </div>
 
-                                <input onClick={this.confirmarEmbargo} type="button" class="confirm-form-btn " value="Confirmar Embargo" />
 
                                 <Dialog
                                     open={this.props.mensaje.exist}
