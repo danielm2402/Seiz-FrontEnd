@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components';
 import { nuevaRegion, setTablePoints} from '../../redux/actions/boundingAction'
 import './Viewer.css'
+
 const PDFDocumentWrapper = styled.div`
   canvas {
     width: 100% !important;
@@ -226,11 +227,12 @@ function MyPdfViewer(props) {
 
                 </div>
             </PDFDocumentWrapper>
-
         </div>
 
     );
 }
+
+
 
 const mapStateToProps = (state) => ({
     json: state.EmbargosReducer.embargo.json,

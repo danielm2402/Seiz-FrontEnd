@@ -20,7 +20,7 @@ function* obtenerDemandadosTableSaga(payload) {
             'Content-Type': 'application/json'
         },
         params: {
-            'idEmbargo': 20021000171
+            'idEmbargo': payload.id 
         }
     };
     const data = yield axios.post('https://bancow.finseiz.com/api/v1/demandados/seiz/extractTable', {
@@ -28,6 +28,7 @@ function* obtenerDemandadosTableSaga(payload) {
         verticalLines: [],
         pageNumber: (payload.page - 1),
         boundingPoly: { vertices: payload.vertices },
+        
         keyColumns: payload.columns
     }, config)
         .then(response => response)
