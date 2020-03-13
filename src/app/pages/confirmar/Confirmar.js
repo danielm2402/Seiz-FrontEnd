@@ -81,21 +81,7 @@ const dot = (color = '#ccc') => ({
     },
 });
 
-const colourStyles = {
-    control: styles => ({ ...styles, backgroundColor: 'white' }),
-    input: styles => ({ ...styles, ...dot() }),
-    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-        const color = chroma('blue');
-        return {
-            ...styles,
-            zIndex: '99',
-            color: 'blue'
 
-        };
-    },
-    placeholder: styles => ({ ...styles, ...dot() }),
-    singleValue: (styles, { data }) => ({ ...styles, ...dot('blue') }),
-};
 
 class Confirmar extends Component {
     constructor(props) {
@@ -310,13 +296,16 @@ class Confirmar extends Component {
         })
     }
     obtenerDemandados = () => {
-        const ctx = this.refs.canvas.getContext('2d');
-        ctx.clearRect(0, 0, this.refs.canvas.width, this.refs.canvas.height); //clear canvas
-        ctx.beginPath();
-
         this.setState({ obtenerDemandados: false })
+        const columns = {
+            nombre: String(this.state.colsEdit.nombre),
+            identificacion: String(this.state.colsEdit.identificacion),
+            expendiente: String(this.state.colsEdit.expediente),
+            monto: String(this.state.colsEdit.monto)
+        }
 
-        this.props.handleTableDemandados(this.state.tablePoints, this.state.tableCols, this.props.match.params.id, this.state.pageNumber, this.props.token)
+       
+        this.props.handleTableDemandados(this.props.modeTable.points, columns, this.props.match.params.id, this.state.pageNumber, this.props.token)
     }
     goToExcel = () => {
         this.props.history.push('/upload/excel/' + this.props.match.params.id)
@@ -368,7 +357,7 @@ class Confirmar extends Component {
                                             <a className="btn-herramienta" onClick={this.editCanvas}><MdPhotoSizeSelectSmall size="1.5em" color={"#fff"} /></a>
 
                                             <a onClick={this.modeTable} className="btn-herramienta"><FaTable size="1.5em" color={"#fff"} /></a>
-                                            {this.state.obtenerDemandados ? <button onClick={this.obtenerDemandados}>Obtener</button> : <></>}
+                                            {this.props.modeTable.ready ? <button onClick={this.obtenerDemandados}>Obtener</button> : <></>}
                                         </div>
                                     </div>
                                 </div>
@@ -600,7 +589,7 @@ class Confirmar extends Component {
     }
     handleColsTable = (event) => {
         this.setState({ colsEdit: { ...this.state.colsEdit, [event.target.name]: event.target.value } }, function () {
-
+           
         })
     }
     handleMouseDown(event) { //added code here
@@ -778,6 +767,8 @@ const mapStateToProps = (state) => ({
     mensaje: state.EmbargosReducer.mensaje,
     tablaBounding: state.boundingReducer.tabla,
     bounding: state.boundingReducer.palabra,
+    modeTable: state.boundingReducer.pointsModeTable,
+
 
 })
 const mapDispatchToProps = (dispatch) => ({
@@ -793,6 +784,7 @@ const mapDispatchToProps = (dispatch) => ({
     handleSaveDemandados: bindActionCreators(saveDemandados, dispatch),
     handleChangePage: bindActionCreators(setPage, dispatch),
     handleChangeMode: bindActionCreators(setMode,dispatch),
+   
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Confirmar))

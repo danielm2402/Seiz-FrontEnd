@@ -43,5 +43,9 @@ export const setMode=(mode)=>({
     type: types.MODE_SELECT,
     mode
 })
+export const setTablePoints=(points)=>({
+    type: types.TABLE_POINTS,
+    points
+})
 
 
