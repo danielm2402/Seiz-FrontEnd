@@ -357,7 +357,7 @@ class Confirmar extends Component {
                                             <a className="btn-herramienta" onClick={this.editCanvas}><MdPhotoSizeSelectSmall size="1.5em" color={"#fff"} /></a>
 
                                             <a onClick={this.modeTable} className="btn-herramienta"><FaTable size="1.5em" color={"#fff"} /></a>
-                                            {this.props.modeTable.ready ? <button onClick={this.obtenerDemandados}>Obtener</button> : <></>}
+                                            {this.props.modeTable.ready ? <a className="btn-herramienta" onClick={this.obtenerDemandados}><Icon color={"#fff"} >done</Icon></a> : <></>}
                                         </div>
                                     </div>
                                 </div>

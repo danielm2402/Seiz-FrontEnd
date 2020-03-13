@@ -3,6 +3,7 @@
     display: flex;
     flex-direction: row;
     background: #ccc;
+    color: #595d6e;
 }
 .buttons-edits{
   width: 100%;
@@ -46,7 +47,8 @@
   font-size: 17px;
     font-weight: 300;
     font-family: Poppins, Helvetica, sans-serif;
-    width: 100%
+    width: 100%;
+    color: #595d6e;
 }
 .information-card input:disabled{
 
@@ -191,6 +193,8 @@ display: flex;
 flex-direction: row;
 width: 100%;
 justify-content: space-around;
+color: #595d6e;
+
 }
 .select-table-element{
   display: flex;
