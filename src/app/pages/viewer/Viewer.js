@@ -91,7 +91,18 @@ function MyPdfViewer(props) {
         ctx.beginPath();
             setPage(props.page)
     },[props.page])
-    
+    React.useEffect(()=>{
+        const canvas = canvRef.current
+        const ctx = canvas.getContext('2d')
+        console.log('EL CANVAS')
+        console.log(ctx)
+       if (props.mode==='MANUAL'){
+        ctx.canvas.style.cursor='crosshair'
+       }
+       else{
+        ctx.canvas.style.cursor='cell'
+       }
+    })
 
     function handleMouseDown(event, ctx) { //added code here
 
