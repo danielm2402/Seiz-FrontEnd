@@ -178,8 +178,9 @@ function* getEmbargoSaga(payload) {
   switch (data.status) {
     case 200:
       console.log('obteniendo pdf')
+      console.log(((data.data.urlEmbargoFile.split('files/')[1])))
       yield (axios({
-        url: data.data.urlEmbargoFile,
+        url:'https://bancow.finseiz.com/embargo/embargoimg/?filename='+(data.data.urlEmbargoFile.split('files/')[1]),
         method: 'GET',
         responseType: 'blob', // important
         headers: { Authorization: 'Bearer ' + payload.token, }
@@ -188,7 +189,7 @@ function* getEmbargoSaga(payload) {
       }));
 
       const bounding = (yield (axios({
-        url: ((data.data.urlEmbargoFile.split('.pdf')[0]) + '.json'),
+        url:'https://bancow.finseiz.com/embargo/embargoimg/?filename='+((data.data.urlEmbargoFile.split('files/')[1]).split('.pdf')[0]) + '.json',
         method: 'GET',
         responseType: 'blob', // important
         headers: { Authorization: 'Bearer ' + payload.token }
@@ -199,7 +200,7 @@ function* getEmbargoSaga(payload) {
         .then(response => response.data)
 
       const boundingSelector = (yield (axios({
-        url: ((data.data.urlEmbargoFile.split('.pdf')[0]) + '.jsonl'),
+        url:'https://bancow.finseiz.com/embargo/embargoimg/?filename='+((data.data.urlEmbargoFile.split('files/')[1]).split('.pdf')[0]) + '.jsonl',
         method: 'GET',
         responseType: 'blob', // important
         headers: { Authorization: 'Bearer ' + payload.token }

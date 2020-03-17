@@ -9,7 +9,8 @@ export const Boundingstate = {
     loadingDemandados:false,
     page:1,
     mode: 'MANUAL',
-    pointsModeTable:{ready:false, points:[]}
+    pointsModeTable:{ready:false, points:[]},
+    DemandadosTablePorConfirmar: false
 }
 export default function boundingReducer(state = Boundingstate, action={}){
     switch (action.type) {

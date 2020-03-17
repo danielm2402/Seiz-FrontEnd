@@ -1,3 +1,9 @@
+
+.table-info02 table{
+    display: inline-block; overflow: auto;
+}
+
+
 .container-table-edit{
     width: 100%;
     background-color: #fff;

@@ -163,7 +163,7 @@ class TableDemandado extends Component {
         var contador = -1;
         if (this.props.demandados.loading) {
             renderTable = (
-                <table>
+                <table style={{height:'350px'}}>
                     <tr>
                         <th><div className="title-col">Nombre</div></th>
                         <th><div className="title-col">Tipo</div></th>
@@ -178,7 +178,8 @@ class TableDemandado extends Component {
         } else {
             if (this.props.demandados.data.length > 0) {
                 renderTable = (
-                    <table>
+                    <div className="table-info02">
+                    <table style={{height:'350px', width:'100%'}} >
                         <tr>
                             <th><div className="title-col">Nombre</div></th>
                             <th><div className="title-col">Tipo</div></th>
@@ -270,9 +271,6 @@ class TableDemandado extends Component {
                             </tr> : <></>}
                         {
                             this.props.demandados.data.map((item, index) => {
-                                contador = contador + 1
-                                if (contador >= this.state.numItems && contador < this.state.numItemsSiguientes) {
-
                                     if (this.state.itemEdit != item.id) {
 
                                         return (
@@ -370,7 +368,7 @@ class TableDemandado extends Component {
                                             </div></td>
                                         </tr>
                                     )
-                                }
+                                
                             }
 
                             )
@@ -379,12 +377,13 @@ class TableDemandado extends Component {
 
 
                     </table>
+                    </div>
 
                 )
             }
             else {
                 renderTable = (
-                    <table>
+                    <table >
                         <tr>
                             <th><div className="title-col">Nombre</div></th>
                             <th><div className="title-col">Tipo</div></th>

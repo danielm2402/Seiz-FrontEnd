@@ -44,7 +44,7 @@ function* obtenerDemandadosTableSaga(payload) {
             const vectorEdit = vector.map((item) => {
                 cont = cont + 1;
                 return {
-                    id: cont,
+                    id: cont+'local',
                     nombres: item.nombre,
                     identificacion: item.identificacion,
                     montoAEmbargar: item.monto,

@@ -47,5 +47,10 @@ export const setTablePoints=(points)=>({
     type: types.TABLE_POINTS,
     points
 })
+export const changeDemandadosTablePorConfirmar=()=>({
+    type: types.CHANGE_DEMANDADOS_TABLE_POR_CONFIRMAR
+})
+
+
 
 

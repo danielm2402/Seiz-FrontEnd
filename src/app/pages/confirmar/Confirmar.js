@@ -768,7 +768,7 @@ const mapStateToProps = (state) => ({
     tablaBounding: state.boundingReducer.tabla,
     bounding: state.boundingReducer.palabra,
     modeTable: state.boundingReducer.pointsModeTable,
-
+    
 
 })
 const mapDispatchToProps = (dispatch) => ({
