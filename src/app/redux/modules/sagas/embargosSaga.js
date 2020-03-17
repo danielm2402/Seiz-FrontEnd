@@ -14,7 +14,7 @@ import {
   , getDemandadosUpdateTable, getDemandadosUpdateTableSuccess
 } from '../../actions/embargosAction'
 import {
-  newMensajeBounding,changeDemandadosTablePorConfirmarFalse
+  newMensajeBounding, changeDemandadosTablePorConfirmarFalse
 } from '../../actions/boundingAction'
 
 import * as auth from "../../../store/ducks/auth.duck";
@@ -398,7 +398,7 @@ function* saveDemandadosSaga(payload) {
 
     const demandados = payload.data.map(demandado => {
       return ({
-        amount: Number(demandado.montoAEmbargar.replace(/[$.]/g, '')),
+        amount: demandado.montoAEmbargar,
         expedient: demandado.expediente,
         fullname: demandado.nombres,
         id: String(demandado.id).includes('local') ? null : demandado.id,
@@ -418,6 +418,7 @@ function* saveDemandadosSaga(payload) {
       console.log(data1)
       switch (data1.status) {
         case 200:
+          yield put(newMensajeBounding('Demandados guardados correctamente'))
           yield put(changeDemandadosTablePorConfirmarFalse())
           yield put(getDemandadosUpdateTable(payload.id, payload.token))
           break;
@@ -428,11 +429,13 @@ function* saveDemandadosSaga(payload) {
           break;
       }
     }
-  } catch(err){
+  } catch (err) {
     yield put(changeDemandadosTablePorConfirmarFalse())
-    yield put(newMensajeBounding('Error al guardar demandados, verifique que los datos sean correctos, recuerde que algunos campos son extrictamente numéricos'))
+    yield put(newMensajeBounding('Error al guardar demandados, verifique que los datos sean correctos, recuerde que algunos campos son extrictamente numéricos' + err))
   }
 }
+
+
 function* crearDemandadoSaga(payload) {
   console.log('GET demandado');
   const config = {
@@ -444,9 +447,7 @@ function* crearDemandadoSaga(payload) {
       'idEmbargo': payload.id
     }
   };
-  console.log('MIDDLEWAREEEE')
-  console.log(payload.demandados)
-  console.log(payload.data)
+
   var demandados = [payload.data, ...payload.demandados]
   const demandadosReq = demandados.map(demandado => {
     return ({
@@ -456,7 +457,7 @@ function* crearDemandadoSaga(payload) {
       id: String(demandado.id).includes('local') ? null : demandado.id,
       identification: demandado.identificacion,
       page: demandado.page,
-      typeIdentification: demandado.tipoIdentificacion
+      typeIdentification: demandado.tipoIdentificacion == 'CEDULA_EXTRANJERA' ? 'CEDULA_EXTRANJERIA' : demandado.tipoIdentificacion
     })
   })
 
@@ -470,6 +471,7 @@ function* crearDemandadoSaga(payload) {
     console.log(data1)
     switch (data1.status) {
       case 200:
+        yield put(newMensajeBounding('Demandado agregado correctamente'))
         const data = yield axios.get('https://bancow.finseiz.com/api/v1/demandados/list', config)
           .then(response => response)
           .catch(err => err.response)
@@ -486,6 +488,19 @@ function* crearDemandadoSaga(payload) {
         break;
 
       default:
+        yield put(newMensajeBounding('No se pudo guardar correctamente el demandado, por favor, verifique que los datos sean consistentes. Recuerde que hay campos solamente númericos'))
+        const data2 = yield axios.get('https://bancow.finseiz.com/api/v1/demandados/list', config)
+          .then(response => response)
+          .catch(err => err.response)
+        console.log(data2)
+        switch (data2.status) {
+          case 200:
+            yield put(getDemandadosUpdateTableSuccess(data2.data));
+            break;
+
+          default:
+            break;
+        }
         break;
     }
 
