@@ -7,7 +7,7 @@ import {
     OBTENER_DEMANDADOS_TABLE
 } from '../../constants/boundingConst';
 import {
-    obtenerDemandadosTableSuccess, changeDemandadosTablePorConfirmarTrue
+    obtenerDemandadosTableSuccess, changeDemandadosTablePorConfirmarTrue,newMensajeBounding
 } from '../../actions/boundingAction'
 import { getDemandadosSuccess } from '../../actions/embargosAction'
 import * as auth from "../../../store/ducks/auth.duck";
@@ -47,7 +47,7 @@ function* obtenerDemandadosTableSaga(payload) {
                     id: cont+'local',
                     nombres: item.nombre,
                     identificacion: item.identificacion,
-                    montoAEmbargar: item.monto,
+                    montoAEmbargar: Number(item.monto.replace(/[$.]/g,'')),
                     tipoIdentificacion: payload.tipoIdentificacion
                 }
             })
@@ -63,6 +63,7 @@ function* obtenerDemandadosTableSaga(payload) {
             break;
 
         default:
+            yield put(newMensajeBounding('Error al obtener demandados, por favor, verifique que se seleccionaron correctamente las columnas. Código de error: '+data.status))
             break;
     }
 }

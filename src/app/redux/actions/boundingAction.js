@@ -55,7 +55,14 @@ export const changeDemandadosTablePorConfirmarFalse=()=>({
     type: types.CHANGE_DEMANDADOS_TABLE_POR_CONFIRMAR_FALSE
 })
 
+export const newMensajeBounding=(msj)=>({
+type:types.MENSAJE_BOUNDING,
+msj
+})
 
+export const resetMensajeBounding=()=>({
+    type:types.RESET_MENSAJE_BOUNDING
+})
 
 
 

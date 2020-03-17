@@ -25,7 +25,7 @@ import Demandantes from './Demandantes';
 import chroma from 'chroma-js';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import { changePoints, resetPoints, nuevaRegion, obtenerDemandadosTable, setUltimaTableFocus, setPage, setMode } from '../../redux/actions/boundingAction'
+import { changePoints, resetPoints, nuevaRegion, obtenerDemandadosTable, setUltimaTableFocus, setPage, setMode, resetMensajeBounding } from '../../redux/actions/boundingAction'
 import TableDemandados from './tables/TableDemandado'
 import TableDemandantes from './tables/TableDemandantes'
 import styled from 'styled-components';
@@ -553,6 +553,33 @@ class Confirmar extends Component {
                                           </Button>
                                     </DialogActions>
                                 </Dialog>
+
+                                <Dialog
+                                    open={this.props.mensajeBounding.exist}
+                                    onClose={() => {
+                                        this.props.handleResetMsjBounding()
+                                    
+                                    }
+                                    }
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">{"Información"}</DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            {this.props.mensajeBounding.msj}
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+
+                                        <Button onClick={() => {
+                                            this.props.handleResetMsjBounding()
+                                            
+                                        }} color="primary" autoFocus>
+                                            Aceptar
+                                          </Button>
+                                    </DialogActions>
+                                </Dialog>
                             </div>
                         </div>
                     </div>}
@@ -752,6 +779,9 @@ class Confirmar extends Component {
         }
 
     }
+    handleResetMsjBounding=()=>{
+
+    }
 }
 
 const mapStateToProps = (state) => ({
@@ -769,6 +799,7 @@ const mapStateToProps = (state) => ({
     tablaBounding: state.boundingReducer.tabla,
     bounding: state.boundingReducer.palabra,
     modeTable: state.boundingReducer.pointsModeTable,
+    mensajeBounding: state.boundingReducer.msj
     
     
 
@@ -786,6 +817,7 @@ const mapDispatchToProps = (dispatch) => ({
     handleSaveDemandados: bindActionCreators(saveDemandados, dispatch),
     handleChangePage: bindActionCreators(setPage, dispatch),
     handleChangeMode: bindActionCreators(setMode,dispatch),
+    handleResetMsjBounding: bindActionCreators(resetMensajeBounding, dispatch)
    
 })
 

@@ -3,7 +3,7 @@ import {
 } from 'redux-saga/effects';
 import axios from 'axios';
 import {
-  UPDATE_DEMANDADO, CREATE_DEMANDANTE, DELETE_DEMANDANTE,UPDATE_DEMANDANTE, UPDATE_EMBARGO,
+  UPDATE_DEMANDADO, CREATE_DEMANDANTE, DELETE_DEMANDANTE, UPDATE_DEMANDANTE, UPDATE_EMBARGO,
   GET_EMBARGO, GET_DEMANDADOS, DELETE_DEMANDADO, SAVE_DEMANDADOS, GET_DEMANDADOS_UPDATE_TABLE, CREATE_DEMANDADO,
   GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_CONFIRMADOS, GET_EMBARGOS_POR_CONFIRMAR, GET_EMBARGOS_ALL, DELETE_EMBARGO, CONFIRMAR_EMBARGO
 } from '../../constants/EmbargosConst';
@@ -13,6 +13,10 @@ import {
   getEmbargosConfirmadosSuccess, getEmbargosPorConfirmarSuccess, getEmbargosAsignadosSuccess, getEmbargosAllSuccess, nuevoMensaje, resetMensaje
   , getDemandadosUpdateTable, getDemandadosUpdateTableSuccess
 } from '../../actions/embargosAction'
+import {
+  newMensajeBounding,changeDemandadosTablePorConfirmarFalse
+} from '../../actions/boundingAction'
+
 import * as auth from "../../../store/ducks/auth.duck";
 import { saveAs } from 'file-saver';
 function* getEmbargosConfirmadosSaga(payload) {
@@ -180,7 +184,7 @@ function* getEmbargoSaga(payload) {
       console.log('obteniendo pdf')
       console.log(((data.data.urlEmbargoFile.split('files/')[1])))
       yield (axios({
-        url:'https://bancow.finseiz.com/embargo/embargoimg/?filename='+(data.data.urlEmbargoFile.split('files/')[1]),
+        url: 'https://bancow.finseiz.com/embargo/embargoimg/?filename=' + (data.data.urlEmbargoFile.split('files/')[1]),
         method: 'GET',
         responseType: 'blob', // important
         headers: { Authorization: 'Bearer ' + payload.token, }
@@ -189,7 +193,7 @@ function* getEmbargoSaga(payload) {
       }));
 
       const bounding = (yield (axios({
-        url:'https://bancow.finseiz.com/embargo/embargoimg/?filename='+((data.data.urlEmbargoFile.split('files/')[1]).split('.pdf')[0]) + '.json',
+        url: 'https://bancow.finseiz.com/embargo/embargoimg/?filename=' + ((data.data.urlEmbargoFile.split('files/')[1]).split('.pdf')[0]) + '.json',
         method: 'GET',
         responseType: 'blob', // important
         headers: { Authorization: 'Bearer ' + payload.token }
@@ -200,7 +204,7 @@ function* getEmbargoSaga(payload) {
         .then(response => response.data)
 
       const boundingSelector = (yield (axios({
-        url:'https://bancow.finseiz.com/embargo/embargoimg/?filename='+((data.data.urlEmbargoFile.split('files/')[1]).split('.pdf')[0]) + '.jsonl',
+        url: 'https://bancow.finseiz.com/embargo/embargoimg/?filename=' + ((data.data.urlEmbargoFile.split('files/')[1]).split('.pdf')[0]) + '.jsonl',
         method: 'GET',
         responseType: 'blob', // important
         headers: { Authorization: 'Bearer ' + payload.token }
@@ -259,20 +263,20 @@ function* confirmarEmbargoSaga(payload) {
     },
   };
   const data = yield axios.post('https://bancow.finseiz.com/api/v1/embargos/confirm', {
-    
-      account: payload.data.account,
-      address: payload.data.address,
-      amount: payload.data.amount,
-      city: payload.data.city,
-      docId: payload.data.docId,
-      documentDate: payload.data.documentDate,
-      documentType: payload.data.documentType,
-      embargoType: payload.data.embargoType,
-      id:payload.data.id,
-      reference: payload.data.reference,
-      sender: payload.data.sender,
- 
-    
+
+    account: payload.data.account,
+    address: payload.data.address,
+    amount: payload.data.amount,
+    city: payload.data.city,
+    docId: payload.data.docId,
+    documentDate: payload.data.documentDate,
+    documentType: payload.data.documentType,
+    embargoType: payload.data.embargoType,
+    id: payload.data.id,
+    reference: payload.data.reference,
+    sender: payload.data.sender,
+
+
 
   }, config)
     .then(response => response)
@@ -390,35 +394,43 @@ function* saveDemandadosSaga(payload) {
       "Content-Type": "application/json"
     },
   };
-  const demandados = payload.data.map(demandado => {
-    return ({
-      amount:Number(demandado.montoAEmbargar.replace(/[$.]/g,'')),
-      expedient: demandado.expediente,
-      fullname: demandado.nombres,
-      id: String(demandado.id).includes('local') ? null : demandado.id,
-      identification: demandado.identificacion,
-      page: demandado.page,
-      typeIdentification: demandado.tipoIdentificacion
+  try {
+
+    const demandados = payload.data.map(demandado => {
+      return ({
+        amount: Number(demandado.montoAEmbargar.replace(/[$.]/g, '')),
+        expedient: demandado.expediente,
+        fullname: demandado.nombres,
+        id: String(demandado.id).includes('local') ? null : demandado.id,
+        identification: demandado.identificacion,
+        page: demandado.page,
+        typeIdentification: demandado.tipoIdentificacion
+      })
     })
-  })
 
-  if (demandados.length > 0) {
-    const data1 = yield axios.post('https://bancow.finseiz.com/api/v1/demandados/save', {
-      demandados: demandados,
-      idEmbargo: payload.id
-    }, config)
-      .then(response => response)
-      .catch(err => err.response)
-    console.log(data1)
-    switch (data1.status) {
-      case 200:
-        console.log("200000")
-        yield put(getDemandadosUpdateTable(payload.id, payload.token))
-        break;
+    if (demandados.length > 0) {
+      const data1 = yield axios.post('https://bancow.finseiz.com/api/v1/demandados/save', {
+        demandados: demandados,
+        idEmbargo: payload.id
+      }, config)
+        .then(response => response)
+        .catch(err => err.response)
+      console.log(data1)
+      switch (data1.status) {
+        case 200:
+          yield put(changeDemandadosTablePorConfirmarFalse())
+          yield put(getDemandadosUpdateTable(payload.id, payload.token))
+          break;
 
-      default:
-        break;
+        default:
+          yield put(changeDemandadosTablePorConfirmarFalse())
+          yield put(newMensajeBounding('Error al guardar demandados, verifique que los datos sean correctos, recuerde que algunos campos son extrictamente numéricos'))
+          break;
+      }
     }
+  } catch(err){
+    yield put(changeDemandadosTablePorConfirmarFalse())
+    yield put(newMensajeBounding('Error al guardar demandados, verifique que los datos sean correctos, recuerde que algunos campos son extrictamente numéricos'))
   }
 }
 function* crearDemandadoSaga(payload) {
@@ -604,7 +616,7 @@ function* updateDemandadoSaga(payload) {
 
   }
 }
-function* updateDemandanteSaga(payload){
+function* updateDemandanteSaga(payload) {
   console.log('UPDATE DEMANDANTE');
   console.log(payload.data)
   const config = {
@@ -613,19 +625,19 @@ function* updateDemandanteSaga(payload){
       Accept: 'application/json',
     },
   };
-  const data= yield axios.put('https://bancow.finseiz.com/api/v1/demandantes/{id}',{
-   
-      id: payload.id,
-      identificacion:payload.data.identificacion,
-      nombres:payload.data.nombres
-    
-},config)
-  .then(response=>response)
-  .catch(err=>err.response)
+  const data = yield axios.put('https://bancow.finseiz.com/api/v1/demandantes/{id}', {
+
+    id: payload.id,
+    identificacion: payload.data.identificacion,
+    nombres: payload.data.nombres
+
+  }, config)
+    .then(response => response)
+    .catch(err => err.response)
   console.log(data)
 }
 
-function* updateEmbargoSaga(payload){
+function* updateEmbargoSaga(payload) {
   console.log('UPDATE EMBARGO');
   console.log(payload.data)
   const config = {
@@ -634,7 +646,7 @@ function* updateEmbargoSaga(payload){
       Accept: 'application/json',
     },
   };
-  const data= yield axios.put('https://bancow.finseiz.com/api/v1/embargos',{
+  const data = yield axios.put('https://bancow.finseiz.com/api/v1/embargos', {
     account: payload.data.account,
     address: payload.data.address,
     amount: payload.data.amount,
@@ -646,16 +658,16 @@ function* updateEmbargoSaga(payload){
     id: payload.data.id,
     reference: payload.data.reference,
     sender: payload.data.sender
-    
-},config)
-  .then(response=>response)
-  .catch(err=>err.response)
+
+  }, config)
+    .then(response => response)
+    .catch(err => err.response)
   console.log(data)
   switch (data.status) {
     case 200:
       yield put(nuevoMensaje('Embargo actualizado correctamente'))
-    break;
-  
+      break;
+
     default:
       yield put(nuevoMensaje('Error al actualizar embargo, contacte al administrador'))
       break;
@@ -679,7 +691,7 @@ function* embargosRootSaga() {
     takeEvery(CREATE_DEMANDANTE, crearDemandanteSaga),
     takeEvery(UPDATE_DEMANDADO, updateDemandadoSaga),
     takeEvery(UPDATE_DEMANDANTE, updateDemandanteSaga),
-    
+
     takeEvery(DELETE_DEMANDANTE, deleteDemandanteSaga),
     takeEvery(UPDATE_EMBARGO, updateEmbargoSaga)
 

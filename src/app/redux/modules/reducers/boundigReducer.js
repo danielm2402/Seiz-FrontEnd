@@ -1,5 +1,5 @@
 
-import { CHANGE_DEMANDADOS_TABLE_POR_CONFIRMAR_TRUE,CHANGE_DEMANDADOS_TABLE_POR_CONFIRMAR_FALSE,TABLE_POINTS,MODE_SELECT,CHANGE_PAGE,POINTS, RESET_POINTS, NUEVA_REGION, RESET_REGION,TABLE_ULTIMO_FOCUS,OBTENER_DEMANDADOS_TABLE, OBTENER_DEMANDADOS_TABLE_SUCCESS
+import {MENSAJE_BOUNDING, RESET_MENSAJE_BOUNDING, CHANGE_DEMANDADOS_TABLE_POR_CONFIRMAR_TRUE,CHANGE_DEMANDADOS_TABLE_POR_CONFIRMAR_FALSE,TABLE_POINTS,MODE_SELECT,CHANGE_PAGE,POINTS, RESET_POINTS, NUEVA_REGION, RESET_REGION,TABLE_ULTIMO_FOCUS,OBTENER_DEMANDADOS_TABLE, OBTENER_DEMANDADOS_TABLE_SUCCESS
 } from '../../constants/boundingConst.js';
 
 export const Boundingstate = {
@@ -10,7 +10,8 @@ export const Boundingstate = {
     page:1,
     mode: 'MANUAL',
     pointsModeTable:{ready:false, points:[]},
-    DemandadosTablePorConfirmar: false
+    DemandadosTablePorConfirmar: false,
+    msj:{exist:false, msj:''}
 }
 export default function boundingReducer(state = Boundingstate, action={}){
     switch (action.type) {
@@ -77,7 +78,17 @@ export default function boundingReducer(state = Boundingstate, action={}){
                 return{
                     ...state,
                     DemandadosTablePorConfirmar:false
-                }            
+                }  
+            case MENSAJE_BOUNDING:
+                return{
+                    ...state,
+                    msj:{exist:true, msj:action.msj}
+                } 
+            case RESET_MENSAJE_BOUNDING:
+                return{
+                    ...state,
+                    msj:{exist:false, msj:''}
+                }                 
         default:
             return state;
     }
