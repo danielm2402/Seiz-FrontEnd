@@ -392,7 +392,7 @@ function* saveDemandadosSaga(payload) {
   };
   const demandados = payload.data.map(demandado => {
     return ({
-      amount: demandado.montoAEmbargar,
+      amount:Number(demandado.montoAEmbargar.replace(/[$.]/g,'')),
       expedient: demandado.expediente,
       fullname: demandado.nombres,
       id: String(demandado.id).includes('local') ? null : demandado.id,

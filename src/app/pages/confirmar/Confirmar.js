@@ -301,11 +301,12 @@ class Confirmar extends Component {
             nombre: String(this.state.colsEdit.nombre),
             identificacion: String(this.state.colsEdit.identificacion),
             expendiente: String(this.state.colsEdit.expediente),
-            monto: String(this.state.colsEdit.monto)
+            monto: String(this.state.colsEdit.monto),
+            
         }
 
        
-        this.props.handleTableDemandados(this.props.modeTable.points, columns, this.props.match.params.id, this.state.pageNumber, this.props.token)
+        this.props.handleTableDemandados(this.props.modeTable.points, columns, this.props.match.params.id, this.state.pageNumber, this.props.token, String(this.state.colsEdit.tipo))
     }
     goToExcel = () => {
         this.props.history.push('/upload/excel/' + this.props.match.params.id)
@@ -768,6 +769,7 @@ const mapStateToProps = (state) => ({
     tablaBounding: state.boundingReducer.tabla,
     bounding: state.boundingReducer.palabra,
     modeTable: state.boundingReducer.pointsModeTable,
+    
     
 
 })

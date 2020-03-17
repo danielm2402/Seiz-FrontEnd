@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './styles.css'
 import nextId from "react-id-generator";
-import { MdNavigateNext, MdNavigateBefore, MdDeleteSweep, MdCheck, MdCancel, MdAdd } from "react-icons/md";
+import { MdNavigateNext, MdNavigateBefore, MdDeleteSweep, MdCheck, MdCancel, MdAdd,MdDone } from "react-icons/md";
 import { FaRegEdit } from "react-icons/fa";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
@@ -469,7 +469,7 @@ class TableDemandado extends Component {
             <div className="container-table-edit">
                 <div className="table-header">
                     <h5>Demandados</h5>
-                    <a onClick={this.addRow}><div className="button-table"><MdAdd size={'1.4rem'} /></div></a>
+                    {this.props.demandadosExtractSinConfirmar?<a onClick={this.saveExtractTable}><div className="button-table"><MdDone size={'1.4rem'} /></div></a>:<a onClick={this.addRow}><div className="button-table"><MdAdd size={'1.4rem'} /></div></a>}
                 </div>
                 {renderTable}
                 <div className="buttons-control-table">
@@ -480,6 +480,9 @@ class TableDemandado extends Component {
                 </div>
             </div>
         )
+    }
+    saveExtractTable=()=>{
+        this.props.handleSaveDemandados(this.props.demandados.data, this.props.token, this.props.idDocumento)
     }
     addRow = () => {
         this.setState({ addRow: true })
@@ -530,6 +533,7 @@ const mapStateToProps = (state) => ({
     bounding: state.boundingReducer.palabra,
     tablaBounding: state.boundingReducer.tabla,
     token: state.auth.authToken,
+    demandadosExtractSinConfirmar: state.boundingReducer.DemandadosTablePorConfirmar
 })
 const mapDispatchToProps = (dispatch) => ({
     handleBounding: bindActionCreators(changePoints, dispatch),

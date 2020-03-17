@@ -1,5 +1,5 @@
 
-import { TABLE_POINTS,MODE_SELECT,CHANGE_PAGE,POINTS, RESET_POINTS, NUEVA_REGION, RESET_REGION,TABLE_ULTIMO_FOCUS,OBTENER_DEMANDADOS_TABLE, OBTENER_DEMANDADOS_TABLE_SUCCESS
+import { CHANGE_DEMANDADOS_TABLE_POR_CONFIRMAR_TRUE,CHANGE_DEMANDADOS_TABLE_POR_CONFIRMAR_FALSE,TABLE_POINTS,MODE_SELECT,CHANGE_PAGE,POINTS, RESET_POINTS, NUEVA_REGION, RESET_REGION,TABLE_ULTIMO_FOCUS,OBTENER_DEMANDADOS_TABLE, OBTENER_DEMANDADOS_TABLE_SUCCESS
 } from '../../constants/boundingConst.js';
 
 export const Boundingstate = {
@@ -67,7 +67,17 @@ export default function boundingReducer(state = Boundingstate, action={}){
             return{
                 ...state,
                 pointsModeTable:{ready:true, points:action.points}
-            }       
+            }  
+        case CHANGE_DEMANDADOS_TABLE_POR_CONFIRMAR_TRUE:
+            return{
+                ...state,
+                DemandadosTablePorConfirmar:true
+            }   
+            case CHANGE_DEMANDADOS_TABLE_POR_CONFIRMAR_FALSE:
+                return{
+                    ...state,
+                    DemandadosTablePorConfirmar:false
+                }            
         default:
             return state;
     }

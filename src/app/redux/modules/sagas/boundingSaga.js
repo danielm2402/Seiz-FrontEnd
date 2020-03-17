@@ -7,7 +7,7 @@ import {
     OBTENER_DEMANDADOS_TABLE
 } from '../../constants/boundingConst';
 import {
-    obtenerDemandadosTableSuccess
+    obtenerDemandadosTableSuccess, changeDemandadosTablePorConfirmarTrue
 } from '../../actions/boundingAction'
 import { getDemandadosSuccess } from '../../actions/embargosAction'
 import * as auth from "../../../store/ducks/auth.duck";
@@ -48,13 +48,15 @@ function* obtenerDemandadosTableSaga(payload) {
                     nombres: item.nombre,
                     identificacion: item.identificacion,
                     montoAEmbargar: item.monto,
-                    tipoIdentificacion: 'NO_SELECCIONADO'
+                    tipoIdentificacion: payload.tipoIdentificacion
                 }
             })
             console.log('EL VECTOR EDIT')
             console.log(vectorEdit)
+            yield put(changeDemandadosTablePorConfirmarTrue())
             yield put(getDemandadosSuccess(vectorEdit))
             yield put(obtenerDemandadosTableSuccess(vectorEdit))
+            
             break;
         case 401:
             yield put(auth.actions.logout())

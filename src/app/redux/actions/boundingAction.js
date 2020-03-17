@@ -17,13 +17,14 @@ export const resetRegion=()=>({
     type: types.RESET_REGION,
 });
 
-export const obtenerDemandadosTable=(vertices, columns, id, page, token)=>({
+export const obtenerDemandadosTable=(vertices, columns, id, page, token, tipoIdentificacion)=>({
     type: types.OBTENER_DEMANDADOS_TABLE,
     vertices,
     columns,
     id,
     page,
-    token
+    token,
+    tipoIdentificacion
 });
 export const obtenerDemandadosTableSuccess=(data)=>({
     type: types.OBTENER_DEMANDADOS_TABLE_SUCCESS,
@@ -47,9 +48,13 @@ export const setTablePoints=(points)=>({
     type: types.TABLE_POINTS,
     points
 })
-export const changeDemandadosTablePorConfirmar=()=>({
-    type: types.CHANGE_DEMANDADOS_TABLE_POR_CONFIRMAR
+export const changeDemandadosTablePorConfirmarTrue=()=>({
+    type: types.CHANGE_DEMANDADOS_TABLE_POR_CONFIRMAR_TRUE
 })
+export const changeDemandadosTablePorConfirmarFalse=()=>({
+    type: types.CHANGE_DEMANDADOS_TABLE_POR_CONFIRMAR_FALSE
+})
+
 
 
 
