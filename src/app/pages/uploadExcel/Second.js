@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
-
+import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
 import { uploadRequest, setPositionProcess } from '../../redux/actions/uploadAction'
 import {loadDemandados} from '../../redux/actions/excelActions'
 import './Sencond.css'
@@ -151,7 +152,11 @@ class Second extends Component {
                             </div>
                         </div>
                     </div>
-                    <input onClick={this.loadDemandados} type="button" class="confirm-form-btn " value="Cargar" />
+                    <div style={{textAlign:'center', paddingTop:'40px'}}>
+                    <Button onClick={this.loadDemandados} variant="contained" endIcon={<Icon>send</Icon>}  color="primary">
+                                        Cargar
+                    </Button>
+                    </div>
                 </div>
             </div>
         )

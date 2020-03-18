@@ -79,4 +79,7 @@
   transition: all 0.4s;
   }
 
- 
+ .container-grid{
+     padding-top: 20px;
+    
+ }
