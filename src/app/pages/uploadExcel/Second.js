@@ -29,7 +29,15 @@ class Second extends Component {
         super(props)
         this.state = {
             colsEdit: { nombre: 0, tipo: 'NO_SELECCIONADO', identificacion: 1, expediente: 2, monto: 3 },
-            rows
+            rows,
+            number:0
+        }
+    }
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps.excel.rows!==this.props.excel.rows){
+          console.log('SE ACTUALIZARON LAS ROWS EN SECOND')
+          console.log(this.props.excel.rows)
+          this.setState({rows:this.props.excel.rows, number:this.props.excel.rows.length})
         }
     }
     onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
@@ -49,7 +57,7 @@ class Second extends Component {
                 <ReactDataGrid
                         columns={this.props.excel.columns}
                         rowGetter={i => this.state.rows[i]}
-                        rowsCount={3}
+                        rowsCount={this.state.number}
                         onGridRowsUpdated={this.onGridRowsUpdated}
                         enableCellSelect={true}
                     />
