@@ -518,7 +518,7 @@ class Confirmar extends Component {
 
                                 <TableDemandados page={this.state.pageNumber} idDocumento={this.props.match.params.id} />
                                 <TableDemandantes page={this.state.pageNumber} demandantes={this.state.demandantes} idDocumento={this.props.match.params.id} />
-                                <div style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+                                <div style={{display:'flex', justifyContent:'center', alignItems:'center', paddingTop:'20px'}}>
                                 <MuiThemeProvider theme={theme}>
                                     <Button onClick={this.confirmarEmbargo} variant="contained" endIcon={<Icon>send</Icon>} color="primary">
                                         Confirmar
