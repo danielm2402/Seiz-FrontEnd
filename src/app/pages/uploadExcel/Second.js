@@ -29,7 +29,7 @@ class Second extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            colsEdit: { nombre: 0, tipo: 'NO_SELECCIONADO', identificacion: 1, expediente: 2, monto: 3 },
+            colsEdit: { nombre: -1, tipo: -1, identificacion: -1, expediente: -1, monto: -1 },
             rows,
             number:0
         }
@@ -74,14 +74,10 @@ class Second extends Component {
                                     value={String(this.state.colsEdit.nombre)}
                                     onChange={this.handleColsTable}
                                 >
-                                    <MenuItem value={0}>1</MenuItem>
-                                    <MenuItem value={1}>2</MenuItem>
-                                    <MenuItem value={2}>3</MenuItem>
-                                    <MenuItem value={3}>4</MenuItem>
-                                    <MenuItem value={4}>5</MenuItem>
-                                    <MenuItem value={5}>6</MenuItem>
-                                    <MenuItem value={6}>7</MenuItem>
-                                    <MenuItem value={7}>8</MenuItem>
+                                    <MenuItem value={-1}>NO_SELECT</MenuItem>
+                                    {this.props.excel.columns.map((item)=>{
+                                        return <MenuItem value={item.position}>{item.key}</MenuItem>
+                                    })}
                                 </Select>
                             </div>
                             <div className="select-table-element">
@@ -91,11 +87,10 @@ class Second extends Component {
                                     value={String(this.state.colsEdit.tipo)}
                                     onChange={this.handleColsTable}
                                 >
-                                    <MenuItem value={'NO_SELECCIONADO'}>NO_SELECCIONADO</MenuItem>
-                                    <MenuItem value={'CEDULA'}>CEDULA</MenuItem>
-                                    <MenuItem value={'CEDULA_EXTRANJERA'}>CEDULA_EXTRANJERA</MenuItem>
-                                    <MenuItem value={'NIT'}>NIT</MenuItem>
-                                    <MenuItem value={'TARJETA_IDENTIDAD'}>TARJETA_IDENTIDAD</MenuItem>
+                                   <MenuItem value={-1}>NO_SELECT</MenuItem>
+                                    {this.props.excel.columns.map((item)=>{
+                                        return <MenuItem value={item.position}>{item.key}</MenuItem>
+                                    })}
 
                                 </Select>
                             </div>
@@ -106,14 +101,10 @@ class Second extends Component {
                                     value={String(this.state.colsEdit.identificacion)}
                                     onChange={this.handleColsTable}
                                 >
-                                    <MenuItem value={0}>1</MenuItem>
-                                    <MenuItem value={1}>2</MenuItem>
-                                    <MenuItem value={2}>3</MenuItem>
-                                    <MenuItem value={3}>4</MenuItem>
-                                    <MenuItem value={4}>5</MenuItem>
-                                    <MenuItem value={5}>6</MenuItem>
-                                    <MenuItem value={6}>7</MenuItem>
-                                    <MenuItem value={7}>8</MenuItem>
+                                   <MenuItem value={-1}>NO_SELECT</MenuItem>
+                                    {this.props.excel.columns.map((item)=>{
+                                        return <MenuItem value={item.position}>{item.key}</MenuItem>
+                                    })}
                                 </Select>
                             </div>
                             <div className="select-table-element">
@@ -123,31 +114,23 @@ class Second extends Component {
                                     value={String(this.state.colsEdit.expediente)}
                                     onChange={this.handleColsTable}
                                 >
-                                    <MenuItem value={0}>1</MenuItem>
-                                    <MenuItem value={1}>2</MenuItem>
-                                    <MenuItem value={2}>3</MenuItem>
-                                    <MenuItem value={3}>4</MenuItem>
-                                    <MenuItem value={4}>5</MenuItem>
-                                    <MenuItem value={5}>6</MenuItem>
-                                    <MenuItem value={6}>7</MenuItem>
-                                    <MenuItem value={7}>8</MenuItem>
+                                    <MenuItem value={-1}>NO_SELECT</MenuItem>
+                                    {this.props.excel.columns.map((item)=>{
+                                        return <MenuItem value={item.position}>{item.key}</MenuItem>
+                                    })}
                                 </Select>
                             </div>
                             <div className="select-table-element">
                                 <h6>Monto</h6>
                                 <Select
                                     name="monto"
-                                    value={String(this.state.colsEdit.monto)}
+                                    value={this.state.colsEdit.monto}
                                     onChange={this.handleColsTable}
                                 >
-                                    <MenuItem value={0}>1</MenuItem>
-                                    <MenuItem value={1}>2</MenuItem>
-                                    <MenuItem value={2}>3</MenuItem>
-                                    <MenuItem value={3}>4</MenuItem>
-                                    <MenuItem value={4}>5</MenuItem>
-                                    <MenuItem value={5}>6</MenuItem>
-                                    <MenuItem value={6}>7</MenuItem>
-                                    <MenuItem value={7}>8</MenuItem>
+                                  <MenuItem value={-1}>NO_SELECT</MenuItem>
+                                    {this.props.excel.columns.map((item)=>{
+                                        return <MenuItem value={item.position}>{item.key}</MenuItem>
+                                    })}
                                 </Select>
                             </div>
                         </div>
@@ -162,7 +145,15 @@ class Second extends Component {
         )
     }
     loadDemandados=()=>{
-        this.props.loadDemandados()
+        console.log(this.state.colsEdit)
+        this.props.loadDemandados(this.state.colsEdit,this.props.id, this.props.token )
+    }
+    handleColsTable=(event)=>{
+        this.setState({
+            colsEdit:{...this.state.colsEdit,[event.target.name]: event.target.value}
+        }, function () {
+
+        })
     }
 }
 

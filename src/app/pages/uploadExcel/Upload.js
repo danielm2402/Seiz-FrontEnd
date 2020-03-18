@@ -26,7 +26,7 @@ class Upload extends Component {
                 
                 <StepWizard>
                     <First id={this.props.match.params.id} />
-                    <Second />
+                    <Second id={this.props.match.params.id} />
                     <Loader />
                     <Resultados />
 

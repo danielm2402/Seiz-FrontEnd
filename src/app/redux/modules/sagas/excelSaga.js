@@ -77,7 +77,7 @@ function* getPreviewSaga(payload) {
     switch (data.status) {
         case 200:
             const columns = data.data.columns.map((item, index)=>{
-                return{ key: item.header==""?'NOT_FOUND'+index:item.header, name: item.header, editable: true } 
+                return{ key: item.header==""?'NOT_FOUND'+index:item.header, name: item.header, editable: true, position:index } 
             })
             const rows= data.data.columns.map((item)=>{
                 return item.entries
@@ -111,13 +111,24 @@ function* loadDemandados(payload){
         },
     }
 
+    let obj={}
+    for (const prop in payload.data) {
+        if(prop=='tipo'){
+            obj={...obj,'tipo-id':[payload.data[prop]]}
+        }
+        else{
+            obj={...obj,[prop]:[payload.data[prop]]}
+        }
+        
+      }
+      console.log(obj)
     const data = yield  axios.post('https://bancow.finseiz.com/api/v1/embargos/loadDemandados?idEmbargo=' + payload.id,{
-
+        keysHeaders: obj
     },config)
         .then(response => response)
         .catch(err => err.response)
 
-    console.log(data)        
+    console.log(data)       
 }
 
 
