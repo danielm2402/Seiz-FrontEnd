@@ -498,12 +498,7 @@ class TableDemandado extends Component {
                     {this.props.demandadosExtractSinConfirmar ? <a onClick={this.saveExtractTable}><div className="button-table"><MdDone size={'1.4rem'} /></div></a> : <a onClick={this.addRow}><div className="button-table"><MdAdd size={'1.4rem'} /></div></a>}
                 </div>
                 {renderTable}
-                <div className="buttons-control-table">
-
-                    <a onClick={this.back}><div className="button-table"><MdNavigateBefore size={'1.4rem'} /></div></a>
-                    <a onClick={this.next}><div className="button-table"><MdNavigateNext size={'1.4rem'} /></div></a>
-
-                </div>
+                
             </div>
         )
     }

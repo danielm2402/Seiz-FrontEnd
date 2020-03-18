@@ -88,40 +88,7 @@ class TableDemandantes extends Component {
     handleDelete = (id) => {
         this.props.handleDelete(id, this.props.token)
     }
-    focusElement(e, palabra) {
-        console.log(e.target.name)
-        // this.setState({ actualFocus: e.target.name })
-        if (this.props.resaltado !== "") {
-            console.log(e.target.value)
-            console.log(palabra)
-            try {
-                let vectorLocation = [];
-                let totalBoundig = [];
-                for (const prop in palabra.fieldInstances) {
-                    console.log(`palabra.fieldInstances.${prop}`);
-                    for (const prop1 in palabra.fieldInstances[prop].parts) {
-                        console.log(palabra.fieldInstances[prop].parts[prop1])
-                        vectorLocation.push({ start: palabra.fieldInstances[prop].parts[prop1].startLocation, end: palabra.fieldInstances[prop].parts[prop1].endLocation, page: palabra.fieldInstances[prop].parts[prop1].page })
-                    }
-                }
-                console.log(vectorLocation)
-                vectorLocation.map((item) => {
-                    var iterador = item.start
-                    for (iterador; iterador <= item.end; iterador++) {
-                        totalBoundig.push(this.props.json.pages[this.props.page - 1].words[iterador].boundingPoly.vertices)
-                    }
-                })
-                console.log('totalboundig')
-                console.log(totalBoundig)
-
-                this.props.handleBounding(totalBoundig)
-                this.setState({
-                    boundig: { boundig: true, points: totalBoundig }
-                })
-            } catch (error) {
-            }
-        }
-    }
+    
     focusElement2(e, palabra, id, tipo, column) {
        
 
@@ -239,7 +206,7 @@ class TableDemandantes extends Component {
                                         return (
                                             <tr>
                                                 <td><div className="element-table">{item.fullname}</div></td>
-                                                <td><div className="element-table">{item.identificacion || '-'}</div></td>
+                                                <td><div className="element-table">{item.identification || '-'}</div></td>
 
                                                 <td><div className="edits-rows"><a onClick={() => this.handleEdit(item.id, item.fullname, item.identificacion)}><div className="button-edit-row"><FaRegEdit size={'1.3rem'} /></div></a>
                                                     <a onClick={() => this.handleDelete(item.id)}><div className="button-edit-row"><MdDeleteSweep size={'1.3rem'} /></div></a>
@@ -366,12 +333,7 @@ class TableDemandantes extends Component {
                     <a onClick={this.addRow}><div className="button-table"><MdAdd size={'1.4rem'} /></div></a>
                 </div>
                 {renderTable}
-                <div className="buttons-control-table">
-
-                    <a onClick={this.back}><div className="button-table"><MdNavigateBefore size={'1.4rem'} /></div></a>
-                    <a onClick={this.next}><div className="button-table"><MdNavigateNext size={'1.4rem'} /></div></a>
-
-                </div>
+               
             </div>
         )
     }
