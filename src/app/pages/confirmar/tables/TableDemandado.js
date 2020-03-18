@@ -101,7 +101,7 @@ class TableDemandado extends Component {
         // this.setState({ actualFocus: e.target.name })
         if (Object.keys(this.state.extraInfo).length !== 0) {
             var vertices = this.state.extraInfo[e.target.name].bounds.vertices
-            vertices.push(0)
+            vertices.push((this.props.page)-1)
 
             const vectorWrapper = [vertices]
             this.props.handleBounding(vectorWrapper)
@@ -141,7 +141,8 @@ class TableDemandado extends Component {
 
         if (Object.keys(this.state.extraInfo).length !== 0) {
             var vertices = this.state.extraInfo[column].bounds.vertices
-            vertices.push(0)
+            vertices.push((this.props.page)-1)
+         
 
             const vectorWrapper = [vertices]
             this.props.handleBounding(vectorWrapper)
@@ -556,7 +557,8 @@ const mapStateToProps = (state) => ({
     bounding: state.boundingReducer.palabra,
     tablaBounding: state.boundingReducer.tabla,
     token: state.auth.authToken,
-    demandadosExtractSinConfirmar: state.boundingReducer.DemandadosTablePorConfirmar
+    demandadosExtractSinConfirmar: state.boundingReducer.DemandadosTablePorConfirmar,
+    page: state.boundingReducer.page,
 })
 const mapDispatchToProps = (dispatch) => ({
     handleBounding: bindActionCreators(changePoints, dispatch),
