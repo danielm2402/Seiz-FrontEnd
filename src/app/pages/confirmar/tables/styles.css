@@ -91,3 +91,8 @@ border-top: 3px solid #E9EBF1 ;
     padding-left: 10px;
     padding-right: 10px;
 }
+.element-table-no{
+    padding-left: 10px;
+    padding-right: 10px;
+    border:2px solid #DC3545;
+}

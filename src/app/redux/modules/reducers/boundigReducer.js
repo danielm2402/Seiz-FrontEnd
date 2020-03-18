@@ -6,7 +6,7 @@ export const Boundingstate = {
     boundigTable:{boundig: false, points: []},
     palabra:'',
     tabla:'',
-    loadingDemandados:false,
+    loadingDemandados:false, 
     page:1,
     mode: 'MANUAL',
     pointsModeTable:{ready:false, points:[]},
