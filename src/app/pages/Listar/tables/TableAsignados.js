@@ -10,15 +10,29 @@ import axios from 'axios'
 const color=(value)=>{
   switch (value) {
     case 'CONFIRMADO':
-      return '#03A9F4'
+      return '#EBEFF9'
     case 'SIN_CONFIRMAR':
-      return '#F44336'
+      return '#FBE6ED'
       case 'COMPLETO':
-      return '#4CAF50'
+      return '#E2F2EF'
     default:
       return '#ffffff'
+     
   }
 }
+const colorText=(value)=>{
+    switch (value) {
+      case 'CONFIRMADO':
+        return '#6971B8'
+      case 'SIN_CONFIRMAR':
+        return '#C15C83'
+        case 'COMPLETO':
+        return '#33AE89'
+      default:
+        return '#ffffff'
+       
+    }
+  }
 
 function MaterialTableDemo(props) {
   let history=useHistory()
@@ -48,7 +62,7 @@ function MaterialTableDemo(props) {
       
             >
               {props.columnDef.field=='status'?
-              <span style={{backgroundColor:color(props.value), borderRadius:'3px'}}>{props.value}</span>:<></>}
+              <div style={{backgroundColor:color(props.value), borderRadius:'3px', padding:'10px', color:colorText(props.value), fontFamily:'Poppins,Helvetica,sans-serif !important', fontWeight:'500' }}>{props.value}</div>:<></>}
               </MTableCell>
           );
         }
@@ -64,9 +78,6 @@ function MaterialTableDemo(props) {
       }}
       data={query =>
         new Promise((resolve, reject) => {
-          console.log('QUERYYY')
-          console.log(query)
-          console.log(query.page)
           let params= {}
           if(query.filters.length!==0){
            for (let i = 0; i < query.filters.length; i++) {
@@ -142,23 +153,21 @@ function MaterialTableDemo(props) {
        rowData=>({
           icon:'remove_red_eye',
           tooltip:'Ver',
-          disabled: rowData.status=='SIN_CONFIRMAR',
+          disabled: rowData.status=='CONFIRMADO'||rowData.status=='COMPLETO',
           onClick:(event, rowData)=>{
             props.handleView(rowData.id, props.token)
             props.handleDemandados(rowData.id, props.token)
-            history.push(`/view/${rowData.id}`)
+            history.push(`/confirm/${rowData.id}`)
           },
         }),
-      ]}
+      ]} 
       options={{
         filtering: true,
         pageSize: 19,
         pageSizeOptions: [],
         toolbar: true,
         paging: true,
-        rowStyle: {
-          backgroundColor: '#EEE',
-        }
+        
     }}
       editable={{
         onRowDelete: oldData =>
