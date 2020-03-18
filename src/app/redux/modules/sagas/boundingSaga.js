@@ -37,7 +37,7 @@ function* obtenerDemandadosTableSaga(payload) {
     switch (data.status) {
         case 200:
             const vector = data.data.map((item) => {
-                return JSON.parse(item.content)
+                return{ content:JSON.parse(item.content),extraInfo:item.extraInfo}
 
             })
             var cont = 0;
@@ -45,10 +45,11 @@ function* obtenerDemandadosTableSaga(payload) {
                 cont = cont + 1;
                 return {
                     id: cont+'local',
-                    nombres: item.nombre,
-                    identificacion: item.identificacion,
-                    montoAEmbargar: Number(item.monto.replace(/[$.]/g,'')),
-                    tipoIdentificacion: payload.tipoIdentificacion
+                    nombres: item.content.nombre,
+                    identificacion: item.content.identificacion,
+                    montoAEmbargar: Number(item.content.monto.replace(/[$.]/g,'')),
+                    tipoIdentificacion: payload.tipoIdentificacion,
+                    extraInfo: item.extraInfo,
                 }
             })
             console.log('EL VECTOR EDIT')
