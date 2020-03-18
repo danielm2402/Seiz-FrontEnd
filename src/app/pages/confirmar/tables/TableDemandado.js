@@ -30,6 +30,7 @@ class TableDemandado extends Component {
             totalItems: 0,
             totalPages: { exacts: 0, numRecorrido: 1 },
             addRow: false,
+            waitConfirmDelete: false,
             addRowValues: {
                 nombre: '',
                 tipo: 'NO_SELECCIONADO',
@@ -94,14 +95,22 @@ class TableDemandado extends Component {
         this.setState({ itemEdit: id })
     }
     handleDelete = (id) => {
-        this.props.handleDelete(id, this.props.token)
+        this.setState({ waitConfirmDelete: true })
+        // this.props.handleDelete(id, this.props.token)
+    }
+    handleDeleteConfirm=(id)=>{
+        this.setState({ waitConfirmDelete: false })
+         this.props.handleDelete(id, this.props.token)
+    }
+    handleDeleteCancel=()=>{
+        this.setState({ waitConfirmDelete: false })
     }
     focusElement(e, palabra) {
 
         // this.setState({ actualFocus: e.target.name })
         if (Object.keys(this.state.extraInfo).length !== 0) {
             var vertices = this.state.extraInfo[e.target.name].bounds.vertices
-            vertices.push((this.props.page)-1)
+            vertices.push((this.props.page) - 1)
 
             const vectorWrapper = [vertices]
             this.props.handleBounding(vectorWrapper)
@@ -122,7 +131,7 @@ class TableDemandado extends Component {
                     vectorLocation.map((item) => {
                         var iterador = item.start
                         for (iterador; iterador <= item.end; iterador++) {
-                           
+
                             totalBoundig.push([...this.props.json.pages[item.page].words[iterador].boundingPoly.vertices, item.page])
                         }
                     })
@@ -142,8 +151,8 @@ class TableDemandado extends Component {
 
         if (Object.keys(this.state.extraInfo).length !== 0) {
             var vertices = this.state.extraInfo[column].bounds.vertices
-            vertices.push((this.props.page)-1)
-         
+            vertices.push((this.props.page) - 1)
+
 
             const vectorWrapper = [vertices]
             this.props.handleBounding(vectorWrapper)
@@ -159,11 +168,11 @@ class TableDemandado extends Component {
                         var iterador = item.start
                         for (iterador; iterador <= item.end; iterador++) {
                             totalBoundig.push([...this.props.json.pages[item.page].words[iterador].boundingPoly.vertices, item.page])
-                            
+
                         }
                     })
                     console.log('MANDANDO HANDLE ULTIM TABLE')
-                    
+
                     this.props.handleBounding(totalBoundig)
                     this.setState({
                         boundig: { boundig: true, points: totalBoundig }
@@ -300,12 +309,25 @@ class TableDemandado extends Component {
                                                 <td><div className="element-table">{item.tipoIdentificacion}</div></td>
                                                 <td><div className="element-table">{item.identificacion}</div></td>
                                                 <td><div className={isNaN(item.montoAEmbargar) ? 'element-table-no' : 'element-table'}>{item.montoAEmbargar}</div></td>
-                                                <td><div className="edits-rows"><a onClick={() => {
-                                                    
-                                                    this.handleEdit(item.id, item.nombres, item.tipoIdentificacion, item.identificacion, item.montoAEmbargar, "extraInfo" in item ? item.extraInfo : {})
-                                                }}><div className="button-edit-row"><FaRegEdit size={'1.3rem'} /></div></a>
-                                                    <a onClick={() => this.handleDelete(item.id)}><div className="button-edit-row"><MdDeleteSweep size={'1.3rem'} /></div></a>
-                                                </div></td>
+                                                <td>
+                                                    {!this.state.waitConfirmDelete?
+                                                     <div className="edits-rows">
+                                                     <a onClick={() => {this.handleEdit(item.id, item.nombres, item.tipoIdentificacion, item.identificacion, item.montoAEmbargar, "extraInfo" in item ? item.extraInfo : {})
+                                                 }}><div className="button-edit-row"><FaRegEdit size={'1.3rem'} /></div></a>
+                                                     <a onClick={() => {
+
+                                                         this.handleDelete(item.id)
+                                                     }}><div className="button-edit-row"><MdDeleteSweep size={'1.3rem'} /></div></a>
+                                                 </div>: <div className="edits-rows">
+                                                        <a onClick={() => {this.handleDeleteConfirm(item.id)
+                                                    }}><div className="button-edit-row"><MdDone size={'1.3rem'} /></div></a>
+                                                        <a onClick={() => {
+                                                               this.handleDeleteCancel()
+                                                           
+                                                        }}><div className="button-edit-row"><MdCancel size={'1.3rem'} /></div></a>
+                                                    </div>}
+                                                   
+                                                </td>
 
                                             </tr>
                                         )
@@ -498,7 +520,7 @@ class TableDemandado extends Component {
                     {this.props.demandadosExtractSinConfirmar ? <a onClick={this.saveExtractTable}><div className="button-table"><MdDone size={'1.4rem'} /></div></a> : <a onClick={this.addRow}><div className="button-table"><MdAdd size={'1.4rem'} /></div></a>}
                 </div>
                 {renderTable}
-                
+
             </div>
         )
     }
