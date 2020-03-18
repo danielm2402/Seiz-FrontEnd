@@ -3,7 +3,7 @@ import { UPLOAD_EXCEL, MENSAJE_EXCEL, RESET_MENSAJE_EXCEL, UPLOAD_EXCEL_SUCCESS,
 export const excelState = {
     upload: { loading: false, data: {} },
     mensaje: { exist: false, msj: '' },
-    preview:{loading: true, data:{}}
+    preview:{loading: true, data:{columns:[], rows:[]}}
 }
 export default function excelReducer(state = excelState, action = {}) {
     switch (action.type) {
@@ -31,7 +31,7 @@ export default function excelReducer(state = excelState, action = {}) {
         case GET_PREVIEW:
             return{
                 ...state,
-                preview:{loading: true, data:{}}
+                preview:{loading: true, data:{columns:[], rows:[]}}
             } 
         case GET_PREVIEW_SUCCESS:
             return{

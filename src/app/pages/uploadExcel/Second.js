@@ -47,7 +47,7 @@ class Second extends Component {
             <div className="contenedor-section-grid">
                 <div className="container-grid">
                 <ReactDataGrid
-                        columns={columns}
+                        columns={this.props.excel.columns}
                         rowGetter={i => this.state.rows[i]}
                         rowsCount={3}
                         onGridRowsUpdated={this.onGridRowsUpdated}
@@ -160,7 +160,8 @@ const mapDisptachToProps = (dispatch) => ({
 })
 const mapStateToProps = (state) => ({
     files: state.uploadReducer.files,
-    token: state.auth.authToken
+    token: state.auth.authToken,
+    excel: state.excelReducer.preview.data
 })
 
 export default connect(mapStateToProps, mapDisptachToProps)(Second)
