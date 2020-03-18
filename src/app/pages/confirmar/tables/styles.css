@@ -1,6 +1,12 @@
 
+.table-info02{
+    max-height: 350px;
+  
+  overflow: auto;
+}
 .table-info02 table{
-    display: inline-block; overflow: auto;
+    
+      
 }
 
 
@@ -75,12 +81,13 @@ border-top: 3px solid #E9EBF1 ;
     color:#595E6E;
     margin-left: 10px;
     border: 1px solid #E9EBF1;
-    height: 66px;
+    position: sticky;
+    
 }
 .container-table-edit td{
    color:#595d6e;
     border: 1px solid #E9EBF1;
-    height: 66px;
+    
 }
 .title-col{
 

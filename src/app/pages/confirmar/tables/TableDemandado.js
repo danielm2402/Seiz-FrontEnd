@@ -183,7 +183,7 @@ class TableDemandado extends Component {
         var contador = -1;
         if (this.props.demandados.loading) {
             renderTable = (
-                <table style={{ height: '350px' }}>
+                <table>
                     <tr>
                         <th><div className="title-col">Nombre</div></th>
                         <th><div className="title-col">Tipo</div></th>
@@ -199,7 +199,7 @@ class TableDemandado extends Component {
             if (this.props.demandados.data.length > 0) {
                 renderTable = (
                     <div className="table-info02">
-                        <table style={{ height: '350px', width: '100%' }} >
+                        <table style={{ width: '100%' }} >
                             <tr>
                                 <th><div className="title-col">Nombre</div></th>
                                 <th><div className="title-col">Tipo</div></th>

@@ -208,7 +208,7 @@ class TableDemandantes extends Component {
                                                 <td><div className="element-table">{item.fullname}</div></td>
                                                 <td><div className="element-table">{item.identification || '-'}</div></td>
 
-                                                <td><div className="edits-rows"><a onClick={() => this.handleEdit(item.id, item.fullname, item.identificacion)}><div className="button-edit-row"><FaRegEdit size={'1.3rem'} /></div></a>
+                                                <td><div className="edits-rows"><a onClick={() => this.handleEdit(item.id, item.fullname, item.identification)}><div className="button-edit-row"><FaRegEdit size={'1.3rem'} /></div></a>
                                                     <a onClick={() => this.handleDelete(item.id)}><div className="button-edit-row"><MdDeleteSweep size={'1.3rem'} /></div></a>
                                                 </div></td>
                                             </tr>
