@@ -369,7 +369,7 @@ class Confirmar extends Component {
                             <div className="section-table">
                                 <div className="buttons-edits">
 
-                                    <div> <button onClick={this.goToExcel}><FaFileExcel size="1.5em" color={"#BDD535"} /></button> </div>
+                                    <div> <a className="btn-herramienta" onClick={this.goToExcel}><FaFileExcel size="1.7em" color={"#BDD535"} /></a> </div>
                                 </div>
                                 <div className="information-card">
                                     <label for="entidad">Entidad Remitente</label>

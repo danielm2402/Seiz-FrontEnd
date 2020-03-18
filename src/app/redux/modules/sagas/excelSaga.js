@@ -84,8 +84,15 @@ function* getPreviewSaga(payload) {
             })
             console.log('LAS ROWS SON')
             console.log(rows)
+            let files=[]
+            for (let index = 0; index < rows[0].length; index++) {
+                files.push({EXPEDIENTE:rows[0][index],NOMBRES:rows[1][index], DOCUMENTO:rows[2][index], VALOR:rows[3][index],})
+                
+            }
+            console.log('LAS FILAS TRANS SON:')
+            console.log(files)
             const dataSend= {columns:columns, rows}
-            yield put(getPreviewSuccess())
+            yield put(getPreviewSuccess(dataSend))
             console.log(columns)
                 
             break;
