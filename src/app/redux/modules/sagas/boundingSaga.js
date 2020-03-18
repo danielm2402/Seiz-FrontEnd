@@ -9,7 +9,7 @@ import {
 import {
     obtenerDemandadosTableSuccess, changeDemandadosTablePorConfirmarTrue,newMensajeBounding
 } from '../../actions/boundingAction'
-import { getDemandadosSuccess } from '../../actions/embargosAction'
+import { getDemandadosSuccessTable } from '../../actions/embargosAction'
 import * as auth from "../../../store/ducks/auth.duck";
 function* obtenerDemandadosTableSaga(payload) {
     console.log('OBTENIENDO DEMANDADOS TABLA saga...');
@@ -54,7 +54,7 @@ function* obtenerDemandadosTableSaga(payload) {
             console.log('EL VECTOR EDIT')
             console.log(vectorEdit)
             yield put(changeDemandadosTablePorConfirmarTrue())
-            yield put(getDemandadosSuccess(vectorEdit))
+            yield put(getDemandadosSuccessTable(vectorEdit))
             yield put(obtenerDemandadosTableSuccess(vectorEdit))
             
             break;

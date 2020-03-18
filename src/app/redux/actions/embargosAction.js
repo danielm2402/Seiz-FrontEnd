@@ -62,6 +62,11 @@ export const getDemandadosSuccess=(data)=>({
     type:types.GET_DEMANDADOS_SUCCESS,
     data
 })
+export const getDemandadosSuccessTable=(data)=>({
+    type:types.GET_DEMANDADOS_SUCCESS_TABLE,
+    data
+})
+
 
 export const updateDemandando=(id, data, demandados, token, idDoc)=>({
     type:types.UPDATE_DEMANDADO,
