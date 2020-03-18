@@ -14,6 +14,7 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import { updateDemandando, deleteDemandado, addDemandado, saveDemandados } from '../../../redux/actions/embargosAction'
 
+import CurrencyFormat from 'react-currency-format';
 class TableDemandado extends Component {
     constructor(props) {
         super(props)
@@ -308,7 +309,7 @@ class TableDemandado extends Component {
                                                 <td><div className="element-table">{item.nombres}</div></td>
                                                 <td><div className="element-table">{item.tipoIdentificacion}</div></td>
                                                 <td><div className="element-table">{item.identificacion}</div></td>
-                                                <td><div className={isNaN(item.montoAEmbargar) ? 'element-table-no' : 'element-table'}>{item.montoAEmbargar}</div></td>
+                                                <td><div className={isNaN(item.montoAEmbargar) ? 'element-table-no' : 'element-table'}><div><CurrencyFormat value={Number(item.montoAEmbargar)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></div></div></td>
                                                 <td>
                                                     {!this.state.waitConfirmDelete?
                                                      <div className="edits-rows">
