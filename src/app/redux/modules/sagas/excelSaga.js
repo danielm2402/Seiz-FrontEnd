@@ -54,7 +54,7 @@ function* uploadExcelSaga(payload) {
             yield put(auth.actions.logout())
             break;
         default:
-            yield put(mensajeExcel('Error al subir el documento'))
+            yield put(mensajeExcel('Error al subir el documento, código '+data.status))
             yield put(uploadExcelSuccess({ response: data.status }))
             break;
     }
