@@ -6,7 +6,6 @@ export const uploadExcel=(data, id, token)=>({
     data,
     id,
     token
-
 });
 export const uploadExcelSuccess=(data)=>({
     type: types.UPLOAD_EXCEL_SUCCESS,
@@ -39,5 +38,10 @@ export const loadDemandados=(data, id, token)=>({
     id,
     token
 })
+export const loadDemandadosSuccess=()=>({
+    type:types.LOAD_DEMANDADOS_SUCCESS,
+
+})
+
 
 

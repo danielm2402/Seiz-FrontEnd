@@ -1,9 +1,11 @@
-import { UPLOAD_EXCEL, MENSAJE_EXCEL, RESET_MENSAJE_EXCEL, UPLOAD_EXCEL_SUCCESS,GET_PREVIEW, GET_PREVIEW_SUCCESS } from '../../constants/excelConst';
+import {LOAD_DEMANDADOS,LOAD_DEMANDADOS_SUCCESS, UPLOAD_EXCEL, MENSAJE_EXCEL, RESET_MENSAJE_EXCEL, UPLOAD_EXCEL_SUCCESS,GET_PREVIEW, GET_PREVIEW_SUCCESS } from '../../constants/excelConst';
 
 export const excelState = {
     upload: { loading: false, data: {} },
     mensaje: { exist: false, msj: '' },
-    preview:{loading: true, data:{columns:[], rows:[]}}
+    preview:{loading: true, data:{columns:[], rows:[]}},
+    loadDemandados:false,
+
 }
 export default function excelReducer(state = excelState, action = {}) {
     switch (action.type) {
@@ -37,7 +39,17 @@ export default function excelReducer(state = excelState, action = {}) {
             return{
                 ...state,
                 preview:{loading: false, data:action.data}
-            }       
+            }  
+        case LOAD_DEMANDADOS:
+            return{
+                ...state,
+                loadDemandados:true
+            } 
+        case LOAD_DEMANDADOS_SUCCESS:
+            return{
+                ...state,
+                loadDemandados:false,
+            }            
 
         default:
             return state;

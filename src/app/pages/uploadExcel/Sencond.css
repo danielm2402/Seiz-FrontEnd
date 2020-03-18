@@ -47,6 +47,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: #EFEFF6;
 }
 .container-progress{
     width: 100%;

@@ -7,7 +7,7 @@ import {
     UPLOAD_EXCEL, GET_PREVIEW,LOAD_DEMANDADOS
 } from '../../constants/excelConst';
 import {
-    uploadExcelSuccess, mensajeExcel, getPreview, getPreviewSuccess
+    uploadExcelSuccess, mensajeExcel, getPreview, getPreviewSuccess,loadDemandadosSuccess
 } from '../../actions/excelActions'
 
 import * as auth from "../../../store/ducks/auth.duck";
@@ -128,7 +128,15 @@ function* loadDemandados(payload){
         .then(response => response)
         .catch(err => err.response)
 
-    console.log(data)       
+    console.log(data)   
+    switch (data.status) {
+        case 200:
+            yield put(loadDemandadosSuccess())
+            break;
+    
+        default:
+            break;
+    }    
 }
 
 

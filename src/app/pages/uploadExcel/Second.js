@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import Button from '@material-ui/core/Button';
 import Icon from '@material-ui/core/Icon';
 import { uploadRequest, setPositionProcess } from '../../redux/actions/uploadAction'
-import {loadDemandados} from '../../redux/actions/excelActions'
+import { loadDemandados } from '../../redux/actions/excelActions'
 import './Sencond.css'
 import axios from 'axios'
 import { TiDocumentText } from "react-icons/ti";
@@ -12,7 +12,7 @@ import './grid.css';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import ReactDataGrid from "react-data-grid";
-
+import { ProgressBar } from 'react-bootstrap';
 const columns = [
     { key: "id", name: "ID", editable: true },
     { key: "title", name: "Title", editable: true },
@@ -31,126 +31,147 @@ class Second extends Component {
         this.state = {
             colsEdit: { nombre: -1, tipo: -1, identificacion: -1, expediente: -1, monto: -1 },
             rows,
-            number:0
+            number: 0,
+            loadDemandados:false
         }
     }
     componentDidUpdate(prevProps, prevState) {
-        if(prevProps.excel.rows!==this.props.excel.rows){
-          console.log('SE ACTUALIZARON LAS ROWS EN SECOND')
-          console.log(this.props.excel.rows)
-          this.setState({rows:this.props.excel.rows, number:this.props.excel.rows.length})
+        if (prevProps.excel.rows !== this.props.excel.rows) {
+            
+            console.log(this.props.excel.rows)
+            this.setState({ rows: this.props.excel.rows, number: this.props.excel.rows.length })
+        }
+        if(prevProps.loadDemandadosControl!==this.props.loadDemandadosControl){
+            console.log('CAMBIANDO EL CARGADOR')
+            this.setState({loadDemandados:this.props.loadDemandadosControl})
         }
     }
     onGridRowsUpdated = ({ fromRow, toRow, updated }) => {
         this.setState(state => {
-          const rows = state.rows.slice();
-          for (let i = fromRow; i <= toRow; i++) {
-            rows[i] = { ...rows[i], ...updated };
-          }
-          return { rows };
+            const rows = state.rows.slice();
+            for (let i = fromRow; i <= toRow; i++) {
+                rows[i] = { ...rows[i], ...updated };
+            }
+            return { rows };
         });
-      };
+    };
 
     render() {
         return (
-            <div className="contenedor-section-grid">
-                <div className="container-grid">
-                <ReactDataGrid
-                        columns={this.props.excel.columns}
-                        rowGetter={i => this.state.rows[i]}
-                        rowsCount={this.state.number}
-                        onGridRowsUpdated={this.onGridRowsUpdated}
-                        enableCellSelect={true}
-                    />
-                </div>
-                <div className="container-cols">
-                    <div className="table-generator-container">
-                        <label>Selecciona el número de la columna</label>
-                        <div className="table-inputs">
-                            <div className="select-table-element">
-                                <h6>Nombre</h6>
-                                <Select
-                                    name="nombre"
-                                    value={String(this.state.colsEdit.nombre)}
-                                    onChange={this.handleColsTable}
-                                >
-                                    <MenuItem value={-1}>NO_SELECT</MenuItem>
-                                    {this.props.excel.columns.map((item)=>{
-                                        return <MenuItem value={item.position}>{item.key}</MenuItem>
-                                    })}
-                                </Select>
-                            </div>
-                            <div className="select-table-element">
-                                <h6>Tipo Identificación</h6>
-                                <Select
-                                    name="tipo"
-                                    value={String(this.state.colsEdit.tipo)}
-                                    onChange={this.handleColsTable}
-                                >
-                                   <MenuItem value={-1}>NO_SELECT</MenuItem>
-                                    {this.props.excel.columns.map((item)=>{
-                                        return <MenuItem value={item.position}>{item.key}</MenuItem>
-                                    })}
+            <div>
+                {!this.state.loadDemandados?
+                    <div className="contenedor-section-grid">
+                        <div className="container-grid">
+                            <ReactDataGrid
+                                columns={this.props.excel.columns}
+                                rowGetter={i => this.state.rows[i]}
+                                rowsCount={this.state.number}
+                                onGridRowsUpdated={this.onGridRowsUpdated}
+                                enableCellSelect={true}
+                            />
+                        </div>
+                        <div className="container-cols">
+                            <div className="table-generator-container">
+                                <label>Selecciona el número de la columna</label>
+                                <div className="table-inputs">
+                                    <div className="select-table-element">
+                                        <h6>Nombre</h6>
+                                        <Select
+                                            name="nombre"
+                                            value={String(this.state.colsEdit.nombre)}
+                                            onChange={this.handleColsTable}
+                                        >
+                                            <MenuItem value={-1}>NO_SELECT</MenuItem>
+                                            {this.props.excel.columns.map((item) => {
+                                                return <MenuItem value={item.position}>{item.key}</MenuItem>
+                                            })}
+                                        </Select>
+                                    </div>
+                                    <div className="select-table-element">
+                                        <h6>Tipo Identificación</h6>
+                                        <Select
+                                            name="tipo"
+                                            value={String(this.state.colsEdit.tipo)}
+                                            onChange={this.handleColsTable}
+                                        >
+                                            <MenuItem value={-1}>NO_SELECT</MenuItem>
+                                            {this.props.excel.columns.map((item) => {
+                                                return <MenuItem value={item.position}>{item.key}</MenuItem>
+                                            })}
 
-                                </Select>
+                                        </Select>
+                                    </div>
+                                    <div className="select-table-element">
+                                        <h6>Identificación</h6>
+                                        <Select
+                                            name="identificacion"
+                                            value={String(this.state.colsEdit.identificacion)}
+                                            onChange={this.handleColsTable}
+                                        >
+                                            <MenuItem value={-1}>NO_SELECT</MenuItem>
+                                            {this.props.excel.columns.map((item) => {
+                                                return <MenuItem value={item.position}>{item.key}</MenuItem>
+                                            })}
+                                        </Select>
+                                    </div>
+                                    <div className="select-table-element">
+                                        <h6>Expediente</h6>
+                                        <Select
+                                            name="expediente"
+                                            value={String(this.state.colsEdit.expediente)}
+                                            onChange={this.handleColsTable}
+                                        >
+                                            <MenuItem value={-1}>NO_SELECT</MenuItem>
+                                            {this.props.excel.columns.map((item) => {
+                                                return <MenuItem value={item.position}>{item.key}</MenuItem>
+                                            })}
+                                        </Select>
+                                    </div>
+                                    <div className="select-table-element">
+                                        <h6>Monto</h6>
+                                        <Select
+                                            name="monto"
+                                            value={this.state.colsEdit.monto}
+                                            onChange={this.handleColsTable}
+                                        >
+                                            <MenuItem value={-1}>NO_SELECT</MenuItem>
+                                            {this.props.excel.columns.map((item) => {
+                                                return <MenuItem value={item.position}>{item.key}</MenuItem>
+                                            })}
+                                        </Select>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="select-table-element">
-                                <h6>Identificación</h6>
-                                <Select
-                                    name="identificacion"
-                                    value={String(this.state.colsEdit.identificacion)}
-                                    onChange={this.handleColsTable}
-                                >
-                                   <MenuItem value={-1}>NO_SELECT</MenuItem>
-                                    {this.props.excel.columns.map((item)=>{
-                                        return <MenuItem value={item.position}>{item.key}</MenuItem>
-                                    })}
-                                </Select>
-                            </div>
-                            <div className="select-table-element">
-                                <h6>Expediente</h6>
-                                <Select
-                                    name="expediente"
-                                    value={String(this.state.colsEdit.expediente)}
-                                    onChange={this.handleColsTable}
-                                >
-                                    <MenuItem value={-1}>NO_SELECT</MenuItem>
-                                    {this.props.excel.columns.map((item)=>{
-                                        return <MenuItem value={item.position}>{item.key}</MenuItem>
-                                    })}
-                                </Select>
-                            </div>
-                            <div className="select-table-element">
-                                <h6>Monto</h6>
-                                <Select
-                                    name="monto"
-                                    value={this.state.colsEdit.monto}
-                                    onChange={this.handleColsTable}
-                                >
-                                  <MenuItem value={-1}>NO_SELECT</MenuItem>
-                                    {this.props.excel.columns.map((item)=>{
-                                        return <MenuItem value={item.position}>{item.key}</MenuItem>
-                                    })}
-                                </Select>
+                            <div style={{ textAlign: 'center', paddingTop: '40px' }}>
+                                <Button onClick={this.loadDemandados} variant="contained" endIcon={<Icon>send</Icon>} color="primary">
+                                    Cargar
+                    </Button>
                             </div>
                         </div>
+                    </div> 
+                    :
+                    <div style={{height:'750px', backgroundColor:'#EFEFF6'}}>
+                    <div className="container-finish">
+                        <h3>Estamos testeando tu paciencia</h3>
+                        <div className="container-progress">
+                            <ProgressBar className="right" animated now={100} />
+                        </div>
+                        <h4>Deja que SEIZ haga el trabajo aburrido.</h4>
+                        <p>SEIZ leerá y entenderá todos tus archivos en aproximadamente un minuto y medio.</p>
+                        <h3>Éste es el momento oportuno para ir por un café</h3>
                     </div>
-                    <div style={{textAlign:'center', paddingTop:'40px'}}>
-                    <Button onClick={this.loadDemandados} variant="contained" endIcon={<Icon>send</Icon>}  color="primary">
-                                        Cargar
-                    </Button>
                     </div>
-                </div>
+                }
             </div>
         )
     }
-    loadDemandados=()=>{
+    loadDemandados = () => {
         console.log(this.state.colsEdit)
-        this.props.loadDemandados(this.state.colsEdit,this.props.id, this.props.token )
+        this.props.loadDemandados(this.state.colsEdit, this.props.id, this.props.token)
     }
-    handleColsTable=(event)=>{
+    handleColsTable = (event) => {
         this.setState({
-            colsEdit:{...this.state.colsEdit,[event.target.name]: event.target.value}
+            colsEdit: { ...this.state.colsEdit, [event.target.name]: event.target.value }
         }, function () {
 
         })
@@ -165,7 +186,8 @@ const mapDisptachToProps = (dispatch) => ({
 const mapStateToProps = (state) => ({
     files: state.uploadReducer.files,
     token: state.auth.authToken,
-    excel: state.excelReducer.preview.data
+    excel: state.excelReducer.preview.data,
+    loadDemandadosControl: state.excelReducer.loadDemandados
 })
 
 export default connect(mapStateToProps, mapDisptachToProps)(Second)
