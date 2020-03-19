@@ -191,7 +191,7 @@ function MyPdfViewer(props) {
     }
 
     return (
-        <div style={{ height: '75vw' }}>
+        <div style={{ height: '63vw' }}>
             <PDFDocumentWrapper>
                 <div>
 
