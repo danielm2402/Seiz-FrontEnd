@@ -1,19 +1,17 @@
 import React, { Component } from 'react'
 import './styles.css'
-import nextId from "react-id-generator";
-import { MdNavigateNext, MdNavigateBefore, MdDeleteSweep, MdCheck, MdCancel, MdAdd, MdDone } from "react-icons/md";
-import { FaRegEdit } from "react-icons/fa";
+import { MdDeleteSweep, MdCheck, MdCancel, MdAdd, MdDone } from "react-icons/md";
+import { FaRegEdit,FaFileExcel } from "react-icons/fa";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 import TextField from '@material-ui/core/TextField';
 import { changePoints, setUltimaTableFocus } from '../../../redux/actions/boundingAction'
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import { updateDemandando, deleteDemandado, addDemandado, saveDemandados } from '../../../redux/actions/embargosAction'
 import CurrencyFormat from 'react-currency-format';
+import { withRouter } from "react-router-dom";
 class TableDemandado extends Component {
     constructor(props) {
         super(props)
@@ -561,12 +559,15 @@ class TableDemandado extends Component {
             <div className="container-table-edit">
                 <div className="table-header">
                     <h5>Demandados</h5>
-                    {this.props.demandadosExtractSinConfirmar ? <a onClick={this.saveExtractTable}><div className="button-table"><MdDone size={'1.4rem'} /></div></a> : <a onClick={this.addRow}><div className="button-table"><MdAdd size={'1.4rem'} /></div></a>}
+                    {this.props.demandadosExtractSinConfirmar ? <a onClick={this.saveExtractTable}><div className="button-table"><MdDone size={'1.4rem'} /></div></a> : <div style={{display:'flex'}}><a style={{paddingRight:'5px'}} onClick={this.addRow}><div className="button-table"><MdAdd size={'1.4rem'} /></div></a><a className="button-table" onClick={this.goToExcel}><FaFileExcel size="1.7em" color={"#434040"} /></a></div>}
                 </div>
                 {renderTable}
 
             </div>
         )
+    }
+    goToExcel = () => {
+        this.props.history.push('/upload/excel/' + this.props.match.params.id)
     }
     saveExtractTable = () => {
         this.props.handleSaveDemandados(this.props.demandados.data, this.props.token, this.props.idDocumento)
@@ -633,6 +634,6 @@ const mapDispatchToProps = (dispatch) => ({
     handleSaveDemandados: bindActionCreators(saveDemandados, dispatch),
 
 })
-export default connect(mapStateToProps, mapDispatchToProps)(TableDemandado)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TableDemandado))
 
 
