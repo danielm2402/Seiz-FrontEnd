@@ -450,6 +450,9 @@ function* crearDemandadoSaga(payload) {
 
   var demandados = [payload.data, ...payload.demandados]
   const demandadosReq = demandados.map(demandado => {
+    const tipo= demandado.tipoIdentificacion=='NO_SELECCIONADO'?null:demandado.tipoIdentificacion
+    console.log(tipo)
+    console.log(demandado.tipoIdentificacion)
     return ({
       amount: demandado.montoAEmbargar,
       expedient: demandado.expediente,
@@ -457,7 +460,7 @@ function* crearDemandadoSaga(payload) {
       id: String(demandado.id).includes('local') ? null : demandado.id,
       identification: demandado.identificacion,
       page: demandado.page,
-      typeIdentification: demandado.tipoIdentificacion == 'CEDULA_EXTRANJERA' ? 'CEDULA_EXTRANJERIA' : demandado.tipoIdentificacion
+      typeIdentification: tipo == 'CEDULA_EXTRANJERA' ? 'CEDULA_EXTRANJERIA' : tipo
     })
   })
 
