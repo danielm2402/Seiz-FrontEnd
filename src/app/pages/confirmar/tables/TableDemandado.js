@@ -50,7 +50,7 @@ class TableDemandado extends Component {
             }
             if (this.props.tablaBounding == 'demandadosadd') {
 
-                this.setState({ addRowValues: { ...this.state.addRowValues, [this.state.ultimFocus.tipo]: this.state[this.state.ultimFocus.tipo] + this.props.bounding } })
+                this.setState({ addRowValues: { ...this.state.addRowValues, [this.state.ultimFocus.tipo]: this.state.addRowValues[this.state.ultimFocus.tipo] + this.props.bounding } })
             }
 
         }
@@ -83,9 +83,11 @@ class TableDemandado extends Component {
         const obj = {
             nombres: nombre,
             tipoIdentificacion: tipo,
-            identificacion: identificacion,
-            montoAEmbargar: monto
+            identificacion: String(identificacion).replace(/[.\s]/g,''),
+            montoAEmbargar: String(monto).replace(/[$.,\s\D]/g,'')
         }
+        console.log('ASI SE ESTÁN YENDO')
+        console.log(obj)
         this.props.handleUpdate(id, obj, this.props.demandados.data, this.props.token, this.props.idDocumento);
         this.handleCancelEdit()
 
@@ -227,9 +229,9 @@ class TableDemandado extends Component {
                                             margin="normal"
                                             onFocus={(e) => {
                                                 try {
-                                                    this.props.handleUltimTable('demandadosadd')
+                                                   
                                                     this.setState({ ultimFocus: { id: this.state.itemEdit, tipo: 'nombre' } }, function () {
-                                                        console.log(this.state.ultimFocus)
+                                                        console.log(this.state)
                                                     })
                                                 }
                                                 catch (error) {
@@ -272,7 +274,7 @@ class TableDemandado extends Component {
                                             try {
                                                 this.props.handleUltimTable('demandadosadd')
                                                 this.setState({ ultimFocus: { id: this.state.itemEdit, tipo: 'identificacion' } }, function () {
-                                                    console.log(this.state.ultimFocus)
+                                                    console.log(this.state)
                                                 })
                                             }
                                             catch (error) {
@@ -285,8 +287,9 @@ class TableDemandado extends Component {
                                     /></td>
                                     <td><div className="element-table">
                                     <CurrencyFormat customInput={TextField} thousandSeparator={true} prefix={'$'} 
-                                        
-                                        onValueChange={(values) => this.setState({ addRowValues: { ...this.state.addRowValues, monto: values.formattedValue} })}
+                                        onValueChange={(values) => {this.setState({ addRowValues: { ...this.state.addRowValues, monto: values.floatValue} },function(){
+                                            console.log(this.state.addRowValues)
+                                        })}}
                                         value={String(this.state.addRowValues.monto).replace(/[$.,\s]/g,'')}
                                         label="Monto"
                                         margin="normal"
@@ -312,7 +315,7 @@ class TableDemandado extends Component {
                                             <tr>
                                                 <td><div className="element-table">{item.nombres}</div></td>
                                                 <td><div className="element-table">{item.tipoIdentificacion}</div></td>
-                                                <td><div className="element-table">{item.identificacion}</div></td>
+                                                <td><div className="element-table">{String(item.identificacion).replace(/[.\s]/g,'')}</div></td>
                                                 <td><div className={isNaN(item.montoAEmbargar) ? 'element-table-no' : 'element-table'}><div><CurrencyFormat value={Number(item.montoAEmbargar)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></div></div></td>
                                                 <td>
                                                     {!this.state.waitConfirmDelete?
@@ -382,7 +385,7 @@ class TableDemandado extends Component {
                                             </div></td>
                                             <td><div className="element-table"></div><TextField
                                                 onChange={(e) => this.setState({ identificacion: e.target.value })}
-                                                value={this.state.identificacion}
+                                                value={String(this.state.identificacion).replace(/[.,\s]/g,'')}
                                                 label="Identificación"
                                                 margin="normal"
                                                 onFocus={(e) => {
@@ -399,10 +402,13 @@ class TableDemandado extends Component {
                                                     }
                                                 }}
                                             /></td>
-                                            <td><div className="element-table"><TextField
-                                                onChange={(e) => this.setState({ monto: e.target.value })}
+                                            <td><div className="element-table">
+                                            <CurrencyFormat customInput={TextField} thousandSeparator={true} prefix={'$'} 
+                                            onValueChange={(values) => {this.setState({ monto:values.floatValue},function(){
+                                                
+                                            })}}
                                                 name="monto"
-                                                value={this.state.monto}
+                                                value={String(this.state.monto).replace(/[$.,\s]/g,'')}
                                                 label="Monto"
                                                 margin="normal"
                                                 onFocus={(e) => {
@@ -455,6 +461,7 @@ class TableDemandado extends Component {
                                         margin="normal"
                                         onFocus={(e) => {
                                             try {
+                                                
                                                 this.focusElement2(e, this.props.resaltado.fields.demandados, this.state.itemEdit, 'nombre', 'nombre')
                                             }
                                             catch (error) {
@@ -466,7 +473,7 @@ class TableDemandado extends Component {
                                 <td><div className="element-table">
                                     <InputLabel shrink id="demo-simple-select-placeholder-label-label">
                                         Tipo
-</InputLabel>
+                                    </InputLabel>
                                     <Select
                                         labelId="demo-simple-select-placeholder-label-label"
                                         id="demo-simple-select-placeholder-label"
@@ -541,15 +548,16 @@ class TableDemandado extends Component {
     handleConfirmAdd = () => {
         const obj = {
             id: this.props.demandados.data.length + 'local',
-            identificacion: this.state.addRowValues.identificacion,
+            identificacion: (this.state.addRowValues.identificacion).replace(/[.\s]/g,''),
             nombres: this.state.addRowValues.nombre,
             tipoIdentificacion: this.state.addRowValues.tipo,
-            montoAEmbargar: this.state.addRowValues.monto,
+            montoAEmbargar: String(this.state.addRowValues.monto).replace(/[$.,\s\D]/g,''),
             montoEmbargado: 0,
             page: 0,
             esCliente: false,
             expediente: null,
             expedientes: []
+            
         }
         this.props.handleAddDemandado(obj, this.props.demandados.data, this.props.token, this.props.idDocumento)
 
