@@ -317,7 +317,7 @@ class TableDemandado extends Component {
                                         return (
                                             <tr>
                                                 <td><div className="element-table">{item.nombres}</div></td>
-                                                <td><div className="element-table">{item.tipoIdentificacion}</div></td>
+                                                <td><div className="element-table">{item.tipoIdentificacion===null?'NO_SELECCIONADO':item.tipoIdentificacion}</div></td>
                                                 <td><div className="element-table">{String(item.identificacion).replace(/[.\s]/g, '')}</div></td>
                                                 <td><div className={isNaN(item.montoAEmbargar) ? 'element-table-no' : 'element-table'}><div><CurrencyFormat value={Number(item.montoAEmbargar)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></div></div></td>
                                                 <td>
@@ -377,7 +377,7 @@ class TableDemandado extends Component {
                                                     id="demo-simple-select-placeholder-label"
                                                     label="Tipo"
                                                     name="tipo"
-                                                    value={String(this.state.tipo)}
+                                                    value={String(this.state.tipo===null?'NO_SELECCIONADO':this.state.tipo)}
                                                     onChange={(e) => this.setState({ tipo: e.target.value })}
                                                 >
                                                     <MenuItem value={'NO_SELECCIONADO'}>NO_SELECCIONADO</MenuItem>
