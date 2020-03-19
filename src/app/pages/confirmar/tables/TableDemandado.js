@@ -229,7 +229,7 @@ class TableDemandado extends Component {
                                             margin="normal"
                                             onFocus={(e) => {
                                                 try {
-                                                   
+                                                    this.props.handleUltimTable('demandadosadd')
                                                     this.setState({ ultimFocus: { id: this.state.itemEdit, tipo: 'nombre' } }, function () {
                                                         console.log(this.state)
                                                     })
@@ -462,6 +462,7 @@ class TableDemandado extends Component {
                                         onFocus={(e) => {
                                             try {
                                                 
+                                                this.props.handleUltimTable('demandadosadd')
                                                 this.focusElement2(e, this.props.resaltado.fields.demandados, this.state.itemEdit, 'nombre', 'nombre')
                                             }
                                             catch (error) {
@@ -499,6 +500,7 @@ class TableDemandado extends Component {
                                     margin="normal"
                                     onFocus={(e) => {
                                         try {
+                                            this.props.handleUltimTable('demandados')
                                             this.focusElement2(e, this.props.resaltado.fields.demandados, this.state.itemEdit, 'identificacion', 'identificacion')
                                         }
                                         catch (error) {
@@ -506,7 +508,8 @@ class TableDemandado extends Component {
                                         }
                                     }}
                                 /></td>
-                                <td><div className="element-table"><TextField
+                                <td><div className="element-table">
+                                    <TextField
                                     onChange={(e) => this.setState({ addRowValues: { ...this.state.addRowValues, monto: e.target.value } })}
                                     value={String(this.state.addRowValues.monto)}
                                     label="Monto"
