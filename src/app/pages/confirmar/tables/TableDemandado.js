@@ -13,7 +13,6 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import { updateDemandando, deleteDemandado, addDemandado, saveDemandados } from '../../../redux/actions/embargosAction'
-
 import CurrencyFormat from 'react-currency-format';
 class TableDemandado extends Component {
     constructor(props) {
@@ -284,9 +283,11 @@ class TableDemandado extends Component {
                                             }
                                         }}
                                     /></td>
-                                    <td><div className="element-table"><TextField
-                                        onChange={(e) => this.setState({ addRowValues: { ...this.state.addRowValues, monto: e.target.value } })}
-                                        value={String(this.state.addRowValues.monto)}
+                                    <td><div className="element-table">
+                                    <CurrencyFormat customInput={TextField} thousandSeparator={true} prefix={'$'} 
+                                        
+                                        onValueChange={(values) => this.setState({ addRowValues: { ...this.state.addRowValues, monto: values.formattedValue} })}
+                                        value={String(this.state.addRowValues.monto).replace(/[$.,\s]/g,'')}
                                         label="Monto"
                                         margin="normal"
                                         onFocus={(e) => {
@@ -295,7 +296,7 @@ class TableDemandado extends Component {
                                                 console.log(this.state.ultimFocus)
                                             })
                                         }}
-                                    /></div></td>
+                                        /></div></td>
                                     <td><div className="edits-rows">
                                         <a onClick={this.handleCancelAdd}><div className="button-edit-row"><MdCancel /></div></a>
                                         <a onClick={this.handleConfirmAdd}><div className="button-edit-row"><MdCheck /></div></a>
