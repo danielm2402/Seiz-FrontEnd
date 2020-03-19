@@ -229,7 +229,9 @@ class TableDemandado extends Component {
                                             onFocus={(e) => {
                                                 try {
                                                     this.props.handleUltimTable('demandadosadd')
-                                                    this.focusElement2(e, this.props.resaltado.fields.demandados, this.state.itemEdit, 'nombre', 'nombre')
+                                                    this.setState({ ultimFocus: { id: this.state.itemEdit, tipo: 'nombre' } }, function () {
+                                                        console.log(this.state.ultimFocus)
+                                                    })
                                                 }
                                                 catch (error) {
                                                     this.setState({ ultimFocus: { id: this.state.itemEdit, tipo: 'nombre' } }, function () {
@@ -264,13 +266,15 @@ class TableDemandado extends Component {
                                     </div></td>
                                     <td><div className="element-table"></div><TextField
                                         onChange={(e) => this.setState({ addRowValues: { ...this.state.addRowValues, identificacion: e.target.value } })}
-                                        value={String(this.state.addRowValues.identificacion)}
+                                        value={String(this.state.addRowValues.identificacion).replace(/[.\s]/g,'')}
                                         label="Identificación"
                                         margin="normal"
                                         onFocus={(e) => {
                                             try {
                                                 this.props.handleUltimTable('demandadosadd')
-                                                this.focusElement2(e, this.props.resaltado.fields.demandados, this.state.itemEdit, 'identificacion', 'identificacion')
+                                                this.setState({ ultimFocus: { id: this.state.itemEdit, tipo: 'identificacion' } }, function () {
+                                                    console.log(this.state.ultimFocus)
+                                                })
                                             }
                                             catch (error) {
                                                 this.setState({ ultimFocus: { id: this.state.itemEdit, tipo: 'identificacion' } }, function () {
@@ -287,7 +291,6 @@ class TableDemandado extends Component {
                                         margin="normal"
                                         onFocus={(e) => {
                                             this.props.handleUltimTable('demandadosadd')
-                                            this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.monto : null))
                                             this.setState({ ultimFocus: { id: this.state.itemEdit, tipo: 'monto' } }, function () {
                                                 console.log(this.state.ultimFocus)
                                             })
