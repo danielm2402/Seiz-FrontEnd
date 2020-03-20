@@ -69,6 +69,7 @@ class Second extends Component {
                                 rowsCount={this.state.number}
                                 onGridRowsUpdated={this.onGridRowsUpdated}
                                 enableCellSelect={true}
+                                minHeight={500}
                             />
                         </div>
                         <div className="container-cols">
@@ -76,7 +77,7 @@ class Second extends Component {
                                 <label>Selecciona el número de la columna</label>
                                 <br></br>
                                 <div style={{ maxHeight:'350px', overflow:'auto',width: '100%', textAlign:'center'}}>
-                                    <table style={{ width: '95%', margin:'0 auto', textAlign:'left' }}>
+                                    <table style={{ width: '93%', margin:'0 auto', textAlign:'left' }}>
                                         <tr>
                                             <th style={{paddingRight:'5px'}}>
                                                 <div className="select-table-element">
