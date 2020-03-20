@@ -29,7 +29,7 @@ class Second extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            colsEdit: { nombre: -1, tipo: -1, identificacion: -1, expediente: -1, monto: -1 },
+            colsEdit: { nombre: [-1], tipo: [-1], identificacion: [-1], expediente: [-1], monto: [-1] },
             rows,
             number: 0,
             loadDemandados: false
@@ -57,7 +57,7 @@ class Second extends Component {
     };
 
     render() {
-        const{nombre, tipo, identificacion, expediente, monto}=this.state.colsEdit
+        const { nombre, tipo, identificacion, expediente, monto } = this.state.colsEdit
         return (
             <div>
                 {!this.state.loadDemandados ?
@@ -76,24 +76,40 @@ class Second extends Component {
                             <div className="table-generator-container">
                                 <label>Selecciona el número de la columna</label>
                                 <br></br>
-                                <div style={{ maxHeight:'350px', overflow:'auto',width: '100%', textAlign:'center'}}>
-                                    <table style={{ width: '93%', margin:'0 auto', textAlign:'left' }}>
+                                <div style={{ maxHeight: '350px', overflow: 'auto', width: '100%', textAlign: 'center' }}>
+                                    <table style={{ width: '93%', margin: '0 auto', textAlign: 'left' }}>
                                         <tr>
-                                            <th style={{paddingRight:'5px'}}>
+                                            <th style={{ paddingRight: '5px' }}>
                                                 <div className="select-table-element">
                                                     <h6>Nombre</h6>
-                                                    <Select
-                                                        name="nombre"
-                                                        value={String(this.state.colsEdit.nombre)}
-                                                        onChange={this.handleColsTable}
-                                                    >
-                                                        <MenuItem value={-1}>NO_SELECT</MenuItem>
-                                                        {this.props.excel.columns.map((item) => {
-                                                            return <MenuItem value={item.position}>{item.key}</MenuItem>
-                                                        })}
-                                                    </Select>
+                                                    <div style={{ display: 'flex', width:'100%' }}>
+                                                        <div style={{width:'50%'}}>
+                                                            <Select
+                                                                name="nombre"
+                                                                value={String(this.state.colsEdit.nombre)}
+                                                                onChange={this.handleColsTable}
+                                                            >
+                                                                <MenuItem value={-1}>NO_SELECT</MenuItem>
+                                                                {this.props.excel.columns.map((item) => {
+                                                                    return <MenuItem value={item.position}>{item.key}</MenuItem>
+                                                                })}
+                                                            </Select>
+                                                        </div>
+                                                        <div style={{width:'50%'}}>
+                                                            <Select
+                                                                name="nombre"
+                                                                value={String(this.state.colsEdit.nombre)}
+                                                                onChange={this.handleColsTable}
+                                                            >
+                                                                <MenuItem value={-1}>NO_SELECT</MenuItem>
+                                                                {this.props.excel.columns.map((item) => {
+                                                                    return <MenuItem value={item.position}>{item.key}</MenuItem>
+                                                                })}
+                                                            </Select>
+                                                        </div>
+                                                    </div>
                                                 </div></th>
-                                            <th style={{paddingRight:'5px'}}>
+                                            <th style={{ paddingRight: '5px' }}>
                                                 <div className="select-table-element">
                                                     <h6>Tipo Id</h6>
                                                     <Select
@@ -109,7 +125,7 @@ class Second extends Component {
                                                     </Select>
                                                 </div>
                                             </th>
-                                            <th style={{paddingRight:'5px'}}>
+                                            <th style={{ paddingRight: '5px' }}>
                                                 <div className="select-table-element">
                                                     <h6>Identificación</h6>
                                                     <Select
@@ -124,7 +140,7 @@ class Second extends Component {
                                                     </Select>
                                                 </div>
                                             </th>
-                                            <th style={{paddingRight:'5px'}}>
+                                            <th style={{ paddingRight: '5px' }}>
                                                 <div className="select-table-element">
                                                     <h6>Expediente</h6>
                                                     <Select
@@ -155,21 +171,21 @@ class Second extends Component {
                                                 </div>
                                             </th>
                                         </tr>
-                                        {this.props.excel.rows.map((item, index)=>{
-                                            return(
-                                                <tr style={nombre!==-1||tipo!==-1||identificacion!==-1||expediente!==-1||monto!==-1?{borderBottom:'1px solid #E7EAEC'}:{}}>
-                                                    {nombre!==-1?<td>{this.props.excel.normal[nombre].entries[index]}</td>:<td></td>}
-                                                    {tipo!==-1?<td>{this.props.excel.normal[tipo].entries[index]}</td>:<td></td>}
-                                                    {identificacion!==-1?<td>{this.props.excel.normal[identificacion].entries[index]}</td>:<td></td>}
-                                                    {expediente!==-1?<td>{this.props.excel.normal[expediente].entries[index]}</td>:<td></td>}
-                                                    {monto!==-1?<td>{this.props.excel.normal[monto].entries[index]}</td>:<td></td>}
+                                        {this.props.excel.rows.map((item, index) => {
+                                            return (
+                                                <tr style={nombre[0] !== -1 || tipo[0] !== -1 || identificacion[0] !== -1 || expediente[0] !== -1 || monto[0] !== -1 ? { borderBottom: '1px solid #E7EAEC' } : {}}>
+                                                    {nombre[0] !== -1 ? <td>{this.props.excel.normal[nombre].entries[index]}</td> : <td></td>}
+                                                    {tipo[0] !== -1 ? <td>{this.props.excel.normal[tipo].entries[index]}</td> : <td></td>}
+                                                    {identificacion[0] !== -1 ? <td>{this.props.excel.normal[identificacion].entries[index]}</td> : <td></td>}
+                                                    {expediente[0] !== -1 ? <td>{this.props.excel.normal[expediente].entries[index]}</td> : <td></td>}
+                                                    {monto[0] !== -1 ? <td>{this.props.excel.normal[monto].entries[index]}</td> : <td></td>}
                                                 </tr>
                                             )
                                         })}
-                                        
+
                                     </table>
                                 </div>
-                                
+
                             </div>
                             <div style={{ textAlign: 'center', paddingTop: '40px' }}>
                                 <Button onClick={this.loadDemandados} variant="contained" endIcon={<Icon>send</Icon>} color="primary">
@@ -203,9 +219,9 @@ class Second extends Component {
     }
     handleColsTable = (event) => {
         this.setState({
-            colsEdit: { ...this.state.colsEdit, [event.target.name]: event.target.value }
+            colsEdit: { ...this.state.colsEdit, [event.target.name]: [event.target.value] }
         }, function () {
-
+            console.log(this.state)
         })
     }
 }

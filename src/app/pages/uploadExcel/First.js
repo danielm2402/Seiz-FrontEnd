@@ -7,9 +7,10 @@ import { SheetJSFT } from './types';
 import { Fabric } from 'office-ui-fabric-react/lib/Fabric';
 import { DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import XLSX from 'xlsx';
-
+import LinearProgress from '@material-ui/core/LinearProgress';
 import Second from './Second'
 import './First.css'
+import { withStyles } from '@material-ui/core/styles';
 class First extends Component {
     constructor(props) {
         super(props)
@@ -89,8 +90,14 @@ class First extends Component {
         
     }
     render() {
+        const { classes } = this.props;
         return (
             <div className="contenedor-upload">
+                <div className="progress-bar-excel">
+                    {this.props.upload.loading? <LinearProgress {...this.props} classes={{colorPrimary: classes.colorPrimary, barColorPrimary: classes.barColorPrimary}} />:<></>
+                    }
+               
+                </div>
                 <div className="upload-file">
                     <div className="upload-cov">
                         <div class="image-upload">
@@ -103,7 +110,7 @@ class First extends Component {
                         </div>
                     </div>
                 </div>
-                <button onClick={()=>this.props.nextStep()}>CLICK</button>
+                
             </div>
         )
     }
@@ -118,5 +125,13 @@ const mapStateToProps = (state) => ({
     upload: state.excelReducer.upload,
     
 })
+const styles = props => ({
+    colorPrimary: {
+      backgroundColor: '#BDD535',
+    },
+    barColorPrimary: {
+      backgroundColor: '#8BC34A',
+    }
+  });
 
-export default connect(mapStateToProps, mapDispatchToProps)(First)
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(First))

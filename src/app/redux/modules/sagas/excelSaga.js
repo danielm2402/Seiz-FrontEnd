@@ -114,10 +114,10 @@ function* loadDemandados(payload){
     let obj={}
     for (const prop in payload.data) {
         if(prop=='tipo'){
-            obj={...obj,'tipo-id':[payload.data[prop]]}
+            obj={...obj,'tipo-id':payload.data[prop]}
         }
         else{
-            obj={...obj,[prop]:[payload.data[prop]]}
+            obj={...obj,[prop]:payload.data[prop]}
         }
         
       }
