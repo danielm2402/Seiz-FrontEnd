@@ -103,6 +103,7 @@ class First extends Component {
                         </div>
                     </div>
                 </div>
+                <button onClick={()=>this.props.nextStep()}>CLICK</button>
             </div>
         )
     }

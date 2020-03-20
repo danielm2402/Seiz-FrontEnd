@@ -51,7 +51,6 @@ class First extends Component {
                         </div>
                     </div>
                 </div>
-
             </div>
         )
     }

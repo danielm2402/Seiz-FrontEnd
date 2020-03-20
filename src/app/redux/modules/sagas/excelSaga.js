@@ -91,7 +91,7 @@ function* getPreviewSaga(payload) {
             }
             console.log('LAS FILAS TRANS SON:')
             console.log(files)
-            const dataSend= {columns:columns, rows:files}
+            const dataSend= {columns:columns, rows:files, normal: data.data.columns}
             yield put(getPreviewSuccess(dataSend))
             console.log(columns)
                 

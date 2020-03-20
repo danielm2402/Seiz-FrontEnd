@@ -33,11 +33,11 @@ import Pdf from '@mikecousins/react-pdf';
 import Viewer from '../viewer/Viewer'
 import Icon from '@material-ui/core/Icon';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-
+import LoadingBar from 'react-top-loading-bar';
 const theme = createMuiTheme({
     palette: {
         primary: { 500: '#337ab7' },
-        
+
     },
 });
 const pdfjsVersion = "2.0.305";
@@ -302,10 +302,10 @@ class Confirmar extends Component {
             identificacion: String(this.state.colsEdit.identificacion),
             expendiente: String(this.state.colsEdit.expediente),
             monto: String(this.state.colsEdit.monto),
-            
+
         }
 
-       
+
         this.props.handleTableDemandados(this.props.modeTable.points, columns, this.props.match.params.id, this.state.pageNumber, this.props.token, String(this.state.colsEdit.tipo))
     }
     goToExcel = () => {
@@ -318,8 +318,14 @@ class Confirmar extends Component {
             <div>
 
                 {this.props.loadingEmbargo || this.props.loadingDemandados ?
-                    <div className="container-progress">
-                        <ProgressBar className="right" animated now={100} />
+                    <div className="container-progress" >
+                        
+                        <LoadingBar
+                            progress={100}
+                            height={4}
+                            color='#BDD535'
+                            onRef={ref => (this.LoadingBar = ref)}
+                        />
                     </div> :
                     <div>
                         <div style={{ width: '100%', backgroundColor: '#fff' }}>
@@ -369,7 +375,7 @@ class Confirmar extends Component {
                             <div className="section-table">
                                 <div className="buttons-edits">
 
-                                    
+
                                 </div>
                                 <div className="information-card">
                                     <label for="entidad">Entidad Remitente</label>
@@ -518,12 +524,12 @@ class Confirmar extends Component {
 
                                 <TableDemandados page={this.state.pageNumber} idDocumento={this.props.match.params.id} />
                                 <TableDemandantes page={this.state.pageNumber} demandantes={this.state.demandantes} idDocumento={this.props.match.params.id} />
-                                <div style={{display:'flex', justifyContent:'center', alignItems:'center', paddingTop:'20px'}}>
-                                <MuiThemeProvider theme={theme}>
-                                    <Button onClick={this.confirmarEmbargo} variant="contained" endIcon={<Icon>send</Icon>} color="primary">
-                                        Confirmar
+                                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '20px' }}>
+                                    <MuiThemeProvider theme={theme}>
+                                        <Button onClick={this.confirmarEmbargo} variant="contained" endIcon={<Icon>send</Icon>} color="primary">
+                                            Confirmar
                                  </Button>
-                                </MuiThemeProvider>
+                                    </MuiThemeProvider>
                                 </div>
 
 
@@ -558,7 +564,7 @@ class Confirmar extends Component {
                                     open={this.props.mensajeBounding.exist}
                                     onClose={() => {
                                         this.props.handleResetMsjBounding()
-                                    
+
                                     }
                                     }
                                     aria-labelledby="alert-dialog-title"
@@ -574,7 +580,7 @@ class Confirmar extends Component {
 
                                         <Button onClick={() => {
                                             this.props.handleResetMsjBounding()
-                                            
+
                                         }} color="primary" autoFocus>
                                             Aceptar
                                           </Button>
@@ -617,7 +623,7 @@ class Confirmar extends Component {
     }
     handleColsTable = (event) => {
         this.setState({ colsEdit: { ...this.state.colsEdit, [event.target.name]: event.target.value } }, function () {
-           
+
         })
     }
     handleMouseDown(event) { //added code here
@@ -779,7 +785,7 @@ class Confirmar extends Component {
         }
 
     }
-    handleResetMsjBounding=()=>{
+    handleResetMsjBounding = () => {
 
     }
 }
@@ -800,8 +806,8 @@ const mapStateToProps = (state) => ({
     bounding: state.boundingReducer.palabra,
     modeTable: state.boundingReducer.pointsModeTable,
     mensajeBounding: state.boundingReducer.msj
-    
-    
+
+
 
 })
 const mapDispatchToProps = (dispatch) => ({
@@ -816,9 +822,9 @@ const mapDispatchToProps = (dispatch) => ({
     handleResetMsj: bindActionCreators(resetMensaje, dispatch),
     handleSaveDemandados: bindActionCreators(saveDemandados, dispatch),
     handleChangePage: bindActionCreators(setPage, dispatch),
-    handleChangeMode: bindActionCreators(setMode,dispatch),
+    handleChangeMode: bindActionCreators(setMode, dispatch),
     handleResetMsjBounding: bindActionCreators(resetMensajeBounding, dispatch)
-   
+
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Confirmar))
