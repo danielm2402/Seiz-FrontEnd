@@ -81,6 +81,8 @@
   }
 
  .container-grid{
+     width: 50%;
+     padding-left: 10px;
      padding-top: 20px;
-    padding-left: 10px;
+  
  }

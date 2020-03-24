@@ -76,7 +76,7 @@ class Second extends Component {
                             <div className="table-generator-container">
                                 <label>Selecciona el número de la columna</label>
                                 <br></br>
-                                <div style={{ maxHeight: '350px', overflow: 'auto', width: '100%', textAlign: 'center' }}>
+                                <div style={{ maxHeight: '350px', overflow: 'auto', width: '95%', textAlign: 'center' }}>
                                     <table style={{ width: '93%', margin: '0 auto', textAlign: 'left' }}>
                                         <tr>
                                             <th style={{ paddingRight: '5px' }}>
@@ -174,7 +174,7 @@ class Second extends Component {
                                         {this.props.excel.rows.map((item, index) => {
                                             return (
                                                 <tr style={nombre[0] !== -1 || tipo[0] !== -1 || identificacion[0] !== -1 || expediente[0] !== -1 || monto[0] !== -1 ? { borderBottom: '1px solid #E7EAEC' } : {}}>
-                                                    {nombre[0] !== -1 ? <td>{this.props.excel.normal[nombre[0]].entries[index]}{nombre[1]!== -1?this.props.excel.normal[nombre[0]].entries[index]:''}</td> : <td></td>}
+                                                    {nombre[0] !== -1 ? <td>{this.props.excel.normal[nombre[0]].entries[index]}{nombre[1]!== -1?' '+this.props.excel.normal[nombre[1]].entries[index]:''}</td> : <td></td>}
                                                     {tipo[0] !== -1 ? <td>{this.props.excel.normal[tipo].entries[index]}</td> : <td></td>}
                                                     {identificacion[0] !== -1 ? <td>{this.props.excel.normal[identificacion].entries[index]}</td> : <td></td>}
                                                     {expediente[0] !== -1 ? <td>{this.props.excel.normal[expediente].entries[index]}</td> : <td></td>}
