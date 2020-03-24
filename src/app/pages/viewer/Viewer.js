@@ -66,7 +66,7 @@ function MyPdfViewer(props) {
 
         }
         else{
-            ctx.fillStyle = "rgba(0,0,0, 0.8)";
+            ctx.fillStyle = "rgba(255,255,255, 0.2)";
             ctx.fillRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
             ctx.stroke();
             const verti = [
@@ -184,7 +184,7 @@ function MyPdfViewer(props) {
             ctx.beginPath();
             ctx.lineWidth = "1";
             ctx.strokeStyle = "red";
-            ctx.fillStyle = "rgba(255,255,255, 0.5)";
+            ctx.fillStyle = "rgba(255,255,255, 0.3)"
             ctx.fillRect(previousPointX, previousPointY, width, height);
             setDown(false)
         }

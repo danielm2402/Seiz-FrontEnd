@@ -215,7 +215,14 @@ class Second extends Component {
     }
     loadDemandados = () => {
         console.log(this.state.colsEdit)
-        this.props.loadDemandados(this.state.colsEdit, this.props.id, this.props.token)
+        let obj;
+        if(this.state.colsEdit.nombre[1]===-1){
+             obj={...this.state.colsEdit, nombre:[this.state.colsEdit.nombre[0]]}
+        }
+        else{
+             obj=this.state.colsEdit
+        }
+        this.props.loadDemandados(obj, this.props.id, this.props.token)
     }
     handleColsTable = (event) => {
         switch (event.target.name) {

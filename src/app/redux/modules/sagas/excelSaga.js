@@ -122,7 +122,7 @@ function* loadDemandados(payload){
         
       }
       console.log(obj)
-    const data = yield  axios.post('https://bancow.finseiz.com/api/v1/embargos/loadDemandados?idEmbargo=' + payload.id,{
+     const data = yield  axios.post('https://bancow.finseiz.com/api/v1/embargos/loadDemandados?idEmbargo=' + payload.id,{
         keysHeaders: obj
     },config)
         .then(response => response)
@@ -131,10 +131,12 @@ function* loadDemandados(payload){
     console.log(data)   
     switch (data.status) {
         case 200:
+            yield put(mensajeExcel('Demandados cargados correctamente'))
             yield put(loadDemandadosSuccess())
             break;
     
         default:
+            yield put(mensajeExcel('No se pudieron cargar los demandados'))
             break;
     }    
 }
