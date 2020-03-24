@@ -47,7 +47,7 @@ class Upload extends Component {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
-                    <DialogTitle id="alert-dialog-title">{"Confirmación de embargo"}</DialogTitle>
+                    <DialogTitle id="alert-dialog-title">{"Subir archivo xsln"}</DialogTitle>
                     <DialogContent>
                         <DialogContentText id="alert-dialog-description">
                             {this.props.mensaje.msj}

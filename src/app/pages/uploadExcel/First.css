@@ -1,9 +1,9 @@
-.contenedor-upload{
+.contenedor-upload2{
     width: 100%;
-    height: 600px;
+    height: 90vh;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     text-align: center;
     
