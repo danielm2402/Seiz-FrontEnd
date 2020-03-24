@@ -29,7 +29,7 @@ class Second extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            colsEdit: { nombre: [-1], tipo: [-1], identificacion: [-1], expediente: [-1], monto: [-1] },
+            colsEdit: { nombre: [-1, -1], tipo: [-1], identificacion: [-1], expediente: [-1], monto: [-1] },
             rows,
             number: 0,
             loadDemandados: false
@@ -86,7 +86,7 @@ class Second extends Component {
                                                         <div style={{width:'50%'}}>
                                                             <Select
                                                                 name="nombre"
-                                                                value={String(this.state.colsEdit.nombre)}
+                                                                value={String(this.state.colsEdit.nombre[0])}
                                                                 onChange={this.handleColsTable}
                                                             >
                                                                 <MenuItem value={-1}>NO_SELECT</MenuItem>
@@ -97,8 +97,8 @@ class Second extends Component {
                                                         </div>
                                                         <div style={{width:'50%'}}>
                                                             <Select
-                                                                name="nombre"
-                                                                value={String(this.state.colsEdit.nombre)}
+                                                                name="apellido"
+                                                                value={String(this.state.colsEdit.nombre[1])}
                                                                 onChange={this.handleColsTable}
                                                             >
                                                                 <MenuItem value={-1}>NO_SELECT</MenuItem>
@@ -174,7 +174,7 @@ class Second extends Component {
                                         {this.props.excel.rows.map((item, index) => {
                                             return (
                                                 <tr style={nombre[0] !== -1 || tipo[0] !== -1 || identificacion[0] !== -1 || expediente[0] !== -1 || monto[0] !== -1 ? { borderBottom: '1px solid #E7EAEC' } : {}}>
-                                                    {nombre[0] !== -1 ? <td>{this.props.excel.normal[nombre].entries[index]}</td> : <td></td>}
+                                                    {nombre[0] !== -1 ? <td>{this.props.excel.normal[nombre[0]].entries[index]}{nombre[1]!== -1?this.props.excel.normal[nombre[0]].entries[index]:''}</td> : <td></td>}
                                                     {tipo[0] !== -1 ? <td>{this.props.excel.normal[tipo].entries[index]}</td> : <td></td>}
                                                     {identificacion[0] !== -1 ? <td>{this.props.excel.normal[identificacion].entries[index]}</td> : <td></td>}
                                                     {expediente[0] !== -1 ? <td>{this.props.excel.normal[expediente].entries[index]}</td> : <td></td>}
@@ -218,11 +218,30 @@ class Second extends Component {
         this.props.loadDemandados(this.state.colsEdit, this.props.id, this.props.token)
     }
     handleColsTable = (event) => {
-        this.setState({
-            colsEdit: { ...this.state.colsEdit, [event.target.name]: [event.target.value] }
-        }, function () {
-            console.log(this.state)
-        })
+        switch (event.target.name) {
+            case 'apellido':
+                this.setState({
+                    colsEdit: { ...this.state.colsEdit, nombre: [this.state.colsEdit.nombre[0], event.target.value] }
+                }, function () {
+                    console.log(this.state)
+                })
+            break;
+            case 'nombre':
+                this.setState({
+                    colsEdit: { ...this.state.colsEdit, nombre: [event.target.value, this.state.colsEdit.nombre[1], ] }
+                }, function () {
+                    console.log(this.state)
+                })
+            break;    
+            default:
+                this.setState({
+                    colsEdit: { ...this.state.colsEdit, [event.target.name]: [event.target.value] }
+                }, function () {
+                    console.log(this.state)
+                })
+             break;
+        }
+ 
     }
 }
 
