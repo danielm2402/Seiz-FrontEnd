@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './styles.css'
-import { MdDeleteSweep, MdCheck, MdCancel, MdAdd, MdDone, MdNavigateBefore,MdNavigateNext } from "react-icons/md";
+import { MdDeleteSweep, MdCheck, MdCancel, MdAdd, MdDone, MdNavigateBefore, MdNavigateNext } from "react-icons/md";
 import { FaRegEdit, FaFileExcel } from "react-icons/fa";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
@@ -9,9 +9,10 @@ import { changePoints, setUltimaTableFocus } from '../../../redux/actions/boundi
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
-import { updateDemandando, deleteDemandado, addDemandado, saveDemandados,getDemandadosSiguiente, getDemandadosAnterior } from '../../../redux/actions/embargosAction'
+import { updateDemandando, deleteDemandado, addDemandado, saveDemandados, getDemandadosSiguiente, getDemandadosAnterior } from '../../../redux/actions/embargosAction'
 import CurrencyFormat from 'react-currency-format';
-
+import PulseLoader from "react-spinners/ClipLoader";
+import { css } from "@emotion/core";
 import { withRouter } from "react-router-dom";
 class TableDemandado extends Component {
     constructor(props) {
@@ -559,7 +560,13 @@ class TableDemandado extends Component {
         return (
             <div className="container-table-edit">
                 <div className="table-header">
-                    <h5>Demandados</h5>
+                    <div style={{ display: 'flex' }}>
+                        <h5>Demandados </h5> {this.props.loadingPage ? <PulseLoader
+                            size={20}
+                            color={"#123abc"}
+                            loading={this.props.loadingPage}
+                        /> : <></>}
+                    </div>
                     {this.props.demandadosExtractSinConfirmar ? <a onClick={this.saveExtractTable}><div className="button-table"><MdDone size={'1.4rem'} /></div></a> : <div style={{ display: 'flex' }}><a style={{ paddingRight: '5px' }} onClick={this.addRow}><div className="button-table"><MdAdd size={'1.4rem'} /></div></a><a className="button-table" onClick={this.goToExcel}><FaFileExcel size="1.7em" color={"#434040"} /></a></div>}
                 </div>
                 {renderTable}
@@ -605,15 +612,20 @@ class TableDemandado extends Component {
         this.setState({ addRow: false, addRowValues: { nombre: '', tipo: 'NO_SELECCIONADO', identificacion: '', monto: '' } })
     }
     next = () => {
-        if(this.props.pathSiguienteDemandados!=='')
-       this.props.handleDemandadosSiguiente(this.props.idDocumento, this.props.token, this.props.pathSiguienteDemandados)
+        if (this.props.pathSiguienteDemandados !== '')
+            this.props.handleDemandadosSiguiente(this.props.idDocumento, this.props.token, this.props.pathSiguienteDemandados)
     }
     back = () => {
-       if(this.props.pathAnteriorDemandados!=='')
-       this.props.handleDemandadosAnterior(this.props.idDocumento, this.props.token, this.props.pathAnteriorDemandados)
+        if (this.props.pathAnteriorDemandados !== '')
+            this.props.handleDemandadosAnterior(this.props.idDocumento, this.props.token, this.props.pathAnteriorDemandados)
 
     }
 }
+const override = css`
+  display: block;
+  margin: 0 auto;
+  border-color: red;
+`;
 
 const mapStateToProps = (state) => ({
     json: state.EmbargosReducer.embargo.json,
@@ -625,7 +637,8 @@ const mapStateToProps = (state) => ({
     demandadosExtractSinConfirmar: state.boundingReducer.DemandadosTablePorConfirmar,
     page: state.boundingReducer.page,
     pathSiguienteDemandados: state.EmbargosReducer.demandadosPathSiguiente,
-    pathAnteriorDemandados: state.EmbargosReducer.demandadosPathAnterior
+    pathAnteriorDemandados: state.EmbargosReducer.demandadosPathAnterior,
+    loadingPage: state.EmbargosReducer.loadingPage
 })
 const mapDispatchToProps = (dispatch) => ({
     handleBounding: bindActionCreators(changePoints, dispatch),
@@ -634,7 +647,7 @@ const mapDispatchToProps = (dispatch) => ({
     handleDelete: bindActionCreators(deleteDemandado, dispatch),
     handleAddDemandado: bindActionCreators(addDemandado, dispatch),
     handleSaveDemandados: bindActionCreators(saveDemandados, dispatch),
-    handleDemandadosSiguiente: bindActionCreators(getDemandadosSiguiente,dispatch),
+    handleDemandadosSiguiente: bindActionCreators(getDemandadosSiguiente, dispatch),
     handleDemandadosAnterior: bindActionCreators(getDemandadosAnterior, dispatch)
 
 })
