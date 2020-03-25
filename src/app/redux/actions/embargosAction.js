@@ -146,6 +146,27 @@ export const updateEmbargo=(data, token)=>({
     token
 })
 
+export const getDemandadosSiguiente=(id, token, path)=>({
+    type:types.GET_DEMANDADOS_SIGUIENTE,
+    id,
+    token,
+    path
+})
+export const getDemandadosAnterior=(id, token, path)=>({
+    type:types.GET_DEMANDADOS_ANTERIOR,
+    id,
+    token,
+    path
+})
+
+export const changeSiguiente=(path)=>({
+    type: types.CHANGE_SIGUIENTE,
+    path
+})
+export const changeAnterior=(path)=>({
+    type: types.CHANGE_ANTERIOR,
+    path
+})
 
 
 

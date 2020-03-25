@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import './styles.css'
-import { MdDeleteSweep, MdCheck, MdCancel, MdAdd, MdDone } from "react-icons/md";
-import { FaRegEdit,FaFileExcel } from "react-icons/fa";
+import { MdDeleteSweep, MdCheck, MdCancel, MdAdd, MdDone, MdNavigateBefore,MdNavigateNext } from "react-icons/md";
+import { FaRegEdit, FaFileExcel } from "react-icons/fa";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
 import TextField from '@material-ui/core/TextField';
@@ -9,8 +9,9 @@ import { changePoints, setUltimaTableFocus } from '../../../redux/actions/boundi
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
-import { updateDemandando, deleteDemandado, addDemandado, saveDemandados } from '../../../redux/actions/embargosAction'
+import { updateDemandando, deleteDemandado, addDemandado, saveDemandados,getDemandadosSiguiente, getDemandadosAnterior } from '../../../redux/actions/embargosAction'
 import CurrencyFormat from 'react-currency-format';
+
 import { withRouter } from "react-router-dom";
 class TableDemandado extends Component {
     constructor(props) {
@@ -315,7 +316,7 @@ class TableDemandado extends Component {
                                         return (
                                             <tr>
                                                 <td><div className="element-table">{item.nombres}</div></td>
-                                                <td><div className="element-table">{item.tipoIdentificacion===null?'NO_SELECCIONADO':item.tipoIdentificacion}</div></td>
+                                                <td><div className="element-table">{item.tipoIdentificacion === null ? 'NO_SELECCIONADO' : item.tipoIdentificacion}</div></td>
                                                 <td><div className="element-table">{String(item.identificacion).replace(/[.\s]/g, '')}</div></td>
                                                 <td><div className={isNaN(item.montoAEmbargar) ? 'element-table-no' : 'element-table'}><div><CurrencyFormat value={Number(item.montoAEmbargar)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></div></div></td>
                                                 <td>
@@ -375,7 +376,7 @@ class TableDemandado extends Component {
                                                     id="demo-simple-select-placeholder-label"
                                                     label="Tipo"
                                                     name="tipo"
-                                                    value={String(this.state.tipo===null?'NO_SELECCIONADO':this.state.tipo)}
+                                                    value={String(this.state.tipo === null ? 'NO_SELECCIONADO' : this.state.tipo)}
                                                     onChange={(e) => this.setState({ tipo: e.target.value })}
                                                 >
                                                     <MenuItem value={'NO_SELECCIONADO'}>NO_SELECCIONADO</MenuItem>
@@ -512,7 +513,7 @@ class TableDemandado extends Component {
                                             this.setState({ ultimFocus: { id: this.state.itemEdit, tipo: 'identificacion' } }, function () {
                                                 console.log(this.state)
                                             })
-                                            
+
                                         }
                                         catch (error) {
                                             console.log(error)
@@ -559,9 +560,15 @@ class TableDemandado extends Component {
             <div className="container-table-edit">
                 <div className="table-header">
                     <h5>Demandados</h5>
-                    {this.props.demandadosExtractSinConfirmar ? <a onClick={this.saveExtractTable}><div className="button-table"><MdDone size={'1.4rem'} /></div></a> : <div style={{display:'flex'}}><a style={{paddingRight:'5px'}} onClick={this.addRow}><div className="button-table"><MdAdd size={'1.4rem'} /></div></a><a className="button-table" onClick={this.goToExcel}><FaFileExcel size="1.7em" color={"#434040"} /></a></div>}
+                    {this.props.demandadosExtractSinConfirmar ? <a onClick={this.saveExtractTable}><div className="button-table"><MdDone size={'1.4rem'} /></div></a> : <div style={{ display: 'flex' }}><a style={{ paddingRight: '5px' }} onClick={this.addRow}><div className="button-table"><MdAdd size={'1.4rem'} /></div></a><a className="button-table" onClick={this.goToExcel}><FaFileExcel size="1.7em" color={"#434040"} /></a></div>}
                 </div>
                 {renderTable}
+                <div className="buttons-control-table">
+
+                    <a onClick={this.back}><div className="button-table"><MdNavigateBefore size={'1.4rem'} /></div></a>
+                    <a onClick={this.next}><div className="button-table"><MdNavigateNext size={'1.4rem'} /></div></a>
+
+                </div>
 
             </div>
         )
@@ -598,20 +605,13 @@ class TableDemandado extends Component {
         this.setState({ addRow: false, addRowValues: { nombre: '', tipo: 'NO_SELECCIONADO', identificacion: '', monto: '' } })
     }
     next = () => {
-
-        if (this.state.totalPages.numRecorrido < this.state.totalPages.exacts) {
-
-            this.setState({ totalPages: { ...this.state.totalPages, numRecorrido: this.state.totalPages.numRecorrido + 1 }, numItems: this.state.numItemsSiguientes, numItemsSiguientes: this.state.numItemsSiguientes + 5 }, function () {
-
-            })
-        }
+        if(this.props.pathSiguienteDemandados!=='')
+       this.props.handleDemandadosSiguiente(this.props.idDocumento, this.props.token, this.props.pathSiguienteDemandados)
     }
     back = () => {
-        if (this.state.totalPages.numRecorrido > 1)
-            this.setState({ totalPages: { ...this.state.totalPages, numRecorrido: this.state.totalPages.numRecorrido - 1 }, numItems: this.state.numItemsSiguientes - 10, numItemsSiguientes: this.state.numItemsSiguientes - 5 }, function () {
+       if(this.props.pathAnteriorDemandados!=='')
+       this.props.handleDemandadosAnterior(this.props.idDocumento, this.props.token, this.props.pathAnteriorDemandados)
 
-
-            })
     }
 }
 
@@ -624,6 +624,8 @@ const mapStateToProps = (state) => ({
     token: state.auth.authToken,
     demandadosExtractSinConfirmar: state.boundingReducer.DemandadosTablePorConfirmar,
     page: state.boundingReducer.page,
+    pathSiguienteDemandados: state.EmbargosReducer.demandadosPathSiguiente,
+    pathAnteriorDemandados: state.EmbargosReducer.demandadosPathAnterior
 })
 const mapDispatchToProps = (dispatch) => ({
     handleBounding: bindActionCreators(changePoints, dispatch),
@@ -632,6 +634,8 @@ const mapDispatchToProps = (dispatch) => ({
     handleDelete: bindActionCreators(deleteDemandado, dispatch),
     handleAddDemandado: bindActionCreators(addDemandado, dispatch),
     handleSaveDemandados: bindActionCreators(saveDemandados, dispatch),
+    handleDemandadosSiguiente: bindActionCreators(getDemandadosSiguiente,dispatch),
+    handleDemandadosAnterior: bindActionCreators(getDemandadosAnterior, dispatch)
 
 })
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TableDemandado))

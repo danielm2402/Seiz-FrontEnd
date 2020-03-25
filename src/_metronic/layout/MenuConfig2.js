@@ -55,12 +55,7 @@ export default {
 
         ]
       },
-      {
-        title: "Historial",
-        root: true,
-        bullet: "dot",
-        icon: "flaticon2-calendar-1",
-      },
+      
 
       { section: "Gestión " },
       {

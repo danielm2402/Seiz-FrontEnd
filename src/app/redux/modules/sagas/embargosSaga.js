@@ -3,12 +3,12 @@ import {
 } from 'redux-saga/effects';
 import axios from 'axios';
 import {
-  UPDATE_DEMANDADO, CREATE_DEMANDANTE, DELETE_DEMANDANTE, UPDATE_DEMANDANTE, UPDATE_EMBARGO,
+  UPDATE_DEMANDADO, CREATE_DEMANDANTE, DELETE_DEMANDANTE,GET_DEMANDADOS_ANTERIOR, UPDATE_DEMANDANTE, UPDATE_EMBARGO, GET_DEMANDADOS_SIGUIENTE,
   GET_EMBARGO, GET_DEMANDADOS, DELETE_DEMANDADO, SAVE_DEMANDADOS, GET_DEMANDADOS_UPDATE_TABLE, CREATE_DEMANDADO,
   GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_CONFIRMADOS, GET_EMBARGOS_POR_CONFIRMAR, GET_EMBARGOS_ALL, DELETE_EMBARGO, CONFIRMAR_EMBARGO
 } from '../../constants/EmbargosConst';
 import {
-  getDemandados, getDemandantesUpdateTableSuccess,
+  getDemandados, getDemandantesUpdateTableSuccess, changeSiguiente,changeAnterior,
   getEmbargosAll, getEmbargosAsignados, getEmbargosPorConfirmar, getEmbargosConfirmados, getDemandadosSuccess, getEmbargoSuccess,
   getEmbargosConfirmadosSuccess, getEmbargosPorConfirmarSuccess, getEmbargosAsignadosSuccess, getEmbargosAllSuccess, nuevoMensaje, resetMensaje
   , getDemandadosUpdateTable, getDemandadosUpdateTableSuccess
@@ -226,7 +226,6 @@ function* getEmbargoSaga(payload) {
 
 }
 function* getDemandadosSaga(payload) {
-  console.log('GET demandado');
   const config = {
     headers: {
       Authorization: 'Bearer ' + payload.token,
@@ -241,7 +240,27 @@ function* getDemandadosSaga(payload) {
     .catch(err => err.response)
   switch (data.status) {
     case 200:
+      var separar = data.headers.links.split(",")
+      const array = separar.map((item) => {
+        return item.split(";")
+      })
+      let page
+      console.log('BANDERAAAAA')
+      array.map((item) => {
+        item.map((item1) => {
+          if (item1.trim() === 'rel="next"') {
+            page = item[0]
+
+          }
+        }
+        )
+      })
       yield put(getDemandadosSuccess(data.data))
+      yield put(changeSiguiente(page))
+
+      console.log('OBTENIENDO DEMANDADOS XD');
+      console.log(data)
+      console.log(page)
       break;
     case 403:
       yield put(auth.actions.logout())
@@ -249,6 +268,108 @@ function* getDemandadosSaga(payload) {
     default:
       break;
   }
+
+}
+function* getDemandadosSagaSiguiente(payload) {
+  console.log('OBTENIENDO DEMANDADOS SIGUIENTES XD');
+  const config = {
+    headers: {
+      Authorization: 'Bearer ' + payload.token,
+      Accept: 'application/json',
+    },
+    params: {
+      'idEmbargo': payload.id
+    }
+  };
+  const path= payload.path.replace(/[<>]/g, '')
+  
+   const data = yield axios.get(path, config)
+    .then(response => response)
+    .catch(err => err.response)
+  console.log(data)
+  switch (data.status) {
+    case 200:
+      var separar = data.headers.links.split(",")
+      const array = separar.map((item) => {
+        return item.split(";")
+      })
+      var page=''
+      var page2=''
+      console.log('BANDERAAAAA')
+      array.map((item) => {
+        item.map((item1) => {
+          if (item1.trim() === 'rel="next"') {
+            page = item[0]
+
+          }
+          if(item1.trim()==='rel="prev"'){
+            page2= item[0]
+          }
+        }
+        )
+      })
+      console.log(page)
+      console.log(page2)
+      yield put(getDemandadosSuccess(data.data))
+      yield put(changeSiguiente(page))
+      yield put(changeAnterior(page2))
+      break;
+    case 403:
+      yield put(auth.actions.logout())
+      break;
+    default:
+      break;
+  } 
+
+}
+function* getDemandadosSagaAnterior(payload) {
+  console.log('OBTENIENDO DEMANDADOS ANTERIOR XD');
+  const config = {
+    headers: {
+      Authorization: 'Bearer ' + payload.token,
+      Accept: 'application/json',
+    },
+    params: {
+      'idEmbargo': payload.id
+    }
+  };
+  const path= payload.path.replace(/[<>]/g, '')
+  
+   const data = yield axios.get(path, config)
+    .then(response => response)
+    .catch(err => err.response)
+  console.log(data)
+  switch (data.status) {
+    case 200:
+      var separar = data.headers.links.split(",")
+      const array = separar.map((item) => {
+        return item.split(";")
+      })
+      var page=''
+      var page2=''
+      array.map((item) => {
+        item.map((item1) => {
+          if (item1.trim() === 'rel="next"') {
+            page = item[0]
+          }
+          if(item1.trim()==='rel="prev"'){
+            page2= item[0]
+          }
+        }
+        )
+      })
+      console.log(page)
+      console.log(page2)
+      yield put(getDemandadosSuccess(data.data))
+      yield put(changeSiguiente(page))
+      yield put(changeAnterior(page2))
+      break;
+    case 403:
+      yield put(auth.actions.logout())
+      break;
+    default:
+      break;
+  } 
 
 }
 
@@ -450,7 +571,7 @@ function* crearDemandadoSaga(payload) {
 
   var demandados = [payload.data, ...payload.demandados]
   const demandadosReq = demandados.map(demandado => {
-    const tipo= demandado.tipoIdentificacion=='NO_SELECCIONADO'?null:demandado.tipoIdentificacion
+    const tipo = demandado.tipoIdentificacion == 'NO_SELECCIONADO' ? null : demandado.tipoIdentificacion
     console.log(tipo)
     console.log(demandado.tipoIdentificacion)
     return ({
@@ -711,7 +832,9 @@ function* embargosRootSaga() {
     takeEvery(UPDATE_DEMANDANTE, updateDemandanteSaga),
 
     takeEvery(DELETE_DEMANDANTE, deleteDemandanteSaga),
-    takeEvery(UPDATE_EMBARGO, updateEmbargoSaga)
+    takeEvery(UPDATE_EMBARGO, updateEmbargoSaga),
+    takeEvery(GET_DEMANDADOS_SIGUIENTE,getDemandadosSagaSiguiente),
+    takeEvery(GET_DEMANDADOS_ANTERIOR, getDemandadosSagaAnterior)
 
 
 
