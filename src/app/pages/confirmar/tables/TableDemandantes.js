@@ -172,7 +172,7 @@ class TableDemandantes extends Component {
 
                                 <td><div className="element-table"></div><TextField
                                     onChange={(e) => this.setState({ addRowValues: { ...this.state.addRowValues, identificacion: e.target.value } })}
-                                    value={String(this.state.addRowValues.identificacion)}
+                                    value={String((this.state.addRowValues.identificacion).replace(/[.\s]/g, ''))}
                                     label="Identificación"
                                     margin="normal"
                                     onFocus={(e) => {
@@ -238,7 +238,7 @@ class TableDemandantes extends Component {
                                             </div></td>
                                             <td><div className="element-table"></div><TextField
                                                 onChange={(e) => this.setState({ identificacion: e.target.value })}
-                                                value={this.state.identificacion}
+                                                value={String((this.state.identificacion).replace(/[.\s]/g, ''))}
                                                 margin="normal"
                                                 onFocus={(e) => {
                                                     try {
@@ -347,7 +347,7 @@ class TableDemandantes extends Component {
         const obj = {
             id: this.props.demandantes.length + 'localID',
             fullname: this.state.addRowValues.nombre,
-            identificacion: this.state.addRowValues.identificacion,
+            identification: this.state.addRowValues.identificacion.replace(/[.\s]/g, ''),
         }
         this.props.handleAddDemandado(obj, this.props.demandantes, this.props.token, this.props.idDocumento)
         this.setState({ addRow: false, addRow: false, addRowValues: { nombre: '', identificacion: '', } })
