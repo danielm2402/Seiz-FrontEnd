@@ -46,6 +46,15 @@
     justify-content: center;
     align-items: center;
 }
+.button-table-dinamic{
+    border-radius: 3px;
+    background-color: #EAE8F1;
+    width: 20px !important;
+    height: 20px !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 .button-table:hover{
     background-color: #5D78FF
 }

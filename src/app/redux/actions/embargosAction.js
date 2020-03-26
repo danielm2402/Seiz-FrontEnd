@@ -167,6 +167,12 @@ export const changeAnterior=(path)=>({
     type: types.CHANGE_ANTERIOR,
     path
 })
+export const updateAllTipoDocumento=(tipo)=>({
+    type: types.UPDATE_ALL_TIPO_DOCUMENTO,
+    tipo
+})
+
+
 
 
 

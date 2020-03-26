@@ -1,6 +1,6 @@
 
 import {
-    GET_DEMANDADOS_SIGUIENTE,GET_DEMANDADOS_ANTERIOR,
+    GET_DEMANDADOS_SIGUIENTE,GET_DEMANDADOS_ANTERIOR,UPDATE_ALL_TIPO_DOCUMENTO,
     GET_DEMANDADOS_SUCCESS, CHANGE_SIGUIENTE, CHANGE_ANTERIOR, GET_DEMANDADOS_SUCCESS_TABLE,GET_EMBARGO_SUCCESS, GET_EMBARGOS_CONFIRMADOS, GET_EMBARGO, GET_DEMANDADOS, GET_EMBARGOS_CONFIRMADOS_SUCCESS, GET_EMBARGOS_POR_CONFIRMAR, GET_EMBARGOS_POR_CONFIRMAR_SUCCESS,
     GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_ASIGNADOS_SUCCESS, GET_EMBARGOS_ALL, GET_EMBARGOS_ALL_SUCCESS, UPDATE_DEMANDADO, UPDATE_DEMANDANTE,DELETE_DEMANDANTE,DELETE_DEMANDADO, CREATE_DEMANDANTE, CREATE_DEMANDADO
     ,NUEVO_MESANJE, RESET_MENSAJE, GET_DEMANDADOS_UPDATE_TABLE_SUCCESS, GET_DEMANDANTES_UPDATE_TABLE_SUCCESS
@@ -17,7 +17,8 @@ export const Authstate = {
     mensaje:{exist:false, msj:''},
     demandadosPathSiguiente:'',
     demandadosPathAnterior:'',
-    loadingPage:false
+    loadingPage:false,
+    demandadosAllUpdateTipo:false
 
 }
 export default function authReducer(state = Authstate, action = {}) {
@@ -119,7 +120,8 @@ export default function authReducer(state = Authstate, action = {}) {
                         }
                         return item
                     })
-                }
+                },
+                demandadosAllUpdateTipo:false
             }
         case UPDATE_DEMANDANTE:
             return {
@@ -185,7 +187,13 @@ export default function authReducer(state = Authstate, action = {}) {
             return{
                 ...state,
                 loadingPage:true
-            }         
+            }     
+        case UPDATE_ALL_TIPO_DOCUMENTO:
+            return{
+                ...state,
+                demandados: { ...state.demandados, data:state.demandados.data.map(item=>{return{...item, tipoIdentificacion:action.tipo}})},
+                demandadosAllUpdateTipo:true
+            }        
         default:
             return state;
     }
