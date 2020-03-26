@@ -1,6 +1,6 @@
 
 import {
-    GET_DEMANDADOS_SIGUIENTE,GET_DEMANDADOS_ANTERIOR,UPDATE_ALL_TIPO_DOCUMENTO,
+    GET_DEMANDADOS_SIGUIENTE,GET_DEMANDADOS_ANTERIOR,UPDATE_ALL_TIPO_DOCUMENTO,UPDATE_ALL_REQUEST_SUCCESS,
     GET_DEMANDADOS_SUCCESS, CHANGE_SIGUIENTE, CHANGE_ANTERIOR, GET_DEMANDADOS_SUCCESS_TABLE,GET_EMBARGO_SUCCESS, GET_EMBARGOS_CONFIRMADOS, GET_EMBARGO, GET_DEMANDADOS, GET_EMBARGOS_CONFIRMADOS_SUCCESS, GET_EMBARGOS_POR_CONFIRMAR, GET_EMBARGOS_POR_CONFIRMAR_SUCCESS,
     GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_ASIGNADOS_SUCCESS, GET_EMBARGOS_ALL, GET_EMBARGOS_ALL_SUCCESS, UPDATE_DEMANDADO, UPDATE_DEMANDANTE,DELETE_DEMANDANTE,DELETE_DEMANDADO, CREATE_DEMANDANTE, CREATE_DEMANDADO
     ,NUEVO_MESANJE, RESET_MENSAJE, GET_DEMANDADOS_UPDATE_TABLE_SUCCESS, GET_DEMANDANTES_UPDATE_TABLE_SUCCESS
@@ -15,6 +15,7 @@ export const Authstate = {
     embargo: { loading: true, data: { plaintiffs: [] }, document: null, json: null, json1: null },
     demandados: { isUpdate:false ,loading: true, data: []},
     mensaje:{exist:false, msj:''},
+    mensaje2:{exist:false, msj:''},
     demandadosPathSiguiente:'',
     demandadosPathAnterior:'',
     loadingPage:false,
@@ -166,7 +167,8 @@ export default function authReducer(state = Authstate, action = {}) {
         case RESET_MENSAJE:
             return{
                 ...state,
-                mensaje:{exist:false, msj:''}
+                mensaje:{exist:false, msj:''},
+                mensaje2:{exist:false, msj:''},
             }    
         case CHANGE_SIGUIENTE:
             return{
@@ -193,7 +195,12 @@ export default function authReducer(state = Authstate, action = {}) {
                 ...state,
                 demandados: { ...state.demandados, data:state.demandados.data.map(item=>{return{...item, tipoIdentificacion:action.tipo}})},
                 demandadosAllUpdateTipo:true
-            }        
+            } 
+        case UPDATE_ALL_REQUEST_SUCCESS:
+            return{
+                ...state,
+                mensaje2:{exist:true, msj:action.msj}
+            }           
         default:
             return state;
     }

@@ -2,13 +2,13 @@ import {
   call, fork, put, take, takeEvery, all
 } from 'redux-saga/effects';
 import axios from 'axios';
-import {
+import {UPDATE_ALL_REQUEST,
   UPDATE_DEMANDADO, CREATE_DEMANDANTE, DELETE_DEMANDANTE,GET_DEMANDADOS_ANTERIOR, UPDATE_DEMANDANTE, UPDATE_EMBARGO, GET_DEMANDADOS_SIGUIENTE,
   GET_EMBARGO, GET_DEMANDADOS, DELETE_DEMANDADO, SAVE_DEMANDADOS, GET_DEMANDADOS_UPDATE_TABLE, CREATE_DEMANDADO,
   GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_CONFIRMADOS, GET_EMBARGOS_POR_CONFIRMAR, GET_EMBARGOS_ALL, DELETE_EMBARGO, CONFIRMAR_EMBARGO
 } from '../../constants/EmbargosConst';
 import {
-  getDemandados, getDemandantesUpdateTableSuccess, changeSiguiente,changeAnterior,
+  getDemandados, getDemandantesUpdateTableSuccess, changeSiguiente,changeAnterior,upadteAllRequestSuccess,
   getEmbargosAll, getEmbargosAsignados, getEmbargosPorConfirmar, getEmbargosConfirmados, getDemandadosSuccess, getEmbargoSuccess,
   getEmbargosConfirmadosSuccess, getEmbargosPorConfirmarSuccess, getEmbargosAsignadosSuccess, getEmbargosAllSuccess, nuevoMensaje, resetMensaje
   , getDemandadosUpdateTable, getDemandadosUpdateTableSuccess
@@ -459,6 +459,49 @@ function* confirmarEmbargoSaga(payload) {
   }
 
 }
+function* updateAllDemandadosSaga(payload){
+  console.log('UPDATE ALLA')
+  const config = {
+    headers: {
+      Authorization: 'Bearer ' + payload.token,
+      Accept: 'application/json',
+      "Content-Type": "application/json"
+    },
+  };
+  const demandados = payload.demandados.map(demandado => {
+    return ({
+      amount: demandado.montoAEmbargar,
+      expedient: demandado.expediente,
+      fullname: demandado.nombres,
+      id: String(demandado.id).includes('local') ? null : demandado.id,
+      identification: demandado.identificacion,
+      page: demandado.page,
+      typeIdentification: demandado.tipoIdentificacion
+    })
+  })
+
+  if (demandados.length > 0) {
+
+    const data1 = yield axios.post('https://bancow.finseiz.com/api/v1/demandados/save', {
+      demandados: demandados,
+      idEmbargo: payload.id
+    }, config)
+      .then(response => response)
+      .catch(err => err.response)
+    console.log(data1)
+    switch (data1.status) {
+      case 200:
+        yield put(upadteAllRequestSuccess('Demandados actualizados correctamente'))
+        break;
+    
+      default:
+        yield put(upadteAllRequestSuccess('No se pudieron actualizar los demandados'))
+        break;
+    }
+  }
+
+
+}
 function* eliminarDemandadoSaga(payload) {
   console.log('DELETE DEMANDADOS')
   console.log(payload)
@@ -834,8 +877,9 @@ function* embargosRootSaga() {
     takeEvery(DELETE_DEMANDANTE, deleteDemandanteSaga),
     takeEvery(UPDATE_EMBARGO, updateEmbargoSaga),
     takeEvery(GET_DEMANDADOS_SIGUIENTE,getDemandadosSagaSiguiente),
-    takeEvery(GET_DEMANDADOS_ANTERIOR, getDemandadosSagaAnterior)
-
+    takeEvery(GET_DEMANDADOS_ANTERIOR, getDemandadosSagaAnterior),
+    takeEvery(UPDATE_ALL_REQUEST, updateAllDemandadosSaga),
+    
 
 
   ])

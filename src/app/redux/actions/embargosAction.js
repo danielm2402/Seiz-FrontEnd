@@ -171,6 +171,17 @@ export const updateAllTipoDocumento=(tipo)=>({
     type: types.UPDATE_ALL_TIPO_DOCUMENTO,
     tipo
 })
+export const upadteAllRequest=(id,token, demandados)=>({
+    type: types.UPDATE_ALL_REQUEST,
+    id,
+    token,
+    demandados
+})
+export const upadteAllRequestSuccess=(msj)=>({
+    type: types.UPDATE_ALL_REQUEST_SUCCESS,
+    msj
+})
+
 
 
 

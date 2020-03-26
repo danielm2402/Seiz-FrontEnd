@@ -9,7 +9,7 @@ import { changePoints, setUltimaTableFocus } from '../../../redux/actions/boundi
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
-import { updateDemandando, deleteDemandado, addDemandado, saveDemandados, getDemandadosSiguiente, getDemandadosAnterior, updateAllTipoDocumento } from '../../../redux/actions/embargosAction'
+import { updateDemandando, deleteDemandado, addDemandado, saveDemandados, getDemandadosSiguiente, getDemandadosAnterior, updateAllTipoDocumento,upadteAllRequest } from '../../../redux/actions/embargosAction'
 import CurrencyFormat from 'react-currency-format';
 import PulseLoader from "react-spinners/ClipLoader";
 import { css } from "@emotion/core";
@@ -36,7 +36,8 @@ class TableDemandado extends Component {
                 tipo: 'NO_SELECCIONADO',
                 identificacion: '',
                 monto: ''
-            }
+            },
+            selectedAllValid:false
         }
     }
     componentDidUpdate(prevProps) {
@@ -190,10 +191,17 @@ class TableDemandado extends Component {
     }
     selecteAll = (e) => {
 
-        this.props.updateAllTipoDocumento(e.target.value)
-
-
+        if(e.target.value!=='NO_SELECCIONADO'){
+            this.props.updateAllTipoDocumento(e.target.value)
+            this.setState({selectedAllValid:true})
+        }else{
+            this.setState({selectedAllValid:false})
+        }
     }
+    handleRequestChangeAllType=()=>{
+       this.props.upadteAllRequest(this.props.idDocumento, this.props.token,this.props.demandados.data)
+    }
+   
     render() {
         let renderTable;
         var contador = -1;
@@ -222,7 +230,7 @@ class TableDemandado extends Component {
                                     <div style={{ width: '100%' }}>
                                         <div style={{ display:'flex', width: '100%', justifyContent:'center', alignItems:'center' }}>
                                             <div style={{width:'50%', display:'flex', justifyContent:'center'}}>Tipo</div>
-                                            {this.props.demandadosAllUpdateTipo?<div style={{width:'50%', display:'flex', justifyContent:'center'}}><a className="button-table-dinamic" onClick={this.goToExcel}><MdDone size="1.0em" color={"#434040"} /></a></div>:<></>}</div>
+                                            {this.props.demandadosAllUpdateTipo && this.state.selectedAllValid?<div style={{width:'50%', display:'flex', justifyContent:'center'}}><a className="button-table-dinamic" onClick={this.handleRequestChangeAllType}><MdDone size="1.0em" color={"#434040"} /></a></div>:<></>}</div>
                                         <div >
                                             <Select
                                                 labelId="demo-simple-select-placeholder-label-label"
@@ -233,7 +241,7 @@ class TableDemandado extends Component {
                                             >
                                                 <MenuItem value={'NO_SELECCIONADO'}>NO_SELECCIONADO</MenuItem>
                                                 <MenuItem value={'CEDULA'}>CEDULA</MenuItem>
-                                                <MenuItem value={'CEDULA_EXTRANJERA'}>CEDULA_EXTRANJERA</MenuItem>
+                                                <MenuItem value={'CEDULA_EXTRANJERIA'}>CEDULA_EXTRANJERA</MenuItem>
                                                 <MenuItem value={'NIT'}>NIT</MenuItem>
                                                 <MenuItem value={'TARJETA_IDENTIDAD'}>TARJETA_IDENTIDAD</MenuItem>
 
@@ -676,8 +684,8 @@ const mapDispatchToProps = (dispatch) => ({
     handleSaveDemandados: bindActionCreators(saveDemandados, dispatch),
     handleDemandadosSiguiente: bindActionCreators(getDemandadosSiguiente, dispatch),
     handleDemandadosAnterior: bindActionCreators(getDemandadosAnterior, dispatch),
-    updateAllTipoDocumento: bindActionCreators(updateAllTipoDocumento, dispatch)
-
+    updateAllTipoDocumento: bindActionCreators(updateAllTipoDocumento, dispatch),
+    upadteAllRequest: bindActionCreators(upadteAllRequest, dispatch)
 })
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TableDemandado))
 

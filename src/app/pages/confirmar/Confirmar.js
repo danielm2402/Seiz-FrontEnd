@@ -561,6 +561,31 @@ class Confirmar extends Component {
                                 </Dialog>
 
                                 <Dialog
+                                    open={this.props.mensaje2.exist}
+                                    onClose={() => {
+                                        this.props.handleResetMsj()
+                                    }
+                                    }
+                                    aria-labelledby="alert-dialog-title"
+                                    aria-describedby="alert-dialog-description"
+                                >
+                                    <DialogTitle id="alert-dialog-title">{"Información"}</DialogTitle>
+                                    <DialogContent>
+                                        <DialogContentText id="alert-dialog-description">
+                                            {this.props.mensaje2.msj}
+                                        </DialogContentText>
+                                    </DialogContent>
+                                    <DialogActions>
+
+                                        <Button onClick={() => {
+                                            this.props.handleResetMsj()
+                                        }} color="primary" autoFocus>
+                                            Aceptar
+                                          </Button>
+                                    </DialogActions>
+                                </Dialog>
+
+                                <Dialog
                                     open={this.props.mensajeBounding.exist}
                                     onClose={() => {
                                         this.props.handleResetMsjBounding()
@@ -802,6 +827,7 @@ const mapStateToProps = (state) => ({
     boundingRedux: state.boundingReducer.boundigTable,
     loadingDemandadosTable: state.boundingReducer.loadingDemandados,
     mensaje: state.EmbargosReducer.mensaje,
+    mensaje2: state.EmbargosReducer.mensaje2,
     tablaBounding: state.boundingReducer.tabla,
     bounding: state.boundingReducer.palabra,
     modeTable: state.boundingReducer.pointsModeTable,
