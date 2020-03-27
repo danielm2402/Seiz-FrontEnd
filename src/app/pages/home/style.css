@@ -53,8 +53,10 @@
     width: 49%;
 }
 .container-embargos{
-    background-color: #fff;
-    
+    background-color: #fff; 
+}
+.container-embargos div{
+   box-shadow: none;
 }
 .left-stadistics{
     padding-top: 20px;
@@ -73,7 +75,7 @@
 }
 .container-top
 {
-    height: 300px;
+    height: 400px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -82,7 +84,7 @@
 .historico{
     background-color: #fff;
     height: 100%;
-    width: 64%;
+    width: 100%;
 }
 .confirmar{
     background-color: #fff;
@@ -91,4 +93,19 @@
 }
 .container-bottom{
     margin-top: 20px;
+    height: 400px;
+}
+.container-bottom div{
+    box-shadow: none;
+    
+}
+.section-final{
+    display:flex;
+   justify-content: space-around;
+}
+.section-col-left{
+width: 58%;
+}
+.section-col-right{
+    width: 40%;
 }

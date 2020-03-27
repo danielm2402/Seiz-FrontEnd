@@ -1,4 +1,4 @@
-import React, { useMemo,useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { bindActionCreators } from 'redux';
 import {
@@ -39,7 +39,7 @@ import TableSinConfirmar from './MaterialTableDemo'
 import ChartArea from './google-material/stadistics/ChartArea'
 import TableUsers from './TableUsers'
 import 'react-circular-progressbar/dist/styles.css';
-import {getEmbargosAsignados} from '../../redux/actions/embargosAction'
+import { getEmbargosAsignados } from '../../redux/actions/embargosAction'
 const colors = [
   "#252525",
   "#525252",
@@ -100,59 +100,59 @@ function Dashboard(props) {
     }),
     [brandColor, dangerColor, primaryColor, successColor]
   );
- 
+
   return (
     <>
       <div className="cards-container">
 
         <Link to="/upload">
-          <Tarjet nombre="Subir oficio" width="210px" height="141px" number={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.total}>
-            <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
-         
-          </div>
+          <Tarjet nombre="Subir oficio" width="210px" height="141px" number={props.conteoEmbargos.loading ? 0 : props.conteoEmbargos.data.total}>
+            <div style={{ width: '60%', height: '70%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+
+            </div>
           </Tarjet>
         </Link>
 
         <Link to="/listar/no-confirmados">
-          <Tarjet nombre="Sin Confirmar" width="210px" height="141px"number={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.PorConfirmar}>
-          <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
-          <CircularProgressbar strokeWidth={5}value={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.porcentajePorConfirmar} text={props.conteoEmbargos.loading?'0%':(String(props.conteoEmbargos.data.porcentajePorConfirmar)).concat('%')} />
-          </div>
+          <Tarjet nombre="Sin Confirmar" width="210px" height="141px" number={props.conteoEmbargos.loading ? 0 : props.conteoEmbargos.data.PorConfirmar}>
+            <div style={{ width: '60%', height: '70%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <CircularProgressbar strokeWidth={5} value={props.conteoEmbargos.loading ? 0 : props.conteoEmbargos.data.porcentajePorConfirmar} text={props.conteoEmbargos.loading ? '0%' : (String(props.conteoEmbargos.data.porcentajePorConfirmar)).concat('%')} />
+            </div>
           </Tarjet>
         </Link>
         <Link to="/listar/confirmados">
-          <Tarjet nombre="Confirmados" width="210px" height="141px" number={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.confirmados}>
-          <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
-          <CircularProgressbar strokeWidth={5} value={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.porcentajeConfirmados} text={props.conteoEmbargos.loading?'0%':(String(props.conteoEmbargos.data.porcentajeConfirmados)).concat('%')} />
-          </div>
+          <Tarjet nombre="Confirmados" width="210px" height="141px" number={props.conteoEmbargos.loading ? 0 : props.conteoEmbargos.data.confirmados}>
+            <div style={{ width: '60%', height: '70%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <CircularProgressbar strokeWidth={5} value={props.conteoEmbargos.loading ? 0 : props.conteoEmbargos.data.porcentajeConfirmados} text={props.conteoEmbargos.loading ? '0%' : (String(props.conteoEmbargos.data.porcentajeConfirmados)).concat('%')} />
+            </div>
           </Tarjet>
         </Link>
         <Link to="/listar/todos">
-          <Tarjet nombre="Buscar" width="210px" height="141px" number={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.total}>
-          <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
-         
-          </div>
+          <Tarjet nombre="Buscar" width="210px" height="141px" number={props.conteoEmbargos.loading ? 0 : props.conteoEmbargos.data.total}>
+            <div style={{ width: '60%', height: '70%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+
+            </div>
           </Tarjet>
         </Link>
         <Link>
-          <Tarjet nombre="Cartas" width="210px" height="141px" number={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.cartas}>
-          <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
-          <CircularProgressbar strokeWidth={5}value={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.porcentajeCartas} text={props.conteoEmbargos.loading?'0%':(String(props.conteoEmbargos.data.porcentajeCartas)).concat('%')} />
-          
-          </div>
+          <Tarjet nombre="Cartas" width="210px" height="141px" number={props.conteoEmbargos.loading ? 0 : props.conteoEmbargos.data.cartas}>
+            <div style={{ width: '60%', height: '70%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <CircularProgressbar strokeWidth={5} value={props.conteoEmbargos.loading ? 0 : props.conteoEmbargos.data.porcentajeCartas} text={props.conteoEmbargos.loading ? '0%' : (String(props.conteoEmbargos.data.porcentajeCartas)).concat('%')} />
+
+            </div>
           </Tarjet>
         </Link>
         <Link to="/listar/asignados">
-          <Tarjet nombre="Asignados" width="210px" height="141px" number={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.asignados}>
-          <div style={{width:'60%', height:'70%', display:'flex', justifyContent:'center', alignItems:'center'}}>
-          <CircularProgressbar strokeWidth={5}value={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.porcentajeAsignados} text={props.conteoEmbargos.loading?'0%':(String(props.conteoEmbargos.data.porcentajeAsignados)).concat('%')} />
-          
-          </div>
+          <Tarjet nombre="Asignados" width="210px" height="141px" number={props.conteoEmbargos.loading ? 0 : props.conteoEmbargos.data.asignados}>
+            <div style={{ width: '60%', height: '70%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <CircularProgressbar strokeWidth={5} value={props.conteoEmbargos.loading ? 0 : props.conteoEmbargos.data.porcentajeAsignados} text={props.conteoEmbargos.loading ? '0%' : (String(props.conteoEmbargos.data.porcentajeAsignados)).concat('%')} />
+
+            </div>
           </Tarjet>
         </Link>
       </div>
 
-    {/*   <div className="row">
+      {/*   <div className="row">
         <div className="col-xl-8">
         <AreaChart/>
         </div>
@@ -161,32 +161,30 @@ function Dashboard(props) {
         </div>
       </div> */}
       <div className="container-general">
-      <div className="container-left">
-        <div className="container-embargos">
-        <TableSinConfirmar token={props.token} nombre="Embargos" />
-        </div>
-        <div className="left-stadistics">
-           <div className="comparator">
-          <Comparator/>
-          </div> 
-          {/* <div className="indicator">
+        <div className="container-left">
+          <div className="container-embargos">
+            <TableSinConfirmar token={props.token} nombre="Embargos" />
+          </div>
+          <div className="left-stadistics">
+            <div className="comparator">
+              <Comparator />
+            </div>
+            {/* <div className="indicator">
           <Details/>
           </div> */}
+          </div>
         </div>
-      </div>
-      <div className="container-right">
+        <div className="container-right">
           <div className="container-top">
             <div className="historico">
-              <ChartArea/>
+              <ChartArea />
             </div>
-            <div className="confirmar">
-            <CircularProgressbar strokeWidth={5}value={props.conteoEmbargos.loading?0:props.conteoEmbargos.data.porcentajeAsignados} text={props.conteoEmbargos.loading?'0%':(String(props.conteoEmbargos.data.porcentajeAsignados)).concat('%')}></CircularProgressbar>
-            </div>
+
           </div>
           <div className="container-bottom">
-            <TableUsers data={props.usersRanking}/>
+            <TableUsers data={props.usersRanking} />
           </div>
-      </div>
+        </div>
       </div>
 
       {/* <Portlet>
@@ -217,22 +215,22 @@ function Dashboard(props) {
         </div>
       </div> */}
 
-      <div className="row">
-        <div className="col-xl-8">
-            <Details/>
+      <div className="section-final">
+        <div className="section-col-left">
+          <Details />
         </div>
-        <div className="col-xl-4">
+        <div className="section-col-right">
           <RecentActivities />
         </div>
       </div>
 
-      <div className="row">
-        <div className="col-xl-8">
-        <div className="kt-portlet kt-portlet--height-fluid">
-          <SimpleBarChar></SimpleBarChar>
+      <div style={{paddingTop:'10px'}} className="section-final">
+        
+          <div style={{ height: '400px', backgroundColor:'#ffffff' }}className="section-col-left">
+            <SimpleBarChar></SimpleBarChar>
           </div>
-        </div>
-        <div className="col-xl-4">
+        
+        <div className="section-col-right">
           <MyRecentActivities />
         </div>
       </div>
@@ -240,13 +238,13 @@ function Dashboard(props) {
   );
 }
 
-const mapStateToProps=(state)=>({
+const mapStateToProps = (state) => ({
   token: state.auth.authToken,
-embargos: state.EmbargosReducer.porConfirmar,
-conteoEmbargos: state.estadisticasReducer.conteo,
-usersRanking: state.estadisticasReducer.ranking
+  embargos: state.EmbargosReducer.porConfirmar,
+  conteoEmbargos: state.estadisticasReducer.conteo,
+  usersRanking: state.estadisticasReducer.ranking
 })
-const mapDispatchToProps=(dispatch)=>({
-  getEmbargos: bindActionCreators(getEmbargosAsignados,dispatch)
+const mapDispatchToProps = (dispatch) => ({
+  getEmbargos: bindActionCreators(getEmbargosAsignados, dispatch)
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)
