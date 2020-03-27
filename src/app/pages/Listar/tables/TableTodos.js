@@ -53,6 +53,8 @@ function MaterialTableDemo(props) {
   const estadoRef = useRef('TODOS');
   const firstRef = useRef('');
   const endRef = useRef('');
+  const noFormatfirstRef = useRef('2/14/2020');
+  const noFormatendRef = useRef('3/28/2020');
   return (
     <div>
       <MaterialTable
@@ -249,7 +251,7 @@ function MaterialTableDemo(props) {
               </Select></TableCell>
             <TableCell align="left"></TableCell>
             <TableCell align="left">
-              <DateRangePicker startDate="2/14/2020" endDate="3/28/2020" onApply={(e, picker) => {
+              <DateRangePicker startDate={noFormatfirstRef.current} endDate={noFormatendRef.current} onApply={(e, picker) => {
                 handleApply(e, picker)
                 props.onFilterChanged(5, [new Date(firstRef.current).toISOString().split('T')[0], new Date(endRef.current).toISOString().split('T')[0]])
               }}>
@@ -283,8 +285,10 @@ function MaterialTableDemo(props) {
   );
 
   function handleApply(event, picker) {
-    firstRef.current = picker.startDate._i;
-    endRef.current = picker.endDate._i;
+    console.log(picker.startDate.toDate())
+    console.log(picker.endDate.toDate())
+    firstRef.current = picker.startDate.toDate();
+    endRef.current = picker.endDate.toDate();
 
   }
 }
