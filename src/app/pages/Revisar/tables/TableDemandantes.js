@@ -38,16 +38,13 @@ class TableDemandantes extends Component {
            
             if (this.props.tablaBounding == 'demandantes') {
               
-                console.log('ULTIMO FOCUS')
-                console.log()
-                console.log(this.state[this.state.ultimFocus.tipo])
+              
                 this.setState({[this.state.ultimFocus.tipo]:(this.state[this.state.ultimFocus.tipo]===undefined?'':this.state[this.state.ultimFocus.tipo]).concat(this.props.bounding)})
             }
             if(this.props.tablaBounding=='demandantesadd'){
-                console.log('NUEVA PALABRA PARA EL EDIT Y ES:')
-                console.log(this.props.bounding)
+               
                 this.setState({addRowValues:{...this.state.addRowValues, [this.state.ultimFocus.tipo]:this.state[this.state.ultimFocus.tipo]+this.props.bounding}}, function(){
-                    console.log(this.state.addRowValues)
+                   
                 })
             }
 
@@ -91,45 +88,12 @@ class TableDemandantes extends Component {
     handleDelete = (id) => {
         this.props.handleDelete(id, this.props.token)
     }
-    focusElement(e, palabra) {
-        console.log(e.target.name)
-        // this.setState({ actualFocus: e.target.name })
-        if (this.props.resaltado !== "") {
-            console.log(e.target.value)
-            console.log(palabra)
-            try {
-                let vectorLocation = [];
-                let totalBoundig = [];
-                for (const prop in palabra.fieldInstances) {
-                    console.log(`palabra.fieldInstances.${prop}`);
-                    for (const prop1 in palabra.fieldInstances[prop].parts) {
-                        console.log(palabra.fieldInstances[prop].parts[prop1])
-                        vectorLocation.push({ start: palabra.fieldInstances[prop].parts[prop1].startLocation, end: palabra.fieldInstances[prop].parts[prop1].endLocation, page: palabra.fieldInstances[prop].parts[prop1].page })
-                    }
-                }
-                console.log(vectorLocation)
-                vectorLocation.map((item) => {
-                    var iterador = item.start
-                    for (iterador; iterador <= item.end; iterador++) {
-                        totalBoundig.push(this.props.json.pages[this.props.page - 1].words[iterador].boundingPoly.vertices)
-                    }
-                })
-                console.log('totalboundig')
-                console.log(totalBoundig)
-
-                this.props.handleBounding(totalBoundig)
-                this.setState({
-                    boundig: { boundig: true, points: totalBoundig }
-                })
-            } catch (error) {
-            }
-        }
-    }
+    
     focusElement2(e, palabra, id, tipo, column) {
        
 
         this.setState({ ultimFocus: { id: id, tipo: column } })
-        this.props.handleUltimTable('demandantes')
+        
         if (this.props.resaltado !== "") {
             try {
                 let vectorLocation = [];
@@ -139,10 +103,10 @@ class TableDemandantes extends Component {
                 vectorLocation.map((item) => {
                     var iterador = item.start
                     for (iterador; iterador <= item.end; iterador++) {
-                        totalBoundig.push(this.props.json.pages[this.props.page - 1].words[iterador].boundingPoly.vertices)
+                        totalBoundig.push([...this.props.json.pages[item.page].words[iterador].boundingPoly.vertices, item.page])
                     }
                 })
-                console.log('MANDANDO HANDLE ULTIM TABLE')
+               
 
                 this.props.handleBounding(totalBoundig)
                 this.setState({
@@ -191,6 +155,7 @@ class TableDemandantes extends Component {
                                         margin="normal"
                                         onFocus={(e) => {
                                             try {
+                                                console.log('EEEEEEO')
                                                 this.props.handleUltimTable('demandantesadd')
                                                 this.setState({ ultimFocus: { id: this.state.itemEdit, tipo: 'nombre' } }, function(){
                                                     console.log(this.state.ultimFocus)
@@ -207,7 +172,7 @@ class TableDemandantes extends Component {
 
                                 <td><div className="element-table"></div><TextField
                                     onChange={(e) => this.setState({ addRowValues: { ...this.state.addRowValues, identificacion: e.target.value } })}
-                                    value={String(this.state.addRowValues.identificacion)}
+                                    value={String((this.state.addRowValues.identificacion).replace(/[.\s]/g, ''))}
                                     label="Identificación"
                                     margin="normal"
                                     onFocus={(e) => {
@@ -241,9 +206,9 @@ class TableDemandantes extends Component {
                                         return (
                                             <tr>
                                                 <td><div className="element-table">{item.fullname}</div></td>
-                                                <td><div className="element-table">{item.identificacion || '-'}</div></td>
+                                                <td><div className="element-table">{item.identification || '-'}</div></td>
 
-                                                <td><div className="edits-rows"><a onClick={() => this.handleEdit(item.id, item.fullname, item.identificacion)}><div className="button-edit-row"><FaRegEdit size={'1.3rem'} /></div></a>
+                                                <td><div className="edits-rows"><a onClick={() => this.handleEdit(item.id, item.fullname, item.identification)}><div className="button-edit-row"><FaRegEdit size={'1.3rem'} /></div></a>
                                                     <a onClick={() => this.handleDelete(item.id)}><div className="button-edit-row"><MdDeleteSweep size={'1.3rem'} /></div></a>
                                                 </div></td>
                                             </tr>
@@ -273,7 +238,7 @@ class TableDemandantes extends Component {
                                             </div></td>
                                             <td><div className="element-table"></div><TextField
                                                 onChange={(e) => this.setState({ identificacion: e.target.value })}
-                                                value={this.state.identificacion}
+                                                value={String((this.state.identificacion).replace(/[.\s]/g, ''))}
                                                 margin="normal"
                                                 onFocus={(e) => {
                                                     try {
@@ -368,12 +333,7 @@ class TableDemandantes extends Component {
                     <a onClick={this.addRow}><div className="button-table"><MdAdd size={'1.4rem'} /></div></a>
                 </div>
                 {renderTable}
-                <div className="buttons-control-table">
-
-                    <a onClick={this.back}><div className="button-table"><MdNavigateBefore size={'1.4rem'} /></div></a>
-                    <a onClick={this.next}><div className="button-table"><MdNavigateNext size={'1.4rem'} /></div></a>
-
-                </div>
+               
             </div>
         )
     }
@@ -387,7 +347,7 @@ class TableDemandantes extends Component {
         const obj = {
             id: this.props.demandantes.length + 'localID',
             fullname: this.state.addRowValues.nombre,
-            identificacion: this.state.addRowValues.identificacion,
+            identification: this.state.addRowValues.identificacion.replace(/[.\s]/g, ''),
         }
         this.props.handleAddDemandado(obj, this.props.demandantes, this.props.token, this.props.idDocumento)
         this.setState({ addRow: false, addRow: false, addRowValues: { nombre: '', identificacion: '', } })

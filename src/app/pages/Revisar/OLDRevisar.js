@@ -1,23 +1,39 @@
-import React, { Component, useRef } from 'react'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import React, { Component } from 'react'
 import ReactDOM from 'react-dom';
-import Button from '@material-ui/core/Button';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { withRouter } from "react-router-dom";
-import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux'
-import { getDemandados, getEmbargo, resetMensaje, saveDemandados, updateEmbargo } from '../../redux/actions/embargosAction'
+import Button from '@material-ui/core/Button';
 import Tabla from './Tabla'
 import './Tabla.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import TextField from '@material-ui/core/TextField';
-import { FaRegEdit, FaTable, FaFileExcel } from "react-icons/fa";
-import { MdCancel, MdPhotoSizeSelectSmall, MdNavigateNext, MdNavigateBefore } from "react-icons/md";
-import { confirmarEmbargo } from '../../redux/actions/embargosAction'
+import { FaRegEdit, FaTable } from "react-icons/fa";
+import { MdCancel, MdPhotoSizeSelectSmall, MdNavigateNext, MdNavigateBefore, MdDone } from "react-icons/md";
+import { updateEmbargo } from '../../redux/actions/embargosAction'
+import { getDemandados, getEmbargo, resetMensaje, saveDemandados } from '../../redux/actions/embargosAction'
 import { ProgressBar } from 'react-bootstrap';
 import { setOptions, Document, Page } from "react-pdf";
 import Demandados from './Demandados'
@@ -25,29 +41,11 @@ import Demandantes from './Demandantes';
 import chroma from 'chroma-js';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-import { changePoints, resetPoints, nuevaRegion, obtenerDemandadosTable, setUltimaTableFocus, setPage, setMode, resetMensajeBounding } from '../../redux/actions/boundingAction'
+import { changePoints, resetPoints, nuevaRegion, obtenerDemandadosTable, setUltimaTableFocus } from '../../redux/actions/boundingAction'
 import TableDemandados from './tables/TableDemandado'
 import TableDemandantes from './tables/TableDemandantes'
-import styled from 'styled-components';
-import Pdf from '@mikecousins/react-pdf';
-import Viewer from '../viewer/Viewer2'
-import Icon from '@material-ui/core/Icon';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import LoadingBar from 'react-top-loading-bar';
-const theme = createMuiTheme({
-    palette: {
-        primary: { 500: '#337ab7' },
-
-    },
-});
 const pdfjsVersion = "2.0.305";
 
-const PDFDocumentWrapper = styled.div`
-  canvas {
-    width: 100% !important;
-    height: auto !important;
-  }
-`;
 setOptions({
     workerSrc: `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsVersion}/pdf.worker.js`
 });
@@ -81,12 +79,25 @@ const dot = (color = '#ccc') => ({
     },
 });
 
+const colourStyles = {
+    control: styles => ({ ...styles, backgroundColor: 'white' }),
+    input: styles => ({ ...styles, ...dot() }),
+    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+        const color = chroma('blue');
+        return {
+            ...styles,
+            zIndex: '99',
+            color: 'blue'
 
+        };
+    },
+    placeholder: styles => ({ ...styles, ...dot() }),
+    singleValue: (styles, { data }) => ({ ...styles, ...dot('blue') }),
+};
 
-class Confirmar extends Component {
+class Revisar extends Component {
     constructor(props) {
         super(props)
-        this.canvasRef = React.createRef();
         this.state = {
             view: '',
             json: '',
@@ -100,13 +111,13 @@ class Confirmar extends Component {
             fecha: props.embargo.data.documentDate,
             tipoEmbargo: '',
             tipoDocumento: '',
-            disabled: false,
+            disabled: true,
             boundig: { boundig: false, points: [] },
             demandantes: [],
             isDown: false,
             previousPointX: '',
             previousPointY: '',
-            editCanvas: true,
+            editCanvas: false,
             actualFocus: '',
             rectangle: {},
             demandados: [],
@@ -121,9 +132,10 @@ class Confirmar extends Component {
         this.handleMouseUp = this.handleMouseUp.bind(this);
     }
     modeTable = () => {
-        this.props.handleChangeMode('TABLE')
+        console.log('edit table')
         this.setState({ activeModeTable: true, editCanvas: false, obtenerDemandados: false }, function () {
-
+            console.log(this.state.editCanvas)
+            console.log(this.state.activeModeTable)
         })
     }
     onDocumentLoad = ({ numPages }) => {
@@ -132,13 +144,14 @@ class Confirmar extends Component {
 
     componentDidMount() {
 
+        console.log(this.state.entidad)
+        console.log(this.props.embargo.data.sender)
         this.props.handleEmbargo(this.props.match.params.id, this.props.token)
         this.props.handleDemandados(this.props.match.params.id, this.props.token)
 
-
     }
     componentDidUpdate(prevProps, prevState) {
-
+        console.log(this.props)
         if (this.props.document !== prevProps.document) {
 
             this.setState({
@@ -159,7 +172,7 @@ class Confirmar extends Component {
 
 
             }, function () {
-
+                console.log(this.state)
             })
 
         }
@@ -175,7 +188,8 @@ class Confirmar extends Component {
 
         if (this.props.demandados !== prevProps.demandados) {
             if (this.props.demandados.data.length > 0) {
-
+                console.log('demandados')
+                console.log(this.props.demandados)
                 let vectorDemandados = {}
                 for (let index = 0; index < this.props.demandados.data.length; index++) {
                     vectorDemandados = { ...vectorDemandados, ['nombre' + this.props.demandados.data[index].id]: this.props.demandados.data[index].nombres }
@@ -183,7 +197,7 @@ class Confirmar extends Component {
 
                 }
                 this.setState({ demandados: vectorDemandados }, () => {
-
+                    console.log(this.state.demandados)
                 })
             }
 
@@ -198,21 +212,9 @@ class Confirmar extends Component {
             this.setState({ demandantes: this.props.embargo.data.plaintiffs })
         }
 
-        if (this.props.bounding !== prevProps.bounding) {
-
-            if (this.props.tablaBounding == 'documento') {
-
-
-                this.setState({ [this.state.actualFocus]: (this.state[this.state.actualFocus] === undefined ? '' : this.state[this.state.actualFocus]).concat(this.props.bounding) })
-            }
-
-
-        }
-
 
     }
     handleEdit = () => {
-        console.log('EDITANDO')
         this.setState({ disabled: false })
     }
     handleCancel = () => {
@@ -220,29 +222,32 @@ class Confirmar extends Component {
         this.props.handleBoundingReset()
     }
     focusElement(e, palabra) {
-
         this.props.handleUltimFocus('documento')
+        console.log(e.target.name)
         this.setState({ actualFocus: e.target.name })
         if (this.props.resaltado !== "") {
-
+            console.log(e.target.value)
+            console.log(palabra)
             try {
                 let vectorLocation = [];
                 let totalBoundig = [];
                 for (const prop in palabra.fieldInstances) {
-
+                    console.log(`palabra.fieldInstances.${prop}`);
                     for (const prop1 in palabra.fieldInstances[prop].parts) {
-
+                        console.log(palabra.fieldInstances[prop].parts[prop1])
                         vectorLocation.push({ start: palabra.fieldInstances[prop].parts[prop1].startLocation, end: palabra.fieldInstances[prop].parts[prop1].endLocation, page: palabra.fieldInstances[prop].parts[prop1].page })
                     }
                 }
-
+                console.log(vectorLocation)
                 vectorLocation.map((item) => {
                     var iterador = item.start
                     for (iterador; iterador <= item.end; iterador++) {
-                        totalBoundig.push([...this.props.json.pages[item.page].words[iterador].boundingPoly.vertices, item.page])
+                        totalBoundig.push(this.props.json.pages[this.state.pageNumber - 1].words[iterador].boundingPoly.vertices)
                     }
                 })
-                this.props.handleBounding(totalBoundig)
+                console.log('totalboundig')
+                console.log(totalBoundig)
+
                 this.setState({
                     boundig: { boundig: true, points: totalBoundig }
                 })
@@ -253,7 +258,9 @@ class Confirmar extends Component {
 
     }
     focusElement2(e, palabra, id, tipo) {
-
+        console.log('el id')
+        console.log(id)
+        console.log(palabra)
         if (this.props.resaltado !== "") {
             try {
 
@@ -261,17 +268,19 @@ class Confirmar extends Component {
                 let vectorLocation = [];
                 let totalBoundig = [];
                 const row = palabra.fieldInstances[id].parts[tipo]
-
+                console.log(row)
                 vectorLocation.push({ start: row.startLocation, end: row.endLocation, page: row.page })
 
 
-
+                console.log(vectorLocation)
                 vectorLocation.map((item) => {
                     var iterador = item.start
                     for (iterador; iterador <= item.end; iterador++) {
                         totalBoundig.push(this.props.json.pages[0].words[iterador].boundingPoly.vertices)
                     }
                 })
+                console.log('totalboundig')
+                console.log(totalBoundig)
 
                 this.setState({
                     boundig: { boundig: true, points: totalBoundig }
@@ -285,47 +294,55 @@ class Confirmar extends Component {
         this.setState({
             [event.target.name]: event.target.value
         }, function () {
-
+            console.log(this.state)
         })
     }
 
     editCanvas = () => {
-        this.props.handleChangeMode('MANUAL')
+        console.log('edit canva')
         this.setState({ editCanvas: true, activeModeTable: false, obtenerDemandados: false }, function () {
-
+            console.log(this.state.editCanvas)
+            console.log(this.state.activeModeTable)
         })
     }
     obtenerDemandados = () => {
+        const ctx = this.refs.canvas.getContext('2d');
+        ctx.clearRect(0, 0, this.refs.canvas.width, this.refs.canvas.height); //clear canvas
+        ctx.beginPath();
+        console.log('obteniendo demandados')
+        console.log(this.props.match.params.id)
         this.setState({ obtenerDemandados: false })
-        const columns = {
-            nombre: String(this.state.colsEdit.nombre),
-            identificacion: String(this.state.colsEdit.identificacion),
-            expendiente: String(this.state.colsEdit.expediente),
-            monto: String(this.state.colsEdit.monto),
-
-        }
-
-
-        this.props.handleTableDemandados(this.props.modeTable.points, columns, this.props.match.params.id, this.state.pageNumber, this.props.token, String(this.state.colsEdit.tipo))
-    }
-    goToExcel = () => {
-        this.props.history.push('/upload/excel/' + this.props.match.params.id)
+        console.log(this.state.tableCols)
+        console.log(this.state.tablePoints)
+        this.props.handleTableDemandados(this.state.tablePoints, this.state.tableCols, this.props.match.params.id, this.state.pageNumber, this.props.token)
     }
 
     render() {
+        const { pageNumber, numPages } = this.state;
+
+
+        var add = null
+        this.props.disabled == true ?
+            add = null
+            : add = newData =>
+                new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        {
+                            const data = this.state.data;
+                            data.push(newData);
+                            this.setState({ data }, () => resolve());
+                        }
+                        resolve()
+                    }, 1000)
+                })
+
 
         return (
             <div>
 
                 {this.props.loadingEmbargo || this.props.loadingDemandados ?
-                    <div className="container-progress" >
-                        
-                        <LoadingBar
-                            progress={100}
-                            height={4}
-                            color='#BDD535'
-                            onRef={ref => (this.LoadingBar = ref)}
-                        />
+                    <div className="container-progress">
+                        <ProgressBar className="right" animated now={100} />
                     </div> :
                     <div>
                         <div style={{ width: '100%', backgroundColor: '#fff' }}>
@@ -337,59 +354,108 @@ class Confirmar extends Component {
                             <div className="section-document">
                                 <div className="tools-doc">
                                     <div className="tools-edit" >
-                                        <div style={{ paddingLeft: '10px' }} className="tools-edit-num">
-                                            <h5 style={{ color: '#fff' }}> {this.state.pageNumber}/{this.state.numPages}</h5>
+                                        <div className="tools-edit-num">
+                                            <label> {this.state.pageNumber}/{this.state.numPages}</label>
                                         </div>
                                         <div className="tools-edit-change">
                                             {this.state.numPages > 1 && this.state.pageNumber > 1 ?
-                                                <a className="btn-herramienta" onClick={() => {
+                                                <button onClick={() => {
+
                                                     this.setState({ pageNumber: this.state.pageNumber - 1 })
-                                                    this.props.handleChangePage(this.state.pageNumber - 1)
-                                                }}><MdNavigateBefore size="1.5em" color={"#fff"} /></a>
-                                                : <a className="btn-herramienta" disabled={true}><MdNavigateBefore size="1.7em" color={"#fff"} /></a>}
+                                                }}><MdNavigateBefore size="1.5em" color={"#BDD535"} /></button>
+                                                : <button disabled={true} onClick={() => console.log('BOTON DESAHIBILITADO')} ><MdNavigateBefore size="1.5em" color={"#BDD535"} /></button>}
                                         </div>
                                     </div>
                                     <div className="tools-page">
                                         <div className="tools-page-center">
                                             {this.state.numPages > 1 && this.state.pageNumber < this.state.numPages ?
-                                                <a className="btn-herramienta" onClick={() => {
-                                                    this.setState({ pageNumber: this.state.pageNumber + 1 })
-                                                    this.props.handleChangePage(this.state.pageNumber + 1)
-                                                }}><MdNavigateNext size="1.7em" color={"#fff"} /></a> :
-                                                <a className="btn-herramienta" disabled={true} ><MdNavigateNext size="1.7em" color={"#fff"} /></a>}
+                                                <button onClick={() => this.setState({ pageNumber: this.state.pageNumber + 1 })}><MdNavigateNext size="1.5em" color={"#BDD535"} /></button> :
+                                                <button disabled={true} onClick={() => console.log('BOTON DESAHIBILITADO')}><MdNavigateNext size="1.5em" color={"#BDD535"} /></button>}
 
                                         </div>
-
-                                        <div className="tools-page-right">
-                                            <a className="btn-herramienta" onClick={this.editCanvas}><MdPhotoSizeSelectSmall size="1.5em" color={"#fff"} /></a>
-
-                                            <a onClick={this.modeTable} className="btn-herramienta"><FaTable size="1.5em" color={"#fff"} /></a>
-                                            {this.props.modeTable.ready ? <a className="btn-herramienta" onClick={this.obtenerDemandados}><Icon color={"#fff"} >done</Icon></a> : <></>}
-                                        </div>
+                                        {this.state.disabled ? <></> :
+                                            <div className="tools-page-right">
+                                                <button className="button-select" onClick={this.editCanvas}><MdPhotoSizeSelectSmall size="1.5em" color={"#BDD535"} /></button>
+                                                <button onClick={this.modeTable}><FaTable size="1.5em" color={"#BDD535"} /></button>
+                                                {this.state.obtenerDemandados ? <button onClick={this.obtenerDemandados}>Obtener</button> : <></>}
+                                            </div>}
                                     </div>
                                 </div>
                                 <div className="container-document">
-                                    <Viewer></Viewer>
+
+
+                                    {this.state.boundig.points.length > 0 ?
+                                        <svg className="lienzo" xmlns="http://www.w3.org/2000/svg">
+                                            {
+                                                this.state.boundig.points.map((item) => {
+                                                    return (
+                                                        <polygon fill="#90FEA5" fill-opacity="0.4" points={`${(item[0].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[0].y) * this.props.json.pages[this.state.pageNumber - 1].height},
+${(item[1].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[1].y) * this.props.json.pages[this.state.pageNumber - 1].height},
+${(item[2].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[2].y) * this.props.json.pages[this.state.pageNumber - 1].height},
+${(item[3].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[3].y) * this.props.json.pages[this.state.pageNumber - 1].height}`} />)
+                                                })
+                                            }
+                                        </svg> : <></>
+                                    }
+                                    {this.props.boundingRedux.points.length > 0 ?
+                                        <svg className="lienzo" xmlns="http://www.w3.org/2000/svg">
+                                            {
+                                                this.props.boundingRedux.points.map((item) => {
+                                                    return (
+                                                        <polygon fill="#90FEA5" fill-opacity="0.4" points={`${(item[0].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[0].y) * this.props.json.pages[this.state.pageNumber - 1].height},
+${(item[1].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[1].y) * this.props.json.pages[this.state.pageNumber - 1].height},
+${(item[2].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[2].y) * this.props.json.pages[this.state.pageNumber - 1].height},
+${(item[3].x) * this.props.json.pages[this.state.pageNumber - 1].width} ${(item[3].y) * this.props.json.pages[this.state.pageNumber - 1].height}`} />)
+                                                })
+                                            }
+                                        </svg> : <></>
+                                    }
+
+                                    <canvas ref="canvas" width={this.props.json.pages[this.state.pageNumber - 1].width} height={this.props.json.pages[this.state.pageNumber - 1].height} className="canvas-edit"
+                                        onMouseDown={
+                                            e => {
+                                                let nativeEvent = e.nativeEvent;
+                                                this.handleMouseDown(nativeEvent);
+                                            }}
+                                        onMouseMove={
+                                            e => {
+                                                let nativeEvent = e.nativeEvent;
+                                                this.handleMouseMove(nativeEvent);
+                                            }}
+                                        onMouseUp={
+                                            e => {
+                                                let nativeEvent = e.nativeEvent;
+                                                this.handleMouseUp(nativeEvent);
+                                            }}
+                                    />
+                                    <Document
+                                        file={this.props.document}
+                                        onLoadSuccess={this.onDocumentLoadSuccess}
+                                    >
+                                        <Page pageNumber={pageNumber} />
+                                    </Document>
+
+
                                 </div>
                             </div>
                             <div className="section-table">
                                 <div className="buttons-edits">
 
-
+                                    {!this.state.disabled ? <div> <button onClick={this.handleConfirmEdit}><MdDone size="1.5em" color={"#BDD535"} /></button> <button onClick={this.handleCancel}><MdCancel size="1.5em" color={"#BDD535"} /></button> </div> : <button onClick={this.handleEdit}><FaRegEdit size="1.5em" color={"#BDD535"} /></button>}
                                 </div>
                                 <div className="information-card">
                                     <label for="entidad">Entidad Remitente</label>
-                                    <input id="entidad" name="entidad" value={this.state.entidad} onChange={this.handleInput} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.entidadRemitente : null)) }} />
+                                    <input id="entidad" name="entidad" value={this.state.entidad} onChange={this.handleInput} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.entidadRemitente : null)) }} />
                                     <div className="section-information-cols">
                                         <div className="section-information-col">
                                             <label for="ciudad" >Ciudad</label>
-                                            <input id="ciudad" name="ciudad" value={this.state.ciudad} onChange={this.handleInput} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.ciudad : null)) }} />
+                                            <input id="ciudad" name="ciudad" value={this.state.ciudad} onChange={this.handleInput} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.ciudad : null)) }} />
                                             <label for="referencia">Referencia</label>
-                                            <input id="referencia" name="referencia" value={this.state.referencia} onChange={this.handleInput} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.referencia : null)) }} />
+                                            <input id="referencia" name="referencia" value={this.state.referencia} onChange={this.handleInput} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.referencia : null)) }} />
                                             <label>Tipo de embargo</label>
                                             <div className="select-input" style={{ zIndex: 999999999 }}>
                                                 <Select
-
+                                                    disabled={this.state.disabled}
                                                     labelId="demo-simple-select-label"
                                                     id="tipoEmbargo"
                                                     name="tipoEmbargo"
@@ -407,13 +473,14 @@ class Confirmar extends Component {
                                         </div>
                                         <div className="section-information-col">
                                             <label for="direccion">Direccion</label>
-                                            <input id="direccion" name="direccion" value={this.state.direccion} onChange={this.handleInput} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.direccion : null)) }} />
+                                            <input id="direccion" name="direccion" value={this.state.direccion} onChange={this.handleInput} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.direccion : null)) }} />
                                             <label for="fecha">Fecha</label>
-                                            <input id="fecha" name="fecha" value={this.state.fecha} onChange={this.handleInput} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.fecha : null)) }} />
+                                            <input id="fecha" name="fecha" value={this.state.fecha} onChange={this.handleInput} disabled={this.state.disabled} onFocus={(e) => { this.focusElement(e, (this.props.resaltado !== "" ? this.props.resaltado.fields.fecha : null)) }} />
                                             <label>Tipo de documento</label>
                                             <div className="select-input">
                                                 <Select
                                                     name="tipoDocumento"
+                                                    disabled={this.state.disabled}
                                                     id="tipoDocumento"
                                                     name="tipoDocumento"
                                                     value={String(this.state.tipoDocumento)}
@@ -524,20 +591,10 @@ class Confirmar extends Component {
 
                                 <TableDemandados page={this.state.pageNumber} idDocumento={this.props.match.params.id} />
                                 <TableDemandantes page={this.state.pageNumber} demandantes={this.state.demandantes} idDocumento={this.props.match.params.id} />
-                                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '20px' }}>
-                                    <MuiThemeProvider theme={theme}>
-                                        <Button onClick={this.handleConfirmEdit} variant="contained" endIcon={<Icon>send</Icon>} color="primary">
-                                            Guardar
-                                 </Button>
-                                    </MuiThemeProvider>
-                                </div>
-
-
                                 <Dialog
                                     open={this.props.mensaje.exist}
                                     onClose={() => {
                                         this.props.handleResetMsj()
-                                        
                                     }
                                     }
                                     aria-labelledby="alert-dialog-title"
@@ -553,62 +610,9 @@ class Confirmar extends Component {
 
                                         <Button onClick={() => {
                                             this.props.handleResetMsj()
-                                            
                                         }} color="primary" autoFocus>
                                             Aceptar
-                                          </Button>
-                                    </DialogActions>
-                                </Dialog>
-
-                                <Dialog
-                                    open={this.props.mensaje2.exist}
-                                    onClose={() => {
-                                        this.props.handleResetMsj()
-                                    }
-                                    }
-                                    aria-labelledby="alert-dialog-title"
-                                    aria-describedby="alert-dialog-description"
-                                >
-                                    <DialogTitle id="alert-dialog-title">{"Información"}</DialogTitle>
-                                    <DialogContent>
-                                        <DialogContentText id="alert-dialog-description">
-                                            {this.props.mensaje2.msj}
-                                        </DialogContentText>
-                                    </DialogContent>
-                                    <DialogActions>
-
-                                        <Button onClick={() => {
-                                            this.props.handleResetMsj()
-                                        }} color="primary" autoFocus>
-                                            Aceptar
-                                          </Button>
-                                    </DialogActions>
-                                </Dialog>
-
-                                <Dialog
-                                    open={this.props.mensajeBounding.exist}
-                                    onClose={() => {
-                                        this.props.handleResetMsjBounding()
-
-                                    }
-                                    }
-                                    aria-labelledby="alert-dialog-title"
-                                    aria-describedby="alert-dialog-description"
-                                >
-                                    <DialogTitle id="alert-dialog-title">{"Información"}</DialogTitle>
-                                    <DialogContent>
-                                        <DialogContentText id="alert-dialog-description">
-                                            {this.props.mensajeBounding.msj}
-                                        </DialogContentText>
-                                    </DialogContent>
-                                    <DialogActions>
-
-                                        <Button onClick={() => {
-                                            this.props.handleResetMsjBounding()
-
-                                        }} color="primary" autoFocus>
-                                            Aceptar
-                                          </Button>
+</Button>
                                     </DialogActions>
                                 </Dialog>
                             </div>
@@ -621,58 +625,13 @@ class Confirmar extends Component {
     onError(e) {
         console.log(e, 'error in file-viewer');
     }
-    confirmarEmbargo = () => {
-        try {
-
-            var data = {
-                account: this.props.embargo.data.account,
-                address: this.state.direccion,
-                amount: this.props.embargo.data.amount,
-                city: this.state.ciudad,
-                docId: this.props.embargo.data.docId,
-                documentDate: this.state.fecha,
-                documentType: this.state.tipoDocumento,
-                embargoType: this.state.tipoEmbargo,
-                reference: this.props.embargo.data.reference,
-                sender: this.state.entidad,
-                id: this.state.referencia,
-                demandados: this.props.demandados,
-                demandantes: this.props.embargo.data.plaintiffs
-            }
-            this.props.handleConfirmarEmbargo(data, this.props.token)
-
-        } catch (error) {
-            console.log(error)
-        }
-
-    }
-    handleConfirmEdit = () => {
-        const obj = {
-            account: this.props.embargo.data.account,
-            address: this.state.direccion,
-            amount: this.props.embargo.data.amount,
-            city: this.state.ciudad,
-            docId: this.props.embargo.data.docId,
-            documentDate: this.state.fecha,
-            documentType: this.state.tipoDocumento,
-            embargoType: this.state.tipoEmbargo,
-            id: this.state.referencia,
-            reference: this.props.embargo.data.reference,
-            sender: this.state.entidad
-        }
-
-        this.props.handleUpdateEmbargo(obj, this.props.token)
-      
-    }
     handleColsTable = (event) => {
         this.setState({ colsEdit: { ...this.state.colsEdit, [event.target.name]: event.target.value } }, function () {
-
+            console.log(this.state.colsEdit)
         })
     }
     handleMouseDown(event) { //added code here
-
         if (this.state.editCanvas && !this.state.activeModeTable) {
-
             this.setState({
                 isDown: true,
                 isDownCount: 1,
@@ -686,7 +645,6 @@ class Confirmar extends Component {
         }
 
         if (!this.state.editCanvas && this.state.activeModeTable) {
-
             this.setState({
                 isDown: true,
                 isDownCount: 1,
@@ -741,7 +699,6 @@ class Confirmar extends Component {
         }
     }
     handleMouseUp(event) {
-
         if (this.state.editCanvas && !this.state.activeModeTable) {
             var x = event.offsetX;
             var y = event.offsetY;
@@ -757,22 +714,21 @@ class Confirmar extends Component {
                     var y = ((((item.boundingPoly.vertices[3].y)) + ((item.boundingPoly.vertices[0].y))) / 2) * this.props.json.pages[this.state.pageNumber - 1].height
 
                     if ((x > this.state.previousPointX && x < (this.state.rectangle.width + this.state.previousPointX) && ((y > this.state.previousPointY) && (y < this.state.rectangle.height + this.state.previousPointY)))) {
-
+                        console.log(item)
                         vector.push(item)
                     }
                 })
+                console.log('EL VECTOR')
+                console.log(vector)
                 var palabra = ''
                 vector.map((item) => {
                     palabra = palabra + ' ' + item.text
 
                 })
-                //palabra= this.state[this.state.actualFocus]+palabra
                 this.props.handleRegion(palabra)
                 if (this.props.tablaBounding == 'documento') {
                     this.setState({ [this.state.actualFocus]: this.state[this.state.actualFocus] + palabra })
                 }
-
-                // console.log(this.state[this.state.actualFocus])
             })
 
             const ctx = this.refs.canvas.getContext('2d');
@@ -810,7 +766,6 @@ class Confirmar extends Component {
                     expendiente: String(this.state.colsEdit.expediente),
                     monto: String(this.state.colsEdit.monto)
                 }
-
                 this.setState({ tablePoints: verti, tableCols: columns })
 
             })
@@ -828,8 +783,23 @@ class Confirmar extends Component {
         }
 
     }
-    handleResetMsjBounding = () => {
+    handleConfirmEdit = () => {
+        const obj = {
+            account: this.props.embargo.data.account,
+            address: this.state.direccion,
+            amount: this.props.embargo.data.amount,
+            city: this.state.ciudad,
+            docId: this.props.embargo.data.docId,
+            documentDate: this.state.fecha,
+            documentType: this.state.tipoDocumento,
+            embargoType: this.state.tipoEmbargo,
+            id: this.state.referencia,
+            reference: this.props.embargo.data.reference,
+            sender: this.state.entidad
+        }
 
+        this.props.handleConfirmarEmbargo(obj, this.props.token)
+        this.handleCancel()
     }
 }
 
@@ -845,31 +815,19 @@ const mapStateToProps = (state) => ({
     boundingRedux: state.boundingReducer.boundigTable,
     loadingDemandadosTable: state.boundingReducer.loadingDemandados,
     mensaje: state.EmbargosReducer.mensaje,
-    mensaje2: state.EmbargosReducer.mensaje2,
-    tablaBounding: state.boundingReducer.tabla,
-    bounding: state.boundingReducer.palabra,
-    modeTable: state.boundingReducer.pointsModeTable,
-    mensajeBounding: state.boundingReducer.msj
-
-
 
 })
 const mapDispatchToProps = (dispatch) => ({
     handleUltimFocus: bindActionCreators(setUltimaTableFocus, dispatch),
     handleEmbargo: bindActionCreators(getEmbargo, dispatch),
     handleDemandados: bindActionCreators(getDemandados, dispatch),
-    handleBounding: bindActionCreators(changePoints, dispatch),
     handleBoundingReset: bindActionCreators(resetPoints, dispatch),
     handleRegion: bindActionCreators(nuevaRegion, dispatch),
     handleTableDemandados: bindActionCreators(obtenerDemandadosTable, dispatch),
-    handleConfirmarEmbargo: bindActionCreators(confirmarEmbargo, dispatch),
-    handleUpdateEmbargo: bindActionCreators(updateEmbargo, dispatch),
+    handleConfirmarEmbargo: bindActionCreators(updateEmbargo, dispatch),
     handleResetMsj: bindActionCreators(resetMensaje, dispatch),
     handleSaveDemandados: bindActionCreators(saveDemandados, dispatch),
-    handleChangePage: bindActionCreators(setPage, dispatch),
-    handleChangeMode: bindActionCreators(setMode, dispatch),
-    handleResetMsjBounding: bindActionCreators(resetMensajeBounding, dispatch)
-
 })
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Confirmar))
+export default connect(mapStateToProps, mapDispatchToProps)(Revisar)
+

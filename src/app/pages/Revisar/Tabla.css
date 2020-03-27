@@ -1,180 +1,191 @@
 .container-view{
-    display: flex;
-    flex-direction: row;
-    background: #ccc;
-}
-.buttons-edits{
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
-  align-items: flex-end;
-  padding-bottom: 10px;
+  background: #ccc;
+  color: #595d6e;
+}
+.buttons-edits{
+width: 100%;
+display: flex;
+flex-direction: row;
+justify-content: flex-end;
+align-items: flex-end;
+padding-bottom: 10px;
 }
 .container-document{
-  
-    padding: 10px;
-    padding-top: 50px;
-  background: #EBECF1;
+width: 100%;
+  padding: 10px;
+  padding-top: 50px;
+background: #EBECF1;
 }
 .section-table{
 
-    width: 55%;
-    padding: 10px;
-  
-  background: #fff;
+  width: 47%;
+  padding: 10px;
+
+background: #fff;
 }
 
 .information-card{
-  width: 100%;
-  background-color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  height: auto;
-  margin-bottom: 25px;
-  
-  
+width: 100%;
+background-color: #ffffff;
+display: flex;
+align-items: center;
+justify-content: center;
+flex-direction: column;
+height: auto;
+margin-bottom: 25px;
+
+
 }
 .information-card input{
-  border-radius: 4px;
-  height: 37px;
-  border: 1px solid #434040 ;
-  outline: none;
-  font-size: 17px;
-    font-weight: 300;
-    font-family: Poppins, Helvetica, sans-serif;
-    width: 100%
+border-radius: 4px;
+height: 37px;
+border: 1px solid #E9EBF1 ;
+outline: none;
+font-size: 17px;
+  font-weight: 300;
+  font-family: Poppins, Helvetica, sans-serif;
+  width: 100%;
+  color: #595d6e;
 }
 .information-card input:disabled{
 
-  border: 1px solid #C9CFD6 ;
-  background-color: #E1E4E6;
-  
+border: 1px solid #C9CFD6 ;
+background-color: #E1E4E6;
+
 }
 .information-card input:focus{
-  box-shadow: 1px 0px 17px 2px rgba(189,213,53,1);
-  
- 
+box-shadow: 1px 0px 17px 2px rgba(189,213,53,1);
+
+
 }
 .select-input input:focus{
-  box-shadow: none
+box-shadow: none
 }
 #entidad{
-  width: 80%;
+width: 95%;
 }
 .section-information-cols{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 80%;
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+width: 95%;
 }
 .section-information-col{
-  width: 45%;
+width: 45%;
 }
 .container-progress{
-  width: 100%;
-  height: 100%;
+width: 100%;
+height: 100%;
 
 }
 .container-finish .progress.right .progress-bar  { 
-  background-color: #BDD535;
+background-color: #BDD535;
 }
 .cols-demandantes{
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
+display: flex;
+flex-direction: row;
+width: 100%;
+justify-content: center;
+align-items: center;
 }
 .table-demandantes{
-  width: 100%;
-  
+width: 100%;
+
 }
 .table-demandantes th{
-  text-align: center;
-  border: 1px solid #D8DCE0;
-  background-color: #434040;
-  border-top-left-radius: 10px;
-  color: #ffffff;
+text-align: center;
+border: 1px solid #D8DCE0;
+background-color: #434040;
+border-top-left-radius: 10px;
+color: #ffffff;
 }
 .lienzo{
-  position: absolute;
-  width: 612px;
-  height: 792px;
-  
-  z-index: 99999999;
+position: absolute;
+width: 612px;
+height: 792px;
+
+z-index: 99999999;
 }
 .canvas-edit{
-  cursor: crosshair;
-  position: absolute;
- 
-  z-index: 99999999999;
+width: auto;
+cursor: crosshair;
+position: absolute;
+height: auto;
+
+}
+#canvas{
+background:#c0c0c0;
+width:100%;
+height:auto;
+position: relative;
 }
 
 .document-tools{
-  width: 50%;
-  display: flex;
-  flex-direction: row;
-  background-color: #EBECF1;
+width: 50%;
+display: flex;
+flex-direction: row;
+background-color: #EBECF1;
 }
 
 .tools-edit{
- width: 50%;
- display: flex;
- 
+width: 50%;
+display: flex;
+
 }
 .tools-edit-num{
-  width: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+width: 50%;
+display: flex;
+align-items: center;
+justify-content: flex-start;
 }
 .tools-edit-change{
-  width: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+width: 50%;
+display: flex;
+align-items: center;
+justify-content: flex-end;
 }
 .tools-page{
-  width: 50%;
-  display: flex;
-  flex-direction: row;
+width: 50%;
+display: flex;
+flex-direction: row;
 }
 .tools-page-right{
-  width: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 10px;
+width: 50%;
+display: flex;
+align-items: center;
+justify-content: flex-end;
+padding-right: 10px;
 }
 .tools-page-center{
-  width: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+width: 50%;
+display: flex;
+align-items: center;
+justify-content: flex-start;
 }
 .section-document{
-  background-color: #fff;
+width: 53%;
+background-color: #fff;
 
 }
 .tools-doc{
-  background-color: #BDD535;
-  width: 100%;
-  height: 50px;
-  display: flex;
-  flex-direction: row;
+background-color: #434040;
+width: 100%;
+height: 50px;
+display: flex;
+flex-direction: row;
 }
 .table-generator-container{
-  width: 100%;
-  margin-top: 10px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
+width: 100%;
+margin-top: 10px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+margin-bottom: 20px;
 
 }
 .table-generator-container .table-inputs{
@@ -182,8 +193,49 @@ display: flex;
 flex-direction: row;
 width: 100%;
 justify-content: space-around;
+color: #595d6e;
+
 }
 .select-table-element{
-  display: flex;
-  flex-direction: column;
+display: flex;
+flex-direction: column;
+}
+.confirm-form-btn{
+box-shadow: 0 0.5rem 1rem rgb(88, 185, 87); 
+margin: auto;
+font-size: 16px;
+line-height: 1.5;
+color: #fff;
+text-transform: uppercase;
+height: 62px;
+border-radius: 3px;
+background: #58b957;
+display: -webkit-box;
+display: -webkit-flex;
+display: -moz-box;
+display: -ms-flexbox;
+display: flex;
+justify-content: center;
+align-items: center;
+padding: 0 25px;
+-webkit-transition: all 0.4s;
+-o-transition: all 0.4s;
+-moz-transition: all 0.4s;
+transition: all 0.4s;
+}
+
+.btn-herramienta{
+width: 36px;
+height: 80%;
+display: flex;
+justify-content: center;
+align-items: center;
+}
+.btn-herramienta:hover{
+background-color: #283048;
+fill:#fff;
+border-radius: 5px;
+}
+.btn-herramienta svg:hover{
+fill:#c0c4d1
 }
