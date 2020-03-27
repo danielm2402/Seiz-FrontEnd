@@ -6,6 +6,7 @@ import DashboardChoice from './DashboardChoice'
 import DocsPage from "./docs/DocsPage";
 import Upload from '../upload/Upload'
 import Confirmados from '../Listar/Confirmados'
+import Cartas from '../Listar/Cartas'
 import NoConfirmados from '../Listar/NoConfirmados'
 import Asignados from '../Listar/Asignados'
 import Todos from '../Listar/Todos'
@@ -40,6 +41,7 @@ export default function HomePage() {
         <Route path="/listar/asignados" exact component={Asignados}/>
         <Route path="/listar/todos" exact component={Todos}/>
         <Route path="/listar/users" exact component={Usuarios}/>
+        <Route path="/listar/cartas" exact component={Cartas}/>
         <Route path="/user/:id" exact component={User}/>
         <Route path="/upload/excel/:id" exact component={UploadExcel}/>
         <Redirect to="/error/error-v1" />

@@ -153,7 +153,7 @@ function MaterialTableDemo(props) {
           }
           else{
             console.log('NO LA ENCONTRÓ')
-              params={...params, estadoEmbargo:'CONFIRMADO'}
+              params={...params, estadoEmbargo:''}
           }
             const config = {
                 headers: {

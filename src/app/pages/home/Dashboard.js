@@ -134,7 +134,7 @@ function Dashboard(props) {
             </div>
           </Tarjet>
         </Link>
-        <Link>
+        <Link to="/listar/cartas">
           <Tarjet nombre="Cartas" width="210px" height="141px" number={props.conteoEmbargos.loading ? 0 : props.conteoEmbargos.data.cartas}>
             <div style={{ width: '60%', height: '70%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <CircularProgressbar strokeWidth={5} value={props.conteoEmbargos.loading ? 0 : props.conteoEmbargos.data.porcentajeCartas} text={props.conteoEmbargos.loading ? '0%' : (String(props.conteoEmbargos.data.porcentajeCartas)).concat('%')} />
