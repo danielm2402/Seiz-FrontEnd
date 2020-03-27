@@ -1,5 +1,5 @@
 
-import React, { useState }  from 'react';
+import React, { useState, useRef }  from 'react';
 import MaterialTable,{ MTableCell }  from 'material-table';
 import {deleteEmbargo, getEmbargo, getDemandados} from '../../../redux/actions/embargosAction'
 import { bindActionCreators } from 'redux';
@@ -7,21 +7,52 @@ import { connect } from 'react-redux';
 import {Link} from 'react-router-dom'
 import {useHistory} from 'react-router-dom'
 import axios from 'axios'
-const color=(value)=>{
+import TableCell from '@material-ui/core/TableCell';
+import TableRow from '@material-ui/core/TableRow';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
+import DateRangePicker from 'react-bootstrap-daterangepicker';
+// you will need the css that comes with bootstrap@3. if you are using
+// a tool like webpack, you can do the following:
+import 'bootstrap/dist/css/bootstrap.css';
+// you will also need the css that comes with bootstrap-daterangepicker
+import 'bootstrap-daterangepicker/daterangepicker.css';
+import Button from '@material-ui/core/Button';
+import moment from 'moment';
+const color = (value) => {
   switch (value) {
     case 'CONFIRMADO':
-      return '#03A9F4'
+      return '#EBEFF9'
     case 'SIN_CONFIRMAR':
       return '#FBE6ED'
-      case 'COMPLETO':
-      return '#4CAF50'
+    case 'COMPLETO':
+      return '#E2F2EF'
     default:
       return '#ffffff'
-     
+
+  }
+}
+const colorText = (value) => {
+  switch (value) {
+    case 'CONFIRMADO':
+      return '#6971B8'
+    case 'SIN_CONFIRMAR':
+      return '#C15C83'
+    case 'COMPLETO':
+      return '#33AE89'
+    default:
+      return '#ffffff'
+
   }
 }
 function MaterialTableDemo(props) {
   let history=useHistory()
+  const estadoRef = useRef('SIN_CONFIRMAR');
+  const firstRef = useRef('');
+  const endRef = useRef('');
+  const noFormatfirstRef = useRef('2/14/2020');
+  const noFormatendRef = useRef('3/28/2020');
   return (
     <div>
     <MaterialTable
@@ -38,47 +69,97 @@ function MaterialTableDemo(props) {
    
       ]}
       components={{
-        Cell: props => {
-          console.log('LA CELDA TABLE')
-          console.log(props);
-          if(props.columnDef.field=='status'){
+        FilterRow: props => <TableRow>
+            <TableCell></TableCell>
+            <TableCell align="left"><TextField id="standard-basic" label="Id" onChange={(e) => { props.onFilterChanged(0, e.target.value) }} /></TableCell>
+            <TableCell align="left"></TableCell>
+            <TableCell align="left"><TextField id="standard-basic" label="Ciudad" onChange={(e) => { props.onFilterChanged(2, e.target.value) }} /></TableCell>
+            <TableCell align="left">
+              <Select
+                onChange={(e) => {
+                  estadoRef.current = e.target.value;
+                  props.onFilterChanged(3, e.target.value)
+                  console.log(props)
+
+                }}
+                value={estadoRef.current}
+
+              >
+                <MenuItem value={'SIN_CONFIRMAR'}>SIN_CONFIRMAR</MenuItem>
+                <MenuItem value={'CONFIRMADO'}>CONFIRMADO</MenuItem>
+                <MenuItem value={'COMPLETO'}>COMPLETO</MenuItem>
+                <MenuItem value={'FINALIZADO'}>FINALIZADO</MenuItem>
+                <MenuItem value={'TODOS'}>TODOS</MenuItem>
+
+
+              </Select></TableCell>
+            <TableCell align="left"></TableCell>
+            <TableCell align="left">
+              <DateRangePicker startDate={noFormatfirstRef.current} endDate={noFormatendRef.current} onApply={(e, picker) => {
+                handleApply(e, picker)
+                props.onFilterChanged(5, [new Date(firstRef.current).toISOString().split('T')[0], new Date(endRef.current).toISOString().split('T')[0]])
+              }}>
+                <Button>Fecha</Button>
+              </DateRangePicker>
+            </TableCell>
+            <TableCell align="left"></TableCell>
+          </TableRow>,
+      Cell: props => {
+        if (props.columnDef.field == 'status') {
           return (
-            
             <MTableCell
-      
             >
-              {props.columnDef.field=='status'?
-              <div style={{backgroundColor:color(props.value), borderRadius:'3px', padding:'10px', color:'#C15C83', fontFamily:'Poppins,Helvetica,sans-serif !important', fontWeight:'500' }}>{props.value}</div>:<></>}
-              </MTableCell>
+              {props.columnDef.field == 'status' ?
+                <div style={{ backgroundColor: color(props.value), borderRadius: '3px', padding: '10px', color: colorText(props.value), fontFamily: 'Poppins,Helvetica,sans-serif !important', fontWeight: '500' }}>{props.value}</div> : <></>}
+            </MTableCell>
           );
         }
-        else{
-          return(
-          <MTableCell
-             
-          {...props}
-        />)
+        else {
+          return (
+            <MTableCell
+
+              {...props}
+            />)
         }
       }
+
+    }}
       
-      }}
       data={query =>
         new Promise((resolve, reject) => {
           console.log('QUERYYY')
           console.log(query)
           console.log(query.page)
           let params= {}
+          
           if(query.filters.length!==0){
            for (let i = 0; i < query.filters.length; i++) {
-             if(query.filters[i].column.title==='Demandante')
-             params={...params,'entidadRemitente':query.filters[i].value}
-             else{
-              params={...params,[(query.filters[i].column.title).toLowerCase()]:query.filters[i].value}
-             }
+            switch (query.filters[i].column.title) {
+              case 'Demandante':
+                params = { ...params, 'entidadRemitente': query.filters[i].value }
+                break;
+              case 'Estado':
+                params = { ...params,'estadoEmbargo':  query.filters[i].value!=='TODOS'?query.filters[i].value:'' }
+                break;
+              case 'Fecha de carga':
+                params = { ...params, 'startDate': query.filters[i].value[0].replace(/[-]/g, '/'), finalDate:query.filters[i].value[1].replace(/[-]/g, '/') }
+              break;
+              default:
+                params = { ...params, [(query.filters[i].column.title).toLowerCase()]: query.filters[i].value }
+                break;
+            }
              
            }
-           console.log(params)
+         
           }
+          if(params.hasOwnProperty('estadoEmbargo')){
+             
+          }
+          else{
+            console.log('NO LA ENCONTRÓ')
+              params={...params, estadoEmbargo:'SIN_CONFIRMAR'}
+          }
+             console.log(params)
             const config = {
                 headers: {
                   Authorization: 'Bearer ' + props.token,
@@ -87,14 +168,14 @@ function MaterialTableDemo(props) {
                 params
               };
               console.log('DATOS DE TABLAAAAAAAAAA')
-              axios.get('https://bancow.finseiz.com/api/v1/embargos/count?estadoEmbargo=SIN_CONFIRMAR',config)
+              axios.get('https://bancow.finseiz.com/api/v1/embargos/count?',config)
               .then(response=>{
                 let total
                 var page
                 total=response.data
                 console.log(response)
                 console.log('INFORMACION DEL NUEVO REQUEST')
-                axios.post('https://bancow.finseiz.com/api/v1/embargos/list?estadoEmbargo=SIN_CONFIRMAR&page='+(query.page)+'&size='+query.pageSize
+                axios.post('https://bancow.finseiz.com/api/v1/embargos/list?page='+(query.page)+'&size='+query.pageSize
                 ,{}, config)
                    .then(response1 => {
                      
@@ -177,7 +258,14 @@ function MaterialTableDemo(props) {
     />
     </div>
   );
-  
+  function handleApply(event, picker) {
+    console.log(picker.startDate.toDate())
+    console.log(picker.endDate.toDate())
+    firstRef.current = picker.startDate.toDate();
+    endRef.current = picker.endDate.toDate();
+
+  }
+
 }
 
 const mapStateToProps=(state)=>({
