@@ -80,11 +80,7 @@ export default {
         bullet: "dot",
         icon: "flaticon2-user",
         submenu: [
-          {
-            title: "Mi perfil",
-            bullet: "dot",
-            
-          },
+          
           {
             title: "Salir",
             bullet: "dot",

@@ -25,7 +25,7 @@ class Footer extends React.Component {
           </div>
           <div className="kt-footer__menu">
             <a
-              href="http://keenthemes.com/metronic"
+              
               target="_blank"
               rel="noopener noreferrer"
               className="kt-footer__menu-link kt-link"
@@ -33,7 +33,7 @@ class Footer extends React.Component {
               Acerca de
             </a>
             <a
-              href="http://keenthemes.com/metronic"
+              
               target="_blank"
               rel="noopener noreferrer"
               className="kt-footer__menu-link kt-link"
@@ -41,7 +41,7 @@ class Footer extends React.Component {
               Equipo
             </a>
             <a
-              href="http://keenthemes.com/metronic"
+             
               target="_blank"
               rel="noopener noreferrer"
               className="kt-footer__menu-link kt-link"

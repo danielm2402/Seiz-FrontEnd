@@ -19,7 +19,7 @@ function RecentActivities(props) {
       <div className="kt-portlet kt-portlet--height-fluid">
         <div className="kt-portlet__head">
           <div className="kt-portlet__head-label">
-            <h3 className="kt-portlet__head-title">Mis ultimos embargos confirmados</h3>
+            <h3 className="kt-portlet__head-title">Mis ultimos embargos asignados y confirmados</h3>
           </div>
          
         </div>
@@ -47,7 +47,7 @@ function RecentActivities(props) {
                     )
                   })
                 :<div className="kt-timeline-v2__item">
-                <span className="kt-timeline-v2__item-time">10:00</span>
+                <span className="kt-timeline-v2__item-time"></span>
                 <div className="kt-timeline-v2__item-cricle">
                   <i className="fa fa-genderless kt-font-danger" />
                 </div>

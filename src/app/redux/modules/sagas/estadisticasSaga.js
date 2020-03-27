@@ -256,6 +256,8 @@ function* getHistorialMeSaga(payload) {
     const data = yield axios.post('https://bancow.finseiz.com/api/v1/embargos/list?assignedTo=' + payload.user + '&estadoEmbargo=CONFIRMADO&sort.sorted=true', {}, config)
         .then(response => response)
         .catch(error => error.response)
+        console.log('MIS EMBARGOS')
+        console.log(data)
     switch (data.status) {
         case 200:
             yield put(getHistorialSuccessMe(data.data))

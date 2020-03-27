@@ -57,23 +57,16 @@ class UserProfile extends React.Component {
             </div>
             <div className="kt-user-card__name">{this.props.auth.user.username}</div>
             <div className="kt-user-card__badge">
-              <span className="btn btn-success btn-sm btn-bold btn-font-md">
-                23 messages
-              </span>
+              
             </div>
           </div>
           <div className="kt-notification">
             <a className="kt-notification__item">
               <div className="kt-notification__item-icon">
-                <i className="flaticon2-calendar-3 kt-font-success" />
+                
               </div>
               <div className="kt-notification__item-details">
-                <div className="kt-notification__item-title kt-font-bold">
-                  Mi Perfíl
-                </div>
-                <div className="kt-notification__item-time">
-                  Configuración de usuario
-                </div>
+                
               </div>
             </a>
            
