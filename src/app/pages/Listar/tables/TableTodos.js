@@ -11,6 +11,16 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
+import TextField from '@material-ui/core/TextField';
+import DateRangePicker from 'react-bootstrap-daterangepicker';
+// you will need the css that comes with bootstrap@3. if you are using
+// a tool like webpack, you can do the following:
+import 'bootstrap/dist/css/bootstrap.css';
+// you will also need the css that comes with bootstrap-daterangepicker
+import 'bootstrap-daterangepicker/daterangepicker.css';
+import Button from '@material-ui/core/Button';
+import moment from 'moment';
+
 const color = (value) => {
   switch (value) {
     case 'CONFIRMADO':
@@ -41,6 +51,8 @@ function MaterialTableDemo(props) {
   let history = useHistory()
   const [estado, setEstado] = useState('TODOS');
   const estadoRef = useRef('TODOS');
+  const firstRef = useRef('');
+  const endRef = useRef('');
   return (
     <div>
       <MaterialTable
@@ -92,6 +104,9 @@ function MaterialTableDemo(props) {
                   case 'Estado':
                     params = { ...params, 'estadoEmbargo': query.filters[i].value }
                     break;
+                  case 'Fecha de carga':
+                    params = { ...params, 'startDate': query.filters[i].value[0].replace(/[-]/g, '/'), finalDate:query.filters[i].value[1].replace(/[-]/g, '/') }
+                  break;
                   default:
                     params = { ...params, [(query.filters[i].column.title).toLowerCase()]: query.filters[i].value }
                     break;
@@ -157,6 +172,7 @@ function MaterialTableDemo(props) {
                   })
 
               })
+              .catch(err=>console.log(err.response))
 
 
           })
@@ -209,9 +225,9 @@ function MaterialTableDemo(props) {
         components={{
           FilterRow: props => <TableRow>
             <TableCell></TableCell>
-            <TableCell align="left"><input onChange={() => console.log(props)} /></TableCell>
+            <TableCell align="left"><TextField id="standard-basic" label="Id" onChange={(e) => { props.onFilterChanged(0, e.target.value) }} /></TableCell>
             <TableCell align="left"></TableCell>
-            <TableCell align="left"><input onChange={() => console.log(props)} /></TableCell>
+            <TableCell align="left"><TextField id="standard-basic" label="Ciudad" onChange={(e) => { props.onFilterChanged(2, e.target.value) }} /></TableCell>
             <TableCell align="left">
               <Select
                 onChange={(e) => {
@@ -221,7 +237,7 @@ function MaterialTableDemo(props) {
 
                 }}
                 value={estadoRef.current}
-                ç
+
               >
                 <MenuItem value={'SIN_CONFIRMAR'}>SIN_CONFIRMAR</MenuItem>
                 <MenuItem value={'CONFIRMADO'}>CONFIRMADO</MenuItem>
@@ -232,7 +248,14 @@ function MaterialTableDemo(props) {
 
               </Select></TableCell>
             <TableCell align="left"></TableCell>
-            <TableCell align="left"><input onChange={(e) => { props.onFilterChanged(0, 1) }} /></TableCell>
+            <TableCell align="left">
+              <DateRangePicker startDate="2/14/2020" endDate="3/28/2020" onApply={(e, picker) => {
+                handleApply(e, picker)
+                props.onFilterChanged(5, [new Date(firstRef.current).toISOString().split('T')[0], new Date(endRef.current).toISOString().split('T')[0]])
+              }}>
+                <Button>Fecha</Button>
+              </DateRangePicker>
+            </TableCell>
             <TableCell align="left"></TableCell>
           </TableRow>,
           Cell: props => {
@@ -259,7 +282,11 @@ function MaterialTableDemo(props) {
     </div>
   );
 
+  function handleApply(event, picker) {
+    firstRef.current = picker.startDate._i;
+    endRef.current = picker.endDate._i;
 
+  }
 }
 
 
