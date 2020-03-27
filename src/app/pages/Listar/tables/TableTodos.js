@@ -231,6 +231,7 @@ function MaterialTableDemo(props) {
             <TableCell align="left"></TableCell>
             <TableCell align="left"><TextField id="standard-basic" label="Ciudad" onChange={(e) => { props.onFilterChanged(2, e.target.value) }} /></TableCell>
             <TableCell align="left">
+            <div style={{paddingTop:'15px'}}>
               <Select
                 onChange={(e) => {
                   estadoRef.current = e.target.value;
@@ -248,15 +249,18 @@ function MaterialTableDemo(props) {
                 <MenuItem value={'TODOS'}>TODOS</MenuItem>
 
 
-              </Select></TableCell>
+              </Select></div></TableCell>
             <TableCell align="left"></TableCell>
             <TableCell align="left">
+            <div style={{paddingTop:'15px'}}>
               <DateRangePicker startDate={noFormatfirstRef.current} endDate={noFormatendRef.current} onApply={(e, picker) => {
                 handleApply(e, picker)
                 props.onFilterChanged(5, [new Date(firstRef.current).toISOString().split('T')[0], new Date(endRef.current).toISOString().split('T')[0]])
               }}>
+                
                 <Button>Fecha</Button>
               </DateRangePicker>
+              </div>
             </TableCell>
             <TableCell align="left"></TableCell>
           </TableRow>,
