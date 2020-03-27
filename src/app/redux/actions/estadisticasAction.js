@@ -29,9 +29,10 @@ export const getStatsGeneralSuccess=(data)=>({
     data
 });
 
-export const getStatsRankingUser=(token)=>({
+export const getStatsRankingUser=(token, fecha)=>({
     type: types.STATS_RANKING_USER,
-    token
+    token,
+    fecha
 });
 export const getStatsRankingUserSuccess=(data)=>({
     type: types.STATS_RANKING_USER_SUCCESS,

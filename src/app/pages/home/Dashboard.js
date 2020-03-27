@@ -1,38 +1,25 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { bindActionCreators } from 'redux';
-import {
-  Portlet,
-  PortletBody,
-  PortletHeader,
-  PortletHeaderToolbar
-} from "../../partials/content/Portlet";
+
 import { metronic } from "../../../_metronic";
-import QuickStatsChart from "../../widgets/QuickStatsChart";
-import OrderStatisticsChart from "../../widgets/OrderStatisticsChart";
-import OrdersWidget from "../../widgets/OrdersWidget";
-import SalesBarChart from "../../widgets/SalesBarChart";
-import DownloadFiles from "../../widgets/DownloadFiles";
-import NewUsers from "../../widgets/NewUsers";
-import LatestUpdates from "../../widgets/LatestUpdates";
-import BestSellers from "../../widgets/BestSellers";
+
 import RecentActivities from "../../widgets/RecentActivities";
 import MyRecentActivities from "../../widgets/MyRecentActivities";
-import PortletHeaderDropdown from "../../partials/content/CustomDropdowns/PortletHeaderDropdown";
-import { MdVideoLibrary, MdFileUpload, MdFileDownload, MdCloudUpload, MdSearch, MdEmail, MdNotificationsActive } from "react-icons/md";
-import { FaSearch, FaCheck, FaUpload, FaEye } from "react-icons/fa";
+
+import { FaCalendarAlt } from "react-icons/fa";
 import {
   Link
 } from "react-router-dom";
-import { VictoryPie, VictoryChart, VictoryLine, VictoryGroup, VictoryBar } from "victory";
+
 import Tarjet from './Tarjet'
 import './style.css'
 import Details from './google-material/stadistics/Detalles'
-import Pie from './google-material/stadistics/Pie'
+
 import Comparator from './google-material/stadistics/Comparator'
-import AreaChart from './google-material/stadistics/AreaChart'
+
 import SimpleBarChar from './google-material/stadistics/SimpleBarChar'
-import TarjetInficator from './google-material/stadistics/TarjetIndicator'
+import {getConteoEmbargos, getStatsRankingUser,getHistorial,getHistorialMe,getBarrasSemanales,statsMeMvp,getStadisticsUserGeneral,getPolygon} from '../../redux/actions/estadisticasAction'
 import { CircularProgressbar } from 'react-circular-progressbar';
 import { connect } from 'react-redux'
 import TableSinConfirmar from './MaterialTableDemo'
@@ -40,6 +27,13 @@ import ChartArea from './google-material/stadistics/ChartArea'
 import TableUsers from './TableUsers'
 import 'react-circular-progressbar/dist/styles.css';
 import { getEmbargosAsignados } from '../../redux/actions/embargosAction'
+import DateRangePicker from 'react-bootstrap-daterangepicker';
+// you will need the css that comes with bootstrap@3. if you are using
+// a tool like webpack, you can do the following:
+import 'bootstrap/dist/css/bootstrap.css';
+// you will also need the css that comes with bootstrap-daterangepicker
+import 'bootstrap-daterangepicker/daterangepicker.css';
+import Button from '@material-ui/core/Button';
 const colors = [
   "#252525",
   "#525252",
@@ -51,6 +45,10 @@ const colors = [
 ];
 
 function Dashboard(props) {
+  const firstRef = useRef('');
+  const endRef = useRef('');
+  const noFormatfirstRef = useRef('2/14/2020');
+  const noFormatendRef = useRef('3/28/2020');
   const { brandColor, dangerColor, successColor, primaryColor } = useSelector(
     state => ({
       brandColor: metronic.builder.selectors.getConfig(
@@ -137,7 +135,7 @@ function Dashboard(props) {
         <Link to="/listar/cartas">
           <Tarjet nombre="Cartas" width="210px" height="141px" number={props.conteoEmbargos.loading ? 0 : props.conteoEmbargos.data.cartas}>
             <div style={{ width: '60%', height: '70%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-             
+
 
             </div>
           </Tarjet>
@@ -181,7 +179,15 @@ function Dashboard(props) {
             </div>
 
           </div>
-          <div className="container-bottom">
+          <div style={{ backgroundColor: '#fff' }} className="container-bottom">
+            <div style={{paddingLeft:'10px', paddingTop:'10px'}}>
+              <DateRangePicker startDate={noFormatfirstRef.current} endDate={noFormatendRef.current} onApply={(e, picker) => {
+                 handleApply(e, picker)
+                props.handleRanking(props.token,{init:firstRef.current.toISOString().split('T')[0],final:endRef.current.toISOString().split('T')[0]} )
+              }}>
+                <a className="btn-herramienta"><FaCalendarAlt size={'1.3rem'}/></a>
+              </DateRangePicker>
+            </div>
             <TableUsers data={props.usersRanking} />
           </div>
         </div>
@@ -224,18 +230,25 @@ function Dashboard(props) {
         </div>
       </div>
 
-      <div style={{paddingTop:'10px'}} className="section-final">
-        
-          <div style={{ height: '400px', backgroundColor:'#ffffff' }}className="section-col-left">
-            <SimpleBarChar></SimpleBarChar>
-          </div>
-        
+      <div style={{ paddingTop: '10px' }} className="section-final">
+
+        <div style={{ height: '400px', backgroundColor: '#ffffff' }} className="section-col-left">
+          <SimpleBarChar></SimpleBarChar>
+        </div>
+
         <div className="section-col-right">
           <MyRecentActivities />
         </div>
       </div>
     </>
   );
+  function handleApply(event, picker) {
+    console.log(picker.startDate.toDate())
+    console.log(picker.endDate.toDate())
+    firstRef.current = picker.startDate.toDate();
+    endRef.current = picker.endDate.toDate();
+
+  }
 }
 
 const mapStateToProps = (state) => ({
@@ -245,6 +258,14 @@ const mapStateToProps = (state) => ({
   usersRanking: state.estadisticasReducer.ranking
 })
 const mapDispatchToProps = (dispatch) => ({
-  getEmbargos: bindActionCreators(getEmbargosAsignados, dispatch)
+  getEmbargos: bindActionCreators(getEmbargosAsignados, dispatch),
+  handleConteoEmbargos: bindActionCreators(getConteoEmbargos,dispatch),
+  handleRanking: bindActionCreators(getStatsRankingUser, dispatch),
+  handleHistorialGeneral: bindActionCreators(getHistorial, dispatch),
+  handleHistorialMe:bindActionCreators(getHistorialMe,dispatch),
+  handleBarrasSemanales: bindActionCreators(getBarrasSemanales,dispatch),
+  handleMvp: bindActionCreators(statsMeMvp, dispatch),
+  handleOthersStadistics: bindActionCreators(getStadisticsUserGeneral,dispatch),
+  handlePolygon: bindActionCreators(getPolygon,dispatch)
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

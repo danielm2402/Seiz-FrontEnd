@@ -59,71 +59,103 @@ function* rankingUsersSaga(payload) {
         },
 
     };
-    var fechaActual = new Date();
-    var dia = new Date(fechaActual.getTime()- (fechaActual.getTimezoneOffset() * 60000 )).toISOString()
-    .split("T")[0];
+    if (payload.fecha === '') {
+        var fechaActual = new Date();
+        var dia = new Date(fechaActual.getTime() - (fechaActual.getTimezoneOffset() * 60000)).toISOString()
+            .split("T")[0];
 
-    var fecha1 = new Date(dia);
-    
-    var diapararestar = fecha1.getUTCDay();
-    let dias1
-    if (diapararestar == 0) {
-        dias1 = (-6);
-        fecha1.setDate((fecha1.getDate() + dias1) + 1)
+        var fecha1 = new Date(dia);
 
-    } else {
-        dias1 = (diapararestar - 1) * (-1);
-        fecha1.setDate(fecha1.getDate() + dias1);
-        fecha1.setDate(fecha1.getDate() - 6)
-    }
-    
+        var diapararestar = fecha1.getUTCDay();
+        let dias1
+        if (diapararestar == 0) {
+            dias1 = (-6);
+            fecha1.setDate((fecha1.getDate() + dias1) + 1)
 
-    var Lunes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
-    fecha1.setDate(fecha1.getDate() + 1);
-    var Martes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
-    fecha1.setDate(fecha1.getDate() + 1);
-    var Miercoles = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
-    fecha1.setDate(fecha1.getDate() + 1);
-    var Jueves = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
-    fecha1.setDate(fecha1.getDate() + 1);
-    var Viernes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
-    fecha1.setDate(fecha1.getDate() + 1);
-    var Sabado = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
-    fecha1.setDate(fecha1.getDate() + 1);
-    var Domingo = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
-    Lunes = Lunes.split('-')
-    Martes = Martes.split('-')
-    Miercoles = Miercoles.split('-')
-    Jueves = Jueves.split('-')
-    Viernes = Viernes.split('-')
-    Sabado = Sabado.split('-')
-    Domingo = Domingo.split('-')
+        } else {
+            dias1 = (diapararestar - 1) * (-1);
+            fecha1.setDate(fecha1.getDate() + dias1);
+            fecha1.setDate(fecha1.getDate() - 6)
+        }
 
 
-    const data = yield axios.get('https://bancow.finseiz.com/api/v1/stats/users?filter=CONFIRMED&page=0&range=' + Lunes[0] + '.' + Lunes[1] + '.' + Lunes[2] + '-' + Sabado[0] + '.' + Sabado[1] + '.' + Sabado[2] + '&size=5', config)
+        var Lunes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+        fecha1.setDate(fecha1.getDate() + 1);
+        var Martes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+        fecha1.setDate(fecha1.getDate() + 1);
+        var Miercoles = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+        fecha1.setDate(fecha1.getDate() + 1);
+        var Jueves = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+        fecha1.setDate(fecha1.getDate() + 1);
+        var Viernes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+        fecha1.setDate(fecha1.getDate() + 1);
+        var Sabado = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+        fecha1.setDate(fecha1.getDate() + 1);
+        var Domingo = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
+        Lunes = Lunes.split('-')
+        Martes = Martes.split('-')
+        Miercoles = Miercoles.split('-')
+        Jueves = Jueves.split('-')
+        Viernes = Viernes.split('-')
+        Sabado = Sabado.split('-')
+        Domingo = Domingo.split('-')
+
+
+        const data = yield axios.get('https://bancow.finseiz.com/api/v1/stats/users?filter=CONFIRMED&page=0&range=' + Lunes[0] + '.' + Lunes[1] + '.' + Lunes[2] + '-' + Sabado[0] + '.' + Sabado[1] + '.' + Sabado[2] + '&size=5', config)
+            .then(response => response)
+            .catch(error => error.response)
+
+        switch (data.status) {
+            case 200:
+                let vector = []
+                for (var i = 0; i < data.data.length; i++) {
+                    var element = yield axios.get('https://bancow.finseiz.com/api/v1/users/' + data.data[i].user, config)
+                        .then(response => response.data)
+                        .catch(err => err.response)
+                    vector.push(element)
+
+                }
+
+
+                yield put(getStatsRankingUserSuccess(vector))
+
+
+                break;
+
+            default:
+                break;
+        }
+
+    }else{
+        console.log('LAS FECHAS SON')
+        console.log(payload.fecha)
+         const data1= yield axios.get('https://bancow.finseiz.com/api/v1/stats/users?filter=CONFIRMED&page=0&range=' +payload.fecha.init.replace(/[-]/g, '.')+'-'+payload.fecha.final.replace(/[-]/g, '.') + '&size=4', config)
         .then(response => response)
-        .catch(error => error.response)
+        .catch(error => error.response)  
+        console.log(data1)
 
-    switch (data.status) {
-        case 200:
-            let vector = []
-            for (var i = 0; i < data.data.length; i++) {
-                var element = yield axios.get('https://bancow.finseiz.com/api/v1/users/' + data.data[i].user, config)
-                    .then(response => response.data)
-                    .catch(err => err.response)
-                vector.push(element)
+        switch (data1.status) {
+            case 200:
+                let vector = []
+                for (var i = 0; i < data1.data.length; i++) {
+                    var element = yield axios.get('https://bancow.finseiz.com/api/v1/users/' + data1.data[i].user, config)
+                        .then(response => response.data)
+                        .catch(err => err.response)
+                    vector.push(element)
 
-            }
-
-
-            yield put(getStatsRankingUserSuccess(vector))
+                }
 
 
-            break;
+                yield put(getStatsRankingUserSuccess(vector))
 
-        default:
-            break;
+
+                break;
+
+            default:
+                break;
+        }
     }
+
 }
 
 function* statsMeMvpSaga(payload) {
@@ -137,11 +169,11 @@ function* statsMeMvpSaga(payload) {
 
 
     var fechaActual = new Date();
-    var dia = new Date(fechaActual.getTime()- (fechaActual.getTimezoneOffset() * 60000 )).toISOString()
-    .split("T")[0];
+    var dia = new Date(fechaActual.getTime() - (fechaActual.getTimezoneOffset() * 60000)).toISOString()
+        .split("T")[0];
 
     var fecha1 = new Date(dia);
-    
+
     var diapararestar = fecha1.getUTCDay();
     let dias1
     if (diapararestar == 0) {
@@ -153,7 +185,7 @@ function* statsMeMvpSaga(payload) {
         fecha1.setDate(fecha1.getDate() + dias1);
         fecha1.setDate(fecha1.getDate() - 6)
     }
-    
+
     var Lunes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
     fecha1.setDate(fecha1.getDate() + 1);
     var Martes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
@@ -248,11 +280,11 @@ function* getBarrasSemanalesSaga(payload) {
     };
 
     var fechaActual = new Date();
-    var dia = new Date(fechaActual.getTime()- (fechaActual.getTimezoneOffset() * 60000 )).toISOString()
-    .split("T")[0];
+    var dia = new Date(fechaActual.getTime() - (fechaActual.getTimezoneOffset() * 60000)).toISOString()
+        .split("T")[0];
 
     var fecha1 = new Date(dia);
-    
+
     var diapararestar = fecha1.getUTCDay();
     let dias1
     if (diapararestar == 0) {
@@ -369,11 +401,11 @@ function* getEstadisticasUserGeneralSaga(payload) {
     };
 
     var fechaActual = new Date();
-    var dia = new Date(fechaActual.getTime()- (fechaActual.getTimezoneOffset() * 60000 )).toISOString()
-    .split("T")[0];
+    var dia = new Date(fechaActual.getTime() - (fechaActual.getTimezoneOffset() * 60000)).toISOString()
+        .split("T")[0];
 
     var fecha1 = new Date(dia);
-    
+
     var diapararestar = fecha1.getUTCDay();
     let dias1
     if (diapararestar == 0) {
@@ -385,7 +417,7 @@ function* getEstadisticasUserGeneralSaga(payload) {
         fecha1.setDate(fecha1.getDate() + dias1);
         fecha1.setDate(fecha1.getDate() - 6)
     }
-    
+
 
     var Lunes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
     fecha1.setDate(fecha1.getDate() + 1);

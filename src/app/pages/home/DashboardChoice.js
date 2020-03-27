@@ -6,7 +6,7 @@ import {getConteoEmbargos, getStatsRankingUser,getHistorial,getHistorialMe,getBa
 class DashboardChoice extends Component {
     componentDidMount(){
         this.props.handleConteoEmbargos(this.props.token, this.props.user)
-        this.props.handleRanking(this.props.token)
+        this.props.handleRanking(this.props.token, '')
         this.props.handleHistorialGeneral(this.props.token)
         this.props.handleHistorialMe(this.props.token, this.props.user)
         this.props.handleBarrasSemanales(this.props.token, this.props.user)
