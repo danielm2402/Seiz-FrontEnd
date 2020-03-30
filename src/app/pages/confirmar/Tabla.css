@@ -239,3 +239,8 @@ transition: all 0.4s;
 .btn-herramienta svg:hover{
   fill:#c0c4d1
 }
+
+.container-view label{
+  font-weight: 600;
+  padding-top: 10px;
+}

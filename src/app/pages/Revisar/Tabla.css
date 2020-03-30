@@ -239,3 +239,7 @@ border-radius: 5px;
 .btn-herramienta svg:hover{
 fill:#c0c4d1
 }
+.container-view .table-inputs span{
+  font-weight: 600;
+  padding-top: 10px;
+}

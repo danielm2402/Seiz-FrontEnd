@@ -205,7 +205,7 @@ class Second extends Component {
                                 <ProgressBar className="right" animated now={100} />
                             </div>
                             <h4>Deja que SEIZ haga el trabajo aburrido.</h4>
-                            <p>SEIZ leerá y entenderá todos tus archivos en aproximadamente un minuto y medio.</p>
+                            <p>SEIZ leerá y entenderá todos tus archivos en poco tiempo.</p>
                             <h3>Éste es el momento oportuno para ir por un café</h3>
                         </div>
                     </div>
