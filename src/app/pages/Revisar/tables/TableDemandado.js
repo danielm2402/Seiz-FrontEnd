@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './styles.css'
-import { MdDeleteSweep, MdCheck, MdCancel, MdAdd, MdDone, MdNavigateBefore, MdNavigateNext } from "react-icons/md";
+import { MdDeleteSweep, MdCheck, MdCancel, MdAdd, MdDone, MdNavigateBefore, MdNavigateNext, MdFirstPage, MdLastPage } from "react-icons/md";
 import { FaRegEdit, FaFileExcel } from "react-icons/fa";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
@@ -9,7 +9,7 @@ import { changePoints, setUltimaTableFocus } from '../../../redux/actions/boundi
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
-import { updateDemandando, deleteDemandado, addDemandado, saveDemandados, getDemandadosSiguiente, getDemandadosAnterior, updateAllTipoDocumento,upadteAllRequest } from '../../../redux/actions/embargosAction'
+import { updateDemandando, deleteDemandado, addDemandado, saveDemandados, getDemandadosSiguiente, getDemandadosAnterior, updateAllTipoDocumento,upadteAllRequest, getDemandadosFirstPage,getDemandadosLastPage } from '../../../redux/actions/embargosAction'
 import CurrencyFormat from 'react-currency-format';
 import PulseLoader from "react-spinners/ClipLoader";
 import { css } from "@emotion/core";
@@ -110,7 +110,7 @@ class TableDemandado extends Component {
     }
     focusElement(e, palabra) {
 
-        // this.setState({ actualFocus: e.target.name })
+       
         if (Object.keys(this.state.extraInfo).length !== 0) {
             var vertices = this.state.extraInfo[e.target.name].bounds.vertices
             vertices.push((this.props.page) - 1)
@@ -605,14 +605,21 @@ class TableDemandado extends Component {
                 </div>
                 {renderTable}
                 <div className="buttons-control-table">
-
+                    <a onClick={this.first}><div className="button-table"><MdFirstPage size={'1.4rem'} /></div></a>
                     <a onClick={this.back}><div className="button-table"><MdNavigateBefore size={'1.4rem'} /></div></a>
                     <a onClick={this.next}><div className="button-table"><MdNavigateNext size={'1.4rem'} /></div></a>
+                    <a onClick={this.last}><div className="button-table"><MdLastPage size={'1.4rem'} /></div></a>
 
                 </div>
 
             </div>
         )
+    }
+    first=()=>{
+       this.props.handleDemandadosFirstPage()
+    }
+    last=()=>{
+        this.props.handleDemandadosUltimPage(this.props.pathLastPage)
     }
     goToExcel = () => {
         this.props.history.push('/upload/excel/' + this.props.match.params.id)
@@ -672,6 +679,7 @@ const mapStateToProps = (state) => ({
     page: state.boundingReducer.page,
     pathSiguienteDemandados: state.EmbargosReducer.demandadosPathSiguiente,
     pathAnteriorDemandados: state.EmbargosReducer.demandadosPathAnterior,
+    pathLastPage:state.EmbargosReducer.demandadosPathUltim,
     loadingPage: state.EmbargosReducer.loadingPage,
     demandadosAllUpdateTipo: state.EmbargosReducer.demandadosAllUpdateTipo,
 })
@@ -685,7 +693,9 @@ const mapDispatchToProps = (dispatch) => ({
     handleDemandadosSiguiente: bindActionCreators(getDemandadosSiguiente, dispatch),
     handleDemandadosAnterior: bindActionCreators(getDemandadosAnterior, dispatch),
     updateAllTipoDocumento: bindActionCreators(updateAllTipoDocumento, dispatch),
-    upadteAllRequest: bindActionCreators(upadteAllRequest, dispatch)
+    upadteAllRequest: bindActionCreators(upadteAllRequest, dispatch),
+    handleDemandadosUltimPage: bindActionCreators(getDemandadosLastPage, dispatch),
+    handleDemandadosFirstPage: bindActionCreators(getDemandadosFirstPage)
 })
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TableDemandado))
 

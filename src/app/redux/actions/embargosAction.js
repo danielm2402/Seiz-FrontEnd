@@ -146,17 +146,19 @@ export const updateEmbargo=(data, token)=>({
     token
 })
 
-export const getDemandadosSiguiente=(id, token, path)=>({
+export const getDemandadosSiguiente=(id, token, path, page)=>({
     type:types.GET_DEMANDADOS_SIGUIENTE,
     id,
     token,
-    path
+    path,
+    page
 })
-export const getDemandadosAnterior=(id, token, path)=>({
+export const getDemandadosAnterior=(id, token, path, page)=>({
     type:types.GET_DEMANDADOS_ANTERIOR,
     id,
     token,
-    path
+    path,
+    page
 })
 
 export const changeSiguiente=(path)=>({
@@ -181,6 +183,32 @@ export const upadteAllRequestSuccess=(msj)=>({
     type: types.UPDATE_ALL_REQUEST_SUCCESS,
     msj
 })
+export const changeUltimPage=(path)=>({
+    type: types.CHANGE_ULTIM_PAGE,
+    path
+})
+export const changeFirstPage=(path)=>({
+    type: types.CHANGE_FIRST_PAGE,
+    path
+})
+export const getDemandadosFirstPage=(id, token, path)=>({
+    type: types.GET_DEMANDADOS_FIRST_PAGE,
+    path,
+    id,
+    token
+})
+export const getDemandadosLastPage=(id, token, path)=>({
+    type: types.GET_DEMANDADOS_ULTIM_PAGE,
+    path,
+    id,
+    token
+})
+export const setActualPage=(page)=>({
+    type: types.SET_ACTUAL_PAGE,
+    page
+})
+
+
 
 
 

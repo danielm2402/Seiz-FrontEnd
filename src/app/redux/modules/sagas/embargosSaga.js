@@ -2,16 +2,16 @@ import {
   call, fork, put, take, takeEvery, all
 } from 'redux-saga/effects';
 import axios from 'axios';
-import {UPDATE_ALL_REQUEST,
+import {UPDATE_ALL_REQUEST,GET_DEMANDADOS_FIRST_PAGE,GET_DEMANDADOS_ULTIM_PAGE,
   UPDATE_DEMANDADO, CREATE_DEMANDANTE, DELETE_DEMANDANTE,GET_DEMANDADOS_ANTERIOR, UPDATE_DEMANDANTE, UPDATE_EMBARGO, GET_DEMANDADOS_SIGUIENTE,
   GET_EMBARGO, GET_DEMANDADOS, DELETE_DEMANDADO, SAVE_DEMANDADOS, GET_DEMANDADOS_UPDATE_TABLE, CREATE_DEMANDADO,
   GET_EMBARGOS_ASIGNADOS, GET_EMBARGOS_CONFIRMADOS, GET_EMBARGOS_POR_CONFIRMAR, GET_EMBARGOS_ALL, DELETE_EMBARGO, CONFIRMAR_EMBARGO
 } from '../../constants/EmbargosConst';
-import {
+import {setActualPage,
   getDemandados, getDemandantesUpdateTableSuccess, changeSiguiente,changeAnterior,upadteAllRequestSuccess,
   getEmbargosAll, getEmbargosAsignados, getEmbargosPorConfirmar, getEmbargosConfirmados, getDemandadosSuccess, getEmbargoSuccess,
   getEmbargosConfirmadosSuccess, getEmbargosPorConfirmarSuccess, getEmbargosAsignadosSuccess, getEmbargosAllSuccess, nuevoMensaje, resetMensaje
-  , getDemandadosUpdateTable, getDemandadosUpdateTableSuccess
+  , getDemandadosUpdateTable, getDemandadosUpdateTableSuccess, changeUltimPage
 } from '../../actions/embargosAction'
 import {
   newMensajeBounding, changeDemandadosTablePorConfirmarFalse
@@ -244,7 +244,8 @@ function* getDemandadosSaga(payload) {
       const array = separar.map((item) => {
         return item.split(";")
       })
-      let page
+      let page, ultim
+      page=''
       console.log('BANDERAAAAA')
       array.map((item) => {
         item.map((item1) => {
@@ -252,11 +253,16 @@ function* getDemandadosSaga(payload) {
             page = item[0]
 
           }
+          if(item1.trim()==='rel="last"'){
+            ultim=item[0]
+          }
         }
         )
       })
       yield put(getDemandadosSuccess(data.data))
+      yield put(setActualPage(0))
       yield put(changeSiguiente(page))
+      yield put(changeUltimPage(ultim))
 
       console.log('OBTENIENDO DEMANDADOS XD');
       console.log(data)
@@ -311,6 +317,7 @@ function* getDemandadosSagaSiguiente(payload) {
       console.log(page)
       console.log(page2)
       yield put(getDemandadosSuccess(data.data))
+      yield put(setActualPage(payload.page+1))
       yield put(changeSiguiente(page))
       yield put(changeAnterior(page2))
       break;
@@ -361,6 +368,107 @@ function* getDemandadosSagaAnterior(payload) {
       console.log(page)
       console.log(page2)
       yield put(getDemandadosSuccess(data.data))
+      yield put(setActualPage(payload.page-1))
+      yield put(changeSiguiente(page))
+      yield put(changeAnterior(page2))
+      break;
+    case 403:
+      yield put(auth.actions.logout())
+      break;
+    default:
+      break;
+  } 
+
+}
+
+function* getDemandadosSagaUltim(payload) {
+  console.log('OBTENIENDO DEMANDADOS ULTIM XD');
+  const config = {
+    headers: {
+      Authorization: 'Bearer ' + payload.token,
+      Accept: 'application/json',
+    },
+    params: {
+      'idEmbargo': payload.id
+    }
+  };
+  const path= payload.path.replace(/[<>]/g, '')
+  
+   const data = yield axios.get(path, config)
+    .then(response => response)
+    .catch(err => err.response)
+  console.log(data)
+  switch (data.status) {
+    case 200:
+      var separar = data.headers.links.split(",")
+      const array = separar.map((item) => {
+        return item.split(";")
+      })
+      var page=''
+      var page2=''
+      array.map((item) => {
+        item.map((item1) => {
+          if (item1.trim() === 'rel="next"') {
+            page = item[0]
+          }
+          if(item1.trim()==='rel="prev"'){
+            page2= item[0]
+          }
+        }
+        )
+      })
+      const number_page= path.split('page=')[1].split('&')[0]
+      yield put(getDemandadosSuccess(data.data))
+      yield put(setActualPage(number_page))
+      yield put(changeSiguiente(page))
+      yield put(changeAnterior(page2))
+      break;
+    case 403:
+      yield put(auth.actions.logout())
+      break;
+    default:
+      break;
+  } 
+
+}
+function* getDemandadosSagaFirst(payload) {
+  console.log('OBTENIENDO DEMANDADOS FIRST XD');
+  const config = {
+    headers: {
+      Authorization: 'Bearer ' + payload.token,
+      Accept: 'application/json',
+    },
+    params: {
+      'idEmbargo': payload.id
+    }
+  }; 
+   const data = yield axios.get('https://bancow.finseiz.com/api/v1/demandados/list?page=0&size=20', config)
+    .then(response => response)
+    .catch(err => err.response)
+  console.log(data)
+  switch (data.status) {
+    case 200:
+      var separar = data.headers.links.split(",")
+      const array = separar.map((item) => {
+        return item.split(";")
+      })
+      var page=''
+      var page2=''
+      array.map((item) => {
+        item.map((item1) => {
+          if (item1.trim() === 'rel="next"') {
+            page = item[0]
+          }
+          if(item1.trim()==='rel="prev"'){
+            page2= item[0]
+          }
+        }
+        )
+      })
+      console.log(page)
+      console.log(page2)
+      yield put(getDemandadosSuccess(data.data))
+      yield put(setActualPage(0))
       yield put(changeSiguiente(page))
       yield put(changeAnterior(page2))
       break;
@@ -683,9 +791,6 @@ function* crearDemandanteSaga(payload) {
     },
 
   };
-  console.log('MIDDLEWAREEEE DEMANDANTES')
-  console.log(payload.demandantes)
-  console.log(payload.data)
   var demandantesReq = [payload.data, ...payload.demandantes]
   console.log(demandantes)
   const demandantes = demandantesReq.map(demandante => {
@@ -879,7 +984,8 @@ function* embargosRootSaga() {
     takeEvery(GET_DEMANDADOS_SIGUIENTE,getDemandadosSagaSiguiente),
     takeEvery(GET_DEMANDADOS_ANTERIOR, getDemandadosSagaAnterior),
     takeEvery(UPDATE_ALL_REQUEST, updateAllDemandadosSaga),
-    
+    takeEvery(GET_DEMANDADOS_FIRST_PAGE, getDemandadosSagaFirst),
+    takeEvery(GET_DEMANDADOS_ULTIM_PAGE, getDemandadosSagaUltim),
 
 
   ])

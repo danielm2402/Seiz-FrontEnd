@@ -40,8 +40,8 @@
 .button-table{
     border-radius: 3px;
     background-color: #EAE8F1;
-    width: 30px !important;
-    height: 30px !important;
+    width: 15px !important;
+    height: 15px !important;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -79,7 +79,9 @@
     height: 32px;
     background-color:#EBEEFB ;
 }
-
+.container-table-edit{
+    padding-top: 40px;
+}
 .container-table-edit table{
 width: 100%;
 

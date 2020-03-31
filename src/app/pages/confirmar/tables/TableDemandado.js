@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './styles.css'
-import { MdDeleteSweep, MdCheck, MdCancel, MdAdd, MdDone, MdNavigateBefore, MdNavigateNext } from "react-icons/md";
+import { MdDeleteSweep, MdCheck, MdCancel, MdAdd, MdDone, MdNavigateBefore, MdNavigateNext, MdFirstPage, MdLastPage } from "react-icons/md";
 import { FaRegEdit, FaFileExcel } from "react-icons/fa";
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux'
@@ -9,7 +9,7 @@ import { changePoints, setUltimaTableFocus } from '../../../redux/actions/boundi
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
-import { updateDemandando, deleteDemandado, addDemandado, saveDemandados, getDemandadosSiguiente, getDemandadosAnterior, updateAllTipoDocumento,upadteAllRequest } from '../../../redux/actions/embargosAction'
+import { updateDemandando, deleteDemandado, addDemandado, saveDemandados, getDemandadosSiguiente, getDemandadosAnterior, updateAllTipoDocumento, upadteAllRequest, getDemandadosFirstPage, getDemandadosLastPage } from '../../../redux/actions/embargosAction'
 import CurrencyFormat from 'react-currency-format';
 import PulseLoader from "react-spinners/ClipLoader";
 import { css } from "@emotion/core";
@@ -37,7 +37,7 @@ class TableDemandado extends Component {
                 identificacion: '',
                 monto: ''
             },
-            selectedAllValid:false
+            selectedAllValid: false
         }
     }
     componentDidUpdate(prevProps) {
@@ -191,17 +191,17 @@ class TableDemandado extends Component {
     }
     selecteAll = (e) => {
 
-        if(e.target.value!=='NO_SELECCIONADO'){
+        if (e.target.value !== 'NO_SELECCIONADO') {
             this.props.updateAllTipoDocumento(e.target.value)
-            this.setState({selectedAllValid:true})
-        }else{
-            this.setState({selectedAllValid:false})
+            this.setState({ selectedAllValid: true })
+        } else {
+            this.setState({ selectedAllValid: false })
         }
     }
-    handleRequestChangeAllType=()=>{
-       this.props.upadteAllRequest(this.props.idDocumento, this.props.token,this.props.demandados.data)
+    handleRequestChangeAllType = () => {
+        this.props.upadteAllRequest(this.props.idDocumento, this.props.token, this.props.demandados.data)
     }
-   
+
     render() {
         let renderTable;
         var contador = -1;
@@ -228,9 +228,9 @@ class TableDemandado extends Component {
                                 <th><div className="title-col">Nombre</div></th>
                                 <th><div className="title-col">
                                     <div style={{ width: '100%' }}>
-                                        <div style={{ display:'flex', width: '100%', justifyContent:'center', alignItems:'center' }}>
-                                            <div style={{width:'50%', display:'flex', justifyContent:'center'}}>Tipo</div>
-                                            {this.props.demandadosAllUpdateTipo && this.state.selectedAllValid?<div style={{width:'50%', display:'flex', justifyContent:'center'}}><a className="button-table-dinamic" onClick={this.handleRequestChangeAllType}><MdDone size="1.0em" color={"#434040"} /></a></div>:<></>}</div>
+                                        <div style={{ display: 'flex', width: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                                            <div style={{ width: '50%', display: 'flex', justifyContent: 'center' }}>Tipo</div>
+                                            {this.props.demandadosAllUpdateTipo && this.state.selectedAllValid ? <div style={{ width: '50%', display: 'flex', justifyContent: 'center' }}><a className="button-table-dinamic" onClick={this.handleRequestChangeAllType}><MdDone size="1.0em" color={"#434040"} /></a></div> : <></>}</div>
                                         <div >
                                             <Select
                                                 labelId="demo-simple-select-placeholder-label-label"
@@ -594,25 +594,38 @@ class TableDemandado extends Component {
         return (
             <div className="container-table-edit">
                 <div className="table-header">
-                    <div style={{ display: 'flex' }}>
-                        <h5>Demandados </h5> {this.props.loadingPage ? <PulseLoader
+                    <div style={{ display: 'flex', alignItems:'center' }}>
+                        <h5>Demandados </h5>  {this.props.loadingPage ? <div style={{paddingLeft:'10px'}}><PulseLoader
                             size={20}
                             color={"#123abc"}
                             loading={this.props.loadingPage}
-                        /> : <></>}
+                        /></div> : <h6 style={{paddingLeft:'10px'}}> Page {this.props.actualPage}</h6>}
                     </div>
                     {this.props.demandadosExtractSinConfirmar ? <a onClick={this.saveExtractTable}><div className="button-table"><MdDone size={'1.4rem'} /></div></a> : <div style={{ display: 'flex' }}><a style={{ paddingRight: '5px' }} onClick={this.addRow}><div className="button-table"><MdAdd size={'1.4rem'} /></div></a><a className="button-table" onClick={this.goToExcel}><FaFileExcel size="1.7em" color={"#434040"} /></a></div>}
                 </div>
                 {renderTable}
                 <div className="buttons-control-table">
-
+                    <a onClick={this.first}><div className="button-table"><MdFirstPage size={'1.4rem'} /></div></a>
                     <a onClick={this.back}><div className="button-table"><MdNavigateBefore size={'1.4rem'} /></div></a>
                     <a onClick={this.next}><div className="button-table"><MdNavigateNext size={'1.4rem'} /></div></a>
+                    <a onClick={this.last}><div className="button-table"><MdLastPage size={'1.4rem'} /></div></a>
 
                 </div>
 
             </div>
         )
+    }
+    first = () => {
+        if(this.props.actualPage!==0){
+            this.props.handleDemandadosFirstPage(this.props.idDocumento, this.props.token, '')
+        }
+        
+    }
+    last = () => {
+        if(this.props.pathLastPage!==''){
+            this.props.handleDemandadosUltimPage(this.props.idDocumento, this.props.token, this.props.pathLastPage)
+        }
+        
     }
     goToExcel = () => {
         this.props.history.push('/upload/excel/' + this.props.match.params.id)
@@ -647,11 +660,11 @@ class TableDemandado extends Component {
     }
     next = () => {
         if (this.props.pathSiguienteDemandados !== '')
-            this.props.handleDemandadosSiguiente(this.props.idDocumento, this.props.token, this.props.pathSiguienteDemandados)
+            this.props.handleDemandadosSiguiente(this.props.idDocumento, this.props.token, this.props.pathSiguienteDemandados, this.props.actualPage)
     }
     back = () => {
         if (this.props.pathAnteriorDemandados !== '')
-            this.props.handleDemandadosAnterior(this.props.idDocumento, this.props.token, this.props.pathAnteriorDemandados)
+            this.props.handleDemandadosAnterior(this.props.idDocumento, this.props.token, this.props.pathAnteriorDemandados, this.props.actualPage)
 
     }
 }
@@ -672,8 +685,10 @@ const mapStateToProps = (state) => ({
     page: state.boundingReducer.page,
     pathSiguienteDemandados: state.EmbargosReducer.demandadosPathSiguiente,
     pathAnteriorDemandados: state.EmbargosReducer.demandadosPathAnterior,
+    pathLastPage: state.EmbargosReducer.demandadosPathUltim,
     loadingPage: state.EmbargosReducer.loadingPage,
     demandadosAllUpdateTipo: state.EmbargosReducer.demandadosAllUpdateTipo,
+    actualPage:state.EmbargosReducer.actualPage
 })
 const mapDispatchToProps = (dispatch) => ({
     handleBounding: bindActionCreators(changePoints, dispatch),
@@ -685,7 +700,9 @@ const mapDispatchToProps = (dispatch) => ({
     handleDemandadosSiguiente: bindActionCreators(getDemandadosSiguiente, dispatch),
     handleDemandadosAnterior: bindActionCreators(getDemandadosAnterior, dispatch),
     updateAllTipoDocumento: bindActionCreators(updateAllTipoDocumento, dispatch),
-    upadteAllRequest: bindActionCreators(upadteAllRequest, dispatch)
+    upadteAllRequest: bindActionCreators(upadteAllRequest, dispatch),
+    handleDemandadosUltimPage: bindActionCreators(getDemandadosLastPage, dispatch),
+    handleDemandadosFirstPage: bindActionCreators(getDemandadosFirstPage, dispatch)
 })
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TableDemandado))
 
