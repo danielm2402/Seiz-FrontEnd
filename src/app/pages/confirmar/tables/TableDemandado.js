@@ -599,7 +599,7 @@ class TableDemandado extends Component {
                             size={20}
                             color={"#123abc"}
                             loading={this.props.loadingPage}
-                        /></div> : <h6 style={{paddingLeft:'10px'}}> Page {this.props.actualPage}</h6>}
+                        /></div> : <h6 style={{paddingLeft:'10px'}}> (Page {this.props.actualPage})</h6>}
                     </div>
                     {this.props.demandadosExtractSinConfirmar ? <a onClick={this.saveExtractTable}><div className="button-table"><MdDone size={'1.4rem'} /></div></a> : <div style={{ display: 'flex' }}><a style={{ paddingRight: '5px' }} onClick={this.addRow}><div className="button-table"><MdAdd size={'1.4rem'} /></div></a><a className="button-table" onClick={this.goToExcel}><FaFileExcel size="1.7em" color={"#434040"} /></a></div>}
                 </div>

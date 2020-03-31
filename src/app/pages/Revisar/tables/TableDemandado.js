@@ -594,12 +594,12 @@ class TableDemandado extends Component {
         return (
             <div className="container-table-edit">
                 <div className="table-header">
-                    <div style={{ display: 'flex' }}>
-                        <h5>Demandados </h5> {this.props.loadingPage ? <PulseLoader
+                    <div style={{ display: 'flex', alignItems:'center' }}>
+                        <h5>Demandados </h5>  {this.props.loadingPage ? <div style={{paddingLeft:'10px'}}><PulseLoader
                             size={20}
                             color={"#123abc"}
                             loading={this.props.loadingPage}
-                        /> : <></>}
+                        /></div> : <h6 style={{paddingLeft:'10px'}}> (Page {this.props.actualPage})</h6>}
                     </div>
                     {this.props.demandadosExtractSinConfirmar ? <a onClick={this.saveExtractTable}><div className="button-table"><MdDone size={'1.4rem'} /></div></a> : <div style={{ display: 'flex' }}><a style={{ paddingRight: '5px' }} onClick={this.addRow}><div className="button-table"><MdAdd size={'1.4rem'} /></div></a><a className="button-table" onClick={this.goToExcel}><FaFileExcel size="1.7em" color={"#434040"} /></a></div>}
                 </div>
@@ -615,11 +615,17 @@ class TableDemandado extends Component {
             </div>
         )
     }
-    first=()=>{
-       this.props.handleDemandadosFirstPage()
+    first = () => {
+        if(this.props.actualPage!==0){
+            this.props.handleDemandadosFirstPage(this.props.idDocumento, this.props.token, '')
+        }
+        
     }
-    last=()=>{
-        this.props.handleDemandadosUltimPage(this.props.pathLastPage)
+    last = () => {
+        if(this.props.pathLastPage!==''){
+            this.props.handleDemandadosUltimPage(this.props.idDocumento, this.props.token, this.props.pathLastPage)
+        }
+        
     }
     goToExcel = () => {
         this.props.history.push('/upload/excel/' + this.props.match.params.id)
@@ -682,6 +688,7 @@ const mapStateToProps = (state) => ({
     pathLastPage:state.EmbargosReducer.demandadosPathUltim,
     loadingPage: state.EmbargosReducer.loadingPage,
     demandadosAllUpdateTipo: state.EmbargosReducer.demandadosAllUpdateTipo,
+    actualPage:state.EmbargosReducer.actualPage
 })
 const mapDispatchToProps = (dispatch) => ({
     handleBounding: bindActionCreators(changePoints, dispatch),
@@ -695,7 +702,7 @@ const mapDispatchToProps = (dispatch) => ({
     updateAllTipoDocumento: bindActionCreators(updateAllTipoDocumento, dispatch),
     upadteAllRequest: bindActionCreators(upadteAllRequest, dispatch),
     handleDemandadosUltimPage: bindActionCreators(getDemandadosLastPage, dispatch),
-    handleDemandadosFirstPage: bindActionCreators(getDemandadosFirstPage)
+    handleDemandadosFirstPage: bindActionCreators(getDemandadosFirstPage, dispatch)
 })
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(TableDemandado))
 
