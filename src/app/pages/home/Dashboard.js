@@ -19,7 +19,7 @@ import Details from './google-material/stadistics/Detalles'
 import Comparator from './google-material/stadistics/Comparator'
 
 import SimpleBarChar from './google-material/stadistics/SimpleBarChar'
-import {getConteoEmbargos, getStatsRankingUser,getHistorial,getHistorialMe,getBarrasSemanales,statsMeMvp,getStadisticsUserGeneral,getPolygon} from '../../redux/actions/estadisticasAction'
+import { getConteoEmbargos, getStatsRankingUser, getHistorial, getHistorialMe, getBarrasSemanales, statsMeMvp, getStadisticsUserGeneral, getPolygon } from '../../redux/actions/estadisticasAction'
 import { CircularProgressbar } from 'react-circular-progressbar';
 import { connect } from 'react-redux'
 import TableSinConfirmar from './MaterialTableDemo'
@@ -28,12 +28,32 @@ import TableUsers from './TableUsers'
 import 'react-circular-progressbar/dist/styles.css';
 import { getEmbargosAsignados } from '../../redux/actions/embargosAction'
 import DateRangePicker from 'react-bootstrap-daterangepicker';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import Input from "@material-ui/core/Input";
 // you will need the css that comes with bootstrap@3. if you are using
 // a tool like webpack, you can do the following:
 import 'bootstrap/dist/css/bootstrap.css';
 // you will also need the css that comes with bootstrap-daterangepicker
 import 'bootstrap-daterangepicker/daterangepicker.css';
-import Button from '@material-ui/core/Button';
+import { makeStyles } from "@material-ui/core/styles";
+
+const useInputStyles = makeStyles({
+  underline: {
+    "&:before": {
+      // normal
+      borderBottom: "1px solid #BDD535"
+    },
+    "&:after": {
+      // focused
+      borderBottom: `1px solid #BDD535`
+    },
+    "&:hover:not(.Mui-disabled):not(.Mui-focused):not(.Mui-error):before": {
+      // hover
+      borderBottom: `1px solid #BDD535`
+    }
+  }
+});
 const colors = [
   "#252525",
   "#525252",
@@ -49,6 +69,10 @@ function Dashboard(props) {
   const endRef = useRef('');
   const noFormatfirstRef = useRef('2/14/2020');
   const noFormatendRef = useRef('3/28/2020');
+  const [grafica1, setGrafica1] = useState('SEMANA_ANTERIOR');
+  const [grafica2, setGrafica2] = useState('SEMANA_ANTERIOR');
+  const [grafica3, setGrafica3] = useState('SEMANA_ANTERIOR');
+  const [grafica4, setGrafica4] = useState('SEMANA_ANTERIOR');
   const { brandColor, dangerColor, successColor, primaryColor } = useSelector(
     state => ({
       brandColor: metronic.builder.selectors.getConfig(
@@ -98,7 +122,7 @@ function Dashboard(props) {
     }),
     [brandColor, dangerColor, primaryColor, successColor]
   );
-
+  const inputClasses = useInputStyles();
   return (
     <>
       <div className="cards-container">
@@ -149,80 +173,83 @@ function Dashboard(props) {
           </Tarjet>
         </Link>
       </div>
-
-      {/*   <div className="row">
-        <div className="col-xl-8">
-        <AreaChart/>
-        </div>
-        <div className="col-xl-4">
-        <Comparator/>
-        </div>
-      </div> */}
       <div className="container-general">
         <div className="container-left">
           <div className="container-embargos">
             <TableSinConfirmar token={props.token} nombre="Embargos" />
           </div>
           <div className="left-stadistics">
+            <div style={{ paddingLeft: '10px', paddingTop: '10px', width: '100%', display: 'flex', justifyContent: 'start', backgroundColor: '#fff' }}>
+              <Select
+                labelId="demo-simple-select-label"
+                name="grafica2"
+                input={<Input classes={inputClasses} />}
+                value={String(grafica2)}
+                onChange={handleInput}
+              >
+                <MenuItem value={'SEMANA_ANTERIOR'}>SEMANA ANTERIOR</MenuItem>
+                <MenuItem value={'MES_ANTERIOR'}>MES ANTERIOR</MenuItem>
+                <MenuItem value={'DOS_MESES_ANTERIORES'}>DOS MESES ANTERIORES</MenuItem>
+                <MenuItem value={'SEIS_MESES_ANTERIORES'}>SEIS MESES ANTERIORES</MenuItem>
+              </Select>
+            </div>
             <div className="comparator">
+
               <Comparator />
             </div>
-            {/* <div className="indicator">
-          <Details/>
-          </div> */}
+
           </div>
         </div>
         <div className="container-right">
           <div className="container-top">
+            <div style={{ paddingLeft: '10px', paddingTop: '10px', width: '100%', display: 'flex', justifyContent: 'start', backgroundColor: '#fff' }}>
+              <Select
+                labelId="demo-simple-select-label"
+                name="grafica1"
+                input={<Input classes={inputClasses} />}
+                value={String(grafica1)}
+                onChange={handleInput}
+              >
+                <MenuItem value={'SEMANA_ANTERIOR'}>SEMANA ANTERIOR</MenuItem>
+                <MenuItem value={'MES_ANTERIOR'}>MES ANTERIOR</MenuItem>
+                <MenuItem value={'DOS_MESES_ANTERIORES'}>DOS MESES ANTERIORES</MenuItem>
+                <MenuItem value={'SEIS_MESES_ANTERIORES'}>SEIS MESES ANTERIORES</MenuItem>
+              </Select>
+            </div>
             <div className="historico">
               <ChartArea />
             </div>
 
           </div>
           <div style={{ backgroundColor: '#fff' }} className="container-bottom">
-            <div style={{paddingLeft:'10px', paddingTop:'10px'}}>
+            <div style={{ paddingLeft: '10px', paddingTop: '10px' }}>
               <DateRangePicker startDate={noFormatfirstRef.current} endDate={noFormatendRef.current} onApply={(e, picker) => {
-                 handleApply(e, picker)
-                props.handleRanking(props.token,{init:firstRef.current.toISOString().split('T')[0],final:endRef.current.toISOString().split('T')[0]} )
+                handleApply(e, picker)
+                props.handleRanking(props.token, { init: firstRef.current.toISOString().split('T')[0], final: endRef.current.toISOString().split('T')[0] })
               }}>
-                <a className="btn-herramienta"><FaCalendarAlt size={'1.3rem'}/></a>
+                <a className="btn-herramienta"><FaCalendarAlt size={'1.3rem'} /></a>
               </DateRangePicker>
             </div>
             <TableUsers data={props.usersRanking} />
           </div>
         </div>
       </div>
-
-      {/* <Portlet>
-        <PortletBody fit={true}>
-          <div className="row  row-col-separator-xl">
-           
-            <div className="col-xl-6">
-            <AreaChart/>
-            </div>
-            <div className="col-xl-4">
-            <Comparator/>
-            
-            </div>
-            <div className="col-xl-2">
-            <Comparator/>
-            
-            </div>
-          </div>
-        </PortletBody>
-      </Portlet> */}
-
-
-
-      {/* <div className="row">
-        <div className="col-xl-8"></div>
-        <div className="col-xl-4">
-          <AuthorsProfit />
-        </div>
-      </div> */}
-
       <div className="section-final">
         <div className="section-col-left">
+        <div style={{ paddingLeft: '10px', paddingTop: '10px', paddingBottom:'10px', width: '100%', display: 'flex', justifyContent: 'start', backgroundColor: '#fff' }}>
+              <Select
+                labelId="demo-simple-select-label"
+                name="grafica3"
+                input={<Input classes={inputClasses} />}
+                value={String(grafica3)}
+                onChange={handleInput}
+              >
+                <MenuItem value={'SEMANA_ANTERIOR'}>SEMANA ANTERIOR</MenuItem>
+                <MenuItem value={'MES_ANTERIOR'}>MES ANTERIOR</MenuItem>
+                <MenuItem value={'DOS_MESES_ANTERIORES'}>DOS MESES ANTERIORES</MenuItem>
+                <MenuItem value={'SEIS_MESES_ANTERIORES'}>SEIS MESES ANTERIORES</MenuItem>
+              </Select>
+            </div>
           <Details />
         </div>
         <div className="section-col-right">
@@ -233,7 +260,24 @@ function Dashboard(props) {
       <div style={{ paddingTop: '10px' }} className="section-final">
 
         <div style={{ height: '400px', backgroundColor: '#ffffff' }} className="section-col-left">
-          <SimpleBarChar></SimpleBarChar>
+          <div style={{display:'flex', flexDirection:'column', height:'400px'}}>
+            <div style={{ paddingLeft: '10px', paddingTop: '10px', paddingBottom:'10px', width: '100%', display: 'flex', justifyContent: 'start', backgroundColor: '#fff' }}>
+              <Select
+                labelId="demo-simple-select-label"
+                name="grafica4"
+                input={<Input classes={inputClasses} />}
+                value={String(grafica4)}
+                onChange={handleInput}
+              >
+                <MenuItem value={'SEMANA_ANTERIOR'}>SEMANA ANTERIOR</MenuItem>
+                <MenuItem value={'MES_ANTERIOR'}>MES ANTERIOR</MenuItem>
+                <MenuItem value={'DOS_MESES_ANTERIORES'}>DOS MESES ANTERIORES</MenuItem>
+                <MenuItem value={'SEIS_MESES_ANTERIORES'}>SEIS MESES ANTERIORES</MenuItem>
+              </Select>
+            </div>
+            <SimpleBarChar></SimpleBarChar>
+            
+          </div>
         </div>
 
         <div className="section-col-right">
@@ -249,6 +293,26 @@ function Dashboard(props) {
     endRef.current = picker.endDate.toDate();
 
   }
+  function handleInput(e) {
+    console.log('ENTRANDO AL CHANGE')
+    switch (e.target.name) {
+      case 'grafica1':
+        setGrafica1(e.target.value)
+        break;
+      case 'grafica2':
+        setGrafica2(e.target.value)
+        break;
+      case 'grafica3':
+        setGrafica3(e.target.value)
+        break;
+      case 'grafica4':
+        setGrafica4(e.target.value)
+        break;
+
+      default:
+        break;
+    }
+  }
 }
 
 const mapStateToProps = (state) => ({
@@ -259,13 +323,13 @@ const mapStateToProps = (state) => ({
 })
 const mapDispatchToProps = (dispatch) => ({
   getEmbargos: bindActionCreators(getEmbargosAsignados, dispatch),
-  handleConteoEmbargos: bindActionCreators(getConteoEmbargos,dispatch),
+  handleConteoEmbargos: bindActionCreators(getConteoEmbargos, dispatch),
   handleRanking: bindActionCreators(getStatsRankingUser, dispatch),
   handleHistorialGeneral: bindActionCreators(getHistorial, dispatch),
-  handleHistorialMe:bindActionCreators(getHistorialMe,dispatch),
-  handleBarrasSemanales: bindActionCreators(getBarrasSemanales,dispatch),
+  handleHistorialMe: bindActionCreators(getHistorialMe, dispatch),
+  handleBarrasSemanales: bindActionCreators(getBarrasSemanales, dispatch),
   handleMvp: bindActionCreators(statsMeMvp, dispatch),
-  handleOthersStadistics: bindActionCreators(getStadisticsUserGeneral,dispatch),
-  handlePolygon: bindActionCreators(getPolygon,dispatch)
+  handleOthersStadistics: bindActionCreators(getStadisticsUserGeneral, dispatch),
+  handlePolygon: bindActionCreators(getPolygon, dispatch)
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)
