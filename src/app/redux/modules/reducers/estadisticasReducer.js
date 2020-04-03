@@ -11,7 +11,7 @@ export const Authstate = {
     ranking: [],
     historial: [],
     myHistorial: [],
-    semanal: { general: [[], [], [], [], [], []], user: [[], [], [], [], [], []] },
+    semanal: { general: [], user: [] },
     mvpSemana: [{}, {}, {}, {}, {}, {}],
     userStatsOther: { upload: [[], [], [], [], [], []], userAssig: [[], [], [], [], [], []] },
 

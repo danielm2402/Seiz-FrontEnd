@@ -68,10 +68,11 @@ export const getHistorialSuccessMe=(data)=>({
 });
 
 
-export const getBarrasSemanales=(token, user)=>({
+export const getBarrasSemanales=(token, user, rango)=>({
     type: types.GET_BARRAS_SEMANALES,
     token,
-    user
+    user,
+    rango
 });
 export const getBarrasSemanalesSuccess=(data)=>({
     type: types.GET_BARRAS_SEMANALES_SUCCESS,

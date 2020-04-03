@@ -41,24 +41,26 @@ class Example extends Component {
   render() {
     const{me, prom, mvp}=this.props
     const lengthMvp= mvp.length
+    console.log('EL PROMEDIO ES')
+    console.log(this.props.prom)
     const data = [
       {
-        name: 'Lun', mvp: lengthMvp>0?mvp[0].stat:0, Me: me[0].length==0?0:me[0][0].stat, prom: prom[0].length==0?0:prom[0][0].stat,
+        name: 'Lun', mvp: lengthMvp>0?mvp[0].stat:0, Me: me.length==0?0:0, prom: prom.length!==0?prom[0].stats:0,
       },
       {
-        name: 'Mar', mvp:lengthMvp>1?mvp[1].stat:0,  Me: me[1].length==0?0:me[1][0].stat, prom: prom[1].length==0?0:prom[1][0].stat,
+        name: 'Mar', mvp:lengthMvp>1?mvp[1].stat:0,  Me: me.length==0?0:0, prom: prom.length!==0?prom[1].stats:0,
       },
       {
-        name: 'Mie', mvp: lengthMvp>2?mvp[2].stat:0,  Me: me[2].length==0?0:me[2][0].stat, prom: prom[2].length==0?0:prom[2][0].stat,
+        name: 'Mie', mvp: lengthMvp>2?mvp[2].stat:0,  Me: me.length==0?0:0, prom: prom.length!==0?prom[2].stats:0,
       },
       {
-        name: 'Jue', mvp: lengthMvp>3?mvp[3].stat:0,  Me: me[3].length==0?0:me[3][0].stat, prom: prom[3].length==0?0:prom[3][0].stat,
+        name: 'Jue', mvp: lengthMvp>3?mvp[3].stat:0,  Me: me.length==0?0:0, prom: prom.length!==0?prom[3].stats:0,
       },
       {
-        name: 'Vie', mvp: lengthMvp>4?mvp[4].stat:0,  Me: me[4].length==0?0:me[4][0].stat, prom: prom[4].length==0?0:prom[4][0].stat,
+        name: 'Vie', mvp: lengthMvp>4?mvp[4].stat:0,  Me: me.length==0?0:0, prom: prom.length!==0?prom[4].stats:0,
       },
       {
-        name: 'Sáb', mvp: lengthMvp>5?mvp[5].stat:0,  Me: me[5].length==0?0:me[5][0].stat, prom: prom[5].length==0?0:prom[5][0].stat,
+        name: 'Sáb', mvp: lengthMvp>5?mvp[5].stat:0,  Me: me.length==0?0:0, prom: prom.length!==0?prom[5].stats:0,
       },
     ];
     return (

@@ -127,12 +127,11 @@ function* rankingUsersSaga(payload) {
         }
 
     }else{
-        console.log('LAS FECHAS SON')
-        console.log(payload.fecha)
+        
          const data1= yield axios.get('https://bancow.finseiz.com/api/v1/stats/users?filter=CONFIRMED&page=0&range=' +payload.fecha.init.replace(/[-]/g, '.')+'-'+payload.fecha.final.replace(/[-]/g, '.') + '&size=4', config)
         .then(response => response)
         .catch(error => error.response)  
-        console.log(data1)
+   
 
         switch (data1.status) {
             case 200:
@@ -256,8 +255,7 @@ function* getHistorialMeSaga(payload) {
     const data = yield axios.post('https://bancow.finseiz.com/api/v1/embargos/list?assignedTo=' + payload.user + '&estadoEmbargo=CONFIRMADO&sort.sorted=true', {}, config)
         .then(response => response)
         .catch(error => error.response)
-        console.log('MIS EMBARGOS')
-        console.log(data)
+       
     switch (data.status) {
         case 200:
             yield put(getHistorialSuccessMe(data.data))
@@ -298,9 +296,7 @@ function* getBarrasSemanalesSaga(payload) {
         fecha1.setDate(fecha1.getDate() + dias1);
         fecha1.setDate(fecha1.getDate() - 6)
     }
-    console.log('LA FECHA DE INICIO ES')
-    console.log(fecha1)
-
+    
     var Lunes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
     fecha1.setDate(fecha1.getDate() + 1);
     var Martes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
@@ -325,36 +321,26 @@ function* getBarrasSemanalesSaga(payload) {
 
     try {
 
-
-
-        const rLunes =
-            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${Lunes[0]}.${Lunes[1]}.${Lunes[2]}-${Lunes[0]}.${Lunes[1]}.${Lunes[2]}&filter=CONFIRMED&periodU=D`, config)
-                .then(response => response)
-                .catch(err => err.response)
-        const rMartes =
-            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${Martes[0]}.${Martes[1]}.${Martes[2]}-${Martes[0]}.${Martes[1]}.${Martes[2]}&filter=CONFIRMED&periodU=D`, config)
-                .then(response => response)
-                .catch(err => err.response)
-        const rMiercoles =
-            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${Miercoles[0]}.${Miercoles[1]}.${Miercoles[2]}-${Miercoles[0]}.${Miercoles[1]}.${Miercoles[2]}&filter=CONFIRMED&periodU=D`, config)
-                .then(response => response)
-                .catch(err => err.response)
-        const rJueves =
-            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${Jueves[0]}.${Jueves[1]}.${Jueves[2]}-${Jueves[0]}.${Jueves[1]}.${Jueves[2]}&filter=CONFIRMED&periodU=D`, config)
-                .then(response => response)
-                .catch(err => err.response)
-        const rViernes =
-            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${Viernes[0]}.${Viernes[1]}.${Viernes[2]}-${Viernes[0]}.${Viernes[1]}.${Viernes[2]}&filter=CONFIRMED&periodU=D`, config)
-                .then(response => response)
-                .catch(err => err.response)
-        const rSabado =
-            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${Sabado[0]}.${Sabado[1]}.${Sabado[2]}-${Sabado[0]}.${Sabado[1]}.${Sabado[2]}&filter=CONFIRMED&periodU=D`, config)
-                .then(response => response)
-                .catch(err => err.response)
-
-        const vectorResponse = [rLunes.data, rMartes.data, rMiercoles.data, rJueves.data, rViernes.data, rSabado.data]
-
-
+        const rGeneral =
+        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${Lunes[0]}.${Lunes[1]}.${Lunes[2]}-${Sabado[0]}.${Sabado[1]}.${Sabado[2]}&filter=CONFIRMED&periodU=D`, config)
+            .then(response => response)
+            .catch(err => err.response)
+        const days=[Lunes,Martes,Miercoles,Jueves,Viernes, Sabado]    
+        
+        var vectorResponse=[]
+        for (let i = 0; i < days.length; i++) {
+            vectorResponse.push({date:`${days[i][0]}.${days[i][1]}.${days[i][2]}`, stats:0})
+            for (let j = 0; j < rGeneral.data.length; j++) {
+                if(rGeneral.data[j].date===`${days[i][0]}.${days[i][1]}.${days[i][2]}`){
+                    vectorResponse[i]={date:`${days[i][0]}.${days[i][1]}.${days[i][2]}`, stats:rGeneral.data[j].stat}
+                }
+            }
+            
+        }
+        console.log('BARRAS SEMANALES')
+        console.log(vectorResponse)
+        console.log(rGeneral)
+        console.log(days)
         const id = jwtDecode(payload.token).userId
 
 
@@ -390,7 +376,7 @@ function* getBarrasSemanalesSaga(payload) {
         const dataStats = { general: vectorResponse, user: vectorUser }
         yield put(getBarrasSemanalesSuccess(dataStats))
     } catch (error) {
-
+        console.log(error)
     }
 }
 function* getEstadisticasUserGeneralSaga(payload) {

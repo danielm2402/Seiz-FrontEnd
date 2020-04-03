@@ -46,42 +46,42 @@ class PerformanceChartWidget extends PureComponent {
     const dataPerformance = [
       {
         name: 'Lunes',
-        Confirmados: user[0].length==0?0:user[0][0].stat,
+        Confirmados: user.length==0?0:user[0].stat,
         Subidos: userOther.upload[0].length==0?0:userOther.upload[0][0].stat,
         Asignados: userOther.userAssig[0].length==0?0:userOther.userAssig[0][0].stat,
        
       },
       {
         name: 'Martes',
-        Confirmados: user[1].length==0?0:user[1][0].stat,
+        Confirmados: user.length==0?0:user[1].stat,
         Subidos: userOther.upload[1].length==0?0:userOther.upload[1][0].stat,
         Asignados: userOther.userAssig[1].length==0?0:userOther.userAssig[1][0].stat,
      
       },
       {
         name: 'Miercoles',
-        Confirmados: user[2].length==0?0:user[2][0].stat,
+        Confirmados: user.length==0?0:user[2].stat,
         Subidos: userOther.upload[2].length==0?0:userOther.upload[2][0].stat,
         Asignados: userOther.userAssig[2].length==0?0:userOther.userAssig[2][0].stat,
         
       },
       {
         name: 'Jueves',
-        Confirmados: user[3].length==0?0:user[3][0].stat,
+        Confirmados: user.length==0?0:user[3].stat,
         Subidos: userOther.upload[3].length==0?0:userOther.upload[3][0].stat,
         Asignados: userOther.userAssig[3].length==0?0:userOther.userAssig[3][0].stat,
        
       },
       {
         name: 'Viernes',
-        Confirmados: user[4].length==0?0:user[4][0].stat,
+        Confirmados: user.length==0?0:user[4].stat,
         Subidos: userOther.upload[4].length==0?0:userOther.upload[4][0].stat,
         Asignados: userOther.userAssig[4].length==0?0:userOther.userAssig[4][0].stat,
         
       },
       {
         name: 'Sábado',
-        Confirmados: user[5].length==0?0:user[5][0].stat,
+        Confirmados: user.length==0?0:user[5].stat,
         Subidos: userOther.upload[5].length==0?0:userOther.upload[5][0].stat,
         Asignados: userOther.userAssig[5].length==0?0:userOther.userAssig[5][0].stat,
        
