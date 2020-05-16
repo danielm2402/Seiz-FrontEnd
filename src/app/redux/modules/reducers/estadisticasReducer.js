@@ -11,7 +11,7 @@ export const Authstate = {
     ranking: [],
     historial: [],
     myHistorial: [],
-    semanal: { general: [], user: [] },
+    semanal: { general: [], user: [], mvp:[]},
     mvpSemana: [{}, {}, {}, {}, {}, {}],
     userStatsOther: { upload: [[], [], [], [], [], []], userAssig: [[], [], [], [], [], []] },
 
@@ -75,7 +75,7 @@ export default function authReducer(state = Authstate, action = {}) {
         case GET_BARRAS_SEMANALES_SUCCESS:
             return {
                 ...state,
-                semanal: { general: action.data.general, user: action.data.user }
+                semanal: { general: action.data.general, user: action.data.user, mvp: action.data.mvp }
             }
         case STATS_ME_MVP_SUCCESS:
             return {

@@ -126,12 +126,12 @@ function* rankingUsersSaga(payload) {
                 break;
         }
 
-    }else{
-        
-         const data1= yield axios.get('https://bancow.finseiz.com/api/v1/stats/users?filter=CONFIRMED&page=0&range=' +payload.fecha.init.replace(/[-]/g, '.')+'-'+payload.fecha.final.replace(/[-]/g, '.') + '&size=4', config)
-        .then(response => response)
-        .catch(error => error.response)  
-   
+    } else {
+
+        const data1 = yield axios.get('https://bancow.finseiz.com/api/v1/stats/users?filter=CONFIRMED&page=0&range=' + payload.fecha.init.replace(/[-]/g, '.') + '-' + payload.fecha.final.replace(/[-]/g, '.') + '&size=4', config)
+            .then(response => response)
+            .catch(error => error.response)
+
 
         switch (data1.status) {
             case 200:
@@ -255,7 +255,7 @@ function* getHistorialMeSaga(payload) {
     const data = yield axios.post('https://bancow.finseiz.com/api/v1/embargos/list?assignedTo=' + payload.user + '&estadoEmbargo=CONFIRMADO&sort.sorted=true', {}, config)
         .then(response => response)
         .catch(error => error.response)
-       
+
     switch (data.status) {
         case 200:
             yield put(getHistorialSuccessMe(data.data))
@@ -271,7 +271,8 @@ function* getHistorialMeSaga(payload) {
 
 function* getBarrasSemanalesSaga(payload) {
 
-
+    console.log('OBTENIENDO BARRAS SEMANALES PARA LA Q ES')
+    console.log(payload)
     const config = {
         headers: {
             Authorization: 'Bearer ' + payload.token,
@@ -283,101 +284,116 @@ function* getBarrasSemanalesSaga(payload) {
     var dia = new Date(fechaActual.getTime() - (fechaActual.getTimezoneOffset() * 60000)).toISOString()
         .split("T")[0];
 
-    var fecha1 = new Date(dia);
-
-    var diapararestar = fecha1.getUTCDay();
-    let dias1
-    if (diapararestar == 0) {
-        dias1 = (-6);
-        fecha1.setDate((fecha1.getDate() + dias1) + 1)
-
-    } else {
-        dias1 = (diapararestar - 1) * (-1);
-        fecha1.setDate(fecha1.getDate() + dias1);
-        fecha1.setDate(fecha1.getDate() - 6)
-    }
-    
-    var Lunes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
-    fecha1.setDate(fecha1.getDate() + 1);
-    var Martes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
-    fecha1.setDate(fecha1.getDate() + 1);
-    var Miercoles = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
-    fecha1.setDate(fecha1.getDate() + 1);
-    var Jueves = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
-    fecha1.setDate(fecha1.getDate() + 1);
-    var Viernes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
-    fecha1.setDate(fecha1.getDate() + 1);
-    var Sabado = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
-    fecha1.setDate(fecha1.getDate() + 1);
-    var Domingo = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0]
-    Lunes = Lunes.split('-')
-    Martes = Martes.split('-')
-    Miercoles = Miercoles.split('-')
-    Jueves = Jueves.split('-')
-    Viernes = Viernes.split('-')
-    Sabado = Sabado.split('-')
-    Domingo = Domingo.split('-')
-
-
-    try {
-
-        const rGeneral =
-        yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${Lunes[0]}.${Lunes[1]}.${Lunes[2]}-${Sabado[0]}.${Sabado[1]}.${Sabado[2]}&filter=CONFIRMED&periodU=D`, config)
-            .then(response => response)
-            .catch(err => err.response)
-        const days=[Lunes,Martes,Miercoles,Jueves,Viernes, Sabado]    
-        
-        var vectorResponse=[]
-        for (let i = 0; i < days.length; i++) {
-            vectorResponse.push({date:`${days[i][0]}.${days[i][1]}.${days[i][2]}`, stats:0})
-            for (let j = 0; j < rGeneral.data.length; j++) {
-                if(rGeneral.data[j].date===`${days[i][0]}.${days[i][1]}.${days[i][2]}`){
-                    vectorResponse[i]={date:`${days[i][0]}.${days[i][1]}.${days[i][2]}`, stats:rGeneral.data[j].stat}
-                }
+    switch (payload.rango) {
+        case 'SEMANA_ANTERIOR':
+            var fecha1 = new Date(dia);
+            var diapararestar = fecha1.getUTCDay();
+            let dias1
+            if (diapararestar == 0) {
+                dias1 = (-6);
+                fecha1.setDate((fecha1.getDate() + dias1) + 1)
+            } else {
+                dias1 = (diapararestar - 1) * (-1);
+                fecha1.setDate(fecha1.getDate() + dias1);
+                fecha1.setDate(fecha1.getDate() - 6)
             }
+            var Lunes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0].split('-')
+            fecha1.setDate(fecha1.getDate() + 1);
+            var Martes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0].split('-')
+            fecha1.setDate(fecha1.getDate() + 1);
+            var Miercoles = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0].split('-')
+            fecha1.setDate(fecha1.getDate() + 1);
+            var Jueves = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0].split('-')
+            fecha1.setDate(fecha1.getDate() + 1);
+            var Viernes = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0].split('-')
+            fecha1.setDate(fecha1.getDate() + 1);
+            var Sabado = new Date(fecha1.getTime() - (fecha1.getTimezoneOffset() * 60000)).toISOString().split("T")[0].split('-')
+
+            const days = [Lunes, Martes, Miercoles, Jueves, Viernes, Sabado] // TODOS LOS DÍAS DE LA SEMANA ANTERIOR
+            try {
+                const rGeneral =
+                    yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${Lunes[0]}.${Lunes[1]}.${Lunes[2]}-${Sabado[0]}.${Sabado[1]}.${Sabado[2]}&filter=CONFIRMED&periodU=D`, config)
+                        .then(response => response)
+                        .catch(err => err.response)
+                var vectorResponseGeneral = []
+                for (let i = 0; i < days.length; i++) {
+                    vectorResponseGeneral.push({ date: `${days[i][0]}.${days[i][1]}.${days[i][2]}`, stats: 0 })
+                    for (let j = 0; j < rGeneral.data.length; j++) {
+                        if (rGeneral.data[j].date === `${days[i][0]}.${days[i][1]}.${days[i][2]}`) {
+                            vectorResponseGeneral[i] = { date: `${days[i][0]}.${days[i][1]}.${days[i][2]}`, stats: rGeneral.data[j].stat }
+                        }
+                    }
+
+                }
+
+                //STATS USER
+                const id = jwtDecode(payload.token).userId
+                const uGeneral =
+                    yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}?dateRange=${Lunes[0]}.${Lunes[1]}.${Lunes[2]}-${Sabado[0]}.${Sabado[1]}.${Sabado[2]}&filter=CONFIRMED&periodU=D`, config)
+                        .then(response => response)
+                        .catch(err => err.response)
+                var vectorResponseUser = []
+                for (let i = 0; i < days.length; i++) {
+                    vectorResponseUser.push({ date: `${days[i][0]}.${days[i][1]}.${days[i][2]}`, stats: 0 })
+                    for (let j = 0; j < uGeneral.data.length; j++) {
+                        if (uGeneral.data[j].date === `${days[i][0]}.${days[i][1]}.${days[i][2]}`) {
+                            vectorResponseUser[i] = { date: `${days[i][0]}.${days[i][1]}.${days[i][2]}`, stats: uGeneral.data[j].stat }
+                        }
+                    }
+                }
+                //STATS MVP 
+                const MvpGeneral = yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users?filter=CONFIRMED&page=0&range=${Lunes[0]}.${Lunes[1]}.${Lunes[2]}-${Sabado[0]}.${Sabado[1]}.${Sabado[2]}&size=1`, config)
+                    .then(response => response)
+                    .catch(err => err.response)
+                var vectorResponseMvp = []
+                for (let i = 0; i < days.length; i++) {
+                    vectorResponseMvp.push({ date: `${days[i][0]}.${days[i][1]}.${days[i][2]}`, stats: 0 })
+                    for (let j = 0; j < uGeneral.data.length; j++) {
+                        if (MvpGeneral.data[j].date === `${days[i][0]}.${days[i][1]}.${days[i][2]}`) {
+                            vectorResponseMvp[i] = { date: `${days[i][0]}.${days[i][1]}.${days[i][2]}`, stats: MvpGeneral.data[j].stat }
+                        }
+                    }
+                }
+
+
+                const dataStats = { general: vectorResponseGeneral, user: vectorResponseUser, mvp: vectorResponseMvp }
+                yield put(getBarrasSemanalesSuccess(dataStats))
+            } catch (error) {
+                console.log(error)
+            }
+
+        break;
+
+        case 'MES_ANTERIOR':
+            console.log(fechaActual)
+            fechaActual.setMonth(fechaActual.getMonth() - 1);
+            const primerDia= new Date(fechaActual.getFullYear(), fechaActual.getMonth(), 1).toISOString().split("T")[0].split('-')
+            const ultimoDia=  new Date(fechaActual.getFullYear(), fechaActual.getMonth() + 1, 0).toISOString().split("T")[0].split('-');
+            var contadorDomingos=new Date(primerDia)
+            var vectorDomingos=[];
+            //SEMANAS
+            while (contadorDomingos.getDay() != 0) {
+                contadorDomingos.setDate(contadorDomingos.getDate() + 1);
+              }
             
-        }
-        console.log('BARRAS SEMANALES')
-        console.log(vectorResponse)
-        console.log(rGeneral)
-        console.log(days)
-        const id = jwtDecode(payload.token).userId
+            while(Date.parse(contadorDomingos)<= Date.parse(ultimoDia)){
+                vectorDomingos.push({date:new Date(contadorDomingos).toISOString().split("T")[0].replace(/-/gi,'.'), stats:0})
+                contadorDomingos.setDate(contadorDomingos.getDate() + 7)
+            } 
+            console.log(vectorDomingos)
+            //STATS GENERAL
+            const rGeneral =
+            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/?dateRange=${primerDia[0]}.${primerDia[1]}.${primerDia[2]}-${ultimoDia[0]}.${ultimoDia[1]}.${ultimoDia[2]}&filter=CONFIRMED&periodU=W`, config)
+                .then(response => response)
+                .catch(err => err.response)
+            //STATS USER
+            
+            //STATS MVP
 
-
-        //STATS USER
-
-        const uLunes =
-            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Lunes[0]}.${Lunes[1]}.${Lunes[2]}-${Lunes[0]}.${Lunes[1]}.${Lunes[2]}&filter=CONFIRMED&periodU=D`, config)
-                .then(response => response)
-                .catch(err => err.response)
-        const uMartes =
-            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Martes[0]}.${Martes[1]}.${Martes[2]}-${Martes[0]}.${Martes[1]}.${Martes[2]}&filter=CONFIRMED&periodU=D`, config)
-                .then(response => response)
-                .catch(err => err.response)
-        const uMiercoles =
-            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Miercoles[0]}.${Miercoles[1]}.${Miercoles[2]}-${Miercoles[0]}.${Miercoles[1]}.${Miercoles[2]}&filter=CONFIRMED&periodU=D`, config)
-                .then(response => response)
-                .catch(err => err.response)
-        const uJueves =
-            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Jueves[0]}.${Jueves[1]}.${Jueves[2]}-${Jueves[0]}.${Jueves[1]}.${Jueves[2]}&filter=CONFIRMED&periodU=D`, config)
-                .then(response => response)
-                .catch(err => err.response)
-        const uViernes =
-            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Viernes[0]}.${Viernes[1]}.${Viernes[2]}-${Viernes[0]}.${Viernes[1]}.${Viernes[2]}&filter=CONFIRMED&periodU=D`, config)
-                .then(response => response)
-                .catch(err => err.response)
-        const uSabado =
-            yield axios.get(`https://bancow.finseiz.com/api/v1/stats/users/${id}/?dateRange=${Sabado[0]}.${Sabado[1]}.${Sabado[2]}-${Domingo[0]}.${Sabado[1]}.${Sabado[2]}&filter=CONFIRMED&periodU=D`, config)
-                .then(response => response)
-                .catch(err => err.response)
-        const vectorUser = [uLunes.data, uMartes.data, uMiercoles.data, uJueves.data, uViernes.data, uSabado.data]
-
-
-        const dataStats = { general: vectorResponse, user: vectorUser }
-        yield put(getBarrasSemanalesSuccess(dataStats))
-    } catch (error) {
-        console.log(error)
+        default:
+            break;
     }
+
 }
 function* getEstadisticasUserGeneralSaga(payload) {
 

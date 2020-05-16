@@ -294,10 +294,10 @@ function Dashboard(props) {
 
   }
   function handleInput(e) {
-    console.log('ENTRANDO AL CHANGE')
     switch (e.target.name) {
       case 'grafica1':
         setGrafica1(e.target.value)
+        props.handleBarrasSemanales(props.token, props.user, e.target.value)
         break;
       case 'grafica2':
         setGrafica2(e.target.value)
@@ -319,7 +319,8 @@ const mapStateToProps = (state) => ({
   token: state.auth.authToken,
   embargos: state.EmbargosReducer.porConfirmar,
   conteoEmbargos: state.estadisticasReducer.conteo,
-  usersRanking: state.estadisticasReducer.ranking
+  usersRanking: state.estadisticasReducer.ranking,
+  user: state.auth.user.username
 })
 const mapDispatchToProps = (dispatch) => ({
   getEmbargos: bindActionCreators(getEmbargosAsignados, dispatch),
