@@ -44,7 +44,7 @@
     "@react-pdf/renderer": "^1.6.8",
     "@tanem/react-nprogress": "^3.0.18",
     "@tanem/svg-injector": "^8.0.34",
-    "axios": "^0.19.1",
+    "axios": "^0.21.1",
     "axios-mock-adapter": "^1.17.0",
     "bootstrap": "^4.3.1",
     "bootstrap-daterangepicker": "^3.0.5",
