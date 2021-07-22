@@ -128,7 +128,7 @@
     "socicon": "^3.0.5",
     "styled-components": "^5.0.1",
     "victory": "^34.0.1",
-    "xlsx": "0.13.4"
+    "xlsx": "0.17.0"
   },
   "devDependencies": {
     "copyfiles": "^2.1.1",
